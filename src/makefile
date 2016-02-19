@@ -1,0 +1,61 @@
+TARGET	= randomWalk
+
+CPP	 := main.cpp \
+
+
+OBJ	 = $(CPP:%.cpp=obj/%.o)
+OP	 = $(OBJ:.o=.op)
+OO	 = $(OBJ:.o=.oo)
+GCDA = $(OBJ:.o=.gcda)
+DEP	 = $(OBJ:obj/%.o=dep/%.d)
+
+CC	= g++ -g
+#CC	= g++ -O3 -flto -mtune=native -ffast-math
+#CC	= clang++ -O3 -flto -march=native -ffast-math
+WARNLEVEL= -Wall -Wextra -Wno-unused-parameter -pedantic
+
+BOOSTDIR      = ../boost
+
+LNDIRS  = -L$(PWD)/lib
+
+INCLUDES = -I$(PWD)/include
+
+COPT = -std=c++11 -m64 -O -fPIC -fno-strict-aliasing -fomit-frame-pointer -fexceptions -DNDEBUG -pipe
+CFLAGS	= $(COPT) $(INCLUDES)
+
+LIBS = -lm
+LFLAGS	= $(LNDIRS) $(LIBS)
+
+all: $(DEP) $(TARGET)
+
+.DELETE_ON_ERROR:
+.PHONY: clean proper
+
+MAKEFILE_TARGETS_WITHOUT_INCLUDE := clean proper
+ifeq ($(filter $(MAKECMDGOALS),$(MAKEFILE_TARGETS_WITHOUT_INCLUDE)),)
+-include $(DEP)
+endif
+
+obj dep:
+	mkdir $@
+
+# perfect dependencies, see https://www.gnu.org/software/make/manual/make.pdf
+dep/%.d: %.cpp | dep
+	@echo Dep: $@
+	@set -e; rm -f $@; \
+	$(CC) $(WARNLEVEL) $(CFLAGS) -MM $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ $*.oo $*.op: ,g' < $@.$$$$ > $@; \
+	rm -f $@.$$$$
+
+obj/%.o: %.cpp | obj
+	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@
+
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
+
+proper:
+	rm -rf $(OBJ)
+
+clean: proper
+	rm -rf dep
+	rm -rf $(TARGET)

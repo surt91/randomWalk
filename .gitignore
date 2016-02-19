@@ -1,0 +1,10 @@
+build/
+dep/
+obj/
+tmp/
+*~
+
+.idea/
+
+lit/
+
