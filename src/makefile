@@ -4,9 +4,6 @@ CPP	 := main.cpp \
 
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
-OP	 = $(OBJ:.o=.op)
-OO	 = $(OBJ:.o=.oo)
-GCDA = $(OBJ:.o=.gcda)
 DEP	 = $(OBJ:obj/%.o=dep/%.d)
 
 CC	= g++ -g
@@ -14,13 +11,13 @@ CC	= g++ -g
 #CC	= clang++ -O3 -flto -march=native -ffast-math
 WARNLEVEL= -Wall -Wextra -Wno-unused-parameter -pedantic
 
-BOOSTDIR      = ../boost
+BOOSTDIR = ../boost
 
 LNDIRS  = -L$(PWD)/lib
 
 INCLUDES = -I$(PWD)/include
 
-COPT = -std=c++11 -m64 -O -fPIC -fno-strict-aliasing -fomit-frame-pointer -fexceptions -DNDEBUG -pipe
+COPT = -std=c++11 -m64 -O -fPIC -fno-strict-aliasing -fomit-frame-pointer -fexceptions -pipe
 CFLAGS	= $(COPT) $(INCLUDES)
 
 LIBS = -lm
