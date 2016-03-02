@@ -37,9 +37,11 @@ int main(int argc, char** argv)
 
         std::vector<double> numbers = rng(n, seed);
         Walker w(2, numbers);
+        auto ch = w.convexHull();
+        ch.hullPoints();
         w.print();
         if(!svg_path.empty())
-            w.svg(svg_path);
+            w.svg(svg_path, true);
     }
     catch(TCLAP::ArgException &e)  // catch any exceptions
     {

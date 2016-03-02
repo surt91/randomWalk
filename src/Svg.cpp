@@ -9,7 +9,7 @@ SVG::SVG(const std::string filename, const double scale)
                 <svg xmlns='http://www.w3.org/2000/svg'\n\
                 xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events'\n\
                 version='1.1' baseProfile='full' width='800px' height='800px' >\n");
-                
+
     radius = 0.2;
     stroke = 0.1;
 }
@@ -47,14 +47,18 @@ void SVG::line(const double x1, const double x2, const double y1, const double y
     buffer << "<line x1='" << x1 << "' x2='" << x2 << "' y1='" << y1 << "' y2='" << y2 << "' stroke='" << color << "' stroke-width='" << stroke*scale << "'/>\n";
 }
 
-void SVG::polyline(const std::vector<std::vector<double>> points, const std::string color)
+void SVG::polyline(const std::vector<std::vector<double>> points, const bool closed, const std::string color)
 {
-    buffer << "<polyline fill='none' points='";
+    if(closed)
+        buffer << "<polygon ";
+    else
+        buffer << "<polyline ";
+
+    buffer << "fill='none' points='";
     for(const auto i : points)
         buffer << i[0] << "," << i[1] << " ";
     buffer << "' stroke='" << color << "' stroke-width='" << stroke*scale <<"' />\n";
 }
-
 void SVG::setGeometry(const double min, const double max, const bool border)
 {
     setGeometry(min, min, max, max, border);
@@ -65,7 +69,7 @@ void SVG::setGeometry(const double min_x, const double min_y, const double max_x
     std::stringstream ss;
     ss << min_x << " " << min_y << " " << (max_x-min_x) << " " << (max_y-min_y) ;
     std::string area = ss.str();
-    
+
     ss.str("");
     ss << "<rect x='" << min_x << "' y='" << min_y << "' width='" << (max_x - min_x) << "' height='" << (max_y-min_y) << "' fill='white' />\n";
 

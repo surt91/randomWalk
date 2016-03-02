@@ -2,22 +2,24 @@
 
 #include "defines.h"
 
+#include <cmath>
 #include <vector>
 #include <iostream>
+#include <stdexcept>
 
 class Step
 {
     public:
         Step()
         {};
-        
+
         Step(int d, double rn)
               : m_d(d)
         {
             // special for 2D lattice, needs to be fixed
             if(d != 2)
                 std::cout << ERROR << " d != 2 not implemented";
-            
+
             m_coordinates = std::vector<int>(2, 0);
             if(rn < 0.25)
                 m_coordinates[0] = 1;
@@ -33,6 +35,11 @@ class Step
               : m_d(coord.size()),
                 m_coordinates(coord)
               {};
+
+        double angle() const //only 2D projection
+        {
+            return atan2(m_coordinates[1], m_coordinates[0]);
+        }
 
         Step operator+(const Step &other) const
         {
@@ -54,7 +61,7 @@ class Step
             std::vector<int> other_coord = other.coordinates();
             for(int i=0; i<m_d; ++i)
                 m_coordinates[i] += other_coord[i];
-                
+
             return *this;
         }
 
@@ -82,4 +89,3 @@ class Step
     private:
 
 };
-

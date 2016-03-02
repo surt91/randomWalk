@@ -1,10 +1,15 @@
 TARGET	= randomWalk
 
 CPP	 := main.cpp \
-
+        Walker.cpp \
+        ConvexHull.cpp \
+        RNG.cpp \
+        Svg.cpp
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 DEP	 = $(OBJ:obj/%.o=dep/%.d)
+
+QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
 CC	= g++ -g
 #CC	= g++ -O3 -flto -mtune=native -ffast-math
@@ -13,14 +18,16 @@ WARNLEVEL= -Wall -Wextra -Wno-unused-parameter -pedantic
 
 BOOSTDIR = ../boost
 
-LNDIRS  = -L$(PWD)/lib
+LNDIRS  = -L$(PWD)/lib \
+          -L$(PWD)/qhull/lib
 
-INCLUDES = -I$(PWD)/include
+INCLUDES = -I$(PWD)/include \
+           -I$(PWD)/qhull/src
 
 COPT = -std=c++11 -m64 -O -fPIC -fno-strict-aliasing -fomit-frame-pointer -fexceptions -pipe
 CFLAGS	= $(COPT) $(INCLUDES)
 
-LIBS = -lm
+LIBS = -lqhullcpp -lqhullstatic_r -lm
 LFLAGS	= $(LNDIRS) $(LIBS)
 
 all: $(DEP) $(TARGET)
@@ -47,7 +54,13 @@ dep/%.d: %.cpp | dep
 obj/%.o: %.cpp | obj
 	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@
 
-$(TARGET): $(OBJ)
+$(QHULL):
+	# needed three tries the last time I tried
+	$(MAKE) -i -C qhull
+	$(MAKE) -i -C qhull
+	$(MAKE) -i -C qhull
+
+$(TARGET): $(OBJ) $(QHULL)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
 proper:

@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <stdexcept>
 
 #include "defines.h"
 
@@ -16,8 +17,8 @@ class SVG
 
         void circle(const double x, const double y, const int filled);
         void line(const double x1, const double x2, const double y1, const double y2, const std::string color=std::string("black"));
-        void polyline(const std::vector<std::vector<double>> points, const std::string color=std::string("black"));
-        
+        void polyline(const std::vector<std::vector<double>> points, const bool closed=false, const std::string color=std::string("black"));
+
         double radius;
         double stroke;
 
