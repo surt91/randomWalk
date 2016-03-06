@@ -4,6 +4,7 @@
 
 #include "Walker.hpp"
 #include "RNG.hpp"
+#include "ConvexHull.hpp"
 
 int main(int argc, char** argv)
 {
@@ -39,6 +40,8 @@ int main(int argc, char** argv)
         Walker w(2, numbers);
         auto ch = w.convexHull();
         ch.hullPoints();
+        std::cout << "Aea    " << ch.L();
+        std::cout << "Volume " << ch.A();
         w.print();
         if(!svg_path.empty())
             w.svg(svg_path, true);

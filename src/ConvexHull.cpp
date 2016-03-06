@@ -8,7 +8,6 @@ ConvexHull::ConvexHull(const std::vector<Step>& interiorPoints)
               n(interiorPoints.size()),
               d(interiorPoints[0].d())
 {
-    std::cout << "construct" << std::endl;
     coords = new double[n*d];
     for(int i=0; i<n; ++i)
     {
@@ -18,8 +17,6 @@ ConvexHull::ConvexHull(const std::vector<Step>& interiorPoints)
 
     // comment, dimension, count, coordinates[], command
     qhull = new orgQhull::Qhull("", d, n, coords, "");
-
-    std::cout << qhull->area() << "\n" << qhull->volume() << "\n";
 }
 
 ConvexHull::~ConvexHull()
@@ -32,7 +29,6 @@ const std::vector<Step> ConvexHull::hullPoints() const
 {
     std::vector<Step> out;
     orgQhull::QhullVertexList vl = qhull->vertexList();
-    std::cout << vl << std::endl;
 
     for(auto v : vl)
     {
@@ -51,4 +47,14 @@ const std::vector<Step> ConvexHull::hullPoints() const
     }
 
     return out;
+}
+
+double ConvexHull::A() const
+{
+    return qhull->volume();
+}
+
+double ConvexHull::L() const
+{
+    return qhull->area();
 }

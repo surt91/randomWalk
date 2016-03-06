@@ -2,8 +2,9 @@
 
 const std::vector<Step> Walker::steps() const
 {
-    std::vector<Step> ret(numSteps);
-    for(int i=0; i<numSteps; ++i)
+    std::vector<Step> ret(numSteps+1);
+    ret[0] = Step(std::vector<int>(d, 0));
+    for(int i=1; i<=numSteps; ++i)
         ret[i] = Step(d, random_numbers[i]);
 
     return ret;
@@ -39,7 +40,7 @@ void Walker::svg(const std::string filename, const bool with_hull) const
     for(auto i : p)
     {
         int x1 = i[0], y1 = i[1];
-        std::vector<double> point {x1, y1};
+        std::vector<double> point {(double) x1, (double) y1};
 
         pic.circle(x1, y1, true);
 
@@ -62,7 +63,7 @@ void Walker::svg(const std::string filename, const bool with_hull) const
         const std::vector<Step> h = convexHull().hullPoints();
         for(auto i : h)
         {
-            std::vector<double> point {i[0], i[1]};
+            std::vector<double> point {(double) i[0], (double) i[1]};
             points.push_back(point);
         }
         pic.polyline(points, true, std::string("red"));
