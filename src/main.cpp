@@ -18,7 +18,8 @@ int main(int argc, char** argv)
         // -short, --long, description, required, default, type
         TCLAP::ValueArg<int> numArg("n", "number", "how many steps", true, 100, "integer");
         TCLAP::ValueArg<int> seedArg("x", "seed", "seed for rng", false, 0, "integer");
-        TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename", false, "", "string");
+        TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
+        TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
 
         std::vector<int> allowedTypes_;
         allowedTypes_.push_back(1);
@@ -46,13 +47,14 @@ int main(int argc, char** argv)
         int n = numArg.getValue();
         int seed = seedArg.getValue();
         int type = typeArg.getValue();
+        int d = dimArg.getValue();
 
         std::vector<double> numbers = rng(n, seed);
         Walker *w = NULL;
         if(type == 1)
-            w = new Walker(2, numbers);
+            w = new Walker(d, numbers);
         else if(type == 2)
-            w = new LoopErasedWalker(2, numbers);
+            w = new LoopErasedWalker(d, numbers);
         w->steps();
 
         w->convexHull();

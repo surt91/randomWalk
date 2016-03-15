@@ -24,19 +24,15 @@ class Step
         Step(int d, double rn)
               : m_d(d)
         {
-            // special for 2D lattice, needs to be fixed
-            if(d != 2)
-                throw std::invalid_argument("d != 2 not implemented");
-
-            m_coordinates = std::vector<int>(2, 0);
-            if(rn < 0.25)
-                m_coordinates[0] = 1;
-            else if(rn < 0.5)
-                m_coordinates[0] = -1;
-            else if(rn < 0.75)
-                m_coordinates[1] = 1;
-            else
-                m_coordinates[1] = -1;
+            m_coordinates = std::vector<int>(d, 0);
+            for(int i=0; i<d; ++i)
+                if(rn * d < i+1) // direction i
+                {
+                    if(rn * 2 * d < i+1)
+                        m_coordinates[i] = 1;
+                    else
+                        m_coordinates[i] = -1;
+                }
         };
 
         Step(const std::vector<int> &coord)
