@@ -1,4 +1,5 @@
 #include <string>
+#include <ctime>
 
 #include <tclap/CmdLine.h>
 
@@ -20,6 +21,7 @@ int main(int argc, char** argv)
         TCLAP::ValueArg<int> seedArg("x", "seed", "seed for rng", false, 0, "integer");
         TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
+        TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level", false, 0, "integer");
 
         std::vector<int> allowedTypes_;
         allowedTypes_.push_back(1);
@@ -37,7 +39,9 @@ int main(int argc, char** argv)
         cmd.add(numArg);
         cmd.add(seedArg);
         cmd.add(svgArg);
+        cmd.add(dimArg);
         cmd.add(typeArg);
+        cmd.add(verboseArg);
 //        cmd.add(reverseSwitch);
         // Parse the argv array.
         cmd.parse(argc, argv);
@@ -48,8 +52,12 @@ int main(int argc, char** argv)
         int seed = seedArg.getValue();
         int type = typeArg.getValue();
         int d = dimArg.getValue();
+        int v = verboseArg.getValue();
 
+        clock_t before_rng = clock();
         std::vector<double> numbers = rng(n, seed);
+
+        clock_t before_walker = clock();
         Walker *w = NULL;
         if(type == 1)
             w = new Walker(d, numbers);
@@ -57,7 +65,10 @@ int main(int argc, char** argv)
             w = new LoopErasedWalker(d, numbers);
         w->steps();
 
+        clock_t before_ch = clock();
         w->convexHull();
+
+        clock_t before_output = clock();
         w->hullPoints();
         std::cout << "Steps  " << w->nSteps() << "\n";
         std::cout << "Area   " << w->L() << "\n";
@@ -65,6 +76,14 @@ int main(int argc, char** argv)
 //        w->print();
         if(!svg_path.empty())
             w->svg(svg_path, true);
+
+        if(v >= 1)
+        {
+            std::cout << "RNG: " << (double)(before_rng - before_walker) / CLOCKS_PER_SEC << " s\n";
+            std::cout << "RW : " << (double)(before_walker - before_ch) / CLOCKS_PER_SEC << " s\n";
+            std::cout << "CH : " << (double)(before_ch - before_output) / CLOCKS_PER_SEC << " s\n";
+            std::cout << "OUT: " << (double)(before_output - clock()) / CLOCKS_PER_SEC << " s\n";
+        }
 
         delete w;
     }
