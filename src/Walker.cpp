@@ -2,12 +2,17 @@
 
 const std::vector<Step> Walker::steps() const
 {
+    if(!stepsDirty)
+        return m_steps;
+
     std::vector<Step> ret(numSteps+1);
     ret[0] = Step(std::vector<int>(d, 0));
     for(int i=1; i<=numSteps; ++i)
         ret[i] = Step(d, random_numbers[i]);
 
-    return ret;
+    m_steps = ret;
+    stepsDirty = false;
+    return m_steps;
 }
 
 const std::vector<Step> Walker::points() const
@@ -22,6 +27,17 @@ const std::vector<Step> Walker::points() const
 ConvexHull Walker::convexHull() const
 {
     return ConvexHull(points());
+}
+
+int Walker::nSteps() const
+{
+    if(!stepsDirty)
+        return numSteps;
+    else
+    {
+        steps();
+        return numSteps;
+    }
 }
 
 void Walker::print() const

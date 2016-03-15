@@ -7,8 +7,16 @@
 #include <iostream>
 #include <stdexcept>
 
+class Step;
+namespace std {
+    template<>
+    class hash<Step>;
+}
+
 class Step
 {
+    friend class std::hash<Step>;
+
     public:
         Step()
         {};
@@ -18,7 +26,7 @@ class Step
         {
             // special for 2D lattice, needs to be fixed
             if(d != 2)
-                std::cout << ERROR << " d != 2 not implemented";
+                throw std::invalid_argument("d != 2 not implemented");
 
             m_coordinates = std::vector<int>(2, 0);
             if(rn < 0.25)
@@ -41,6 +49,8 @@ class Step
             return atan2(m_coordinates[1], m_coordinates[0]);
         }
 
+        friend inline bool operator==(const Step &lhs, const Step &rhs);
+
         Step operator+(const Step &other) const
         {
             if(m_d != other.d())
@@ -61,6 +71,18 @@ class Step
             std::vector<int> other_coord = other.coordinates();
             for(int i=0; i<m_d; ++i)
                 m_coordinates[i] += other_coord[i];
+
+            return *this;
+        }
+
+        Step& operator-=(const Step &other)
+        {
+            if(m_d != other.d())
+                throw std::invalid_argument("dimensions do not agree");
+
+            std::vector<int> other_coord = other.coordinates();
+            for(int i=0; i<m_d; ++i)
+                m_coordinates[i] -= other_coord[i];
 
             return *this;
         }
@@ -89,3 +111,32 @@ class Step
     private:
 
 };
+
+inline bool operator==(const Step &lhs, const Step &rhs)
+{
+    if(lhs.m_d != rhs.m_d)
+        return false;
+
+    for(int i=0; i<lhs.m_d; ++i)
+        if(lhs.m_coordinates[i] != rhs.m_coordinates[i])
+            return false;
+
+    return true;
+}
+
+namespace std {
+    template<>
+    class hash<Step>
+    {
+        public:
+            // very simple lcg for hashing int vectors
+            // http://stackoverflow.com/a/27216842/1698412
+            size_t operator()(const Step &s) const
+            {
+                std::size_t seed = 0;
+                for(auto &i : s.m_coordinates)
+                    seed ^= i + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+                return seed;
+            }
+    };
+}

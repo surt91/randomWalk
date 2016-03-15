@@ -2,6 +2,7 @@ TARGET	= randomWalk
 
 CPP	 := main.cpp \
         Walker.cpp \
+        LoopErasedWalker.cpp \
         ConvexHull.cpp \
         RNG.cpp \
         Svg.cpp

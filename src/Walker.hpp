@@ -22,7 +22,11 @@ class Walker
             : numSteps(random_numbers.size()),
               d(d), 
               random_numbers(random_numbers)
-        {};
+        {
+            stepsDirty = true;
+        };
+
+        virtual ~Walker() {};
 
         const Step& position() const;
 
@@ -33,13 +37,17 @@ class Walker
         ConvexHull convexHull() const;
 
         const std::vector<Step> points() const;
-        const std::vector<Step> steps() const;
+        virtual const std::vector<Step> steps() const;
+
+        int nSteps() const;
 
         void print() const;
         void svg(const std::string filename, const bool with_hull=false) const;
 
     protected:
-        int numSteps;
+        mutable int numSteps;
+        mutable int stepsDirty;
+        mutable std::vector<Step> m_steps;
         int d;
         std::vector<double> random_numbers;
 };
