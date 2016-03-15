@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 
 #include "Svg.hpp"
 #include "Step.hpp"
@@ -24,6 +25,7 @@ class Walker
               random_numbers(random_numbers)
         {
             stepsDirty = true;
+            hullDirty = true;
         };
 
         virtual ~Walker() {};
@@ -34,7 +36,11 @@ class Walker
 
         void rnChange(const int idx, const double other);
 
-        ConvexHull convexHull() const;
+        const ConvexHull& convexHull() const;
+        // convenience functions
+        double A() const { return convexHull().A(); };
+        double L() const { return convexHull().L(); };
+        const std::vector<Step> hullPoints() const { return convexHull().hullPoints(); };
 
         const std::vector<Step> points() const;
         virtual const std::vector<Step> steps() const;
@@ -47,7 +53,9 @@ class Walker
     protected:
         mutable int numSteps;
         mutable int stepsDirty;
+        mutable int hullDirty;
         mutable std::vector<Step> m_steps;
+        mutable std::unique_ptr<ConvexHull> m_convex_hull;
         int d;
         std::vector<double> random_numbers;
 };

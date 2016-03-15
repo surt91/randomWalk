@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include <memory>
 
 #include "qhull/src/libqhullcpp/Qhull.h"
 #include "qhull/src/libqhullcpp/QhullVertex.h"
@@ -22,7 +23,7 @@ class ConvexHull
         // void movePoint();
 
     protected:
-        orgQhull::Qhull *qhull;
+        std::unique_ptr<orgQhull::Qhull> qhull;
         double *coords;
         std::vector<Step> interiorPoints;
         int n;

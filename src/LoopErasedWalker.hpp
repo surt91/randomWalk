@@ -10,7 +10,6 @@ class LoopErasedWalker : public Walker
         LoopErasedWalker(int d, std::vector<double> random_numbers)
             : Walker(d, random_numbers)
         {
-            stepsDirty = true;
             numSteps = -1;
         };
 

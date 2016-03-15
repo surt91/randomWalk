@@ -48,17 +48,18 @@ int main(int argc, char** argv)
         int type = typeArg.getValue();
 
         std::vector<double> numbers = rng(n, seed);
-        Walker *w;
+        Walker *w = NULL;
         if(type == 1)
             w = new Walker(2, numbers);
         else if(type == 2)
             w = new LoopErasedWalker(2, numbers);
+        w->steps();
 
-        auto ch = w->convexHull();
-        ch.hullPoints();
+        w->convexHull();
+        w->hullPoints();
         std::cout << "Steps  " << w->nSteps() << "\n";
-        std::cout << "Area   " << ch.L() << "\n";
-        std::cout << "Volume " << ch.A() << "\n";
+        std::cout << "Area   " << w->L() << "\n";
+        std::cout << "Volume " << w->A() << "\n";
 //        w->print();
         if(!svg_path.empty())
             w->svg(svg_path, true);

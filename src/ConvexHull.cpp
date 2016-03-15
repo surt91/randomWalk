@@ -16,12 +16,11 @@ ConvexHull::ConvexHull(const std::vector<Step>& interiorPoints)
     }
 
     // comment, dimension, count, coordinates[], command
-    qhull = new orgQhull::Qhull("", d, n, coords, "");
+    qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords, ""));
 }
 
 ConvexHull::~ConvexHull()
 {
-    delete qhull;
     delete[] coords;
 }
 

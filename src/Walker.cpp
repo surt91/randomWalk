@@ -24,20 +24,29 @@ const std::vector<Step> Walker::points() const
     return ret;
 }
 
-ConvexHull Walker::convexHull() const
+const ConvexHull& Walker::convexHull() const
 {
-    return ConvexHull(points());
+    if(stepsDirty)
+        steps();
+    if(hullDirty)
+    {
+        m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHull(points()));
+        hullDirty = false;
+    }
+
+    return *m_convex_hull;
 }
+
+//ConvexHull Walker::convexHull() const
+//{
+//    return ConvexHull(points());
+//}
 
 int Walker::nSteps() const
 {
-    if(!stepsDirty)
-        return numSteps;
-    else
-    {
+    if(stepsDirty)
         steps();
-        return numSteps;
-    }
+    return numSteps;
 }
 
 void Walker::print() const
