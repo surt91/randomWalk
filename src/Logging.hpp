@@ -1,10 +1,11 @@
+#pragma once
+
 #include <sstream>
 #include <iostream>
-#include <cstdarg>
+#include <vector>
 
 // http://stackoverflow.com/questions/1255576/what-is-good-practice-for-generating-verbose-output
 
-int VERBOSITY_LEVEL;
 enum log_level_t {
     LOG_QUIET = 0,
     LOG_ALWAYS,
@@ -32,23 +33,23 @@ static const std::vector<std::string> LABEL = {
 class Logger {
     public:
         Logger(log_level_t level, const std::string &msg)
-            : verbose(level <= VERBOSITY_LEVEL),
-              level(level),
+            : level(level),
               msg(msg)
         {}
 
         ~Logger()
         {
             // VERBOSITY_LEVEL is a global variable and could be changed at runtime
-            if(verbose)
+            if(level <= verbosity)
                 std::cout << LABEL[level] << msg << std::endl;
         }
+
+        static int verbosity;
 
         template<class T>
         friend Logger& operator<<(Logger &&l, const T &obj);
 
     protected:
-        bool verbose;
         log_level_t level;
         std::string msg;
 };
@@ -56,8 +57,6 @@ class Logger {
 template<class T>
 Logger& operator<<(Logger &&l, const T &obj)
 {
-    if(!l.verbose)
-        return l;
     std::stringstream ss;
     ss << " " << obj;
     l.msg += ss.str();
