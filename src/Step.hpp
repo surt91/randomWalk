@@ -26,10 +26,12 @@ class Step
             for(int i=0; i<d; ++i)
                 if(rn * d < i+1) // direction i
                 {
-                    if(rn * 2 * d < i+1)
+                    if(rn * d - i < 0.5)
                         m_coordinates[i] = 1;
                     else
                         m_coordinates[i] = -1;
+
+                    break;
                 }
         };
 
