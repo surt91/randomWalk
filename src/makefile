@@ -25,7 +25,7 @@ LNDIRS  = -L$(PWD)/lib \
 INCLUDES = -I$(PWD)/include \
            -I$(PWD)/qhull/src \
 
-COPT = -std=c++11 -m64 -O -fPIC -fno-strict-aliasing -fomit-frame-pointer -fexceptions -pipe
+COPT = -std=c++11 -m64 -O -fPIC -fno-strict-aliasing -fomit-frame-pointer -fexceptions -pipe -fdiagnostics-color
 CFLAGS	= $(COPT) $(INCLUDES)
 
 LIBS = -lqhullcpp -lqhullstatic_r -lm
