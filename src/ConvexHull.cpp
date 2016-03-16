@@ -10,10 +10,8 @@ ConvexHull::ConvexHull(const std::vector<Step>& interiorPoints)
 {
     coords = new double[n*d];
     for(int i=0; i<n; ++i)
-    {
         for(int j=0; j<d; ++j)
             coords[i*d + j] = interiorPoints[i][j];
-    }
 
     // comment, dimension, count, coordinates[], command
     qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords, ""));
