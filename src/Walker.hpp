@@ -21,10 +21,11 @@ class Walker
     public:
         Walker(int d, std::vector<double> &random_numbers)
             : numSteps(random_numbers.size()),
-              d(d), 
+              d(d),
               random_numbers(random_numbers)
         {
             stepsDirty = true;
+            pointsDirty = true;
             hullDirty = true;
         };
 
@@ -34,7 +35,7 @@ class Walker
 
         void appendRN();
 
-        void rnChange(const int idx, const double other);
+        double rnChange(const int idx, const double other);
 
         const ConvexHull& convexHull() const;
         // convenience functions
@@ -42,7 +43,7 @@ class Walker
         double L() const { return convexHull().L(); };
         const std::vector<Step> hullPoints() const { return convexHull().hullPoints(); };
 
-        const std::vector<Step> points() const;
+        const std::vector<Step>& points(int start=1) const;
         virtual const std::vector<Step> steps(int limit=0) const;
 
         int nSteps() const;
@@ -53,10 +54,12 @@ class Walker
     protected:
         mutable int numSteps;
         mutable int stepsDirty;
+        mutable int pointsDirty;
         mutable int hullDirty;
         mutable std::vector<Step> m_steps;
+        mutable std::vector<Step> m_points;
         mutable std::unique_ptr<ConvexHull> m_convex_hull;
+
         int d;
         std::vector<double> random_numbers;
 };
-

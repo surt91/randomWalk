@@ -13,8 +13,14 @@ class Cmd
         Cmd(int argc, char** argv);
 
         std::string svg_path;
-        int n;
-        int seed;
+        std::string data_path;
+        int steps;
+        int seedRealization;
+        int seedMC;
         int type;
         int d;
+        int iterations;
+        int theta;
+
+        bool benchmark;
 };

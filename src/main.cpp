@@ -6,15 +6,13 @@
 #include "Walker.hpp"
 #include "LoopErasedWalker.hpp"
 #include "RNG.hpp"
-#include "ConvexHull.hpp"
 #include "misc.hpp"
+#include "LargeDeviation.hpp"
 
-int main(int argc, char** argv)
+void benchmark(Cmd &o)
 {
-    Cmd o(argc, argv);
-
     clock_t before_rng = clock();
-    std::vector<double> numbers = rng(o.n, o.seed);
+    std::vector<double> numbers = rng(o.steps, o.seedRealization);
 
     clock_t before_walker = clock();
     std::unique_ptr<Walker> w;
@@ -40,4 +38,17 @@ int main(int argc, char** argv)
     log<LOG_TIMING>("RW : ") << time_diff(before_ch, before_walker);
     log<LOG_TIMING>("CH : ") << time_diff(before_output, before_ch);
     log<LOG_TIMING>("OUT: ") << time_diff(clock(), before_output);
+}
+
+int main(int argc, char** argv)
+{
+    Cmd o(argc, argv);
+
+    if(o.benchmark)
+    {
+        benchmark(o);
+        return 0;
+    }
+
+    run(o);
 }

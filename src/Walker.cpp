@@ -12,29 +12,35 @@ const std::vector<Step> Walker::steps(int limit) const
     if(!stepsDirty)
         return m_steps;
 
-    std::vector<Step> ret(numSteps);
-    ret[0] = Step(std::vector<int>(d, 0));
-    for(int i=1; i<numSteps; ++i)
-        ret[i] = Step(d, random_numbers[i]);
+    m_steps.resize(numSteps);
+    for(int i=0; i<numSteps; ++i)
+        m_steps[i] = Step(d, random_numbers[i]);
 
-    m_steps = ret;
     stepsDirty = false;
     return m_steps;
 }
 
-const std::vector<Step> Walker::points() const
+const std::vector<Step>& Walker::points(int start) const
 {
-    std::vector<Step> ret = steps();
-    for(int i=1; i<numSteps; ++i)
-        ret[i] += ret[i-1];
+    if(stepsDirty)
+        steps();
+    if(!pointsDirty)
+        return m_points;
 
-    return ret;
+    if(m_points.size() != numSteps + 1)
+    {
+        m_points.resize(numSteps + 1);
+        m_points[0] = Step(std::vector<int>(d, 0));
+    }
+
+    for(int i=start; i<=numSteps; ++i)
+        m_points[i] = m_points[i-1] + m_steps[i-1];
+
+    return m_points;
 }
 
 const ConvexHull& Walker::convexHull() const
 {
-    if(stepsDirty)
-        steps();
     if(hullDirty)
     {
         m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHull(points()));
@@ -44,10 +50,23 @@ const ConvexHull& Walker::convexHull() const
     return *m_convex_hull;
 }
 
-//ConvexHull Walker::convexHull() const
-//{
-//    return ConvexHull(points());
-//}
+double Walker::rnChange(const int idx, const double other)
+{
+    // I should do this in a far more clever way
+    double tmp = random_numbers[idx];
+    random_numbers[idx] = other;
+
+    Step newStep(d, other);
+    // test if something changes
+    if(newStep == m_steps[idx])
+        return tmp;
+
+    m_steps[idx] = newStep;
+    points(idx+1);
+    hullDirty = true;
+
+    return tmp;
+}
 
 int Walker::nSteps() const
 {

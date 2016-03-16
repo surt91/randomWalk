@@ -2,10 +2,12 @@
 
 std::vector<double> rng(int n, int seed)
 {
-    std::mt19937 rng(seed);
-    std::uniform_real_distribution<double> distribution(0.0, 1.0);
-    auto uniform = std::bind(distribution, rng);
+    UniformRNG u(seed);
+    return u.vector(n);
+}
 
+std::vector<double> UniformRNG::vector(int n)
+{
     std::vector<double> v(n);
     std::generate(v.begin(), v.end(), uniform);
 
