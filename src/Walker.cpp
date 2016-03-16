@@ -12,9 +12,9 @@ const std::vector<Step> Walker::steps(int limit) const
     if(!stepsDirty)
         return m_steps;
 
-    std::vector<Step> ret(numSteps+1);
+    std::vector<Step> ret(numSteps);
     ret[0] = Step(std::vector<int>(d, 0));
-    for(int i=1; i<=numSteps; ++i)
+    for(int i=1; i<numSteps; ++i)
         ret[i] = Step(d, random_numbers[i]);
 
     m_steps = ret;
