@@ -47,7 +47,7 @@ class Walker
 
         int nSteps() const;
 
-        void print() const;
+        std::string print() const;
         void svg(const std::string filename, const bool with_hull=false) const;
 
     protected:

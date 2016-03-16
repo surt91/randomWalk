@@ -52,7 +52,7 @@ const std::vector<Step> LoopErasedWalker::steps(int limit) const
         // we only want limit steps
         if(limit && numSteps==limit)
         {
-            std::cout << i << " Random numbers used" << "\n";
+            log<LOG_INFO>("Random numbers used:") << i;
             break;
         }
     }

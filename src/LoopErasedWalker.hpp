@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 
+#include "Logging.hpp"
 #include "Walker.hpp"
 
 class LoopErasedWalker : public Walker

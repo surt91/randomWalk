@@ -3,10 +3,12 @@
 
 #include <tclap/CmdLine.h>
 
+#include "Logging.hpp"
 #include "Walker.hpp"
 #include "LoopErasedWalker.hpp"
 #include "RNG.hpp"
 #include "ConvexHull.hpp"
+#include "misc.hpp"
 
 int main(int argc, char** argv)
 {
@@ -21,7 +23,7 @@ int main(int argc, char** argv)
         TCLAP::ValueArg<int> seedArg("x", "seed", "seed for rng", false, 0, "integer");
         TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
-        TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level", false, 0, "integer");
+        TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level", false, 4, "integer");
 
         std::vector<int> allowedTypes_;
         allowedTypes_.push_back(1);
@@ -52,7 +54,7 @@ int main(int argc, char** argv)
         int seed = seedArg.getValue();
         int type = typeArg.getValue();
         int d = dimArg.getValue();
-        int v = verboseArg.getValue();
+        VERBOSITY_LEVEL = verboseArg.getValue();
 
         clock_t before_rng = clock();
         std::vector<double> numbers = rng(n, seed);
@@ -70,25 +72,22 @@ int main(int argc, char** argv)
 
         clock_t before_output = clock();
         w->hullPoints();
-        std::cout << "Steps  " << w->nSteps() << "\n";
-        std::cout << "Area   " << w->L() << "\n";
-        std::cout << "Volume " << w->A() << "\n";
-//        w->print();
+        log<LOG_INFO>("Steps :") << w->nSteps();
+        log<LOG_INFO>("Area  :") << w->L();
+        log<LOG_INFO>("Volume:") << w->A();
+        log<LOG_TOO_MUCH>("Trajectory:") << w->print();
         if(!svg_path.empty())
             w->svg(svg_path, true);
 
-        if(v >= 1)
-        {
-            std::cout << "RNG: " << (double)(before_rng - before_walker) / CLOCKS_PER_SEC << " s\n";
-            std::cout << "RW : " << (double)(before_walker - before_ch) / CLOCKS_PER_SEC << " s\n";
-            std::cout << "CH : " << (double)(before_ch - before_output) / CLOCKS_PER_SEC << " s\n";
-            std::cout << "OUT: " << (double)(before_output - clock()) / CLOCKS_PER_SEC << " s\n";
-        }
+        log<LOG_TIMING>("RNG: ") << time_diff(before_walker, before_rng);
+        log<LOG_TIMING>("RW : ") << time_diff(before_ch, before_walker);
+        log<LOG_TIMING>("CH : ") << time_diff(before_output, before_ch);
+        log<LOG_TIMING>("OUT: ") << time_diff(clock(), before_output);
 
         delete w;
     }
     catch(TCLAP::ArgException &e)  // catch any exceptions
     {
-        std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
+//        log<LOG_ERROR>("") << e.error() << " for arg " << e.argId() << std::endl;
     }
 }

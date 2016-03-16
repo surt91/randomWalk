@@ -56,11 +56,13 @@ int Walker::nSteps() const
     return numSteps;
 }
 
-void Walker::print() const
+std::string Walker::print() const
 {
+    std::stringstream ss;
     for(auto i : points())
-        std::cout << i << " ";
-    std::cout << std::endl;
+        ss << i << " ";
+    ss << "\n";
+    return ss.str();
 }
 
 void Walker::svg(const std::string filename, const bool with_hull) const
