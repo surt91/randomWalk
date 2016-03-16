@@ -95,7 +95,7 @@ void SVG::save()
 
     if(!oss.good())
     {
-        std::cout << ERROR << filename << " cannot be opened" << std::endl;
+        log<LOG_ERROR>("File can not be opened:") << filename;
         throw std::invalid_argument("cannot be opened");
     }
 

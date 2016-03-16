@@ -8,22 +8,20 @@ CPP	 := main.cpp \
         Svg.cpp
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
-DEP	 = $(OBJ:obj/%.o=dep/%.d)
+DEP	 = $(CPP:%.cpp=dep/%.d)
 
 QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
-CC	= g++ -g
-#CC	= g++ -O3 -flto -mtune=native -ffast-math
+#CC	= g++ -g
+CC	= g++ -O3 -flto -mtune=native -ffast-math
 #CC	= clang++ -O3 -flto -march=native -ffast-math
 WARNLEVEL= -Wall -Wextra -Wno-unused-parameter -pedantic
-
-BOOSTDIR = ../boost
 
 LNDIRS  = -L$(PWD)/lib \
           -L$(PWD)/qhull/lib
 
 INCLUDES = -I$(PWD)/include \
-           -I$(PWD)/qhull/src
+           -I$(PWD)/qhull/src \
 
 COPT = -std=c++11 -m64 -O -fPIC -fno-strict-aliasing -fomit-frame-pointer -fexceptions -pipe
 CFLAGS	= $(COPT) $(INCLUDES)
@@ -49,7 +47,7 @@ dep/%.d: %.cpp | dep
 	@echo Dep: $@
 	@set -e; rm -f $@; \
 	$(CC) $(WARNLEVEL) $(CFLAGS) -MM $< > $@.$$$$; \
-	sed 's,\($*\)\.o[ :]*,\1.o $@ $*.oo $*.op: ,g' < $@.$$$$ > $@; \
+	sed 's,\($*\)\.o[ :]*,obj/\1.o $@: ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 obj/%.o: %.cpp | obj

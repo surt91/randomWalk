@@ -1,5 +1,4 @@
-#ifndef _IO_H
-#define _IO_H
+#pragma once
 
 #include <iostream>
 #include <sstream>
@@ -8,7 +7,7 @@
 #include <vector>
 #include <stdexcept>
 
-#include "defines.h"
+#include "Logging.hpp"
 
 class SVG
 {
@@ -34,5 +33,3 @@ class SVG
         std::stringstream buffer;
         std::string header;
 };
-
-#endif

@@ -73,11 +73,11 @@ int main(int argc, char** argv)
         std::vector<double> numbers = rng(n, seed);
 
         clock_t before_walker = clock();
-        Walker *w = NULL;
+        std::unique_ptr<Walker> w;
         if(type == 1)
-            w = new Walker(d, numbers);
+            w = std::unique_ptr<Walker>(new Walker(d, numbers));
         else if(type == 2)
-            w = new LoopErasedWalker(d, numbers);
+            w = std::unique_ptr<Walker>(new LoopErasedWalker(d, numbers));
         w->steps();
 
         clock_t before_ch = clock();
@@ -96,8 +96,6 @@ int main(int argc, char** argv)
         log<LOG_TIMING>("RW : ") << time_diff(before_ch, before_walker);
         log<LOG_TIMING>("CH : ") << time_diff(before_output, before_ch);
         log<LOG_TIMING>("OUT: ") << time_diff(clock(), before_output);
-
-        delete w;
     }
     catch(TCLAP::ArgException &e)  // catch any exceptions
     {
