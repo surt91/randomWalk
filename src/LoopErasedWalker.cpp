@@ -1,6 +1,6 @@
 #include "LoopErasedWalker.hpp"
 
-const std::vector<Step> LoopErasedWalker::steps() const
+const std::vector<Step> LoopErasedWalker::steps(int limit) const
 {
     if(!stepsDirty)
         return m_steps;
@@ -48,6 +48,13 @@ const std::vector<Step> LoopErasedWalker::steps() const
             occupied_tiles.insert({p, index});
         }
         numSteps = index + 1;
+
+        // we only want limit steps
+        if(limit && numSteps==limit)
+        {
+            std::cout << i << " Random numbers used" << "\n";
+            break;
+        }
     }
     ret.resize(numSteps);
 

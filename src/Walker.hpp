@@ -43,7 +43,7 @@ class Walker
         const std::vector<Step> hullPoints() const { return convexHull().hullPoints(); };
 
         const std::vector<Step> points() const;
-        virtual const std::vector<Step> steps() const;
+        virtual const std::vector<Step> steps(int limit=0) const;
 
         int nSteps() const;
 

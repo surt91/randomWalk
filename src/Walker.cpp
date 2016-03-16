@@ -1,7 +1,14 @@
 #include "Walker.hpp"
 
-const std::vector<Step> Walker::steps() const
+const std::vector<Step> Walker::steps(int limit) const
 {
+    if(limit)
+    {
+        if(limit != numSteps)
+            stepsDirty = true;
+        numSteps = limit;
+    }
+
     if(!stepsDirty)
         return m_steps;
 
