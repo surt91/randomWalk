@@ -12,13 +12,13 @@ const std::vector<Step> LoopErasedWalker::steps() const
     // hashmap. Also clear the hashmap from all entries with a greater index
     // by iterating over the vector of steps taken, starting at index+1
     // then continue
-    
+
     const int N = random_numbers.size();
     std::unordered_map<Step, int> occupied_tiles;
     // at most as many steps as random numbers, i.e. no loop erasure
     std::vector<Step> ret(N+1);
 
-    // p will kepp track where the head is
+    // p will keep track where the head is
     Step p(std::vector<int>(d, 0));
     ret[0] = p; // start at origin
     occupied_tiles.insert({p, 0});
@@ -27,7 +27,7 @@ const std::vector<Step> LoopErasedWalker::steps() const
     {
         Step s(d, random_numbers[i]);
         p += s;
-        
+
         // if already occupied, erase loop
         auto it = occupied_tiles.find(p);
         if(it != occupied_tiles.end())

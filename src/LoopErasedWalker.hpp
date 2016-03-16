@@ -7,7 +7,7 @@
 class LoopErasedWalker : public Walker
 {
     public:
-        LoopErasedWalker(int d, std::vector<double> random_numbers)
+        LoopErasedWalker(int d, std::vector<double> &random_numbers)
             : Walker(d, random_numbers)
         {
             numSteps = -1;

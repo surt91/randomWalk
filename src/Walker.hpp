@@ -19,7 +19,7 @@
 class Walker
 {
     public:
-        Walker(int d, std::vector<double> random_numbers)
+        Walker(int d, std::vector<double> &random_numbers)
             : numSteps(random_numbers.size()),
               d(d), 
               random_numbers(random_numbers)

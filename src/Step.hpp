@@ -10,12 +10,12 @@
 class Step;
 namespace std {
     template<>
-    class hash<Step>;
+    struct hash<Step>;
 }
 
 class Step
 {
-    friend class std::hash<Step>;
+    friend struct std::hash<Step>;
 
     public:
         Step()
@@ -122,7 +122,7 @@ inline bool operator==(const Step &lhs, const Step &rhs)
 
 namespace std {
     template<>
-    class hash<Step>
+    struct hash<Step>
     {
         public:
             // very simple lcg for hashing int vectors
