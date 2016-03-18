@@ -44,6 +44,7 @@ const std::vector<std::string> TYPE_LABEL = {
 class Cmd
 {
     public:
+        Cmd() {};
         Cmd(int argc, char** argv);
 
         std::string svg_path;
@@ -57,6 +58,7 @@ class Cmd
         int theta;
         hull_algorithm_t chAlg;
 
-        bool aklHeuristic;
         bool benchmark;
+        double benchmark_A;
+        double benchmark_L;
 };

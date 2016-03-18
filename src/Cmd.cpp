@@ -12,8 +12,8 @@ Cmd::Cmd(int argc, char** argv)
 
         // value argument
         // -short, --long, description, required, default, type
-        TCLAP::ValueArg<int> numArg("N", "steps", "how many steps", true, 100, "integer");
-        TCLAP::ValueArg<int> iterationsArg("n", "iterations", "how many MC tries", true, 100, "integer");
+        TCLAP::ValueArg<int> numArg("N", "steps", "how many steps", false, 100, "integer");
+        TCLAP::ValueArg<int> iterationsArg("n", "iterations", "how many MC tries", false, 100, "integer");
         TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, 0, "integer");
         TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, 0, "integer");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
@@ -78,11 +78,19 @@ Cmd::Cmd(int argc, char** argv)
         cmd.parse(argc, argv);
 
 
+        Logger::verbosity = 4;
+        benchmark = benchmarkSwitch.getValue();
+        if(benchmark)
+        {
+            log<LOG_INFO>("Benchmark Mode");
+            return;
+        }
+
         // Get the value parsed by each arg.
         Logger::verbosity = verboseArg.getValue();
         log<LOG_INFO>("Verbosity                 ") << Logger::verbosity;
 
-        aklHeuristic = aklHeuristicSwitch.getValue();
+        bool aklHeuristic = aklHeuristicSwitch.getValue();
         int tmp = chAlgArg.getValue();
         tmp = (tmp-1)*2 + 1;
         std::cout << tmp;
@@ -110,9 +118,6 @@ Cmd::Cmd(int argc, char** argv)
         log<LOG_INFO>("Path to store the SVG     ") << svg_path;
         data_path = dataPathArg.getValue();
         log<LOG_INFO>("Path to store the data    ") << data_path;
-
-        benchmark = benchmarkSwitch.getValue();
-        log<LOG_INFO>("Benchmark                 ") << benchmark;
     }
     catch(TCLAP::ArgException &e)  // catch any exceptions
     {
