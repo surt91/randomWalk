@@ -33,7 +33,12 @@ void run(const Cmd &o)
             double oldRN = w.rnChange(rn_to_change, rngMC());
 
             // Metropolis rejection
-            if(exp(-(w.A() - oldS)/o.theta) > rngMC())
+            double p_acc = std::min({1.0, exp(-(w.A() - oldS)/o.theta)});
+            log<LOG_TOO_MUCH>("newA") << w.A();
+            log<LOG_TOO_MUCH>("oldA") << oldS;
+            log<LOG_TOO_MUCH>("delta") << (w.A() - oldS);
+            log<LOG_TOO_MUCH>("p_acc") << p_acc;
+            if(p_acc < 1 - rngMC())
                 w.rnChange(rn_to_change, oldRN);
 
         }
