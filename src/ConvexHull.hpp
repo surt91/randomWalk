@@ -24,4 +24,6 @@ class ConvexHull
         mutable std::vector<Step> hullPoints_;
         int n;
         int d;
+
+        void preprocessAklToussaint();
 };
