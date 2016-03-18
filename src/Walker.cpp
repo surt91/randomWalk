@@ -43,7 +43,7 @@ const ConvexHull& Walker::convexHull() const
 {
     if(hullDirty)
     {
-        m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHull(points()));
+        m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullQHull(points()));
         hullDirty = false;
     }
 

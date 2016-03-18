@@ -6,6 +6,7 @@
 #include "Svg.hpp"
 #include "Step.hpp"
 #include "ConvexHull.hpp"
+#include "ConvexHullQHull.hpp"
 
 /* Class Walker
  *
