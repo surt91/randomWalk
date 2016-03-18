@@ -6,6 +6,7 @@ CPP	 := main.cpp \
         LoopErasedWalker.cpp \
         ConvexHull.cpp \
         ConvexHullQHull.cpp \
+        ConvexHullAndrew.cpp \
         LargeDeviation.cpp \
         RNG.cpp \
         Svg.cpp

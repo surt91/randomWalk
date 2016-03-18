@@ -83,6 +83,14 @@ class Step
             return *this;
         }
 
+        // a point is smaller, if the x value is smaller
+        // in case of a tie the smaller y value decides
+        // only for 2d, since it is only needed for the 2d andrew algorithm
+        bool operator <(const Step &other) const
+        {
+            return x() < other.x() || (x() == other.x() && y() < other.y());
+        }
+
         friend std::ostream& operator<<(std::ostream& os, const Step &obj)
         {
             os << "(";
@@ -92,12 +100,22 @@ class Step
             return os;
         }
 
+        friend std::ostream& operator<<(std::ostream& os, const std::vector<Step> &obj)
+        {
+            for(auto i : obj)
+                os << i << " ";
+            os << "\n";
+            return os;
+        }
+
         const int& operator[](std::size_t idx) const { return m_coordinates[idx]; };
         int& operator[](std::size_t idx) { return m_coordinates[idx]; };
 
         // getter
         const int& d() const { return m_d; };
         const int& x(const int n=0) const { return m_coordinates[n]; };
+        const int& y() const { return m_coordinates[1]; }; // specialisation for 2d
+        const int& z() const { return m_coordinates[2]; }; // specialisation for 3d
         const std::vector<int>& coordinates() const { return m_coordinates; };
 
     protected:

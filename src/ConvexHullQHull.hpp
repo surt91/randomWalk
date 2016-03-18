@@ -15,7 +15,7 @@ class ConvexHullQHull : public ConvexHull
         virtual double A() const;
         virtual double L() const;
 
-        virtual const std::vector<Step> hullPoints() const;
+        virtual const std::vector<Step>& hullPoints() const;
 
         // void movePoint();
 

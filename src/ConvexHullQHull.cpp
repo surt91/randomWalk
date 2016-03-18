@@ -20,9 +20,11 @@ ConvexHullQHull::~ConvexHullQHull()
     delete[] coords;
 }
 
-const std::vector<Step> ConvexHullQHull::hullPoints() const
+const std::vector<Step>& ConvexHullQHull::hullPoints() const
 {
-    std::vector<Step> out;
+    if(hullPoints_.size())
+        return hullPoints_;
+
     orgQhull::QhullVertexList vl = qhull->vertexList();
 
     for(auto v : vl)
@@ -31,17 +33,17 @@ const std::vector<Step> ConvexHullQHull::hullPoints() const
         std::vector<int> s(d);
         for(int i=0; i<d; ++i)
             s[i] = coord[i];
-        out.push_back(Step(s));
+        hullPoints_.push_back(Step(s));
     }
 
     if(d==2) // for 2D we can order the points clockwise
     {
-        std::sort(out.begin(), out.end(),
+        std::sort(hullPoints_.begin(), hullPoints_.end(),
             [](Step const & a, Step const & b) -> bool
             { return a.angle() < b.angle(); } );
     }
 
-    return out;
+    return hullPoints_;
 }
 
 double ConvexHullQHull::A() const
