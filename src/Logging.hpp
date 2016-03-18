@@ -57,6 +57,9 @@ class Logger {
 template<class T>
 Logger& operator<<(Logger &&l, const T &obj)
 {
+    if(l.level > l.verbosity)
+        return l;
+
     std::stringstream ss;
     ss << " " << obj;
     l.msg += ss.str();

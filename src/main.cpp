@@ -30,7 +30,7 @@ void benchmark(Cmd &o)
     log<LOG_INFO>("Steps :") << w->nSteps();
     log<LOG_INFO>("Area  :") << w->L();
     log<LOG_INFO>("Volume:") << w->A();
-    log<LOG_TOO_MUCH>("Trajectory:") << w->print();
+    log<LOG_TOO_MUCH>("Trajectory:") << w->points();
     if(!o.svg_path.empty())
         w->svg(o.svg_path, true);
 
