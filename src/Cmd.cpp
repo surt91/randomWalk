@@ -49,11 +49,12 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(iterationsArg);
         cmd.add(seedRArg);
         cmd.add(seedMCArg);
-        cmd.add(svgArg);
         cmd.add(dimArg);
         cmd.add(thetaArg);
         cmd.add(typeArg);
         cmd.add(verboseArg);
+        cmd.add(svgArg);
+        cmd.add(dataPathArg);
 
         cmd.add(benchmarkSwitch);
 
