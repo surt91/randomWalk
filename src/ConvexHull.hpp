@@ -9,7 +9,7 @@
 class ConvexHull
 {
     public:
-        ConvexHull(const std::vector<Step>& interiorPoints);
+        ConvexHull(const std::vector<Step>& interiorPoints, bool akl);
         virtual ~ConvexHull();
 
         virtual double A() const = 0;

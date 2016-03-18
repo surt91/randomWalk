@@ -40,8 +40,22 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\tlooperased walk: 2",
                                      false, 1, &allowedTypes);
 
+        std::vector<int> allowedCH_;
+        allowedCH_.push_back(1);
+        allowedCH_.push_back(2);
+        allowedCH_.push_back(3);
+        allowedCH_.push_back(4);
+        TCLAP::ValuesConstraint<int> allowedCH(allowedCH_);
+        TCLAP::ValueArg<int> chAlgArg("c", "convexHullAlgo", "convex hull algorithm:\n"
+                                                             "\tquickhull (QHull)     : 1 (default)\n"
+                                                             "\tAndrews Monotone Chain: 2\n"
+                                                             "\tGraham Scan           : 3\n"
+                                                             "\tJarvis March          : 4",
+                                      false, 1, &allowedCH);
+
         // switch argument
         // -short, --long, description, default
+        TCLAP::SwitchArg aklHeuristicSwitch("a","aklHeuristic","enables the Akl Toussaint heuristic", false);
         TCLAP::SwitchArg benchmarkSwitch("b","benchmark","perform benchmark", false);
 
         // Add to the parser
@@ -51,11 +65,13 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(seedMCArg);
         cmd.add(dimArg);
         cmd.add(thetaArg);
+        cmd.add(chAlgArg);
         cmd.add(typeArg);
         cmd.add(verboseArg);
         cmd.add(svgArg);
         cmd.add(dataPathArg);
 
+        cmd.add(aklHeuristicSwitch);
         cmd.add(benchmarkSwitch);
 
         // Parse the argv array.
@@ -65,6 +81,16 @@ Cmd::Cmd(int argc, char** argv)
         // Get the value parsed by each arg.
         Logger::verbosity = verboseArg.getValue();
         log<LOG_INFO>("Verbosity                 ") << Logger::verbosity;
+
+        aklHeuristic = aklHeuristicSwitch.getValue();
+        int tmp = chAlgArg.getValue();
+        tmp = (tmp-1)*2 + 1;
+        std::cout << tmp;
+        if(aklHeuristic)
+            tmp++;
+        std::cout << tmp;
+        chAlg = (hull_algorithm_t) tmp;
+        log<LOG_INFO>("Convex Hull Algorithm     ") << CH_LABEL[chAlg];
 
         steps = numArg.getValue();
         log<LOG_INFO>("Number of steps           ") << steps;
@@ -79,12 +105,11 @@ Cmd::Cmd(int argc, char** argv)
         theta = thetaArg.getValue();
         log<LOG_INFO>("Theta                     ") << theta;
         type = typeArg.getValue();
-        log<LOG_INFO>("Type                      ") << type;
+        log<LOG_INFO>("Type                      ") << TYPE_LABEL[type];
         svg_path = svgArg.getValue();
         log<LOG_INFO>("Path to store the SVG     ") << svg_path;
         data_path = dataPathArg.getValue();
         log<LOG_INFO>("Path to store the data    ") << data_path;
-
 
         benchmark = benchmarkSwitch.getValue();
         log<LOG_INFO>("Benchmark                 ") << benchmark;

@@ -10,8 +10,8 @@ double cross(const Step &O, const Step &A, const Step &B)
     return (A.x() - O.x()) * (B.y() - O.y()) - (A.y() - O.y()) * (B.x() - O.x());
 }
 
-ConvexHullAndrew::ConvexHullAndrew(const std::vector<Step>& points)
-            : ConvexHull(points)
+ConvexHullAndrew::ConvexHullAndrew(const std::vector<Step>& points, bool akl)
+            : ConvexHull(points, akl)
 {
     // create convex hull with graham scan, and akl heuristic (?)
     // graham scan does only work in a plane

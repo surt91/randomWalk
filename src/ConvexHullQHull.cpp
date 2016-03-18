@@ -3,8 +3,8 @@
 // http://www.boost.org/doc/libs/1_56_0/libs/geometry/doc/html/geometry/reference/algorithms/convex_hull.html
 // http://www.boost.org/doc/libs/1_57_0/libs/geometry/doc/html/geometry/reference/models/model_multi_point.html
 
-ConvexHullQHull::ConvexHullQHull(const std::vector<Step>& interiorPoints)
-            : ConvexHull(interiorPoints)
+ConvexHullQHull::ConvexHullQHull(const std::vector<Step>& interiorPoints, bool akl)
+            : ConvexHull(interiorPoints, akl)
 {
     coords = new double[n*d];
     for(int i=0; i<n; ++i)

@@ -17,9 +17,9 @@ void benchmark(Cmd &o)
     clock_t before_walker = clock();
     std::unique_ptr<Walker> w;
     if(o.type == 1)
-        w = std::unique_ptr<Walker>(new Walker(o.d, numbers));
+        w = std::unique_ptr<Walker>(new Walker(o.d, numbers, o.chAlg));
     else if(o.type == 2)
-        w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, numbers));
+        w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, numbers, o.chAlg));
     w->steps();
 
     clock_t before_ch = clock();

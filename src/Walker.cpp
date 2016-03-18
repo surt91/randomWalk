@@ -43,8 +43,23 @@ const ConvexHull& Walker::convexHull() const
 {
     if(hullDirty)
     {
-        //~ m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullQHull(points()));
-        m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullAndrew(points()));
+        bool akl = false;
+        switch(hull_algo)
+        {
+            case CH_QHULL_AKL:
+                akl = true;
+            case CH_QHULL:
+                m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullQHull(points(), akl));
+                break;
+            case CH_ANDREWS_AKL:
+                akl = true;
+            case CH_ANDREWS:
+                m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullAndrew(points(), akl));
+                break;
+            default:
+                log<LOG_ERROR>("Algorithm not implemented, yet") << CH_LABEL[hull_algo];
+                throw std::invalid_argument("this is not implemented");
+        }
         hullDirty = false;
     }
 

@@ -1,12 +1,13 @@
 #include "ConvexHull.hpp"
 
 
-ConvexHull::ConvexHull(const std::vector<Step>& interiorPoints)
+ConvexHull::ConvexHull(const std::vector<Step>& interiorPoints, bool akl)
             : interiorPoints(interiorPoints),
               n(interiorPoints.size()),
               d(interiorPoints[0].d())
 {
-    preprocessAklToussaint();
+    if(akl)
+        preprocessAklToussaint();
 }
 
 ConvexHull::~ConvexHull()

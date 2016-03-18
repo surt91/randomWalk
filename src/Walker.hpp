@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 
+#include "Cmd.hpp"
 #include "Svg.hpp"
 #include "Step.hpp"
 #include "ConvexHullQHull.hpp"
@@ -20,10 +21,11 @@
 class Walker
 {
     public:
-        Walker(int d, std::vector<double> &random_numbers)
+        Walker(int d, std::vector<double> &random_numbers, hull_algorithm_t hull_algo)
             : numSteps(random_numbers.size()),
               d(d),
-              random_numbers(random_numbers)
+              random_numbers(random_numbers),
+              hull_algo(hull_algo)
         {
             stepsDirty = true;
             pointsDirty = true;
@@ -63,4 +65,5 @@ class Walker
 
         int d;
         std::vector<double> random_numbers;
+        hull_algorithm_t hull_algo;
 };

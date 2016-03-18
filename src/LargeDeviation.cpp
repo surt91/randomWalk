@@ -17,7 +17,8 @@ void run(const Cmd &o)
     // initial random walk:
     std::vector<double> numbers = rngReal.vector(o.steps);
 
-    Walker w(o.d, numbers);
+    // does not work for loop erased yet
+    Walker w(o.d, numbers, o.chAlg);
     w.convexHull();
 
     for(int i=0; i<o.iterations; ++i)
