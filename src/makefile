@@ -59,10 +59,8 @@ obj/%.o: %.cpp | obj
 	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@
 
 $(QHULL):
-	# needed three tries the last time I tried
-	$(MAKE) -i -C qhull
-	$(MAKE) -i -C qhull
-	$(MAKE) -i -C qhull
+	$(MAKE) -j1 -C qhull cleanall
+	$(MAKE) -j1 -C qhull lib/libqhullstatic_r.a lib/libqhullcpp.a
 
 $(TARGET): $(OBJ) $(QHULL)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
@@ -73,3 +71,6 @@ proper:
 clean: proper
 	rm -rf dep
 	rm -rf $(TARGET)
+
+cleanall: clean
+	$(MAKE) -C qhull cleanall
