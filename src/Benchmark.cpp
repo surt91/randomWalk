@@ -33,8 +33,8 @@ void run_walker_and_CH(Cmd o)
         log<LOG_ERROR>("expected") << o.benchmark_A;
     }
 
-    log<LOG_TIMING>("RW : ") << time_diff(before_ch, before_walker);
-    log<LOG_TIMING>("CH : ") << time_diff(before_output, before_ch);
+    log<LOG_TIMING>("RW : ") << time_diff(before_walker, before_ch);
+    log<LOG_TIMING>("CH : ") << time_diff(before_ch, before_output);
 }
 
 void run_MC_simulation(Cmd o)
