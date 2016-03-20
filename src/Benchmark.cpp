@@ -7,14 +7,13 @@ std::string time_diff(clock_t start, clock_t end)
 
 void run_walker_and_CH(Cmd o)
 {
-    std::vector<double> numbers = rng(o.steps, o.seedRealization);
-
     clock_t before_walker = clock();
     std::unique_ptr<Walker> w;
+    UniformRNG rng(o.seedRealization);
     if(o.type == 1)
-        w = std::unique_ptr<Walker>(new Walker(o.d, numbers, o.chAlg));
+        w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rng, o.chAlg));
     else if(o.type == 2)
-        w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, numbers, o.chAlg));
+        w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rng, o.chAlg));
     w->steps();
 
     clock_t before_ch = clock();
@@ -73,10 +72,10 @@ void benchmark()
     o.chAlg = CH_QHULL_AKL;
     run_walker_and_CH(o);
 
-
+    o.steps = 10000;
     o.type = 2;
-    o.benchmark_L = 3097.93;
-    o.benchmark_A = 581186;
+    o.benchmark_L = 4064.59205479;
+    o.benchmark_A = 481541;
 
     log<LOG_INFO>("Loop Erased Random Walk, Andrews Monotone Chain");
     o.chAlg = CH_ANDREWS;

@@ -1,6 +1,6 @@
 #include "LoopErasedWalker.hpp"
 
-const std::vector<Step> LoopErasedWalker::steps(int limit) const
+const std::vector<Step> LoopErasedWalker::steps() const
 {
     if(!stepsDirty)
         return m_steps;
@@ -13,18 +13,28 @@ const std::vector<Step> LoopErasedWalker::steps(int limit) const
     // by iterating over the vector of steps taken, starting at index+1
     // then continue
 
-    const int N = random_numbers.size();
+    int N = random_numbers.size();
     std::unordered_map<Step, int> occupied_tiles;
     // at most as many steps as random numbers, i.e. no loop erasure
-    std::vector<Step> ret(N+1);
+    std::vector<Step> ret(numSteps+1);
 
     // p will keep track where the head is
     Step p(std::vector<int>(d, 0));
     ret[0] = p; // start at origin
     occupied_tiles.insert({p, 0});
 
-    for(int i=1, index=1; i<N; ++i, ++index)
+    int i=1;
+    int index=1;
+    while(index <= numSteps)
     {
+        // generate more random numbers if necessary
+        if(i >= N)
+        {
+            N *= 2;
+            random_numbers.resize(N);
+
+            std::generate(random_numbers.begin() + i, random_numbers.end(), rng);
+        }
         Step s(d, random_numbers[i]);
         p += s;
 
@@ -47,18 +57,31 @@ const std::vector<Step> LoopErasedWalker::steps(int limit) const
             ret[index] = s;
             occupied_tiles.insert({p, index});
         }
-        numSteps = index + 1;
 
-        // we only want limit steps
-        if(limit && numSteps==limit)
-        {
-            log<LOG_INFO>("Random numbers used:") << i;
-            break;
-        }
+        ++i;
+        ++index;
     }
-    ret.resize(numSteps);
+    log<LOG_INFO>("Random numbers used:") << i;
 
     m_steps = ret;
     stepsDirty = false;
     return m_steps;
+}
+
+double LoopErasedWalker::rnChange(const int idx, const double other)
+{
+    // I should do this in a far more clever way
+    double tmp = random_numbers[idx];
+    random_numbers[idx] = other;
+
+    Step newStep(d, other);
+    // test if something changes
+    if(newStep == m_steps[idx])
+        return tmp;
+
+    stepsDirty = true;
+    pointsDirty = true;
+    hullDirty = true;
+
+    return tmp;
 }

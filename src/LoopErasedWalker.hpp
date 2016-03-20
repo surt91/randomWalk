@@ -8,13 +8,14 @@
 class LoopErasedWalker : public Walker
 {
     public:
-        LoopErasedWalker(int d, std::vector<double> &random_numbers, hull_algorithm_t hull_algo)
-            : Walker(d, random_numbers, hull_algo)
+        LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
+            : Walker(d, numSteps, rng, hull_algo)
         {
-            numSteps = -1;
         };
 
         virtual ~LoopErasedWalker() {};
 
-        virtual const std::vector<Step> steps(int limit=0) const;
+        virtual const std::vector<Step> steps() const;
+
+        virtual double rnChange(const int idx, const double other);
 };

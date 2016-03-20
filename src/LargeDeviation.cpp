@@ -13,12 +13,8 @@ void run(const Cmd &o)
     oss << "# large deviation simulation at theta=" << o.theta << " and steps=" << o.steps << "\n";
     oss << "# sweeps L A\n";
 
-
-    // initial random walk:
-    std::vector<double> numbers = rngReal.vector(o.steps);
-
     // does not work for loop erased yet
-    Walker w(o.d, numbers, o.chAlg);
+    Walker w(o.d, o.steps, rngReal, o.chAlg);
     w.convexHull();
 
     for(int i=0; i<o.iterations; ++i)
