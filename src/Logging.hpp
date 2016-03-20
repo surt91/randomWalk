@@ -32,43 +32,44 @@ static const std::vector<std::string> LABEL = {
 
 class Logger {
     public:
-        Logger(log_level_t level, const std::string &msg)
-            : level(level),
-              msg(msg)
-        {}
+        Logger(log_level_t level)
+            : level(level)
+        {
+            ss.precision(12);
+        }
 
         ~Logger()
         {
             // VERBOSITY_LEVEL is a global variable and could be changed at runtime
             if(level <= verbosity)
-                std::cout << LABEL[level] << msg << std::endl;
+                std::cout << LABEL[level] << ss.str() << std::endl;
         }
 
         static int verbosity;
 
         template<class T>
-        friend Logger& operator<<(Logger &&l, const T &obj);
+        friend std::ostream& operator<<(Logger &&l, const T &obj);
+        
 
     protected:
         log_level_t level;
         std::string msg;
+        std::stringstream ss;
 };
 
 template<class T>
-Logger& operator<<(Logger &&l, const T &obj)
+std::ostream& operator<<(Logger &&l, const T &obj)
 {
-    if(l.level > l.verbosity)
-        return l;
-
-    std::stringstream ss;
-    ss << " " << obj;
-    l.msg += ss.str();
-    return l;
+    l.ss << " " << obj;
+    return l.ss;
 }
 
-// Helper function. Class Logger will not be used directly.
-template<log_level_t level>
-Logger log(const std::string &msg = std::string())
+template<class T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T> &v)
 {
-    return Logger(level, msg);
+    for(auto i : v)
+        os << i << " ";
+    os << "\n";
+    return os;
 }
+

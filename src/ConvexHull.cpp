@@ -70,7 +70,7 @@ void ConvexHull::preprocessAklToussaint()
         pointSelection.push_back(min[i]);
         pointSelection.push_back(max[i]);
     }
-    log<LOG_DEBUG>("Akl Toussaint killed") << (n - pointSelection.size());
+    Logger(LOG_DEBUG) << "Akl Toussaint killed" << (n - pointSelection.size());
 
     interiorPoints = std::move(pointSelection);
     n = interiorPoints.size();

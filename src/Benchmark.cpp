@@ -23,17 +23,17 @@ void run_walker_and_CH(Cmd o)
 
     if(std::abs(w->L() - o.benchmark_L) > 0.01)
     {
-        log<LOG_ERROR>("Wrong L ") << w->L();
-        log<LOG_ERROR>("expected") << o.benchmark_L;
+        Logger(LOG_ERROR) << "Wrong L " << w->L();
+        Logger(LOG_ERROR) <<"expected" << o.benchmark_L;
     }
     if(std::abs(w->A() - o.benchmark_A) > 1)
     {
-        log<LOG_ERROR>("Wrong A ") << w->A();
-        log<LOG_ERROR>("expected") << o.benchmark_A;
+        Logger(LOG_ERROR) <<"Wrong A " << w->A();
+        Logger(LOG_ERROR) <<"expected" << o.benchmark_A;
     }
 
-    log<LOG_TIMING>("RW : ") << time_diff(before_walker, before_ch);
-    log<LOG_TIMING>("CH : ") << time_diff(before_ch, before_output);
+    Logger(LOG_TIMING) << "RW : " << time_diff(before_walker, before_ch);
+    Logger(LOG_TIMING) << "CH : " << time_diff(before_ch, before_output);
 }
 
 void run_MC_simulation(Cmd o)
@@ -56,19 +56,19 @@ void benchmark()
     o.benchmark_L = 3747.18;
     o.benchmark_A = 984338;
 
-    log<LOG_INFO>("Random Walk, Andrews Monotone Chain");
+    Logger(LOG_INFO) << "Random Walk, Andrews Monotone Chain";
     o.chAlg = CH_ANDREWS;
     run_walker_and_CH(o);
 
-    log<LOG_INFO>("Random Walk, Andrews Monotone Chain and Akl Toussaint");
+    Logger(LOG_INFO) << "Random Walk, Andrews Monotone Chain and Akl Toussaint";
     o.chAlg = CH_ANDREWS_AKL;
     run_walker_and_CH(o);
 
-    log<LOG_INFO>("Random Walk, QHull");
+    Logger(LOG_INFO) << "Random Walk, QHull";
     o.chAlg = CH_QHULL;
     run_walker_and_CH(o);
 
-    log<LOG_INFO>("Random Walk, QHull and Akl Toussaint");
+    Logger(LOG_INFO) << "Random Walk, QHull and Akl Toussaint";
     o.chAlg = CH_QHULL_AKL;
     run_walker_and_CH(o);
 
@@ -77,19 +77,19 @@ void benchmark()
     o.benchmark_L = 4064.59205479;
     o.benchmark_A = 481541;
 
-    log<LOG_INFO>("Loop Erased Random Walk, Andrews Monotone Chain");
+    Logger(LOG_INFO) << "Loop Erased Random Walk, Andrews Monotone Chain";
     o.chAlg = CH_ANDREWS;
     run_walker_and_CH(o);
 
-    log<LOG_INFO>("Loop Erased Random Walk, Andrews Monotone Chain and Akl Toussaint");
+    Logger(LOG_INFO) << "Loop Erased Random Walk, Andrews Monotone Chain and Akl Toussaint";
     o.chAlg = CH_ANDREWS_AKL;
     run_walker_and_CH(o);
 
-    log<LOG_INFO>("Loop Erased Random Walk, QHull");
+    Logger(LOG_INFO) << "Loop Erased Random Walk, QHull";
     o.chAlg = CH_QHULL;
     run_walker_and_CH(o);
 
-    log<LOG_INFO>("Loop Erased Random Walk, QHull and Akl Toussaint");
+    Logger(LOG_INFO) << "Loop Erased Random Walk, QHull and Akl Toussaint";
     o.chAlg = CH_QHULL_AKL;
     run_walker_and_CH(o);
 

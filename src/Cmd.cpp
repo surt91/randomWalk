@@ -82,13 +82,13 @@ Cmd::Cmd(int argc, char** argv)
         benchmark = benchmarkSwitch.getValue();
         if(benchmark)
         {
-            log<LOG_INFO>("Benchmark Mode");
+            Logger(LOG_INFO) << "Benchmark Mode";
             return;
         }
 
         // Get the value parsed by each arg.
         Logger::verbosity = verboseArg.getValue();
-        log<LOG_INFO>("Verbosity                 ") << Logger::verbosity;
+        Logger(LOG_INFO) << "Verbosity                 " << Logger::verbosity;
 
         bool aklHeuristic = aklHeuristicSwitch.getValue();
         int tmp = chAlgArg.getValue();
@@ -98,31 +98,29 @@ Cmd::Cmd(int argc, char** argv)
             tmp++;
         std::cout << tmp;
         chAlg = (hull_algorithm_t) tmp;
-        log<LOG_INFO>("Convex Hull Algorithm     ") << CH_LABEL[chAlg];
+        Logger(LOG_INFO) << "Convex Hull Algorithm     " << CH_LABEL[chAlg];
 
         steps = numArg.getValue();
-        log<LOG_INFO>("Number of steps           ") << steps;
+        Logger(LOG_INFO) << "Number of steps           " << steps;
         iterations = iterationsArg.getValue();
-        log<LOG_INFO>("Number of MC iterations   ") << iterations;
+        Logger(LOG_INFO) << "Number of MC iterations   " << iterations;
         seedRealization = seedRArg.getValue();
-        log<LOG_INFO>("Seed for the realization  ") << seedRealization;
+        Logger(LOG_INFO) << "Seed for the realization  " << seedRealization;
         seedMC = seedMCArg.getValue();
-        log<LOG_INFO>("Seed for the MC simulation") << seedMC;
+        Logger(LOG_INFO) << "Seed for the MC simulation" << seedMC;
         d = dimArg.getValue();
-        log<LOG_INFO>("Dimension                 ") << d;
+        Logger(LOG_INFO) << "Dimension                 " << d;
         theta = thetaArg.getValue();
-        log<LOG_INFO>("Theta                     ") << theta;
+        Logger(LOG_INFO) << "Theta                     " << theta;
         type = typeArg.getValue();
-        log<LOG_INFO>("Type                      ") << TYPE_LABEL[type];
+        Logger(LOG_INFO) << "Type                      " << TYPE_LABEL[type];
         svg_path = svgArg.getValue();
-        log<LOG_INFO>("Path to store the SVG     ") << svg_path;
+        Logger(LOG_INFO) << "Path to store the SVG     " << svg_path;
         data_path = dataPathArg.getValue();
-        log<LOG_INFO>("Path to store the data    ") << data_path;
+        Logger(LOG_INFO) << "Path to store the data    " << data_path << "works";
     }
     catch(TCLAP::ArgException &e)  // catch any exceptions
     {
-        std::stringstream ss;
-        ss << e.error() << " for arg " << e.argId();
-        log<LOG_ERROR>("") << ss.str();
+        Logger(LOG_ERROR) << e.error() << " for arg " << e.argId();;
     }
 }

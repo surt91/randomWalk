@@ -50,7 +50,7 @@ const ConvexHull& Walker::convexHull() const
                 m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullAndrew(points(), akl));
                 break;
             default:
-                log<LOG_ERROR>("Algorithm not implemented, yet") << CH_LABEL[hull_algo];
+                Logger(LOG_ERROR) << "Algorithm not implemented, yet" << CH_LABEL[hull_algo];
                 throw std::invalid_argument("this is not implemented");
         }
         hullDirty = false;
