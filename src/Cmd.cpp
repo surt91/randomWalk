@@ -121,7 +121,7 @@ Cmd::Cmd(int argc, char** argv)
         pov_path = povArg.getValue();
         Logger(LOG_INFO) << "Path to store the povray  " << pov_path;
         data_path = dataPathArg.getValue();
-        Logger(LOG_INFO) << "Path to store the data    " << data_path << "works";
+        Logger(LOG_INFO) << "Path to store the data    " << data_path;
     }
     catch(TCLAP::ArgException &e)  // catch any exceptions
     {

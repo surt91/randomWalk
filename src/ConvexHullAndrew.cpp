@@ -72,7 +72,7 @@ double ConvexHullAndrew::L() const
     double l = 0;
     for(int i=0; i<hullPoints_.size()-1; ++i)
         l += sqrt(
-            std::pow(hullPoints_[i].x() - hullPoints_[i+1].x(),2)
+            std::pow(hullPoints_[i].x() - hullPoints_[i+1].x(), 2)
             + std::pow(hullPoints_[i].y() - hullPoints_[i+1].y(), 2)
             );
     return l;
