@@ -95,10 +95,8 @@ Cmd::Cmd(int argc, char** argv)
         bool aklHeuristic = aklHeuristicSwitch.getValue();
         int tmp = chAlgArg.getValue();
         tmp = (tmp-1)*2 + 1;
-        std::cout << tmp;
         if(aklHeuristic)
             tmp++;
-        std::cout << tmp;
         chAlg = (hull_algorithm_t) tmp;
         Logger(LOG_INFO) << "Convex Hull Algorithm     " << CH_LABEL[chAlg];
 
