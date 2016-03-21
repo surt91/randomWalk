@@ -7,15 +7,19 @@ void run(const Cmd &o)
     std::ofstream oss(o.data_path, std::ofstream::out);
     if(!oss.good())
     {
-        Logger(LOG_ERROR) << "Path is not writable" << o.data_path;
+        Logger(LOG_ERROR) << "Path is not writable " << o.data_path;
         throw std::invalid_argument("Path is not writable");
     }
     oss << "# large deviation simulation at theta=" << o.theta << " and steps=" << o.steps << "\n";
     oss << "# sweeps L A\n";
 
+    std::unique_ptr<Walker> w;
     // does not work for loop erased yet
-    Walker w(o.d, o.steps, rngReal, o.chAlg);
-    w.convexHull();
+    if(o.type == 1)
+        w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
+    else if(o.type == 2)
+        w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
+    w->convexHull();
 
     for(int i=0; i<o.iterations; ++i)
     {
@@ -26,25 +30,28 @@ void run(const Cmd &o)
 
             // change one random number to another random number
             // save the random number before the change
-            double oldS = w.A();
-            double oldRN = w.rnChange(rn_to_change, rngMC());
+            double oldS = w->A();
+            double oldRN = w->rnChange(rn_to_change, rngMC());
 
             // Metropolis rejection
-            double p_acc = std::min({1.0, exp(-(w.A() - oldS)/o.theta)});
-            Logger(LOG_TOO_MUCH) << "newA" << w.A();
-            Logger(LOG_TOO_MUCH) << "oldA" << oldS;
-            Logger(LOG_TOO_MUCH) << "delta" << (w.A() - oldS);
-            Logger(LOG_TOO_MUCH) << "p_acc" << p_acc;
+            double p_acc = std::min({1.0, exp(-(w->A() - oldS)/o.theta)});
+            Logger(LOG_TOO_MUCH) << "newA " << w->A();
+            Logger(LOG_TOO_MUCH) << "oldA " << oldS;
+            Logger(LOG_TOO_MUCH) << "delta " << (w->A() - oldS);
+            Logger(LOG_TOO_MUCH) << "p_acc " << p_acc;
             if(p_acc < 1 - rngMC())
-                w.rnChange(rn_to_change, oldRN);
+                w->rnChange(rn_to_change, oldRN);
 
         }
-        Logger(LOG_TOO_MUCH) << "Area  :" << w.L();
-        Logger(LOG_TOO_MUCH) << "Volume:" << w.A();
-        Logger(LOG_DEBUG) << "Iteration:" << i;
-        oss << i << " " << w.L() << " " << w.A() << std::endl;
+        Logger(LOG_TOO_MUCH) << "Area  : " << w->L();
+        Logger(LOG_TOO_MUCH) << "Volume: " << w->A();
+        Logger(LOG_DEBUG) << "Iteration: " << i;
+        oss << i << " " << w->L() << " " << w->A() << std::endl;
     }
 
     if(!o.svg_path.empty())
-        w.svg(o.svg_path, true);
+        w->svg(o.svg_path, true);
+
+    if(!o.pov_path.empty())
+        w->pov(o.pov_path);
 }
