@@ -59,6 +59,12 @@ void SVG::polyline(const std::vector<std::vector<double>> points, const bool clo
         buffer << i[0] << "," << i[1] << " ";
     buffer << "' stroke='" << color << "' stroke-width='" << stroke*scale <<"' />\n";
 }
+
+void SVG::text(const double x, const double y, const std::string t, const std::string color)
+{
+    buffer << "<text x='" << x << "' y='" << y << "' fill='" << color << "'>" << t << "</text>";
+}
+
 void SVG::setGeometry(const double min, const double max, const bool border)
 {
     setGeometry(min, min, max, max, border);

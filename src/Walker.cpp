@@ -119,6 +119,9 @@ void Walker::svg(const std::string filename, const bool with_hull) const
     }
     pic.polyline(points);
 
+    if(d > 2)
+        pic.text(min_x, max_y-20, "projected from d=" + std::to_string(d), "red");
+
     points.clear();
     if(with_hull)
     {

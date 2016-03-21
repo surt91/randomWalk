@@ -18,6 +18,8 @@ class SVG
         void line(const double x1, const double x2, const double y1, const double y2, const std::string color=std::string("black"));
         void polyline(const std::vector<std::vector<double>> points, const bool closed=false, const std::string color=std::string("black"));
 
+        void text(const double x, const double y, const std::string t, const std::string color);
+
         double radius;
         double stroke;
 
