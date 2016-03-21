@@ -13,10 +13,11 @@
 class Povray
 {
     public:
-        Povray(const std::string filename);
+        Povray(const std::string &filename);
 
         void box(const double x, const double y, const double z, const double dx, const double dy, const double dz);
-        void polyline(const std::vector<std::vector<double>> points);
+        void polyline(const std::vector<std::vector<double>> &points);
+        void facet(const std::vector<double> &x, const std::vector<double> &y, const std::vector<double> &z);
 
         double stroke;
 

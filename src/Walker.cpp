@@ -126,7 +126,7 @@ void Walker::svg(const std::string filename, const bool with_hull) const
     if(with_hull)
     {
         const std::vector<Step> h = convexHull().hullPoints();
-        for(auto i : h)
+        for(auto &i : h)
         {
             std::vector<double> point {(double) i[0], (double) i[1]};
             points.push_back(point);
@@ -152,6 +152,19 @@ void Walker::pov(const std::string filename, const bool with_hull) const
         points.push_back(point);
     }
     pic.polyline(points);
+
+    points.clear();
+    if(with_hull && d > 2)
+    {
+        const std::vector<std::vector<Step>> h = convexHull().hullFacets();
+        for(auto &i : h)
+        {
+            std::vector<double> p1 {(double) i[0][0], (double) i[0][1], (double) i[0][2]};
+            std::vector<double> p2 {(double) i[1][0], (double) i[1][1], (double) i[1][2]};
+            std::vector<double> p3 {(double) i[2][0], (double) i[2][1], (double) i[2][2]};
+            pic.facet(p1, p2, p3);
+        }
+    }
 
     pic.save();
 }

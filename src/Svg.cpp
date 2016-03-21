@@ -1,6 +1,6 @@
 #include "Svg.hpp"
 
-SVG::SVG(const std::string filename, const double scale)
+SVG::SVG(const std::string &filename, const double scale)
     : scale(scale), filename(filename)
 {
     /* Schreibe Header */
@@ -60,7 +60,7 @@ void SVG::polyline(const std::vector<std::vector<double>> points, const bool clo
     buffer << "' stroke='" << color << "' stroke-width='" << stroke*scale <<"' />\n";
 }
 
-void SVG::text(const double x, const double y, const std::string t, const std::string color)
+void SVG::text(const double x, const double y, const std::string &t, const std::string color)
 {
     buffer << "<text x='" << x << "' y='" << y << "' fill='" << color << "'>" << t << "</text>";
 }

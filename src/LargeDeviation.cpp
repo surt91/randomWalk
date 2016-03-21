@@ -53,5 +53,5 @@ void run(const Cmd &o)
         w->svg(o.svg_path, true);
 
     if(!o.pov_path.empty())
-        w->pov(o.pov_path);
+        w->pov(o.pov_path, true);
 }

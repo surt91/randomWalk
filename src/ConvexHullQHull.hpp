@@ -3,6 +3,7 @@
 #include "qhull/src/libqhullcpp/Qhull.h"
 #include "qhull/src/libqhullcpp/QhullVertex.h"
 #include "qhull/src/libqhullcpp/QhullFacetList.h"
+#include "qhull/src/libqhullcpp/QhullVertexSet.h"
 
 #include "ConvexHull.hpp"
 
@@ -16,6 +17,8 @@ class ConvexHullQHull : public ConvexHull
         virtual double L() const;
 
         virtual const std::vector<Step>& hullPoints() const;
+
+        virtual std::vector<std::vector<Step>> hullFacets() const;
 
         // void movePoint();
 

@@ -1,6 +1,6 @@
 #include "Povray.hpp"
 
-Povray::Povray(const std::string filename)
+Povray::Povray(const std::string &filename)
     : filename(filename)
 {
     /* Schreibe Header */
@@ -23,6 +23,18 @@ Povray::Povray(const std::string filename)
                             "      }\n"
                             "    };\n"
                             "\n"
+                            "#declare triTexture =\n"
+                            "    texture {\n"
+                            "      pigment{ color rgbt<1,0.7,0, 0.6>}\n"
+                            "      finish {\n"
+                            "        diffuse 0.4\n"
+                            "        ambient 0.2\n"
+                            "        phong 1\n"
+                            "        phong_size 100\n"
+                            "        reflection 0.0\n"
+                            "      }\n"
+                            "    };\n"
+                            "\n"
                             "#macro placeBox(boxCenter, boxSize)\n"
                             "box {\n"
                             "    boxCenter - boxSize / 2\n"
@@ -31,13 +43,21 @@ Povray::Povray(const std::string filename)
                             "}\n"
                             "#end\n"
                             "\n"
+                            "#macro placeTri(a, b, c)\n"
+                            "triangle {\n"
+                            "    a, b, c\n"
+                            "    texture { triTexture }\n"
+                            "}\n"
+                            "#end\n"
+                            "\n"
                             "light_source {\n"
                             "    <20, 25, 25>\n"
                             "    color White\n"
                             "}\n"
                             "camera {\n"
-                            "    location <30, 20, 30>\n"
-                            "    look_at  <0, 5, 0>\n"
+                            "    location <5, 5, 5>\n"
+                            "    look_at  <0, 0, 0>\n"
+                            "    rotate <0 ,360*clock, 0>\n"
                             "}\n\n"
                          );
 }
@@ -47,7 +67,7 @@ void Povray::box(const double x, const double y, const double z, const double dx
     buffer << "placeBox(<" << x << "," << y << "," << z << ">, <" << dx << "," << dy << "," << dz << ">)\n";
 }
 
-void Povray::polyline(const std::vector<std::vector<double>> points)
+void Povray::polyline(const std::vector<std::vector<double>> &points)
 {
     for(int i=1; i<points.size(); ++i)
     {
@@ -64,6 +84,14 @@ void Povray::polyline(const std::vector<std::vector<double>> points)
 
         box(x, y, z, dx, dy, dz);
     }
+}
+
+void Povray::facet(const std::vector<double> &x, const std::vector<double> &y, const std::vector<double> &z)
+{
+    buffer << "placeTri(<" << x[0] << "," << x[1] << "," << x[2] << ">, "
+                        "<" << y[0] << "," << y[1] << "," << y[2] << ">, "
+                        "<" << z[0] << "," << z[1] << "," << z[2] << ">)\n";
+
 }
 
 void Povray::save()

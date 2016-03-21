@@ -27,12 +27,10 @@ const std::vector<Step>& ConvexHullQHull::hullPoints() const
 
     orgQhull::QhullVertexList vl = qhull->vertexList();
 
-    for(auto v : vl)
+    for(const auto &v : vl)
     {
         auto coord = v.point().coordinates();
-        std::vector<int> s(d);
-        for(int i=0; i<d; ++i)
-            s[i] = coord[i];
+        std::vector<int> s(coord, coord+d);
         hullPoints_.push_back(Step(s));
     }
 
@@ -44,6 +42,39 @@ const std::vector<Step>& ConvexHullQHull::hullPoints() const
     }
 
     return hullPoints_;
+}
+
+std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
+{
+    if(d < 3)
+        throw std::invalid_argument("facets only implemented for d >= 3");
+
+    orgQhull::QhullFacetList fl = qhull->facetList();
+    std::vector<std::vector<Step>> facets;
+
+    Logger(LOG_INFO) << "Facet count:" << qhull->facetCount();
+
+    for(const auto &f : fl)
+    {
+        std::vector<Step> facet;
+        for(const auto v : f.vertices())
+        {
+            auto coord = v.point().coordinates();
+            std::vector<int> s(coord, coord+d);
+
+            if(!f.isSimplicial)
+            {
+                // divide the (hyper)polygon into simplical facets (eg triangles)
+                facet.push_back(Step(s));
+            }
+            else
+                facet.push_back(Step(s));
+        }
+        Logger(LOG_TOO_MUCH) << facet;
+        facets.push_back(facet);
+    }
+
+    return facets;
 }
 
 double ConvexHullQHull::A() const

@@ -75,3 +75,8 @@ void ConvexHull::preprocessAklToussaint()
     interiorPoints = std::move(pointSelection);
     n = interiorPoints.size();
 }
+
+std::vector<std::vector<Step>> ConvexHull::hullFacets() const
+{
+    throw std::invalid_argument("hull facets for this algorithm not implemented");
+}

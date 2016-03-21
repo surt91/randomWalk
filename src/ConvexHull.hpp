@@ -16,7 +16,7 @@ class ConvexHull
         virtual double L() const = 0;
 
         virtual const std::vector<Step>& hullPoints() const = 0;
-
+        virtual std::vector<std::vector<Step>> hullFacets() const;
         // void movePoint();
 
     protected:
