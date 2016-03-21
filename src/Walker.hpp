@@ -7,6 +7,7 @@
 #include "Svg.hpp"
 #include "RNG.hpp"
 #include "Step.hpp"
+#include "Povray.hpp"
 #include "ConvexHullQHull.hpp"
 #include "ConvexHullAndrew.hpp"
 
@@ -55,6 +56,7 @@ class Walker
 
         std::string print() const;
         void svg(const std::string filename, const bool with_hull=false) const;
+        void pov(const std::string filename, const bool with_hull=false) const;
 
     protected:
         int numSteps;

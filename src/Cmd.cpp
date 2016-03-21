@@ -20,6 +20,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<int> thetaArg("T", "theta", "temperature for the large deviation scheme", false, 2, "integer");
         TCLAP::ValueArg<std::string> dataPathArg("o", "output", "datafile for the output", false, "out.dat", "string");
         TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
+        TCLAP::ValueArg<std::string> povArg("p", "pov", "povray filename, will be a xyz projection", false, "", "string");
         TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level:\n"
                                                         "\tquiet  : 0\n"
                                                         "\talways : 1\n"
@@ -69,6 +70,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(typeArg);
         cmd.add(verboseArg);
         cmd.add(svgArg);
+        cmd.add(povArg);
         cmd.add(dataPathArg);
 
         cmd.add(aklHeuristicSwitch);
@@ -116,6 +118,8 @@ Cmd::Cmd(int argc, char** argv)
         Logger(LOG_INFO) << "Type                      " << TYPE_LABEL[type];
         svg_path = svgArg.getValue();
         Logger(LOG_INFO) << "Path to store the SVG     " << svg_path;
+        pov_path = povArg.getValue();
+        Logger(LOG_INFO) << "Path to store the povray  " << pov_path;
         data_path = dataPathArg.getValue();
         Logger(LOG_INFO) << "Path to store the data    " << data_path << "works";
     }

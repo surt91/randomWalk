@@ -47,8 +47,9 @@ class Cmd
         Cmd() {};
         Cmd(int argc, char** argv);
 
-        std::string svg_path;
         std::string data_path;
+        std::string svg_path;
+        std::string pov_path;
         int steps;
         int seedRealization;
         int seedMC;

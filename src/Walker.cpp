@@ -133,3 +133,22 @@ void Walker::svg(const std::string filename, const bool with_hull) const
     pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
     pic.save();
 }
+
+void Walker::pov(const std::string filename, const bool with_hull) const
+{
+    Povray pic(filename);
+    const std::vector<Step> p = points();
+    std::vector<std::vector<double>> points;
+    for(auto i : p)
+    {
+        int x = i[0], y = i[1], z = 0;
+        if(d > 2)
+            z = i[2];
+        std::vector<double> point {(double) x, (double) y, (double) z};
+
+        points.push_back(point);
+    }
+    pic.polyline(points);
+
+    pic.save();
+}

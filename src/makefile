@@ -10,7 +10,8 @@ CPP	 := main.cpp \
         ConvexHullAndrew.cpp \
         LargeDeviation.cpp \
         RNG.cpp \
-        Svg.cpp
+        Svg.cpp \
+        Povray.cpp
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 DEP	 = $(CPP:%.cpp=dep/%.d)
