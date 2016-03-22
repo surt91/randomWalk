@@ -59,6 +59,18 @@ class Step
             return Step(new_coord);
         }
 
+        Step operator-(const Step &other) const
+        {
+            if(m_d != other.d())
+                throw std::invalid_argument("dimensions do not agree");
+
+            std::vector<int> new_coord = other.coordinates();
+            for(int i=0; i<m_d; ++i)
+                new_coord[i] -= m_coordinates[i];
+
+            return Step(new_coord);
+        }
+
         Step& operator+=(const Step &other)
         {
             if(m_d != other.d())
@@ -102,11 +114,15 @@ class Step
 
         friend std::ostream& operator<<(std::ostream& os, const std::vector<Step> &obj)
         {
+            os << "[";
             for(auto i : obj)
                 os << i << " ";
-            os << "\n";
+            os << "]";
             return os;
         }
+
+        friend Step cross(const Step &a, const Step &b);
+        friend double dot(const Step &a, const Step &b);
 
         const int& operator[](std::size_t idx) const { return m_coordinates[idx]; };
         int& operator[](std::size_t idx) { return m_coordinates[idx]; };
@@ -137,6 +153,9 @@ inline bool operator==(const Step &lhs, const Step &rhs)
 
     return true;
 }
+
+Step cross(const Step &a, const Step &b);
+double dot(const Step &a, const Step &b);
 
 namespace std {
     template<>

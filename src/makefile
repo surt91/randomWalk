@@ -3,6 +3,7 @@ TARGET	= randomWalk
 CPP	 := main.cpp \
         Cmd.cpp \
         Benchmark.cpp \
+        Step.cpp \
         Walker.cpp \
         LoopErasedWalker.cpp \
         ConvexHull.cpp \

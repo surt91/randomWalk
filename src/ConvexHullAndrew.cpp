@@ -5,7 +5,7 @@
 // 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
 // Returns a positive value, if OAB makes a counter-clockwise turn,
 // negative for clockwise turn, and zero if the points are collinear.
-double cross(const Step &O, const Step &A, const Step &B)
+double cross2d_z(const Step &O, const Step &A, const Step &B)
 {
     return (A.x() - O.x()) * (B.y() - O.y()) - (A.y() - O.y()) * (B.x() - O.x());
 }
@@ -29,7 +29,7 @@ ConvexHullAndrew::ConvexHullAndrew(const std::vector<Step>& points, bool akl)
     // Build lower hull
     for(int i = 0; i < n; ++i)
     {
-        while (k >= 2 && cross(hullPoints_[k-2], hullPoints_[k-1], interiorPoints[i]) <= 0)
+        while (k >= 2 && cross2d_z(hullPoints_[k-2], hullPoints_[k-1], interiorPoints[i]) <= 0)
             k--;
         hullPoints_[k++] = interiorPoints[i];
     }
@@ -37,7 +37,7 @@ ConvexHullAndrew::ConvexHullAndrew(const std::vector<Step>& points, bool akl)
     // Build upper hull
     for (int i = n-2, t = k+1; i >= 0; i--)
     {
-        while (k >= t && cross(hullPoints_[k-2], hullPoints_[k-1], interiorPoints[i]) <= 0)
+        while (k >= t && cross2d_z(hullPoints_[k-2], hullPoints_[k-1], interiorPoints[i]) <= 0)
             k--;
         hullPoints_[k++] = interiorPoints[i];
     }
