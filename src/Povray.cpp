@@ -4,7 +4,7 @@ Povray::Povray(const std::string &filename)
     : filename(filename)
 {
     /* Schreibe Header */
-    header = std::string(   "#version 3.6\n"
+    header = std::string(   "#version 3.6;\n"
                             "global_settings{ assumed_gamma 1.0 }\n"
                             "#include \"colors.inc\"\n"
                             "#include \"textures.inc\"\n"
@@ -90,9 +90,9 @@ void Povray::polyline(const std::vector<std::vector<double>> &points)
         double x = (cX1+cX2)/2;
         double y = (cY1+cY2)/2;
         double z = (cZ1+cZ2)/2;
-        double dx = (0.5 + std::abs(cX1-cX2)*2)/2;
-        double dy = (0.5 + std::abs(cY1-cY2)*2)/2;
-        double dz = (0.5 + std::abs(cZ1-cZ2)*2)/2;
+        double dx = (0.1 + std::abs(cX1-cX2)*2)/2;
+        double dy = (0.1 + std::abs(cY1-cY2)*2)/2;
+        double dz = (0.1 + std::abs(cZ1-cZ2)*2)/2;
 
         box(x, y, z, dx, dy, dz);
     }
