@@ -23,13 +23,13 @@ void run_walker_and_CH(Cmd o)
 
     if(std::abs(w->L() - o.benchmark_L) > 0.01)
     {
-        Logger(LOG_ERROR) << "Wrong L " << w->L();
-        Logger(LOG_ERROR) <<"expected" << o.benchmark_L;
+        Logger(LOG_ERROR) << "Wrong L  " << w->L();
+        Logger(LOG_ERROR) << "expected " << o.benchmark_L;
     }
     if(std::abs(w->A() - o.benchmark_A) > 1)
     {
-        Logger(LOG_ERROR) <<"Wrong A " << w->A();
-        Logger(LOG_ERROR) <<"expected" << o.benchmark_A;
+        Logger(LOG_ERROR) <<"Wrong A  " << w->A();
+        Logger(LOG_ERROR) <<"expected " << o.benchmark_A;
     }
 
     Logger(LOG_TIMING) << "RW : " << time_diff(before_walker, before_ch);

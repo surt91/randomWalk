@@ -103,7 +103,6 @@ void Povray::facet(const std::vector<double> &x, const std::vector<double> &y, c
     buffer << "placeTri(<" << x[0] << "," << x[1] << "," << x[2] << ">, "
                         "<" << y[0] << "," << y[1] << "," << y[2] << ">, "
                         "<" << z[0] << "," << z[1] << "," << z[2] << ">)\n";
-
 }
 
 void Povray::save()
@@ -112,7 +111,7 @@ void Povray::save()
 
     if(!oss.good())
     {
-        Logger(LOG_ERROR) << "File can not be opened:" << filename;
+        Logger(LOG_ERROR) << "File can not be opened: " << filename;
         throw std::invalid_argument("cannot be opened");
     }
 

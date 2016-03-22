@@ -54,7 +54,7 @@ std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
     orgQhull::QhullFacetList fl = qhull->facetList();
     std::vector<std::vector<Step>> facets;
 
-    Logger(LOG_INFO) << "Facet count:" << qhull->facetCount();
+    Logger(LOG_INFO) << "Facet count: " << qhull->facetCount();
 
     for(const auto &f : fl)
     {
@@ -96,7 +96,7 @@ std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
             Logger(LOG_TOO_MUCH) << "reordered " << facet;
 
             // finally splitting the facet into triangles
-            Logger(LOG_TOO_MUCH) << "subdivide to:";
+            Logger(LOG_TOO_MUCH) << "subdivide to: ";
             for(int i=0; i<=facet.size() - d; i+=d)
             {
                 std::vector<Step> simplex(facet.begin()+i, facet.begin()+i+d);
