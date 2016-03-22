@@ -40,9 +40,9 @@ class Step
                 m_coordinates(coord)
               {};
 
-        double angle() const //only 2D projection
+        double angle(int i=0, int j=1) const //only 2D projection on axis i and j
         {
-            return atan2(m_coordinates[1], m_coordinates[0]);
+            return atan2(m_coordinates[j], m_coordinates[i]);
         }
 
         friend inline bool operator==(const Step &lhs, const Step &rhs);
@@ -71,6 +71,15 @@ class Step
             return Step(new_coord);
         }
 
+        Step operator/(const double d) const
+        {
+            std::vector<int> new_coord = coordinates();
+            for(int i=0; i<m_d; ++i)
+                new_coord[i] /= d;
+
+            return Step(std::move(new_coord));
+        }
+
         Step& operator+=(const Step &other)
         {
             if(m_d != other.d())
@@ -91,6 +100,15 @@ class Step
             std::vector<int> other_coord = other.coordinates();
             for(int i=0; i<m_d; ++i)
                 m_coordinates[i] -= other_coord[i];
+
+            return *this;
+        }
+
+        Step& operator/=(const double d)
+        {
+            // uncool, since my coordinates are integer
+            for(int i=0; i<m_d; ++i)
+                m_coordinates[i] = std::round(m_coordinates[i]/d);
 
             return *this;
         }

@@ -71,28 +71,45 @@ std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
 
         if(!f.isSimplicial())
         {
-            // divide the (hyper)polygon into simplical facets (eg triangles)
-            // first order them clockwise (or counterclockwise)
-            // - calculate a normal of the first 3 points (cross(a-c, b-c))
-            // - calculate the normal of points 2 to 4 (cross(b-d, c-d))
-            // - if the dot product of the normals is positive,
-            //      they point in the same direction -> everything is fine
-            //   else 4 and 3 need to be swapped
-            // repeat til the end
+            // calculate the normal, and find the two most suitable axis (maximizing the dot product)
+            // project the points onto the plane of the two axis, i, j
+            // sort by stupid atan2
 
             // points will not be collinear, thanks to qhull
             Step normal = cross(facet[0]-facet[2], facet[1]-facet[2]);
-            const int num = facet.size();
-            for(int i=1; i<num; ++i)
+            double x = std::abs(dot(normal, Step({1, 0, 0})));
+            double y = std::abs(dot(normal, Step({0, 1, 0})));
+            double z = std::abs(dot(normal, Step({0, 0, 1})));
+            int i, j;
+            if(x >= y && x >= z)
             {
-                Step normal_tmp = cross(facet[i]-facet[(i+2)%num], facet[(i+1)%num]-facet[(i+2)%num]);
-                if(dot(normal, normal_tmp) < 0)
-                {
-                    auto tmp = facet[(i+1)%num];
-                    facet[(i+1)%num] = facet[(i+2)%num];
-                    facet[(i+2)%num] = tmp;
-                }
+                i = 1; // y
+                j = 2; // z
             }
+            else if(y >= x && y >= z)
+            {
+                i = 0; // x
+                j = 2; // z
+            }
+            else
+            {
+                i = 0; // x
+                j = 1; // y
+            }
+            Step inside({0, 0, 0});
+            for(auto &v : facet)
+                inside += v;
+            inside /= facet.size();
+            // FIXME inside is integer values and maybe outside of the facet
+            // but probably does not harm since all other points are also integer
+
+            Logger(LOG_TOO_MUCH) << "normal " << normal;
+            Logger(LOG_TOO_MUCH) << "inside " << inside;
+            Logger(LOG_TOO_MUCH) << "axes " << i << j;
+            std::sort(facet.begin(), facet.end(),
+                    [i,j, &inside](Step const &a, Step const &b) -> bool
+                    { return (a-inside).angle(i, j) < (b-inside).angle(i, j); } );
+
             Logger(LOG_TOO_MUCH) << "reordered " << facet;
 
             // finally splitting the facet into triangles
