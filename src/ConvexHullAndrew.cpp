@@ -5,8 +5,6 @@
 ConvexHullAndrew::ConvexHullAndrew(const std::vector<Step>& points, bool akl)
             : ConvexHull2D(points, akl)
 {
-    // create convex hull with graham scan, and akl heuristic (?)
-    // graham scan does only work in a plane
     if(d != 2)
     {
         Logger(LOG_ERROR) << "Andrew Monotone Chain does only work in a plane (d=2), the data is d = " << d;

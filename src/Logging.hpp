@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 #include <vector>
 
 // http://stackoverflow.com/questions/1255576/what-is-good-practice-for-generating-verbose-output
@@ -49,7 +50,7 @@ class Logger {
 
         template<class T>
         friend std::ostream& operator<<(Logger &&l, const T &obj);
-        
+
 
     protected:
         log_level_t level;
@@ -72,4 +73,3 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T> &v)
     os << "\n";
     return os;
 }
-

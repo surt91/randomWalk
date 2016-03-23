@@ -3,8 +3,6 @@
 ConvexHullJarvis::ConvexHullJarvis(const std::vector<Step>& points, bool akl)
             : ConvexHull2D(points, akl)
 {
-    // create convex hull with graham scan, and akl heuristic (?)
-    // graham scan does only work in a plane
     if(d > 3)
     {
         Logger(LOG_ERROR) << "Jarvis March does only work in d=2 and d=3, the data is d = " << d;
@@ -37,10 +35,12 @@ ConvexHullJarvis::ConvexHullJarvis(const std::vector<Step>& points, bool akl)
             int orientation = cross2d_z(hullPoints_[hull_idx], *it, p);
             if(orientation > 0)
                 p = *it;
-            else if(orientation == 0) // colinear, take the one furthest away
+            else if(orientation == 0) // colinear
             {
+                // take the one furthest away
                 if((p-hullPoints_[hull_idx]).length() < (*it-hullPoints_[hull_idx]).length())
                     p = *it;
+                // and delete all other
             }
         }
 
