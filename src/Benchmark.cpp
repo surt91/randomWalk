@@ -43,6 +43,7 @@ void run_MC_simulation(Cmd o)
 void benchmark()
 {
     Logger::verbosity = LOG_TIMING;
+    Logger::verbosity = LOG_TOO_MUCH;
 
     Cmd o;
     o.benchmark = true;
@@ -64,6 +65,14 @@ void benchmark()
     o.chAlg = CH_ANDREWS_AKL;
     run_walker_and_CH(o);
 
+    Logger(LOG_INFO) << "Random Walk, Jarvis March";
+    o.chAlg = CH_JARVIS;
+    run_walker_and_CH(o);
+
+    Logger(LOG_INFO) << "Random Walk, Jarvis March and Akl Toussaint";
+    o.chAlg = CH_JARVIS_AKL;
+    run_walker_and_CH(o);
+
     Logger(LOG_INFO) << "Random Walk, QHull";
     o.chAlg = CH_QHULL;
     run_walker_and_CH(o);
@@ -83,6 +92,14 @@ void benchmark()
 
     Logger(LOG_INFO) << "Loop Erased Random Walk, Andrews Monotone Chain and Akl Toussaint";
     o.chAlg = CH_ANDREWS_AKL;
+    run_walker_and_CH(o);
+
+    Logger(LOG_INFO) << "Loop Erased Random Walk, Jarvis March";
+    o.chAlg = CH_JARVIS;
+    run_walker_and_CH(o);
+
+    Logger(LOG_INFO) << "Loop Erased Random Walk, Jarvis March and Akl Toussaint";
+    o.chAlg = CH_JARVIS_AKL;
     run_walker_and_CH(o);
 
     Logger(LOG_INFO) << "Loop Erased Random Walk, QHull";

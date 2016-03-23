@@ -25,5 +25,5 @@ class ConvexHull
         int n;
         int d;
 
-        void preprocessAklToussaint();
+        virtual void preprocessAklToussaint();
 };

@@ -49,6 +49,11 @@ const ConvexHull& Walker::convexHull() const
             case CH_ANDREWS:
                 m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullAndrew(points(), akl));
                 break;
+            case CH_JARVIS_AKL:
+                akl = true;
+            case CH_JARVIS:
+                m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullJarvis(points(), akl));
+                break;
             default:
                 Logger(LOG_ERROR) << "Algorithm not implemented, yet: " << CH_LABEL[hull_algo];
                 throw std::invalid_argument("this is not implemented");

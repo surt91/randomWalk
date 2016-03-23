@@ -26,3 +26,23 @@ double dot(const Step &a, const Step &b)
 
     return p;
 }
+
+// measures the parallelness of two lines defined by three points
+// 0 means the lines are orthogonal
+// 1 means the lines are parallel
+// -1 means antiparallel
+// works with a dot product of the normalized vectors
+double parallelness(const Step &a, const Step &b, const Step &c)
+{
+    Step l1 = b-a;
+    Step l2 = c-b;
+
+    double ll1 = l1.length();
+    double ll2 = l2.length();
+
+    double p = 0;
+    for(int i=0; i<l1.m_d; ++i)
+        p += l1[i]/ll1 * l2[i]/ll2;
+
+    return p;
+}

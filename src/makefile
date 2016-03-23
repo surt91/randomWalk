@@ -7,8 +7,10 @@ CPP	 := main.cpp \
         Walker.cpp \
         LoopErasedWalker.cpp \
         ConvexHull.cpp \
+        ConvexHull2D.cpp \
         ConvexHullQHull.cpp \
         ConvexHullAndrew.cpp \
+        ConvexHullJarvis.cpp \
         LargeDeviation.cpp \
         RNG.cpp \
         Svg.cpp \

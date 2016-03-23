@@ -10,6 +10,7 @@
 #include "Povray.hpp"
 #include "ConvexHullQHull.hpp"
 #include "ConvexHullAndrew.hpp"
+#include "ConvexHullJarvis.hpp"
 
 /* Class Walker
  *

@@ -3,20 +3,13 @@
 #include <vector>
 #include <algorithm>
 
-#include "ConvexHull.hpp"
+#include "ConvexHull2D.hpp"
 
-class ConvexHullAndrew : public ConvexHull
+class ConvexHullAndrew : public ConvexHull2D
 {
     public:
         ConvexHullAndrew(const std::vector<Step>& interiorPoints, bool akl);
         virtual ~ConvexHullAndrew();
-
-        virtual double A() const;
-        virtual double L() const;
-
-        virtual const std::vector<Step>& hullPoints() const;
-
-        // void movePoint();
 
     protected:
 

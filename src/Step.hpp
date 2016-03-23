@@ -2,8 +2,10 @@
 
 #include <cmath>
 #include <vector>
+#include <unordered_set>
 #include <iostream>
 #include <stdexcept>
+#include <algorithm>
 
 class Step;
 namespace std {
@@ -40,12 +42,22 @@ class Step
                 m_coordinates(coord)
               {};
 
+        double length() const
+        {
+            double s=0;
+            for(const auto i : m_coordinates)
+                s += i*i;
+
+            return std::sqrt(s);
+        }
+
         double angle(int i=0, int j=1) const //only 2D projection on axis i and j
         {
             return atan2(m_coordinates[j], m_coordinates[i]);
         }
 
         friend inline bool operator==(const Step &lhs, const Step &rhs);
+        friend inline bool operator!=(const Step &lhs, const Step &rhs);
 
         Step operator+(const Step &other) const
         {
@@ -133,7 +145,7 @@ class Step
         friend std::ostream& operator<<(std::ostream& os, const std::vector<Step> &obj)
         {
             os << "[";
-            for(auto i : obj)
+            for(const auto &i : obj)
                 os << i << " ";
             os << "]";
             return os;
@@ -141,6 +153,7 @@ class Step
 
         friend Step cross(const Step &a, const Step &b);
         friend double dot(const Step &a, const Step &b);
+        friend double parallelness(const Step &a, const Step &b, const Step &c);
 
         const int& operator[](std::size_t idx) const { return m_coordinates[idx]; };
         int& operator[](std::size_t idx) { return m_coordinates[idx]; };
@@ -172,8 +185,16 @@ inline bool operator==(const Step &lhs, const Step &rhs)
     return true;
 }
 
+inline bool operator!=(const Step &lhs, const Step &rhs)
+{
+    return ! (lhs == rhs);
+}
+
+
+
 Step cross(const Step &a, const Step &b);
 double dot(const Step &a, const Step &b);
+double parallelness(const Step &a, const Step &b, const Step &c);
 
 namespace std {
     template<>
@@ -190,4 +211,13 @@ namespace std {
                 return seed;
             }
     };
+
+    inline Step min(std::vector<Step> &v)
+    {
+        Step p = v[0];
+        for(const auto &i : v)
+            if(i < p)
+                p = i;
+        return p;
+    }
 }
