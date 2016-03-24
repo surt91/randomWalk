@@ -74,7 +74,7 @@ class Cmd
         walk_type_t type;
         int d;
         int iterations;
-        int theta;
+        double theta;
         hull_algorithm_t chAlg;
         wanted_observable_t wantedObservable;
 
