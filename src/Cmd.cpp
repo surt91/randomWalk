@@ -66,8 +66,9 @@ Cmd::Cmd(int argc, char** argv)
 
         // switch argument
         // -short, --long, description, default
-        TCLAP::SwitchArg aklHeuristicSwitch("a","aklHeuristic","enables the Akl Toussaint heuristic", false);
-        TCLAP::SwitchArg benchmarkSwitch("b","benchmark","perform benchmark", false);
+        TCLAP::SwitchArg aklHeuristicSwitch("a", "aklHeuristic", "enables the Akl Toussaint heuristic", false);
+        TCLAP::SwitchArg benchmarkSwitch("b", "benchmark", "perform benchmark", false);
+        TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode (equal to -v 0)", false);
 
         // Add to the parser
         cmd.add(numArg);
@@ -79,7 +80,6 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(chAlgArg);
         cmd.add(wantedobservableArg);
         cmd.add(typeArg);
-        cmd.add(verboseArg);
         cmd.add(svgArg);
         cmd.add(povArg);
         cmd.add(dataPathArg);
@@ -87,6 +87,8 @@ Cmd::Cmd(int argc, char** argv)
 
         cmd.add(aklHeuristicSwitch);
         cmd.add(benchmarkSwitch);
+
+        cmd.xorAdd(verboseArg, quietSwitch);
 
         // Parse the argv array.
         cmd.parse(argc, argv);
@@ -101,7 +103,10 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         // Get the value parsed by each arg.
-        Logger::verbosity = verboseArg.getValue();
+        if(quietSwitch.getValue())
+            Logger::verbosity = 0;
+        else
+            Logger::verbosity = verboseArg.getValue();
         Logger(LOG_INFO) << "Verbosity                 " << Logger::verbosity;
 
         bool aklHeuristic = aklHeuristicSwitch.getValue();
