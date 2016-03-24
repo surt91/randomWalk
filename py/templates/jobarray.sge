@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#$ -S /bin/bash
+#$ -cwd
+#$ -N {{ name }}
+
+#$ -l h_rt={{ hours }}:0:0
+#$ -l h_vmem={{ mb }}M
+
+#$ -j y
+
+module load gcc
+mkdir -p rawConf
+mkdir -p rawData
+
+#$ -t 1-{{ count }}:1
+$(sed -n ${SGE_TASK_ID}'p' {{ name }}.lst) --tmp $TMPDIR

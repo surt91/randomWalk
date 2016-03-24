@@ -53,6 +53,7 @@ class Cmd
         Cmd() {};
         Cmd(int argc, char** argv);
 
+        std::string tmp_path;
         std::string data_path;
         std::string svg_path;
         std::string pov_path;

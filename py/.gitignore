@@ -1,0 +1,8 @@
+HERO
+plots
+__pycache__
+data
+rawData
+rawConf
+
+*.dat
