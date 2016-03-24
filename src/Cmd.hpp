@@ -47,6 +47,17 @@ const std::vector<std::string> TYPE_LABEL = {
     "Self-Avoiding Random Walk"
 };
 
+enum wanted_observable_t {
+    WO_SURFACE_AREA = 1,    // eg circumference in d=2
+    WO_VOLUME              // eg area in d=2
+};
+
+const std::vector<std::string> WANTED_OBSERVABLE_LABEL = {
+    "nan",
+    "surface area (circumference in d=2)",
+    "volume (area in d=2)"
+};
+
 class Cmd
 {
     public:
@@ -65,6 +76,7 @@ class Cmd
         int iterations;
         int theta;
         hull_algorithm_t chAlg;
+        wanted_observable_t wantedObservable;
 
         bool benchmark;
         double benchmark_A;

@@ -21,6 +21,12 @@ void run(const Cmd &o)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
     w->convexHull();
 
+    std::function<double()> S;
+    if(o.wantedObservable == WO_SURFACE_AREA)
+        S = [&w](){ return w->L(); };
+    else if(o.wantedObservable == WO_VOLUME)
+        S = [&w](){ return w->A(); };
+
     for(int i=0; i<o.iterations; ++i)
     {
         // one sweep, i.e., one change try for each site
@@ -30,15 +36,11 @@ void run(const Cmd &o)
 
             // change one random number to another random number
             // save the random number before the change
-            double oldS = w->A();
+            double oldS = S();
             double oldRN = w->rnChange(rn_to_change, rngMC());
 
             // Metropolis rejection
-            double p_acc = std::min({1.0, exp(-(w->A() - oldS)/o.theta)});
-            Logger(LOG_TOO_MUCH) << "newA " << w->A();
-            Logger(LOG_TOO_MUCH) << "oldA " << oldS;
-            Logger(LOG_TOO_MUCH) << "delta " << (w->A() - oldS);
-            Logger(LOG_TOO_MUCH) << "p_acc " << p_acc;
+            double p_acc = std::min({1.0, exp(-(S() - oldS)/o.theta)});
             if(p_acc < 1 - rngMC())
                 w->rnChange(rn_to_change, oldRN);
 

@@ -55,6 +55,15 @@ Cmd::Cmd(int argc, char** argv)
                                                              "\tJarvis March          : 4",
                                       false, 1, &allowedCH);
 
+        std::vector<int> allowedWO_;
+        allowedWO_.push_back(1);
+        allowedWO_.push_back(2);
+        TCLAP::ValuesConstraint<int> allowedWO(allowedWO_);
+        TCLAP::ValueArg<int> wantedobservableArg("w", "wantedObservable", "observable for which the probability density is desired:\n"
+                                                                          "\tsurface area (L)    : 1 (default)\n"
+                                                                          "\tvolume       (A)    : 2",
+                                                 false, 1, &allowedWO);
+
         // switch argument
         // -short, --long, description, default
         TCLAP::SwitchArg aklHeuristicSwitch("a","aklHeuristic","enables the Akl Toussaint heuristic", false);
@@ -68,6 +77,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(dimArg);
         cmd.add(thetaArg);
         cmd.add(chAlgArg);
+        cmd.add(wantedobservableArg);
         cmd.add(typeArg);
         cmd.add(verboseArg);
         cmd.add(svgArg);
@@ -114,6 +124,8 @@ Cmd::Cmd(int argc, char** argv)
         Logger(LOG_INFO) << "Dimension                 " << d;
         theta = thetaArg.getValue();
         Logger(LOG_INFO) << "Theta                     " << theta;
+        wantedObservable = (wanted_observable_t) wantedobservableArg.getValue();
+        Logger(LOG_INFO) << "Wanted Observable         " << WANTED_OBSERVABLE_LABEL[wantedObservable];
         type = (walk_type_t) typeArg.getValue();
         Logger(LOG_INFO) << "Type                      " << TYPE_LABEL[type];
         svg_path = svgArg.getValue();

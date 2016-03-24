@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <functional>
 
 #include "Cmd.hpp"
 #include "Logging.hpp"
