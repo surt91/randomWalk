@@ -34,6 +34,12 @@ const std::vector<std::string> CH_LABEL = {
     "Chan + Akl"
 };
 
+enum walk_type_t {
+    WT_RANDOM_WALK = 1,
+    WT_LOOP_ERASED_RANDOM_WALK,
+    WT_SELF_AVOIDING_RANDOM_WALK
+};
+
 const std::vector<std::string> TYPE_LABEL = {
     "nan",
     "Random Walk",
@@ -53,7 +59,7 @@ class Cmd
         int steps;
         int seedRealization;
         int seedMC;
-        int type;
+        walk_type_t type;
         int d;
         int iterations;
         int theta;

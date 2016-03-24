@@ -10,9 +10,9 @@ void run_walker_and_CH(Cmd o)
     clock_t before_walker = clock();
     std::unique_ptr<Walker> w;
     UniformRNG rng(o.seedRealization);
-    if(o.type == 1)
+    if(o.type == WT_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rng, o.chAlg));
-    else if(o.type == 2)
+    else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rng, o.chAlg));
     w->steps();
 
@@ -53,7 +53,7 @@ void benchmark()
     o.d = 2;
 
 
-    o.type = 1;
+    o.type = WT_RANDOM_WALK;
     o.benchmark_L = 3747.18;
     o.benchmark_A = 984338;
 
@@ -82,7 +82,7 @@ void benchmark()
     run_walker_and_CH(o);
 
     o.steps = 10000;
-    o.type = 2;
+    o.type = WT_LOOP_ERASED_RANDOM_WALK;
     o.benchmark_L = 4064.59205479;
     o.benchmark_A = 481541;
 

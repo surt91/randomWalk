@@ -112,7 +112,7 @@ Cmd::Cmd(int argc, char** argv)
         Logger(LOG_INFO) << "Dimension                 " << d;
         theta = thetaArg.getValue();
         Logger(LOG_INFO) << "Theta                     " << theta;
-        type = typeArg.getValue();
+        type = (walk_type_t) typeArg.getValue();
         Logger(LOG_INFO) << "Type                      " << TYPE_LABEL[type];
         svg_path = svgArg.getValue();
         Logger(LOG_INFO) << "Path to store the SVG     " << svg_path;

@@ -15,9 +15,9 @@ void run(const Cmd &o)
 
     std::unique_ptr<Walker> w;
     // does not work for loop erased yet
-    if(o.type == 1)
+    if(o.type == WT_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
-    else if(o.type == 2)
+    else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
     w->convexHull();
 
