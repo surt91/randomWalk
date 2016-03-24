@@ -5,6 +5,28 @@ std::string time_diff(clock_t start, clock_t end)
     return std::to_string((double)(end - start) / CLOCKS_PER_SEC) + "s";
 }
 
+// taken from http://stackoverflow.com/a/478960/1698412
+std::string exec(const char* cmd)
+{
+    std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
+    if (!pipe)
+        return "ERROR";
+    char buffer[128];
+    std::string result = "";
+    while (!feof(pipe.get())) {
+        if (fgets(buffer, 128, pipe.get()) != NULL)
+            result += buffer;
+    }
+    return result;
+}
+
+std::string vmPeak()
+{
+    std::string pid = std::to_string(getpid());
+    std::string cmd("grep VmPeak /proc/"+pid+"/task/"+pid+"/status");
+    return exec(cmd.c_str());
+}
+
 void run_walker_and_CH(Cmd o)
 {
     clock_t before_walker = clock();
@@ -81,6 +103,7 @@ void benchmark()
     o.chAlg = CH_QHULL_AKL;
     run_walker_and_CH(o);
 
+
     o.steps = 10000;
     o.type = WT_LOOP_ERASED_RANDOM_WALK;
     o.benchmark_L = 4064.59205479;
@@ -109,6 +132,9 @@ void benchmark()
     Logger(LOG_INFO) << "Loop Erased Random Walk, QHull and Akl Toussaint";
     o.chAlg = CH_QHULL_AKL;
     run_walker_and_CH(o);
+
+
+    Logger(LOG_TIMING) << "Mem: " << vmPeak();
 
     //~ o.iterations = 1;
     //~ o.theta = 1;

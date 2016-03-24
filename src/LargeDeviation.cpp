@@ -2,6 +2,7 @@
 
 void run(const Cmd &o)
 {
+    clock_t begin = clock();
     UniformRNG rngReal(o.seedRealization);
     UniformRNG rngMC(o.seedMC);
     std::ofstream oss(o.data_path, std::ofstream::out);
@@ -50,6 +51,10 @@ void run(const Cmd &o)
         Logger(LOG_DEBUG) << "Iteration: " << i;
         oss << i << " " << w->L() << " " << w->A() << std::endl;
     }
+
+    // save runtime statistics
+    oss << "# time in seconds: " << time_diff(begin, clock());
+    oss << "# max vmem: " << vmPeak();
 
     if(!o.svg_path.empty())
         w->svg(o.svg_path, true);
