@@ -23,7 +23,8 @@ std::string exec(const char* cmd)
 std::string vmPeak()
 {
     std::string pid = std::to_string(getpid());
-    std::string cmd("grep VmPeak /proc/"+pid+"/task/"+pid+"/status");
+    std::string cmd("grep VmPeak /proc/"+pid+"/status");
+    // or do I need "VmHWM" (high water mark)?
     return exec(cmd.c_str());
 }
 
