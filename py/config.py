@@ -4,6 +4,7 @@ from subprocess import call
 from multiprocessing import Pool
 import warnings
 import math
+import logging
 
 import numpy as np
 import jinja2
@@ -23,6 +24,15 @@ def bootstrap(xRaw, n_resample=100, f=np.mean):
         return float("NaN"), float("NaN")
     bootstrapSample = [f(np.random.choice(xRaw, len(xRaw), replace=True)) for i in range(n_resample)]
     return np.mean(bootstrapSample), np.std(bootstrapSample)
+
+def bootstrap_histogram(xRaw, bins, n_resample=100, normed=False):
+    """Bootstrap resampling, returns mean and stderror"""
+    if not len(xRaw):
+        return float("NaN"), float("NaN")
+    allCounts = np.zeros((n_resample, len(bins)-1), dtype=np.float)
+    for i in range(n_resample):
+        allCounts[i], _ = np.histogram(np.random.choice(xRaw, len(xRaw), replace=True), bins=bins, normed=normed)
+    return np.mean(allCounts, 0), np.std(allCounts, 0)
 
 def binder(a):
     if(np.mean(a) == 0):
@@ -49,7 +59,7 @@ class Simulation():
                        observable=observable, method=method, akl=akl))
 
     def hero(self):
-        print("Create .sge Files for Hero")
+        logging.info("Create .sge Files for Hero")
         if not os.path.exists("HERO"):
             os.makedirs("HERO")
 
@@ -80,6 +90,7 @@ class Simulation():
 
     # start the calculation
     def __call__(self):
+        logging.info("Executing {} jobs".format(len(self.instances)))
         with Pool() as p:
             p.map(run_instance, self.instances)
 
@@ -153,5 +164,7 @@ class SimulationInstance():
     def __call__(self):
         if not os.path.exists(self.filename):
             if 0 != call(self.get_cmd(), stdout=None, stderr=None):
-                print("Error in command '%s'" % (" ".join(self.get_cmd())))
+                logging.error("Error in command '%s'" % (" ".join(self.get_cmd())))
             print(".", flush=True, end="")
+        else:
+            print("-", flush=True, end="")
