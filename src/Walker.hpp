@@ -1,8 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <memory>
 
+#include "io.hpp"
 #include "Cmd.hpp"
 #include "Svg.hpp"
 #include "RNG.hpp"
@@ -11,6 +14,7 @@
 #include "ConvexHullQHull.hpp"
 #include "ConvexHullAndrew.hpp"
 #include "ConvexHullJarvis.hpp"
+
 
 /* Class Walker
  *
@@ -46,14 +50,17 @@ class Walker
 
         const ConvexHull& convexHull() const;
         // convenience functions
+        const std::vector<Step> hullPoints() const { return convexHull().hullPoints(); };
         double A() const { return convexHull().A(); };
         double L() const { return convexHull().L(); };
-        const std::vector<Step> hullPoints() const { return convexHull().hullPoints(); };
 
         const std::vector<Step>& points(int start=1) const;
         virtual const std::vector<Step> steps() const;
 
         int nSteps() const;
+
+        void saveConfiguration(const std::string filename);
+        void loadConfiguration(const std::string filename, int index=0);
 
         std::string print() const;
         void svg(const std::string filename, const bool with_hull=false) const;

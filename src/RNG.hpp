@@ -23,8 +23,8 @@ class UniformRNG
 
         std::vector<double> vector(int n);
 
-    protected:
         std::mt19937 rng;
+    protected:
         std::uniform_real_distribution<double>distribution;
         std::function<double()> uniform;
 };
