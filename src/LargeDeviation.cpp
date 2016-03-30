@@ -22,6 +22,8 @@ void run(const Cmd &o)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
     w->convexHull();
 
+    w->saveConfiguration("test.conf", false);
+
     std::function<double()> S;
     if(o.wantedObservable == WO_SURFACE_AREA)
         S = [&w](){ return w->L(); };
@@ -44,8 +46,10 @@ void run(const Cmd &o)
             double p_acc = std::min({1.0, exp(-(S() - oldS)/o.theta)});
             if(p_acc < 1 - rngMC())
                 w->rnChange(rn_to_change, oldRN);
-
         }
+        // TODO: only save after t_eq, and only statisically independent configurations
+        w->saveConfiguration("test.conf");
+
         Logger(LOG_TOO_MUCH) << "Area  : " << w->L();
         Logger(LOG_TOO_MUCH) << "Volume: " << w->A();
         Logger(LOG_DEBUG) << "Iteration: " << i;

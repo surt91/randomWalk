@@ -174,32 +174,26 @@ void Walker::pov(const std::string filename, const bool with_hull) const
     pic.save();
 }
 
-void Walker::saveConfiguration(const std::string filename)
+void Walker::saveConfiguration(const std::string &filename, bool append)
 {
-    std::ofstream oss(filename, std::ofstream::binary);
+    std::string data(serialize());
+
+    auto mode = append ? std::ofstream::binary | std::ofstream::app : std::ofstream::binary;
+    std::ofstream oss(filename, mode);
     if(!oss.good())
     {
         Logger(LOG_ERROR) << "File can not be opened: " << filename;
         return;
     }
 
-    std::stringstream ss;
-    ss << rng.rng;
-    std::string s(ss.str());
-    // write header data: nsteps, d, number of random numbers, state of rng
-    binary_write(oss, numSteps);
-    binary_write(oss, d);
-    binary_write(oss, s.size());
-    binary_write_string(oss, s);
-    binary_write(oss, random_numbers.size());
-    for(const auto i : random_numbers)
-        binary_write(oss, i);
+    binary_write(oss, data.size());
+    binary_write_string(oss, data);
 
     // save checksum?
     Logger(LOG_INFO) << "Save file   : " << filename;
 }
 
-void Walker::loadConfiguration(const std::string filename, int index)
+void Walker::loadConfiguration(const std::string &filename, int index)
 {
     std::ifstream iss(filename, std::ifstream::binary);
     if(!iss.good())
@@ -208,27 +202,60 @@ void Walker::loadConfiguration(const std::string filename, int index)
         return;
     }
 
-    size_t rn_size, len_rng_state;
-    binary_read(iss, numSteps);
-    binary_read(iss, d);
-    binary_read(iss, len_rng_state);
-    std::string rng_state(binary_read_string(iss, len_rng_state));
-    std::stringstream ss;
-    ss << rng_state;
-    ss >> rng.rng;
-    binary_read(iss, rn_size);
-
-    random_numbers.clear();
-    for(int i=0; i<rn_size; ++i)
+    size_t len = 0;
+    int ctr = 0;
+    while(ctr < index)
     {
-        double rn;
-        binary_read(iss, rn);
-        random_numbers.push_back(rn);
+        binary_read(iss, len);
+        iss.seekg(len, iss.cur);
+        ++ctr;
     }
+
+    binary_read(iss, len);
+    std::string data(binary_read_string(iss, len));
 
     // verify checksum?
     Logger(LOG_INFO) << "Read file   : " << filename;
     Logger(LOG_INFO) << "nsteps      : " << numSteps;
     Logger(LOG_INFO) << "dimension   : " << d;
     Logger(LOG_INFO) << "# random Num: " << random_numbers.size();
+}
+
+std::string Walker::serialize()
+{
+    std::stringstream ss;
+
+    // write header data: nsteps, d, number of random numbers, state of rng
+    binary_write(ss, numSteps);
+    binary_write(ss, d);
+    //~ std::string rng_state(rng.serialize_rng());
+    //~ binary_write(ss, rng_state.size());
+    //~ binary_write_string(ss, rng_state);
+    binary_write(ss, random_numbers.size());
+    for(const double i : random_numbers)
+        binary_write(ss, i);
+
+    return ss.str();
+}
+
+void Walker::deserialize(std::string s)
+{
+    size_t rn_size, len_rng_state;
+    std::stringstream ss;
+    ss << s;
+
+    binary_read(ss, numSteps);
+    binary_read(ss, d);
+    //~ binary_read(iss, len_rng_state);
+    //~ std::string rng_state(binary_read_string(iss, len_rng_state));
+    //~ rng.deserialize_rng(rng_state);
+    binary_read(ss, rn_size);
+
+    random_numbers.clear();
+    for(int i=0; i<rn_size; ++i)
+    {
+        double rn;
+        binary_read(ss, rn);
+        random_numbers.push_back(rn);
+    }
 }

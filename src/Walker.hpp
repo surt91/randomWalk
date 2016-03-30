@@ -38,7 +38,16 @@ class Walker
             stepsDirty = true;
             pointsDirty = true;
             hullDirty = true;
-        };
+        }
+
+        Walker(std::string data)
+        {
+            stepsDirty = true;
+            pointsDirty = true;
+            hullDirty = true;
+
+            deserialize(data);
+        }
 
         virtual ~Walker() {};
 
@@ -59,8 +68,11 @@ class Walker
 
         int nSteps() const;
 
-        void saveConfiguration(const std::string filename);
-        void loadConfiguration(const std::string filename, int index=0);
+        std::string serialize();
+        void deserialize(std::string s);
+
+        void saveConfiguration(const std::string &filename, bool append=true);
+        void loadConfiguration(const std::string &filename, int index=0);
 
         std::string print() const;
         void svg(const std::string filename, const bool with_hull=false) const;

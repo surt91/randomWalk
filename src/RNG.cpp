@@ -13,3 +13,17 @@ std::vector<double> UniformRNG::vector(int n)
 
     return v;
 }
+
+std::string UniformRNG::serialize_rng()
+{
+    std::stringstream ss;
+    ss << rng;
+    return std::string(ss.str());
+}
+
+void UniformRNG::deserialize_rng(std::string &s)
+{
+    std::stringstream ss;
+    ss << s;
+    ss >> rng;
+}

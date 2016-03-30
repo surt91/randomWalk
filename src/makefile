@@ -13,6 +13,7 @@ CPP	 := main.cpp \
         ConvexHullJarvis.cpp \
         LargeDeviation.cpp \
         RNG.cpp \
+        io.cpp \
         Svg.cpp \
         Povray.cpp
 
