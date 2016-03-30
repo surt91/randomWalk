@@ -15,7 +15,8 @@ CPP	 := main.cpp \
         RNG.cpp \
         io.cpp \
         Svg.cpp \
-        Povray.cpp
+        Povray.cpp \
+        stat.cpp
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 DEP	 = $(CPP:%.cpp=dep/%.d)

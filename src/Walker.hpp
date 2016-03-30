@@ -56,6 +56,7 @@ class Walker
         void appendRN();
 
         virtual double rnChange(const int idx, const double other);
+        void degenerate();
 
         const ConvexHull& convexHull() const;
         // convenience functions

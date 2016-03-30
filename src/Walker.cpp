@@ -89,6 +89,14 @@ int Walker::nSteps() const
     return numSteps;
 }
 
+// set the random numbers such that we get an L shape
+void Walker::degenerate()
+{
+    // TODO generalize for d > 2
+    for(int i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99 / ceil((double) d * (i+1)/random_numbers.size());
+}
+
 std::string Walker::print() const
 {
     std::stringstream ss;
@@ -190,7 +198,7 @@ void Walker::saveConfiguration(const std::string &filename, bool append)
     binary_write_string(oss, data);
 
     // save checksum?
-    Logger(LOG_INFO) << "Save file   : " << filename;
+    Logger(LOG_DEBUG) << "Save file   : " << filename;
 }
 
 void Walker::loadConfiguration(const std::string &filename, int index)
