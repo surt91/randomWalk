@@ -66,6 +66,7 @@ class Cmd
 
         std::string tmp_path;
         std::string data_path;
+        std::string conf_path;
         std::string svg_path;
         std::string pov_path;
         int steps;
