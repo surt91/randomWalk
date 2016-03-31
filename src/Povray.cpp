@@ -81,7 +81,7 @@ void Povray::box(const double x, const double y, const double z, const double dx
 
 void Povray::polyline(const std::vector<std::vector<double>> &points)
 {
-    for(int i=1; i<points.size(); ++i)
+    for(size_t i=1; i<points.size(); ++i)
     {
         const double cX1 = points[i-1][0], cX2 = points[i][0];
         const double cY1 = points[i-1][1], cY2 = points[i][1];

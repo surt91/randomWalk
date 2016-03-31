@@ -1,7 +1,7 @@
 #include "ConvexHull.hpp"
 
 
-ConvexHull::ConvexHull(const std::vector<Step>& interiorPoints, bool akl)
+ConvexHull::ConvexHull(const std::vector<Step>& interiorPoints, bool /*akl*/)
             : interiorPoints(interiorPoints),
               n(interiorPoints.size()),
               d(interiorPoints[0].d())

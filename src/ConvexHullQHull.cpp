@@ -114,7 +114,7 @@ std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
 
             // finally splitting the facet into triangles
             LOG(LOG_TOO_MUCH) << "subdivide to: ";
-            for(int i=0; i<=facet.size() - d; i+=d)
+            for(size_t i=0; i<=facet.size() - d; i+=d)
             {
                 std::vector<Step> simplex(facet.begin()+i, facet.begin()+i+d);
                 LOG(LOG_TOO_MUCH) << simplex;

@@ -20,7 +20,7 @@ const std::vector<Step>& Walker::points(int start) const
     if(!pointsDirty)
         return m_points;
 
-    if(m_points.size() != numSteps + 1)
+    if(m_points.size() != (size_t) numSteps + 1)
     {
         m_points.resize(numSteps + 1);
         m_points[0] = Step(std::vector<int>(d, 0));
@@ -93,7 +93,7 @@ int Walker::nSteps() const
 void Walker::degenerate()
 {
     // TODO generalize for d > 2
-    for(int i=0; i<random_numbers.size(); ++i)
+    for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99 / ceil((double) d * (i+1)/random_numbers.size());
 }
 
@@ -248,19 +248,20 @@ std::string Walker::serialize()
 
 void Walker::deserialize(std::string s)
 {
-    size_t rn_size, len_rng_state;
+    size_t rn_size;
     std::stringstream ss;
     ss << s;
 
     binary_read(ss, numSteps);
     binary_read(ss, d);
+    //~ size_t len_rng_state;
     //~ binary_read(iss, len_rng_state);
     //~ std::string rng_state(binary_read_string(iss, len_rng_state));
     //~ rng.deserialize_rng(rng_state);
     binary_read(ss, rn_size);
 
     random_numbers.clear();
-    for(int i=0; i<rn_size; ++i)
+    for(size_t i=0; i<rn_size; ++i)
     {
         double rn;
         binary_read(ss, rn);

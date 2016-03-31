@@ -59,7 +59,7 @@ void run_walker_and_CH(Cmd o)
     LOG(LOG_TIMING) << "CH : " << time_diff(before_ch, before_output);
 }
 
-void run_MC_simulation(Cmd o)
+void run_MC_simulation(Cmd /*o*/)
 {
 }
 

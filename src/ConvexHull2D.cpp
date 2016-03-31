@@ -26,7 +26,7 @@ double ConvexHull2D::A() const
 {
     // calculate Area in 2d -- since the algorithm only works for d=2
     double a = 0;
-    for(int i=0; i<hullPoints_.size()-1; ++i)
+    for(size_t i=0; i<hullPoints_.size()-1; ++i)
         a += (hullPoints_[i].x() - hullPoints_[i+1].x())
             * (hullPoints_[i].y() + hullPoints_[i+1].y());
     return a/2;
@@ -36,7 +36,7 @@ double ConvexHull2D::L() const
 {
     // calculate circumference in 2d -- since the algorithm only works for d=2
     double l = 0;
-    for(int i=0; i<hullPoints_.size()-1; ++i)
+    for(size_t i=0; i<hullPoints_.size()-1; ++i)
         l += sqrt(
             std::pow(hullPoints_[i].x() - hullPoints_[i+1].x(), 2)
             + std::pow(hullPoints_[i].y() - hullPoints_[i+1].y(), 2)
@@ -73,7 +73,7 @@ bool ConvexHull2D::pointInQuadrilateral(const Step& p1, const Step& p2, const St
 bool ConvexHull2D::pointInPolygon(const std::vector<Step>& poly, const Step& p)
 {
     bool inside = side(poly[poly.size()-1], poly[0], p) >= 0;
-    for(int i=1; i<poly.size(); ++i)
+    for(size_t i=1; i<poly.size(); ++i)
         inside = inside && (side(poly[i-1], poly[i], p) >= 0);
 
     return inside;
