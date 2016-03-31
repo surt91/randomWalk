@@ -25,7 +25,7 @@ QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
 #CC	= g++ -g
 CC	= g++ -O3 -flto -mtune=native
-#CC	= g++ -O3 -flto -mtune=native -DNDEBUG
+#CC	= g++ -O3 -flto -mtune=native -DNLOG
 #CC	= clang++ -O3 -flto -mtune=native
 WARNLEVEL= -Wall -Wextra -pedantic
 

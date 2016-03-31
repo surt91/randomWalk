@@ -5,8 +5,8 @@
 #include <iomanip>
 #include <vector>
 
-#ifdef NDEBUG
-// if compiled with -DNDEBUG, the compiler hopefully optimizes everything after the else away
+#ifdef NLOG
+// if compiled with -DNLOG, the compiler hopefully optimizes everything after the else away
 #define LOG(level) \
     if(true) {} \
     else Logger(level)
