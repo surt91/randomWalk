@@ -5,6 +5,20 @@
 #include <iomanip>
 #include <vector>
 
+#ifdef NDEBUG
+// if compiled with -DNDEBUG, the compiler hopefully optimizes everything after the else away
+#define LOG(level) \
+    if(true) {} \
+    else Logger(level)
+#else
+// http://stackoverflow.com/a/11826787/1698412
+// low overhead macro
+// prevents construction of the Logger object and evaluation of << operators
+#define LOG(level) \
+    if(level > Logger::verbosity) {} \
+    else Logger(level)
+#endif
+
 // http://stackoverflow.com/questions/1255576/what-is-good-practice-for-generating-verbose-output
 
 enum log_level_t {
@@ -41,7 +55,6 @@ class Logger {
 
         ~Logger()
         {
-            // VERBOSITY_LEVEL is a global variable and could be changed at runtime
             if(level <= verbosity)
                 std::cout << LABEL[level] << ss.str() << std::endl;
         }

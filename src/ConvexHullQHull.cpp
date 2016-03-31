@@ -54,7 +54,7 @@ std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
     orgQhull::QhullFacetList fl = qhull->facetList();
     std::vector<std::vector<Step>> facets;
 
-    Logger(LOG_INFO) << "Facet count: " << qhull->facetCount();
+    LOG(LOG_INFO) << "Facet count: " << qhull->facetCount();
 
     for(const auto &f : fl)
     {
@@ -67,7 +67,7 @@ std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
 
             facet.push_back(Step(s));
         }
-        Logger(LOG_TOO_MUCH) << facet;
+        LOG(LOG_TOO_MUCH) << facet;
 
         if(!f.isSimplicial())
         {
@@ -103,21 +103,21 @@ std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
             // FIXME inside is integer values and maybe outside of the facet
             // but probably does not harm since all other points are also integer
 
-            Logger(LOG_TOO_MUCH) << "normal " << normal;
-            Logger(LOG_TOO_MUCH) << "inside " << inside;
-            Logger(LOG_TOO_MUCH) << "axes " << i << j;
+            LOG(LOG_TOO_MUCH) << "normal " << normal;
+            LOG(LOG_TOO_MUCH) << "inside " << inside;
+            LOG(LOG_TOO_MUCH) << "axes " << i << j;
             std::sort(facet.begin(), facet.end(),
                     [i,j, &inside](Step const &a, Step const &b) -> bool
                     { return (a-inside).angle(i, j) < (b-inside).angle(i, j); } );
 
-            Logger(LOG_TOO_MUCH) << "reordered " << facet;
+            LOG(LOG_TOO_MUCH) << "reordered " << facet;
 
             // finally splitting the facet into triangles
-            Logger(LOG_TOO_MUCH) << "subdivide to: ";
+            LOG(LOG_TOO_MUCH) << "subdivide to: ";
             for(int i=0; i<=facet.size() - d; i+=d)
             {
                 std::vector<Step> simplex(facet.begin()+i, facet.begin()+i+d);
-                Logger(LOG_TOO_MUCH) << simplex;
+                LOG(LOG_TOO_MUCH) << simplex;
                 facet.push_back(facet[i]);
                 facet.push_back(facet[i+d-1]); // not sure for d>3
                 facets.push_back(simplex);

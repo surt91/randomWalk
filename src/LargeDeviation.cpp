@@ -54,8 +54,8 @@ int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, s
         ++t_eq;
     }
 
-    Logger(LOG_INFO) << "Equilibration estimate: t_eq = " << t_eq;
-    Logger(LOG_INFO) << "plot with gnuplot: p \"equilibration.dat\" u 1:4 w l, \"\" u 1:5 w l";
+    LOG(LOG_INFO) << "Equilibration estimate: t_eq = " << t_eq;
+    LOG(LOG_INFO) << "plot with gnuplot: p \"equilibration.dat\" u 1:4 w l, \"\" u 1:5 w l";
     return t_eq;
 }
 
@@ -70,7 +70,7 @@ void run(const Cmd &o)
     std::ofstream oss(o.data_path, std::ofstream::out);
     if(!oss.good())
     {
-        Logger(LOG_ERROR) << "Path is not writable " << o.data_path;
+        LOG(LOG_ERROR) << "Path is not writable " << o.data_path;
         throw std::invalid_argument("Path is not writable");
     }
     oss << "# large deviation simulation at theta=" << o.theta << " and steps=" << o.steps << "\n";
@@ -119,16 +119,16 @@ void run(const Cmd &o)
         {
             w->saveConfiguration(o.conf_path);
 
-            Logger(LOG_TOO_MUCH) << "Area  : " << w->L();
-            Logger(LOG_TOO_MUCH) << "Volume: " << w->A();
-            Logger(LOG_DEBUG) << "Iteration: " << i;
+            LOG(LOG_TOO_MUCH) << "Area  : " << w->L();
+            LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
+            LOG(LOG_DEBUG) << "Iteration: " << i;
             oss << i << " " << w->L() << " " << w->A() << std::endl;
         }
     }
 
-    Logger(LOG_INFO) << "# rejected changes: " << fail << " (" << (100. * fail/(o.iterations*o.steps)) << "%)";
-    Logger(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
-    Logger(LOG_INFO) << "# max vmem: " << vmPeak();
+    LOG(LOG_INFO) << "# rejected changes: " << fail << " (" << (100. * fail/(o.iterations*o.steps)) << "%)";
+    LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
+    LOG(LOG_INFO) << "# max vmem: " << vmPeak();
 
     // save runtime statistics
     oss << "# rejected changes: " << fail << " (" << (100. * fail/(o.iterations*o.steps)) << "%)" << "\n";

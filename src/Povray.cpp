@@ -111,12 +111,12 @@ void Povray::save()
 
     if(!oss.good())
     {
-        Logger(LOG_ERROR) << "File can not be opened: " << filename;
+        LOG(LOG_ERROR) << "File can not be opened: " << filename;
         throw std::invalid_argument("cannot be opened");
     }
 
-    Logger(LOG_INFO) << "Povray file: " << filename;
-    Logger(LOG_INFO) << "Render with " << "povray +O" << filename << ".png" << " +I" << filename << " +V +W1920 +H1080 +A";
+    LOG(LOG_INFO) << "Povray file: " << filename;
+    LOG(LOG_INFO) << "Render with " << "povray +O" << filename << ".png" << " +I" << filename << " +V +W1920 +H1080 +A";
 
     oss << header;                  // header
     oss << buffer.str();            // content

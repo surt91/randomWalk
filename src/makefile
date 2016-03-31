@@ -24,9 +24,10 @@ DEP	 = $(CPP:%.cpp=dep/%.d)
 QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
 #CC	= g++ -g
-CC	= g++ -O3 -flto -mtune=native -ffast-math
-#CC	= clang++ -O3 -flto -march=native -ffast-math
-WARNLEVEL= -Wall -Wextra -Wno-unused-parameter -pedantic
+CC	= g++ -O3 -flto -mtune=native
+#CC	= g++ -O3 -flto -mtune=native -DNDEBUG
+#CC	= clang++ -O3 -flto -mtune=native
+WARNLEVEL= -Wall -Wextra -pedantic
 
 LNDIRS  = -L$(PWD)/lib \
           -L$(PWD)/qhull/lib
@@ -34,7 +35,7 @@ LNDIRS  = -L$(PWD)/lib \
 INCLUDES = -I$(PWD)/include \
            -I$(PWD)/qhull/src \
 
-COPT = -std=c++11 -m64 -O -fPIC -fno-strict-aliasing -fomit-frame-pointer -fexceptions -pipe -fdiagnostics-color
+COPT = -std=c++11 -m64 -O -fPIC -ffast-math -fno-strict-aliasing -fomit-frame-pointer -fexceptions -pipe -fdiagnostics-color
 CFLAGS	= $(COPT) $(INCLUDES)
 
 LIBS = -lqhullcpp -lqhullstatic_r -lm

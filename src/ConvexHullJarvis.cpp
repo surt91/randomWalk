@@ -5,12 +5,12 @@ ConvexHullJarvis::ConvexHullJarvis(const std::vector<Step>& points, bool akl)
 {
     if(d > 3)
     {
-        Logger(LOG_ERROR) << "Jarvis March does only work in d=2 and d=3, the data is d = " << d;
+        LOG(LOG_ERROR) << "Jarvis March does only work in d=2 and d=3, the data is d = " << d;
         throw std::invalid_argument("Jarvis March does only work in d=2 and d=3");
     }
     if(d != 2)
     {
-        Logger(LOG_ERROR) << "Jarvis March is only implemented in d=2, the data is d = " << d;
+        LOG(LOG_ERROR) << "Jarvis March is only implemented in d=2, the data is d = " << d;
         throw std::invalid_argument("Jarvis March is only implemented in d=2");
     }
 

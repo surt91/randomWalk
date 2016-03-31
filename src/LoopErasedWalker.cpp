@@ -61,7 +61,7 @@ const std::vector<Step> LoopErasedWalker::steps() const
         ++i;
         ++index;
     }
-    Logger(LOG_DEBUG) << "Random numbers used: " << i;
+    LOG(LOG_DEBUG) << "Random numbers used: " << i;
 
     m_steps = ret;
     stepsDirty = false;

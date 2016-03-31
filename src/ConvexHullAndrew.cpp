@@ -7,7 +7,7 @@ ConvexHullAndrew::ConvexHullAndrew(const std::vector<Step>& points, bool akl)
 {
     if(d != 2)
     {
-        Logger(LOG_ERROR) << "Andrew Monotone Chain does only work in a plane (d=2), the data is d = " << d;
+        LOG(LOG_ERROR) << "Andrew Monotone Chain does only work in a plane (d=2), the data is d = " << d;
         throw std::invalid_argument("Andrew Monotone Chain does only work in a plane (d=2)");
     }
 

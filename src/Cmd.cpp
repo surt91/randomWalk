@@ -90,7 +90,8 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(aklHeuristicSwitch);
         cmd.add(benchmarkSwitch);
 
-        cmd.xorAdd(verboseArg, quietSwitch);
+        cmd.add(quietSwitch);
+        cmd.add(verboseArg);
 
         // Parse the argv array.
         cmd.parse(argc, argv);
@@ -100,7 +101,7 @@ Cmd::Cmd(int argc, char** argv)
         benchmark = benchmarkSwitch.getValue();
         if(benchmark)
         {
-            Logger(LOG_INFO) << "Benchmark Mode";
+            LOG(LOG_INFO) << "Benchmark Mode";
             return;
         }
 
@@ -109,7 +110,7 @@ Cmd::Cmd(int argc, char** argv)
             Logger::verbosity = 0;
         else
             Logger::verbosity = verboseArg.getValue();
-        Logger(LOG_INFO) << "Verbosity                  " << Logger::verbosity;
+        LOG(LOG_INFO) << "Verbosity                  " << Logger::verbosity;
 
         bool aklHeuristic = aklHeuristicSwitch.getValue();
         int tmp = chAlgArg.getValue();
@@ -117,37 +118,37 @@ Cmd::Cmd(int argc, char** argv)
         if(aklHeuristic)
             tmp++;
         chAlg = (hull_algorithm_t) tmp;
-        Logger(LOG_INFO) << "Convex Hull Algorithm      " << CH_LABEL[chAlg];
+        LOG(LOG_INFO) << "Convex Hull Algorithm      " << CH_LABEL[chAlg];
 
         steps = numArg.getValue();
-        Logger(LOG_INFO) << "Number of steps            " << steps;
+        LOG(LOG_INFO) << "Number of steps            " << steps;
         iterations = iterationsArg.getValue();
-        Logger(LOG_INFO) << "Number of MC iterations    " << iterations;
+        LOG(LOG_INFO) << "Number of MC iterations    " << iterations;
         seedRealization = seedRArg.getValue();
-        Logger(LOG_INFO) << "Seed for the realization   " << seedRealization;
+        LOG(LOG_INFO) << "Seed for the realization   " << seedRealization;
         seedMC = seedMCArg.getValue();
-        Logger(LOG_INFO) << "Seed for the MC simulation " << seedMC;
+        LOG(LOG_INFO) << "Seed for the MC simulation " << seedMC;
         d = dimArg.getValue();
-        Logger(LOG_INFO) << "Dimension                  " << d;
+        LOG(LOG_INFO) << "Dimension                  " << d;
         theta = thetaArg.getValue();
-        Logger(LOG_INFO) << "Theta                      " << theta;
+        LOG(LOG_INFO) << "Theta                      " << theta;
         wantedObservable = (wanted_observable_t) wantedobservableArg.getValue();
-        Logger(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
+        LOG(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
         type = (walk_type_t) typeArg.getValue();
-        Logger(LOG_INFO) << "Type                       " << TYPE_LABEL[type];
+        LOG(LOG_INFO) << "Type                       " << TYPE_LABEL[type];
         svg_path = svgArg.getValue();
-        Logger(LOG_INFO) << "Path to store the SVG      " << svg_path;
+        LOG(LOG_INFO) << "Path to store the SVG      " << svg_path;
         pov_path = povArg.getValue();
-        Logger(LOG_INFO) << "Path to store the povray   " << pov_path;
+        LOG(LOG_INFO) << "Path to store the povray   " << pov_path;
         data_path = dataPathArg.getValue();
-        Logger(LOG_INFO) << "Path to store the data     " << data_path;
+        LOG(LOG_INFO) << "Path to store the data     " << data_path;
         conf_path = confPathArg.getValue();
-        Logger(LOG_INFO) << "Path to store the raw data " << conf_path;
+        LOG(LOG_INFO) << "Path to store the raw data " << conf_path;
         tmp_path = tmpPathArg.getValue();
-        Logger(LOG_INFO) << "Path for temporary files   " << tmp_path;
+        LOG(LOG_INFO) << "Path for temporary files   " << tmp_path;
     }
     catch(TCLAP::ArgException &e)  // catch any exceptions
     {
-        Logger(LOG_ERROR) << e.error() << " for arg " << e.argId();;
+        LOG(LOG_ERROR) << e.error() << " for arg " << e.argId();;
     }
 }

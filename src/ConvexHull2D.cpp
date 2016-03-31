@@ -18,7 +18,7 @@ ConvexHull2D::~ConvexHull2D()
 
 const std::vector<Step>& ConvexHull2D::hullPoints() const
 {
-    Logger(LOG_TOO_MUCH) << "Convex Hull: " << hullPoints_;
+    LOG(LOG_TOO_MUCH) << "Convex Hull: " << hullPoints_;
     return hullPoints_;
 }
 
@@ -115,7 +115,7 @@ void ConvexHull2D::preprocessAklToussaint()
         pointSelection.push_back(min[i]);
         pointSelection.push_back(max[i]);
     }
-    Logger(LOG_DEBUG) << "Akl Toussaint killed: "
+    LOG(LOG_DEBUG) << "Akl Toussaint killed: "
             << (n - pointSelection.size()) << "/" << n
             << " ("  << std::setprecision(2) << ((double) (n - pointSelection.size()) / n * 100) << "%)";
 

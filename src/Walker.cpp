@@ -55,7 +55,7 @@ const ConvexHull& Walker::convexHull() const
                 m_convex_hull = std::unique_ptr<ConvexHull>(new ConvexHullJarvis(points(), akl));
                 break;
             default:
-                Logger(LOG_ERROR) << "Algorithm not implemented, yet: " << CH_LABEL[hull_algo];
+                LOG(LOG_ERROR) << "Algorithm not implemented, yet: " << CH_LABEL[hull_algo];
                 throw std::invalid_argument("this is not implemented");
         }
         hullDirty = false;
@@ -190,7 +190,7 @@ void Walker::saveConfiguration(const std::string &filename, bool append)
     std::ofstream oss(filename, mode);
     if(!oss.good())
     {
-        Logger(LOG_ERROR) << "File can not be opened: " << filename;
+        LOG(LOG_ERROR) << "File can not be opened: " << filename;
         return;
     }
 
@@ -198,7 +198,7 @@ void Walker::saveConfiguration(const std::string &filename, bool append)
     binary_write_string(oss, data);
 
     // save checksum?
-    Logger(LOG_DEBUG) << "Save file   : " << filename;
+    LOG(LOG_DEBUG) << "Save file   : " << filename;
 }
 
 void Walker::loadConfiguration(const std::string &filename, int index)
@@ -206,7 +206,7 @@ void Walker::loadConfiguration(const std::string &filename, int index)
     std::ifstream iss(filename, std::ifstream::binary);
     if(!iss.good())
     {
-        Logger(LOG_ERROR) << "File can not be opened: " << filename;
+        LOG(LOG_ERROR) << "File can not be opened: " << filename;
         return;
     }
 
@@ -223,10 +223,10 @@ void Walker::loadConfiguration(const std::string &filename, int index)
     std::string data(binary_read_string(iss, len));
 
     // verify checksum?
-    Logger(LOG_INFO) << "Read file   : " << filename;
-    Logger(LOG_INFO) << "nsteps      : " << numSteps;
-    Logger(LOG_INFO) << "dimension   : " << d;
-    Logger(LOG_INFO) << "# random Num: " << random_numbers.size();
+    LOG(LOG_INFO) << "Read file   : " << filename;
+    LOG(LOG_INFO) << "nsteps      : " << numSteps;
+    LOG(LOG_INFO) << "dimension   : " << d;
+    LOG(LOG_INFO) << "# random Num: " << random_numbers.size();
 }
 
 std::string Walker::serialize()
