@@ -23,10 +23,14 @@ DEP	 = $(CPP:%.cpp=dep/%.d)
 
 QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
-#CC	= g++ -g
-CC	= g++ -O3 -flto -mtune=native
-#CC	= g++ -O3 -flto -mtune=native -DNLOG
-#CC	= clang++ -O3 -flto -mtune=native
+CXX	= g++
+#CXX	= clang++
+
+#COPT = -g
+COPT = -O3 -flto -mtune=native -fomit-frame-pointer
+#COPT += -DNLOG
+COPT += -std=c++11 -m64 -O -fPIC -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color
+
 WARNLEVEL= -Wall -Wextra -pedantic
 
 LNDIRS  = -L$(PWD)/lib \
@@ -35,8 +39,7 @@ LNDIRS  = -L$(PWD)/lib \
 INCLUDES = -I$(PWD)/include \
            -I$(PWD)/qhull/src \
 
-COPT = -std=c++11 -m64 -O -fPIC -ffast-math -fno-strict-aliasing -fomit-frame-pointer -fexceptions -pipe -fdiagnostics-color
-CFLAGS	= $(COPT) $(INCLUDES)
+CXXFLAGS = $(COPT) $(INCLUDES)
 
 LIBS = -lqhullcpp -lqhullstatic_r -lm
 LFLAGS	= $(LNDIRS) $(LIBS)
@@ -58,19 +61,19 @@ obj dep:
 dep/%.d: %.cpp | dep
 	@echo Dep: $@
 	@set -e; rm -f $@; \
-	$(CC) $(WARNLEVEL) $(CFLAGS) -MM $< > $@.$$$$; \
+	$(CXX) $(WARNLEVEL) $(CXXFLAGS) -MM $< > $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,obj/\1.o $@: ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 obj/%.o: %.cpp | obj
-	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@
+	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
 
 $(QHULL):
 	$(MAKE) -j1 -C qhull cleanall
 	$(MAKE) -j1 -C qhull lib/libqhullstatic_r.a lib/libqhullcpp.a
 
 $(TARGET): $(OBJ) $(QHULL)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
 proper:
 	rm -rf $(OBJ)
