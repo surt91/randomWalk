@@ -17,6 +17,7 @@ class ConvexHull2D : public ConvexHull
         static int cross2d_z(const Step &O, const Step &A, const Step &B);
         static bool pointInTriangle(const Step& p1, const Step& p2, const Step& p3, const Step& p);
         static bool pointInQuadrilateral(const Step& p1, const Step& p2, const Step& p3, const Step& p4, const Step& p);
+        static bool pointInPolygon(const std::vector<Step>& poly, const Step& p);
 
     protected:
         static int side(const Step& p1, const Step& p2, const Step& p);

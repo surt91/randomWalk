@@ -69,6 +69,16 @@ bool ConvexHull2D::pointInQuadrilateral(const Step& p1, const Step& p2, const St
     return checkSide1 && checkSide2 && checkSide3 && checkSide4;
 }
 
+// sequence of the points matters, must be counterclockwise
+bool ConvexHull2D::pointInPolygon(const std::vector<Step>& poly, const Step& p)
+{
+    bool inside = side(poly[poly.size()-1], poly[0], p) >= 0;
+    for(int i=1; i<poly.size(); ++i)
+        inside = inside && (side(poly[i-1], poly[i], p) >= 0);
+
+    return inside;
+}
+
 // 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
 // Returns a positive value, if OAB makes a counter-clockwise turn,
 // negative for clockwise turn, and zero if the points are collinear.
