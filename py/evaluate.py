@@ -7,8 +7,17 @@ import numpy as np
 import parameters as param
 from config import bootstrap_histogram
 
+
 def getDistribution(infile, outfile, theta, steps):
-    a = np.loadtxt(infile)
+    try:
+        a = np.loadtxt(infile+".gz")
+    except FileNotFoundError:
+        try:
+            a = np.loadtxt(infile)
+        except FileNotFoundError:
+            print("cannot find " + self.filename)
+            return
+
     counts, bins = np.histogram(a.transpose()[2][30000:], 30, normed=True)
     centers = (bins[1:] + bins[:1])/2
 

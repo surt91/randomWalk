@@ -164,7 +164,7 @@ class SimulationInstance():
         self.t = 13
 
     def __call__(self):
-        if not os.path.exists(self.filename):
+        if not os.path.exists(self.filename+".gz"):
             if 0 != call(self.get_cmd(), stdout=None, stderr=None):
                 logging.error("Error in command '%s'" % (" ".join(self.get_cmd())))
             print(".", flush=True, end="")
