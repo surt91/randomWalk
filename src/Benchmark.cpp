@@ -28,7 +28,7 @@ std::string vmPeak()
     return exec(cmd.c_str());
 }
 
-void run_walker_and_CH(Cmd o)
+std::unique_ptr<Walker> run_walker(Cmd o)
 {
     clock_t before_walker = clock();
     std::unique_ptr<Walker> w;
@@ -39,7 +39,15 @@ void run_walker_and_CH(Cmd o)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rng, o.chAlg));
     w->steps();
 
+    LOG(LOG_TIMING) << "RW : " << time_diff(before_walker, clock());
+
+    return w;
+}
+
+void run_hull(Cmd o, std::unique_ptr<Walker> &w)
+{
     clock_t before_ch = clock();
+    w->setHullAlgo(o.chAlg);
     w->convexHull();
 
     clock_t before_output = clock();
@@ -51,11 +59,11 @@ void run_walker_and_CH(Cmd o)
     }
     if(std::abs(w->A() - o.benchmark_A) > 1)
     {
-        LOG(LOG_ERROR) <<"Wrong A  " << w->A();
-        LOG(LOG_ERROR) <<"expected " << o.benchmark_A;
+        LOG(LOG_ERROR) << "Wrong A  " << w->A();
+        LOG(LOG_ERROR) << "expected " << o.benchmark_A;
     }
 
-    LOG(LOG_TIMING) << "RW : " << time_diff(before_walker, before_ch);
+
     LOG(LOG_TIMING) << "CH : " << time_diff(before_ch, before_output);
 }
 
@@ -66,74 +74,44 @@ void run_MC_simulation(Cmd /*o*/)
 void benchmark()
 {
     Logger::verbosity = LOG_TIMING;
-    Logger::verbosity = LOG_TOO_MUCH;
+    //~ Logger::verbosity = LOG_TOO_MUCH;
 
     Cmd o;
     o.benchmark = true;
-    o.steps = 1000000;
     o.seedRealization = 13;
     o.seedMC = 42;
     o.d = 2;
 
+    for(int i=1; i<=3; ++i)
+    {
+        switch(i)
+        {
+            case WT_RANDOM_WALK:
+                o.steps = 1000000;
+                o.type = WT_RANDOM_WALK;
+                o.benchmark_L = 3747.18;
+                o.benchmark_A = 984338;
+                break;
+            case WT_LOOP_ERASED_RANDOM_WALK:
+                o.steps = 10000;
+                o.type = WT_LOOP_ERASED_RANDOM_WALK;
+                o.benchmark_L = 4064.59205479;
+                o.benchmark_A = 481541;
+                break;
+        }
 
-    o.type = WT_RANDOM_WALK;
-    o.benchmark_L = 3747.18;
-    o.benchmark_A = 984338;
+        LOG(LOG_INFO) << TYPE_LABEL[i];
+        auto w = run_walker(o);
 
-    LOG(LOG_INFO) << "Random Walk, Andrews Monotone Chain";
-    o.chAlg = CH_ANDREWS;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Random Walk, Andrews Monotone Chain and Akl Toussaint";
-    o.chAlg = CH_ANDREWS_AKL;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Random Walk, Jarvis March";
-    o.chAlg = CH_JARVIS;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Random Walk, Jarvis March and Akl Toussaint";
-    o.chAlg = CH_JARVIS_AKL;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Random Walk, QHull";
-    o.chAlg = CH_QHULL;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Random Walk, QHull and Akl Toussaint";
-    o.chAlg = CH_QHULL_AKL;
-    run_walker_and_CH(o);
-
-
-    o.steps = 10000;
-    o.type = WT_LOOP_ERASED_RANDOM_WALK;
-    o.benchmark_L = 4064.59205479;
-    o.benchmark_A = 481541;
-
-    LOG(LOG_INFO) << "Loop Erased Random Walk, Andrews Monotone Chain";
-    o.chAlg = CH_ANDREWS;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Loop Erased Random Walk, Andrews Monotone Chain and Akl Toussaint";
-    o.chAlg = CH_ANDREWS_AKL;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Loop Erased Random Walk, Jarvis March";
-    o.chAlg = CH_JARVIS;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Loop Erased Random Walk, Jarvis March and Akl Toussaint";
-    o.chAlg = CH_JARVIS_AKL;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Loop Erased Random Walk, QHull";
-    o.chAlg = CH_QHULL;
-    run_walker_and_CH(o);
-
-    LOG(LOG_INFO) << "Loop Erased Random Walk, QHull and Akl Toussaint";
-    o.chAlg = CH_QHULL_AKL;
-    run_walker_and_CH(o);
-
+        for(int j=1; j<=8; ++j)
+        {
+            o.chAlg = (hull_algorithm_t) j;
+            LOG(LOG_INFO) << CH_LABEL[j];
+            try{
+                run_hull(o, w);
+            } catch(...) { }
+        }
+    }
 
     LOG(LOG_TIMING) << "Mem: " << vmPeak();
 

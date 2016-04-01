@@ -32,6 +32,12 @@ const std::vector<Step>& Walker::points(int start) const
     return m_points;
 }
 
+void Walker::setHullAlgo(hull_algorithm_t a)
+{
+    hullDirty = true;
+    hull_algo = a;
+}
+
 const ConvexHull& Walker::convexHull() const
 {
     if(hullDirty)
@@ -92,7 +98,6 @@ int Walker::nSteps() const
 // set the random numbers such that we get an L shape
 void Walker::degenerate()
 {
-    // TODO generalize for d > 2
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99 / ceil((double) d * (i+1)/random_numbers.size());
 }

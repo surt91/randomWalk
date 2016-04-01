@@ -57,6 +57,7 @@ class Walker
 
         virtual double rnChange(const int idx, const double other);
         void degenerate();
+        void setHullAlgo(hull_algorithm_t a);
 
         const ConvexHull& convexHull() const;
         // convenience functions
