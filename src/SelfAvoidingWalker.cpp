@@ -15,6 +15,9 @@ const std::vector<Step> SelfAvoidingWalker::steps() const
     //      (Madras2013 The Self-Avoiding Walk)
     //      divide and conquer, merge two subwalks, that may not overlap
     //      + should be easy to apply large deviation scheme
+    //      + could be used as a starting point for pivoting or local modification
+    //      - also takes forever
+    //      + but slightly less forever
     //
     //  pivot algorithm
     //      generate somehow one SAW (dimerization), choose a pivot and
@@ -88,7 +91,6 @@ std::list<Step> SelfAvoidingWalker::dim(int N)
                 }
             }
         } while(!checkOverlapFree(start));
-        //~ std::cout << start << std::endl;
         return start;
     }
     else

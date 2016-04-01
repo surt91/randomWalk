@@ -101,10 +101,10 @@ void benchmark()
                 o.benchmark_A = 481541;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
-                o.steps = 2000;
+                o.steps = 640;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
-                o.benchmark_L = 478.33;
-                o.benchmark_A = 10287;
+                o.benchmark_L = 293.77;
+                o.benchmark_A = 4252.5;
                 break;
         }
 
