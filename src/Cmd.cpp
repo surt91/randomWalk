@@ -37,10 +37,12 @@ Cmd::Cmd(int argc, char** argv)
         std::vector<int> allowedTypes_;
         allowedTypes_.push_back(1);
         allowedTypes_.push_back(2);
+        allowedTypes_.push_back(3);
         TCLAP::ValuesConstraint<int> allowedTypes(allowedTypes_);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
-                                                  "\trandom walk    : 1 (default)\n"
-                                                  "\tlooperased walk: 2",
+                                                  "\trandom walk       : 1 (default)\n"
+                                                  "\tlooperased walk   : 2\n"
+                                                  "\tself-avoiding walk: 3",
                                      false, 1, &allowedTypes);
 
         std::vector<int> allowedCH_;

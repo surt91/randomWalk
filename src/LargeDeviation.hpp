@@ -8,6 +8,7 @@
 #include "Logging.hpp"
 #include "Walker.hpp"
 #include "LoopErasedWalker.hpp"
+#include "SelfAvoidingWalker.hpp"
 #include "RNG.hpp"
 #include "Benchmark.hpp"
 #include "stat.hpp"

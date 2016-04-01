@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <list>
 #include <vector>
 #include <unordered_set>
 #include <iostream>
@@ -83,6 +84,15 @@ class Step
             return Step(new_coord);
         }
 
+        Step operator-() const
+        {
+            std::vector<int> new_coord = coordinates();
+            for(int i=0; i<m_d; ++i)
+                new_coord[i] *= -1;
+
+            return Step(new_coord);
+        }
+
         Step operator/(const double d) const
         {
             std::vector<int> new_coord = coordinates();
@@ -143,6 +153,15 @@ class Step
         }
 
         friend std::ostream& operator<<(std::ostream& os, const std::vector<Step> &obj)
+        {
+            os << "[";
+            for(const auto &i : obj)
+                os << i << " ";
+            os << "]";
+            return os;
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const std::list<Step> &obj)
         {
             os << "[";
             for(const auto &i : obj)

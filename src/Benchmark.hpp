@@ -14,6 +14,7 @@
 #include "Logging.hpp"
 #include "Walker.hpp"
 #include "LoopErasedWalker.hpp"
+#include "SelfAvoidingWalker.hpp"
 
 
 std::string vmPeak();

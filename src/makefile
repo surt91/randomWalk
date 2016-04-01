@@ -6,6 +6,7 @@ CPP	 := main.cpp \
         Step.cpp \
         Walker.cpp \
         LoopErasedWalker.cpp \
+        SelfAvoidingWalker.cpp \
         ConvexHull.cpp \
         ConvexHull2D.cpp \
         ConvexHullQHull.cpp \

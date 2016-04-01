@@ -82,6 +82,8 @@ void run(const Cmd &o)
         w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
     else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
+    else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg));
     w->convexHull();
 
     w->saveConfiguration(o.conf_path, false);

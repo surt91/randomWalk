@@ -37,6 +37,8 @@ std::unique_ptr<Walker> run_walker(Cmd o)
         w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rng, o.chAlg));
     else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rng, o.chAlg));
+    else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rng, o.chAlg));
     w->steps();
 
     LOG(LOG_TIMING) << "RW : " << time_diff(before_walker, clock());
@@ -97,6 +99,12 @@ void benchmark()
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
                 o.benchmark_L = 4064.59205479;
                 o.benchmark_A = 481541;
+                break;
+            case WT_SELF_AVOIDING_RANDOM_WALK:
+                o.steps = 2000;
+                o.type = WT_SELF_AVOIDING_RANDOM_WALK;
+                o.benchmark_L = 478.33;
+                o.benchmark_A = 10287;
                 break;
         }
 

@@ -17,7 +17,10 @@ class ConvexHull
 
         virtual const std::vector<Step>& hullPoints() const = 0;
         virtual std::vector<std::vector<Step>> hullFacets() const;
-        // void movePoint();
+
+        // observables
+        //~ virtual std::vector<int> max_extent();
+        //~ virtual double diameter();
 
     protected:
         std::vector<Step> interiorPoints;
