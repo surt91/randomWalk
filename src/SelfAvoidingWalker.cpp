@@ -1,42 +1,34 @@
 #include "SelfAvoidingWalker.hpp"
 
-const std::vector<Step> SelfAvoidingWalker::steps() const
-{
-    if(!stepsDirty)
-        return m_steps;
-
-    // Possibilities:
-    //  naive approach
-    //      walk randomly, if we step on ourself, discard everything and start again
-    //      + easy to apply large deviation Scheme
-    //      - takes forever
-    //
-    //  dimerization
-    //      (Madras2013 The Self-Avoiding Walk)
-    //      divide and conquer, merge two subwalks, that may not overlap
-    //      + should be easy to apply large deviation scheme
-    //      + could be used as a starting point for pivoting or local modification
-    //      - also takes forever
-    //      + but slightly less forever
-    //
-    //  pivot algorithm
-    //      generate somehow one SAW (dimerization), choose a pivot and
-    //      turn everything behind it clock-, or counterclockwise
-    //      + generates many SAW instances
-    //      + could be used as the "change" step of the large deviation scheme
-    //      - could introduce too much change
-    //      - how do I combine large deviation with a sampling technique?
-    //
-    //  pruned enriched Rosenbluth Rosenbluth (PERM)
-    //      grow SAWs with weights, create a population of SAWs
-    //      by duplicating or killing them based on their weight
-    //      if a walk reaches the length of N, take it as a sample
-    //      and continue with the next in the population
-    //      + generates many SAW instances, quite efficiently
-    //      - where can I plug in the large deviation "bias"? In the weights? How?
-
-    return m_steps;
-}
+// Possibilities:
+//  naive approach
+//      walk randomly, if we step on ourself, discard everything and start again
+//      + easy to apply large deviation Scheme
+//      - takes forever
+//
+//  dimerization
+//      (Madras2013 The Self-Avoiding Walk)
+//      divide and conquer, merge two subwalks, that may not overlap
+//      + should be easy to apply large deviation scheme
+//      + could be used as a starting point for pivoting or local modification
+//      - also takes forever
+//      + but slightly less forever
+//
+//  pivot algorithm
+//      generate somehow one SAW (dimerization), choose a pivot and
+//      turn everything behind it clock-, or counterclockwise
+//      + generates many SAW instances
+//      + could be used as the "change" step of the large deviation scheme
+//      - could introduce too much change
+//      - how do I combine large deviation with a sampling technique?
+//
+//  pruned enriched Rosenbluth Rosenbluth (PERM)
+//      grow SAWs with weights, create a population of SAWs
+//      by duplicating or killing them based on their weight
+//      if a walk reaches the length of N, take it as a sample
+//      and continue with the next in the population
+//      + generates many SAW instances, quite efficiently
+//      - where can I plug in the large deviation "bias"? In the weights? How?
 
 double SelfAvoidingWalker::rnChange(const int idx, const double other)
 {
@@ -46,7 +38,7 @@ double SelfAvoidingWalker::rnChange(const int idx, const double other)
     return oldRN;
 }
 
-bool SelfAvoidingWalker::checkOverlapFree(std::list<Step> &l) const
+bool SelfAvoidingWalker::checkOverlapFree(std::list<double> &l) const
 {
     std::unordered_set<Step> steps;
     steps.reserve(l.size());
@@ -55,7 +47,7 @@ bool SelfAvoidingWalker::checkOverlapFree(std::list<Step> &l) const
     Step p(std::vector<int>(d, 0));
     while(it != l.end())
     {
-        p += *it;
+        p += Step(d, *it);
         if(steps.count(p))
             return false;
         steps.insert(p);
@@ -64,30 +56,31 @@ bool SelfAvoidingWalker::checkOverlapFree(std::list<Step> &l) const
     return true;
 }
 
-// Madras2013, The Self-Avoiding Walk, p. 308 ff
-std::list<Step> SelfAvoidingWalker::dim(int N)
+// Madras2013, The Self-Avoiding Walk, p. 308 ff (doi 10.1007/978-1-4614-6025-1_9)
+std::list<double> SelfAvoidingWalker::dim(int N)
 {
-    // FIXME: do not save the steps, but only the random numbers
-    //        and init from a sequence of random numbers like the others
-    //        that way, the degeneration and serialization will work
     int threshold = 10;
     if(N <= threshold)
     {
-        std::list<Step> start;
+        std::list<double> start;
+
         // generate naively
         do
         {
             start.clear();
             double rn = rng();
-            start.push_back(Step(d, rn));
+            start.push_back(rn);
+            Step lastStep(d, rn);
 
             for(int i=1; i<N;)
             {
-                Step s(d, rng());
-                if(s != -start.back())  // do not allow immediate reversals
+                double rn2 = rng();
+                Step s(d, rn2);
+                if(s != -lastStep)  // do not allow immediate reversals
                 {
                     ++i;
-                    start.push_back(std::move(s));
+                    start.push_back(rn2);
+                    lastStep = std::move(s);
                 }
             }
         } while(!checkOverlapFree(start));
@@ -95,8 +88,8 @@ std::list<Step> SelfAvoidingWalker::dim(int N)
     }
     else
     {
-        std::list<Step> part1;
-        std::list<Step> part2;
+        std::list<double> part1;
+        std::list<double> part2;
 
         do
         {

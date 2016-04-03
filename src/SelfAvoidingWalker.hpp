@@ -13,17 +13,14 @@ class SelfAvoidingWalker : public Walker
             : Walker(d, numSteps, rng, hull_algo)
         {
             auto l(dim(numSteps));
-            m_steps = std::vector<Step>(l.begin(), l.end());
-            stepsDirty = false;
-        };
+            random_numbers = std::vector<double>(l.begin(), l.end());
+        }
 
         virtual ~SelfAvoidingWalker() {};
-
-        virtual const std::vector<Step> steps() const;
 
         virtual double rnChange(const int idx, const double other);
 
     protected:
-        std::list<Step> dim(int N);
-        bool checkOverlapFree(std::list<Step> &l) const;
+        std::list<double> dim(int N);
+        bool checkOverlapFree(std::list<double> &l) const;
 };

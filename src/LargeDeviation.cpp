@@ -11,15 +11,13 @@ int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, s
     std::ofstream oss("equilibration.dat", std::ofstream::out);
 
     if(o.type == WT_RANDOM_WALK)
-    {
-        //~ w1 = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
         w2 = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
-    }
     else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
-    {
-        //~ w1 = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
         w2 = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
-    }
+    else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
+        w2 = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg));
+    else
+        LOG(LOG_ERROR) << "type " << o.type << " is not known to 'equilibrate'";
     w2->degenerate();
 
     // FIXME: this is edundant code, needs to be cleaned up
@@ -84,6 +82,8 @@ void run(const Cmd &o)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
     else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg));
+    else
+        LOG(LOG_ERROR) << "type " << o.type << " is not known to 'run'";
     w->convexHull();
 
     w->saveConfiguration(o.conf_path, false);
