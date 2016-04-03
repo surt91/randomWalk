@@ -30,7 +30,7 @@ CXX	= g++
 #COPT = -g
 COPT = -O3 -flto -mtune=native -fomit-frame-pointer
 #COPT += -DNLOG
-COPT += -std=c++11 -m64 -O -fPIC -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color
+COPT += -std=c++11 -m64 -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color
 
 WARNLEVEL= -Wall -Wextra -pedantic
 
