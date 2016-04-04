@@ -47,8 +47,6 @@ int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, s
         if(std::abs(rmean1.add(S(w1))/rmean2.add(S(w2)) - 1) < 0.01)
             break;
         ++t_eq;
-        w1->svg("svg/eq_" + std::to_string(t_eq) + "_1.svg", true);
-        w2->svg("svg/eq_" + std::to_string(t_eq) + "_2.svg", true);
     }
 
     LOG(LOG_INFO) << "Equilibration estimate: t_eq = " << t_eq;
