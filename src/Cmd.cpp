@@ -70,6 +70,7 @@ Cmd::Cmd(int argc, char** argv)
         // switch argument
         // -short, --long, description, default
         TCLAP::SwitchArg aklHeuristicSwitch("a", "aklHeuristic", "enables the Akl Toussaint heuristic", false);
+        TCLAP::SwitchArg simpleSamplingSwitch("", "simplesampling", "use simple sampling instead of the large deviation scheme", false);
         TCLAP::SwitchArg benchmarkSwitch("b", "benchmark", "perform benchmark", false);
         TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode (equal to -v 0)", false);
 
@@ -90,6 +91,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(tmpPathArg);
 
         cmd.add(aklHeuristicSwitch);
+        cmd.add(simpleSamplingSwitch);
         cmd.add(benchmarkSwitch);
 
         cmd.add(quietSwitch);
@@ -132,8 +134,15 @@ Cmd::Cmd(int argc, char** argv)
         LOG(LOG_INFO) << "Seed for the MC simulation " << seedMC;
         d = dimArg.getValue();
         LOG(LOG_INFO) << "Dimension                  " << d;
-        theta = thetaArg.getValue();
-        LOG(LOG_INFO) << "Theta                      " << theta;
+        simpleSampling = simpleSamplingSwitch.getValue();
+        if(simpleSampling){
+            LOG(LOG_INFO) << "simple sampling            ";
+        }
+        else
+        {
+            theta = thetaArg.getValue();
+            LOG(LOG_INFO) << "Theta                      " << theta;
+        }
         wantedObservable = (wanted_observable_t) wantedobservableArg.getValue();
         LOG(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
         type = (walk_type_t) typeArg.getValue();

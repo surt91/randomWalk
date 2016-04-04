@@ -103,12 +103,15 @@ void run(const Cmd &o)
             double oldS = S(w);
             w->change(rngMC);
 
-            // Metropolis rejection
-            double p_acc = std::min({1.0, exp(-(S(w) - oldS)/o.theta)});
-            if(p_acc < 1 - rngMC())
+            if(!o.simpleSampling)
             {
-                ++fail;
-                w->undoChange();
+                // Metropolis rejection
+                double p_acc = std::min({1.0, exp(-(S(w) - oldS)/o.theta)});
+                if(p_acc < 1 - rngMC())
+                {
+                    ++fail;
+                    w->undoChange();
+                }
             }
         }
         // TODO: only save after t_eq, and only statisically independent configurations

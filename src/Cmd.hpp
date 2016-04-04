@@ -76,6 +76,7 @@ class Cmd
         int d;
         int iterations;
         double theta;
+        bool simpleSampling;
         hull_algorithm_t chAlg;
         wanted_observable_t wantedObservable;
 
