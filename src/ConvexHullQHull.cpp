@@ -31,13 +31,14 @@ const std::vector<Step>& ConvexHullQHull::hullPoints() const
     {
         auto coord = v.point().coordinates();
         std::vector<int> s(coord, coord+d);
-        hullPoints_.push_back(Step(s));
+        hullPoints_.emplace_back(std::move(s));
     }
 
     if(d==2) // for 2D we can order the points clockwise
     {
+        // FIXME: will not work for the point at (0, 0)
         std::sort(hullPoints_.begin(), hullPoints_.end(),
-            [](Step const & a, Step const & b) -> bool
+            [](const Step &a, const Step &b) -> bool
             { return a.angle() < b.angle(); } );
     }
 
