@@ -76,8 +76,9 @@ int LoopErasedWalker::nRN() const
 
 void LoopErasedWalker::change(UniformRNG &rng)
 {
+    steps(); // steps need to be initialized
     // I should do this in a far more clever way
-    int idx = rng() * (nRN() + 1); // +1 to get every possible, since rng \in [0, 1)
+    int idx = rng() * nRN();
     undo_index = idx;
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();

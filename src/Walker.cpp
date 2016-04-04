@@ -72,7 +72,8 @@ const ConvexHull& Walker::convexHull() const
 
 void Walker::change(UniformRNG &rng)
 {
-    int idx = rng() * (nRN() + 1); // +1 to get every possible, since rng \in [0, 1)
+    steps(); // steps need to be initialized
+    int idx = rng() * nRN();
     undo_index = idx;
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();
@@ -124,6 +125,10 @@ void Walker::degenerate()
 {
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99 / ceil((double) d * (i+1)/random_numbers.size());
+
+    stepsDirty = true;
+    pointsDirty = true;
+    hullDirty = true;
 }
 
 std::string Walker::print() const

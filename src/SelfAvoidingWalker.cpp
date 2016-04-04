@@ -34,7 +34,7 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
 {
     // do a pivot change
     // choose the pivot
-    int idx = rng() * (nRN() + 1); // +1 to get every possible, since rng \in [0, 1)
+    int idx = rng() * nRN();
     undo_index = idx;
     int symmetry = rng() * 4; // integer between 0 and 3
     undo_value = symmetry;
