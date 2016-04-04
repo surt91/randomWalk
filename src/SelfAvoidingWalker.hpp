@@ -13,14 +13,19 @@ class SelfAvoidingWalker : public Walker
             : Walker(d, numSteps, rng, hull_algo)
         {
             auto l(dim(numSteps));
+            LOG(LOG_DEBUG) << "Dimerization got the inital SAW";
             random_numbers = std::vector<double>(l.begin(), l.end());
         }
 
         virtual ~SelfAvoidingWalker() {};
 
-        virtual double rnChange(const int idx, const double other);
+        virtual void change(UniformRNG &rng);
+        virtual void undoChange();
 
     protected:
+        Step transform(Step &p, const std::vector<int> &m) const;
+        void pivot(const int index, const int op);
+
         std::list<double> dim(int N);
         bool checkOverlapFree(std::list<double> &l) const;
 };

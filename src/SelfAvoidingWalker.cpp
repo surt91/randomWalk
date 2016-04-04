@@ -30,12 +30,107 @@
 //      + generates many SAW instances, quite efficiently
 //      - where can I plug in the large deviation "bias"? In the weights? How?
 
-double SelfAvoidingWalker::rnChange(const int idx, const double other)
+void SelfAvoidingWalker::change(UniformRNG &rng)
 {
-    // use this for a pivoting change?
-    // or for some local change, or slithering snake?
-    double oldRN = 0.0;
-    return oldRN;
+    // do a pivot change
+    // choose the pivot
+    int idx = rng() * (nRN() + 1); // +1 to get every possible, since rng \in [0, 1)
+    undo_index = idx;
+    int symmetry = rng() * 4; // integer between 0 and 3
+    undo_value = symmetry;
+    if(undo_value == 2)
+        undo_value = 3;
+    if(undo_value == 3)
+        undo_value = 2;
+
+    pivot(idx, symmetry);
+
+    pointsDirty = true;
+    hullDirty = true;
+}
+
+Step SelfAvoidingWalker::transform(Step &p, const std::vector<int> &m) const
+{
+    Step out(std::vector<int>(d, 0));
+    for(int i=0; i<d; ++i)
+        for(int j=0; j<d; ++j)
+            out[i] += p[j] * m[i*d + j];
+
+    return out;
+}
+
+void SelfAvoidingWalker::pivot(const int index, const int op)
+{
+    std::vector<int> matrix(d*d, 0);
+    // FIXME: implement for d > 2
+    if(d != 2)
+        throw std::invalid_argument("Pivot algorithm only implemented for d=2");
+    // choose the symmetry operation
+    switch(op)
+    {
+        // reflection on x-axis
+        case 0:
+            matrix[0] = 1;
+            matrix[3] = -1;
+            break;
+        // reflection on y-axis
+        case 1:
+            matrix[0] = -1;
+            matrix[3] = 1;
+            break;
+        // rotate by pi/2
+        case 2:
+            matrix[1] = 1;
+            matrix[2] = -1;
+            break;
+        // rotate by -pi/2
+        case 3:
+            matrix[1] = -1;
+            matrix[2] = 1;
+            break;
+    }
+
+    steps(); // make sure steps is up to date
+    // FIXME, pivot the shorter end
+    // first just a dry test -- most of the time it will fail and it is
+    // probably cheaper to do it twice in case of success instead of
+    // undo much work everytime
+    std::unordered_set<Step> overlap_test;
+    overlap_test.reserve(numSteps);
+    Step position(std::vector<int>(d, 0));
+    overlap_test.insert(position);
+    bool failed = false;
+    for(int i=0; i<index; ++i)
+    {
+        position += m_steps[i];
+        overlap_test.insert(position);
+    }
+
+    for(int i=index; i<numSteps; ++i)
+    {
+        position += transform(m_steps[i], matrix);
+
+        if(overlap_test.count(position))
+        {
+            failed = true;
+            break;
+        }
+        overlap_test.insert(position);
+    }
+    if(!failed)
+        for(int i=index; i<numSteps; ++i)
+            m_steps[i] = transform(m_steps[i], matrix);
+
+    pointsDirty = true;
+    hullDirty = true;
+}
+
+void SelfAvoidingWalker::undoChange()
+{
+    pivot(undo_index, undo_value);
+
+    pointsDirty = true;
+    hullDirty = true;
 }
 
 bool SelfAvoidingWalker::checkOverlapFree(std::list<double> &l) const
