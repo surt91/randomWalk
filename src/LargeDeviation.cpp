@@ -33,13 +33,16 @@ int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, s
             w1->change(rngMC1);
             w2->change(rngMC);
 
-            // Metropolis rejection
-            double p_acc1 = std::min({1.0, exp(-(S(w1) - oldS1)/o.theta)});
-            double p_acc2 = std::min({1.0, exp(-(S(w2) - oldS2)/o.theta)});
-            if(p_acc1 < 1 - rngMC1())
-                w1->undoChange();
-            if(p_acc2 < 1 - rngMC())
-                w2->undoChange();
+            if(!o.simpleSampling)
+            {
+                // Metropolis rejection
+                double p_acc1 = std::min({1.0, exp(-(S(w1) - oldS1)/o.theta)});
+                double p_acc2 = std::min({1.0, exp(-(S(w2) - oldS2)/o.theta)});
+                if(p_acc1 < 1 - rngMC1())
+                    w1->undoChange();
+                if(p_acc2 < 1 - rngMC())
+                    w2->undoChange();
+            }
         }
         oss << t_eq << " " << w1->L() << " " << w2->L() << " " << w1->A() << " " << w2->A() << std::endl;
 
@@ -68,7 +71,14 @@ void run(const Cmd &o)
         LOG(LOG_ERROR) << "Path is not writable " << o.data_path;
         throw std::invalid_argument("Path is not writable");
     }
-    oss << "# large deviation simulation at theta=" << o.theta << " and steps=" << o.steps << "\n";
+    if(!o.simpleSampling)
+    {
+        oss << "# large deviation simulation at theta=" << o.theta << " and steps=" << o.steps << "\n";
+    }
+    else
+    {
+        oss << "# simple sampling simulation with steps=" << o.steps << "\n";
+    }
     oss << "# sweeps L A\n";
 
     std::unique_ptr<Walker> w;
