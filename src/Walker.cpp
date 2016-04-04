@@ -70,22 +70,41 @@ const ConvexHull& Walker::convexHull() const
     return *m_convex_hull;
 }
 
-double Walker::rnChange(const int idx, const double other)
+void Walker::change(UniformRNG &rng)
 {
-    // I should do this in a far more clever way
-    double tmp = random_numbers[idx];
-    random_numbers[idx] = other;
+    int idx = rng() * (nRN() + 1); // +1 to get every possible, since rng \in [0, 1)
+    undo_index = idx;
+    undo_value = random_numbers[idx];
+    random_numbers[idx] = rng();
 
-    Step newStep(d, other);
+    Step newStep(d, random_numbers[idx]);
     // test if something changes
     if(newStep == m_steps[idx])
-        return tmp;
+        return;
+
+    //~ undo_points = m_points;
+    //~ undo_hull = *m_convex_hull;
 
     m_steps[idx] = newStep;
     points(idx+1);
     hullDirty = true;
 
-    return tmp;
+    return;
+}
+
+void Walker::undoChange()
+{
+    random_numbers[undo_index] = undo_value;
+    Step newStep(d, undo_value);
+    // test if something changes
+    if(newStep == m_steps[undo_index])
+        return;
+
+    m_steps[undo_index] = newStep;
+    points(undo_index+1);
+    hullDirty = true;
+    //~ m_points = std::move(undo_points);
+    //~ *m_convex_hull = std::move(undo_hull);
 }
 
 int Walker::nSteps() const
@@ -93,6 +112,11 @@ int Walker::nSteps() const
     if(stepsDirty)
         steps();
     return numSteps;
+}
+
+int Walker::nRN() const
+{
+    return random_numbers.size();
 }
 
 // set the random numbers such that we get an L shape

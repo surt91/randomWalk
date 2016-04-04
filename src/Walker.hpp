@@ -55,7 +55,9 @@ class Walker
 
         void appendRN();
 
-        virtual double rnChange(const int idx, const double other);
+        virtual void change(UniformRNG &rng);
+        virtual void undoChange();
+
         void degenerate();
         void setHullAlgo(hull_algorithm_t a);
 
@@ -69,6 +71,7 @@ class Walker
         virtual const std::vector<Step> steps() const;
 
         int nSteps() const;
+        int nRN() const;
 
         std::string serialize();
         void deserialize(std::string s);
@@ -93,4 +96,9 @@ class Walker
         UniformRNG rng;
         mutable std::vector<double> random_numbers;
         hull_algorithm_t hull_algo;
+
+        int undo_index;
+        double undo_value;
+        //~ std::vector<Step> undo_points;
+        //~ ConvexHull *undo_hull;
 };

@@ -17,5 +17,11 @@ class LoopErasedWalker : public Walker
 
         virtual const std::vector<Step> steps() const;
 
-        virtual double rnChange(const int idx, const double other);
+        virtual int nRN() const;
+
+        virtual void change(UniformRNG &rng);
+        virtual void undoChange();
+
+    protected:
+        mutable int random_numbers_used;
 };

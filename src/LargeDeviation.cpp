@@ -26,23 +26,20 @@ int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, s
         // one sweep, i.e., one change try for each site
         for(int j=0; j<o.steps; ++j)
         {
-            int rn_to_change1 = o.steps * rngMC1();
-            int rn_to_change2 = o.steps * rngMC();
-
             // change one random number to another random number
             // save the random number before the change
             double oldS1 = S(w1);
             double oldS2 = S(w2);
-            double oldRN1 = w1->rnChange(rn_to_change1, rngMC1());
-            double oldRN2 = w2->rnChange(rn_to_change2, rngMC());
+            w1->change(rngMC1);
+            w2->change(rngMC);
 
             // Metropolis rejection
             double p_acc1 = std::min({1.0, exp(-(S(w1) - oldS1)/o.theta)});
             double p_acc2 = std::min({1.0, exp(-(S(w2) - oldS2)/o.theta)});
             if(p_acc1 < 1 - rngMC1())
-                w1->rnChange(rn_to_change1, oldRN1);
+                w1->undoChange();
             if(p_acc2 < 1 - rngMC())
-                w2->rnChange(rn_to_change2, oldRN2);
+                w2->undoChange();
         }
         oss << t_eq << " " << w1->L() << " " << w2->L() << " " << w1->A() << " " << w2->A() << std::endl;
 
@@ -50,6 +47,8 @@ int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, s
         if(std::abs(rmean1.add(S(w1))/rmean2.add(S(w2)) - 1) < 0.01)
             break;
         ++t_eq;
+        w1->svg("svg/eq_" + std::to_string(t_eq) + "_1.svg", true);
+        w2->svg("svg/eq_" + std::to_string(t_eq) + "_2.svg", true);
     }
 
     LOG(LOG_INFO) << "Equilibration estimate: t_eq = " << t_eq;
@@ -101,19 +100,17 @@ void run(const Cmd &o)
         // one sweep, i.e., one change try for each site
         for(int j=0; j<o.steps; ++j)
         {
-            int rn_to_change = o.steps * rngMC();
-
             // change one random number to another random number
             // save the random number before the change
             double oldS = S(w);
-            double oldRN = w->rnChange(rn_to_change, rngMC());
+            w->change(rngMC);
 
             // Metropolis rejection
             double p_acc = std::min({1.0, exp(-(S(w) - oldS)/o.theta)});
             if(p_acc < 1 - rngMC())
             {
                 ++fail;
-                w->rnChange(rn_to_change, oldRN);
+                w->undoChange();
             }
         }
         // TODO: only save after t_eq, and only statisically independent configurations

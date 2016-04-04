@@ -61,27 +61,46 @@ const std::vector<Step> LoopErasedWalker::steps() const
         ++i;
         ++index;
     }
-    LOG(LOG_DEBUG) << "Random numbers used: " << i;
+    random_numbers_used = i;
+    LOG(LOG_DEBUG) << "Random numbers used: " << random_numbers_used;
 
     m_steps = ret;
     stepsDirty = false;
     return m_steps;
 }
 
-double LoopErasedWalker::rnChange(const int idx, const double other)
+int LoopErasedWalker::nRN() const
+{
+    return random_numbers_used;
+}
+
+void LoopErasedWalker::change(UniformRNG &rng)
 {
     // I should do this in a far more clever way
-    double tmp = random_numbers[idx];
-    random_numbers[idx] = other;
+    int idx = rng() * (nRN() + 1); // +1 to get every possible, since rng \in [0, 1)
+    undo_index = idx;
+    undo_value = random_numbers[idx];
+    random_numbers[idx] = rng();
 
-    Step newStep(d, other);
+    Step newStep(d, random_numbers[idx]);
     // test if something changes
     if(newStep == m_steps[idx])
-        return tmp;
+        return;
 
     stepsDirty = true;
     pointsDirty = true;
     hullDirty = true;
+}
 
-    return tmp;
+void LoopErasedWalker::undoChange()
+{
+    random_numbers[undo_index] = undo_value;
+    Step newStep(d, undo_value);
+    // test if something changes
+    if(newStep == m_steps[undo_index])
+        return;
+
+    stepsDirty = true;
+    pointsDirty = true;
+    hullDirty = true;
 }
