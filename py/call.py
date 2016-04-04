@@ -29,6 +29,7 @@ def read_parameters():
 if __name__ == "__main__":
     # copy the executable
     shutil.copy2("../src/randomWalk", ".")
+
     run = read_parameters()
 
     if len(sys.argv) > 1:

@@ -5,7 +5,7 @@ from math import exp, log
 import numpy as np
 
 import parameters as param
-from config import bootstrap_histogram
+from config import bootstrap_histogram, histogram_simple_error
 
 
 def getDistribution(infile, outfile, theta, steps):
@@ -18,13 +18,15 @@ def getDistribution(infile, outfile, theta, steps):
             print("cannot find " + self.filename)
             return
 
-    counts, bins = np.histogram(a.transpose()[2][30000:], 30, normed=True)
+    counts, bins = np.histogram(a.transpose()[2][3000:], 30, normed=True)
     centers = (bins[1:] + bins[:1])/2
 
-    bs_mean, bs_err = bootstrap_histogram(a.transpose()[2][30000:], bins=bins, normed=True)
+    bs_mean, bs_err = bootstrap_histogram(a.transpose()[2][3000:], bins=bins, normed=True)
+    #~ bs_mean = counts
+    #~ bs_err = histogram_simple_error(counts)
 
     # only for uniform bins
-    center_err = bins[1] - bins[0]
+    center_err = (bins[1] - bins[0]) / 4
 
     with open(outfile, "w") as f:
         f.write("# steps A A_err P(A) P(A)_err")

@@ -14,10 +14,6 @@ import parameters as para
 def run_instance(i):
     i()
 
-def mad(data):
-    """https://de.wikipedia.org/wiki/Streuung_(Statistik)#Median_der_absoluten_Abweichungen"""
-    return np.median(np.abs(data-np.median(data)))
-
 def bootstrap(xRaw, n_resample=100, f=np.mean):
     """Bootstrap resampling, returns mean and stderror"""
     if not xRaw:
@@ -33,6 +29,9 @@ def bootstrap_histogram(xRaw, bins, n_resample=100, normed=False):
     for i in range(n_resample):
         allCounts[i], _ = np.histogram(np.random.choice(xRaw, len(xRaw), replace=True), bins=bins, normed=normed)
     return np.mean(allCounts, 0), np.std(allCounts, 0)
+
+def histogram_simple_error(counts):
+    return np.sqrt(counts)
 
 def binder(a):
     if(np.mean(a) == 0):

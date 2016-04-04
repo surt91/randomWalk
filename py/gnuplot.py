@@ -69,8 +69,10 @@ class Gnuplot():
 
         os.chdir("..")
 
+
 def silentCall(x):
     call(x, stdout=open(os.devnull, 'wb'), stderr=open(os.devnull, 'wb'))
+
 
 def main():
     import parameters as para
@@ -80,6 +82,7 @@ def main():
     g.every()
     print("gnuplot and inkscape")
     g.plotall()
+
 
 if __name__ == "__main__":
     main()
