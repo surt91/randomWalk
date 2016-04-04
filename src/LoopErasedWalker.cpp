@@ -85,7 +85,7 @@ void LoopErasedWalker::change(UniformRNG &rng)
 
     Step newStep(d, random_numbers[idx]);
     // test if something changes
-    if(newStep == m_steps[idx])
+    if(newStep == Step(d, undo_value))
         return;
 
     stepsDirty = true;
