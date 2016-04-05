@@ -84,31 +84,40 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
     }
 
     steps(); // make sure steps is up to date
-    // FIXME, pivot the shorter end
+    // FIXME: pivot the shorter end
     // first just a dry test -- most of the time it will fail and it is
     // probably cheaper to do it twice in case of success instead of
     // undo much work everytime
     std::unordered_set<Step> overlap_test;
     overlap_test.reserve(numSteps);
-    Step position(std::vector<int>(d, 0));
-    overlap_test.insert(position);
+    Step positioni(std::vector<int>(d, 0));
+    Step positionj(std::vector<int>(d, 0));
+    overlap_test.insert(positioni);
     bool failed = false;
-    for(int i=0; i<index; ++i)
+    // test for overlaps starting at the pivot point in both directions
+    for(int i=index-1, j=index; i>=0 || j<numSteps; --i, ++j)
     {
-        position += m_steps[i];
-        overlap_test.insert(position);
-    }
-
-    for(int i=index; i<numSteps; ++i)
-    {
-        position += transform(m_steps[i], matrix);
-
-        if(overlap_test.count(position))
+        if(i >= 0)
         {
-            failed = true;
-            break;
+            positioni -= m_steps[i];
+            if(overlap_test.count(positioni))
+            {
+                failed = true;
+                break;
+            }
+            overlap_test.insert(positioni);
         }
-        overlap_test.insert(position);
+
+        if(j < numSteps)
+        {
+            positionj += transform(m_steps[j], matrix);
+            if(overlap_test.count(positionj))
+            {
+                failed = true;
+                break;
+            }
+            overlap_test.insert(positionj);
+        }
     }
     if(!failed)
         for(int i=index; i<numSteps; ++i)
