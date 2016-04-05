@@ -120,11 +120,13 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
         }
     }
     if(!failed)
+    {
         for(int i=index; i<numSteps; ++i)
             m_steps[i] = transform(m_steps[i], matrix);
 
-    pointsDirty = true;
-    hullDirty = true;
+        pointsDirty = true;
+        hullDirty = true;
+    }
 
     return !failed;
 }
