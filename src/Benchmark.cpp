@@ -28,7 +28,7 @@ std::string vmPeak()
     return exec(cmd.c_str());
 }
 
-std::unique_ptr<Walker> run_walker(Cmd o)
+std::unique_ptr<Walker> run_walker(const Cmd &o)
 {
     clock_t before_walker = clock();
     std::unique_ptr<Walker> w;
@@ -46,7 +46,7 @@ std::unique_ptr<Walker> run_walker(Cmd o)
     return w;
 }
 
-void run_hull(Cmd o, std::unique_ptr<Walker> &w)
+void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
 {
     clock_t before_ch = clock();
     w->setHullAlgo(o.chAlg);
@@ -69,8 +69,14 @@ void run_hull(Cmd o, std::unique_ptr<Walker> &w)
     LOG(LOG_TIMING) << "CH : " << time_diff(before_ch, before_output);
 }
 
-void run_MC_simulation(Cmd /*o*/)
+void run_MC_simulation(const Cmd &o, std::unique_ptr<Walker> &w)
 {
+    UniformRNG rngMC(1);
+    clock_t before_mc = clock();
+    for(int i=0; i<o.iterations; ++i)
+        w->change(rngMC);
+
+    LOG(LOG_TIMING) << "MC : " << time_diff(before_mc, clock());
 }
 
 void benchmark()
@@ -84,6 +90,8 @@ void benchmark()
     o.seedMC = 42;
     o.d = 2;
 
+    o.simpleSampling = true;
+
     for(int i=1; i<=3; ++i)
     {
         switch(i)
@@ -93,18 +101,21 @@ void benchmark()
                 o.type = WT_RANDOM_WALK;
                 o.benchmark_L = 3747.18;
                 o.benchmark_A = 984338;
+                o.iterations = 10;
                 break;
             case WT_LOOP_ERASED_RANDOM_WALK:
                 o.steps = 10000;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
                 o.benchmark_L = 4064.59205479;
                 o.benchmark_A = 481541;
+                o.iterations = 10;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 640;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
                 o.benchmark_L = 293.77;
                 o.benchmark_A = 4252.5;
+                o.iterations = 10000;
                 break;
         }
 
@@ -119,10 +130,9 @@ void benchmark()
                 run_hull(o, w);
             } catch(...) { }
         }
+
+        run_MC_simulation(o, w);
     }
 
     LOG(LOG_TIMING) << "Mem: " << vmPeak();
-
-    //~ o.iterations = 1;
-    //~ o.theta = 1;
 }
