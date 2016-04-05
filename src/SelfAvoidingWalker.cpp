@@ -36,12 +36,18 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
     // choose the pivot
     int idx = rng() * nRN();
     undo_index = idx;
-    int symmetry = rng() * 4; // integer between 0 and 3
-    undo_value = symmetry;
-    if(undo_value == 2)
-        undo_value = 3;
-    if(undo_value == 3)
-        undo_value = 2;
+    int symmetry;
+    switch(d)
+    {
+        case 2:
+            symmetry = rng() * tMatrix2.size(); // integer between 0 and 3
+            undo_value = iMatrix2[symmetry];
+            break;
+        case 3:
+            symmetry = rng() * tMatrix3.size(); // integer between 0 and 3
+            undo_value = iMatrix3[symmetry];
+            break;
+    }
 
     pivot(idx, symmetry);
 
@@ -59,34 +65,21 @@ Step SelfAvoidingWalker::transform(Step &p, const std::vector<int> &m) const
     return out;
 }
 
-void SelfAvoidingWalker::pivot(const int index, const int op)
+bool SelfAvoidingWalker::pivot(const int index, const int op)
 {
-    std::vector<int> matrix(d*d, 0);
-    // FIXME: implement for d > 2
-    if(d != 2)
-        throw std::invalid_argument("Pivot algorithm only implemented for d=2");
+    std::vector<int> matrix;
+    // FIXME: implement for d > 3
+    if(d > 3)
+        throw std::invalid_argument("Pivot algorithm only implemented for d<=3");
+
     // choose the symmetry operation
-    switch(op)
+    switch(d)
     {
-        // reflection on x-axis
-        case 0:
-            matrix[0] = 1;
-            matrix[3] = -1;
-            break;
-        // reflection on y-axis
-        case 1:
-            matrix[0] = -1;
-            matrix[3] = 1;
-            break;
-        // rotate by pi/2
         case 2:
-            matrix[1] = 1;
-            matrix[2] = -1;
+            matrix = tMatrix2[op];
             break;
-        // rotate by -pi/2
         case 3:
-            matrix[1] = -1;
-            matrix[2] = 1;
+            matrix = tMatrix3[op];
             break;
     }
 
@@ -123,6 +116,8 @@ void SelfAvoidingWalker::pivot(const int index, const int op)
 
     pointsDirty = true;
     hullDirty = true;
+
+    return !failed;
 }
 
 void SelfAvoidingWalker::undoChange()
