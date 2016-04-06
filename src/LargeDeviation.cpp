@@ -116,7 +116,6 @@ void run(const Cmd &o)
                 // Metropolis rejection
                 //~ double p_acc = std::min({1.0, exp(-(S(w) - oldS)/o.theta)});
                 double p_acc = exp((oldS - S(w))/o.theta);
-                double tmp = rngMC();
                 if(p_acc < rngMC())
                 {
                     ++fail;
@@ -127,7 +126,7 @@ void run(const Cmd &o)
         // TODO: only save after t_eq
         if(i >= 2*t_eq)
         {
-            if(!o.rawConf.empty())
+            if(!o.conf_path.empty())
                 w->saveConfiguration(o.conf_path);
 
             LOG(LOG_TOO_MUCH) << "Area  : " << w->L();
