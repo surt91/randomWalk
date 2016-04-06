@@ -109,19 +109,27 @@ void run(const Cmd &o)
         for(int j=0; j<o.steps; ++j)
         {
             // change one random number to another random number
-            // save the random number before the change
             double oldS = S(w);
             w->change(rngMC);
 
             if(!o.simpleSampling)
             {
                 // Metropolis rejection
-                double p_acc = std::min({1.0, exp(-(S(w) - oldS)/o.theta)});
-                if(p_acc < 1 - rngMC())
+                //~ double p_acc = std::min({1.0, exp(-(S(w) - oldS)/o.theta)});
+                double p_acc = exp((oldS - S(w))/o.theta);
+                LOG(LOG_TOO_MUCH) << "theta = " << theta;
+                LOG(LOG_TOO_MUCH) << "S* = " << S(w) << ", S = " << oldS;
+                LOG(LOG_TOO_MUCH) << "Delta = " << (S(w) - oldS);
+                LOG(LOG_TOO_MUCH) << "p = " << p_acc;
+                double tmp = rngMC();
+                LOG(LOG_TOO_MUCH) << "rn = " << tmp;
+                if(p_acc < tmp)
                 {
+                    LOG(LOG_TOO_MUCH) << "rejected";
                     ++fail;
                     w->undoChange();
                 }
+                LOG(LOG_TOO_MUCH) << "new S is " << S(w);
             }
         }
         // TODO: only save after t_eq, and only statisically independent configurations
