@@ -97,9 +97,9 @@ void run(const Cmd &o)
 
     std::function<double(std::unique_ptr<Walker>&)> S;
     if(o.wantedObservable == WO_SURFACE_AREA)
-        S = [](std::unique_ptr<Walker> &w){ return w->L(); };
+        S = [](const std::unique_ptr<Walker> &w){ return w->L(); };
     else if(o.wantedObservable == WO_VOLUME)
-        S = [](std::unique_ptr<Walker> &w){ return w->A(); };
+        S = [](const std::unique_ptr<Walker> &w){ return w->A(); };
 
     t_eq = equilibrate(o, w, rngMC, S);
 
