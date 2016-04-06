@@ -62,7 +62,7 @@ void run(const Cmd &o)
     clock_t begin = clock();
     int fail = 0;
     int t_eq = 0;
-    int t_corr = 10; // just a guess
+    int t_corr = 1; // just a guess
     UniformRNG rngReal(o.seedRealization);
     UniformRNG rngMC(o.seedMC);
     std::ofstream oss(o.data_path, std::ofstream::out);
@@ -117,19 +117,12 @@ void run(const Cmd &o)
                 // Metropolis rejection
                 //~ double p_acc = std::min({1.0, exp(-(S(w) - oldS)/o.theta)});
                 double p_acc = exp((oldS - S(w))/o.theta);
-                LOG(LOG_TOO_MUCH) << "theta = " << theta;
-                LOG(LOG_TOO_MUCH) << "S* = " << S(w) << ", S = " << oldS;
-                LOG(LOG_TOO_MUCH) << "Delta = " << (S(w) - oldS);
-                LOG(LOG_TOO_MUCH) << "p = " << p_acc;
                 double tmp = rngMC();
-                LOG(LOG_TOO_MUCH) << "rn = " << tmp;
-                if(p_acc < tmp)
+                if(p_acc < rngMC())
                 {
-                    LOG(LOG_TOO_MUCH) << "rejected";
                     ++fail;
                     w->undoChange();
                 }
-                LOG(LOG_TOO_MUCH) << "new S is " << S(w);
             }
         }
         // TODO: only save after t_eq, and only statisically independent configurations
@@ -144,7 +137,7 @@ void run(const Cmd &o)
         }
     }
 
-    LOG(LOG_INFO) << "# rejected changes: " << fail << " (" << (100. * fail/(o.iterations*o.steps)) << "%)";
+    LOG(LOG_INFO) << "# rejected changes: " << fail << " (" << (100. * fail/((o.iterations+t_eq)*o.steps)) << "%)";
     LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
     LOG(LOG_INFO) << "# max vmem: " << vmPeak();
 
