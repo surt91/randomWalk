@@ -19,8 +19,8 @@ def getDistribution(infile, outfile, theta, steps):
             return
 
     col = param.parameters["observable"]
-    centers = (bins[1:] + bins[:1])/2
     counts, bins = np.histogram(a.transpose()[col], 50, density=True)
+    centers = (bins[1:] + bins[:-1])/2
 
     bs_mean, bs_err = bootstrap_histogram(a.transpose()[col], bins=bins, density=True)
     #bs_err = histogram_simple_error(counts)
