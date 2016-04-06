@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 
-from math import exp, log
+from math import exp, log, ceil
 
 import numpy as np
 
 import parameters as param
 from config import bootstrap_histogram, histogram_simple_error
 
+
+def getAutocorrTime(data):
+    # TODO: calculate the autocorrelation time
+    return 1
 
 def getDistribution(infile, outfile, theta, steps):
     try:
@@ -19,12 +23,17 @@ def getDistribution(infile, outfile, theta, steps):
             return
 
     col = param.parameters["observable"]
-    counts, bins = np.histogram(a.transpose()[col], 50, density=True)
+
+    data = a.transpose()[col]
+    t_corr = getAutocorrTime(data)
+    # do only keep statistically independent samples to not underestimate the error
+    data = data[::ceil(2*t_corr)]
+
+    counts, bins = np.histogram(data, 50, density=True)
     centers = (bins[1:] + bins[:-1])/2
     centers_err = [(centers[i] - bins[i]) / 2 for i in range(len(centers))]
 
-    # errors are not good, we need to include the autocorrelation time
-    bs_mean, bs_err = bootstrap_histogram(a.transpose()[col], bins=bins, density=True)
+    bs_mean, bs_err = bootstrap_histogram(data, bins=bins, density=True)
     #bs_err = histogram_simple_error(counts)
 
     print(outfile)

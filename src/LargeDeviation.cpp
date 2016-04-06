@@ -62,7 +62,6 @@ void run(const Cmd &o)
     clock_t begin = clock();
     int fail = 0;
     int t_eq = 0;
-    int t_corr = 1; // just a guess
     UniformRNG rngReal(o.seedRealization);
     UniformRNG rngMC(o.seedMC);
     std::ofstream oss(o.data_path, std::ofstream::out);
@@ -125,8 +124,8 @@ void run(const Cmd &o)
                 }
             }
         }
-        // TODO: only save after t_eq, and only statisically independent configurations
-        if(i >= 2*t_eq && (i-2*t_eq) % t_corr == 0)
+        // TODO: only save after t_eq
+        if(i >= 2*t_eq)
         {
             if(!o.rawConf.empty())
                 w->saveConfiguration(o.conf_path);
