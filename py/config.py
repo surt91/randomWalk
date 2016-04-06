@@ -121,12 +121,13 @@ class SimulationInstance():
             os.makedirs(self.d)
         if not os.path.exists(self.rawData):
             os.makedirs(self.rawData)
-        if not os.path.exists(self.rawConf):
+        if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
 
         self.basename = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w)
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)
-        self.confname = "{}/{}.dat".format(self.rawConf, self.basename)
+        if self.rawConf:
+            self.confname = "{}/{}.dat".format(self.rawConf, self.basename)
 
     def __str__(self):
         return "RW:\n\tN = {}\n\tt={}".format(self.N, self.t)
@@ -147,8 +148,10 @@ class SimulationInstance():
                 "-w {0}".format(self.w),
                 "-q",
                 "-o {0}".format(self.filename),
-                "-O {0}".format(self.confname),
                ]
+
+        if self.rawConf:
+            opts.append("-O {0}".format(self.confname))
 
         if self.akl:
             opts.append("-a")

@@ -128,7 +128,8 @@ void run(const Cmd &o)
         // TODO: only save after t_eq, and only statisically independent configurations
         if(i >= 2*t_eq && (i-2*t_eq) % t_corr == 0)
         {
-            w->saveConfiguration(o.conf_path);
+            if(!o.rawConf.empty())
+                w->saveConfiguration(o.conf_path);
 
             LOG(LOG_TOO_MUCH) << "Area  : " << w->L();
             LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
