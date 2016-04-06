@@ -21,13 +21,13 @@ def bootstrap(xRaw, n_resample=100, f=np.mean):
     bootstrapSample = [f(np.random.choice(xRaw, len(xRaw), replace=True)) for i in range(n_resample)]
     return np.mean(bootstrapSample), np.std(bootstrapSample)
 
-def bootstrap_histogram(xRaw, bins, n_resample=100, normed=False):
+def bootstrap_histogram(xRaw, bins, n_resample=100, density=False):
     """Bootstrap resampling, returns mean and stderror"""
     if not len(xRaw):
         return float("NaN"), float("NaN")
     allCounts = np.zeros((n_resample, len(bins)-1), dtype=np.float)
     for i in range(n_resample):
-        allCounts[i], _ = np.histogram(np.random.choice(xRaw, len(xRaw), replace=True), bins=bins, normed=normed)
+        allCounts[i], _ = np.histogram(np.random.choice(xRaw, len(xRaw), replace=True), bins=bins, density=density)
     return np.mean(allCounts, 0), np.std(allCounts, 0)
 
 def histogram_simple_error(counts):

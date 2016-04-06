@@ -18,28 +18,30 @@ def getDistribution(infile, outfile, theta, steps):
             print("cannot find " + self.filename)
             return
 
-    counts, bins = np.histogram(a.transpose()[2][3000:], 30, normed=True)
+    col = param.parameters["observable"]
     centers = (bins[1:] + bins[:1])/2
+    counts, bins = np.histogram(a.transpose()[col], 50, density=True)
 
-    bs_mean, bs_err = bootstrap_histogram(a.transpose()[2][3000:], bins=bins, normed=True)
-    #~ bs_mean = counts
-    #~ bs_err = histogram_simple_error(counts)
+    bs_mean, bs_err = bootstrap_histogram(a.transpose()[col], bins=bins, density=True)
+    #bs_err = histogram_simple_error(counts)
 
     # only for uniform bins
     center_err = (bins[1] - bins[0]) / 4
+    print(outfile)
 
     with open(outfile, "w") as f:
-        f.write("# steps A A_err P(A) P(A)_err")
-        for i, j, j_err in zip(centers, bs_mean, bs_err):
+        f.write("# steps S S_err P(S) P(S)_err\n")
+        for s, pts, pts_err in zip(centers, bs_mean, bs_err):
             #~ print(i, exp(i/theta) * j)
             try:
-                ps = i/theta + log(j)
+                ps = s/theta + log(pts)
                 # gaussian erroro propagation
-                ps_err = 1/j * j_err + center_err/theta
+                ps_err = 1/pts * pts_err + center_err/theta
             except ValueError:
                 ps = 0
             else:
-                f.write("{} {} {} {} {}\n".format(steps, i, center_err, ps, ps_err))
+                f.write("{} {} {} {} {}\n".format(steps, s, center_err, ps, ps_err))
+                #f.write("{} {} {} {} {}\n".format(steps, i, center_err, j, j_err))
 
 
 def run():
