@@ -92,7 +92,8 @@ void run(const Cmd &o)
         LOG(LOG_ERROR) << "type " << o.type << " is not known to 'run'";
     w->convexHull();
 
-    w->saveConfiguration(o.conf_path, false);
+    if(!o.conf_path.empty())
+        w->saveConfiguration(o.conf_path, false);
 
     std::function<double(std::unique_ptr<Walker>&)> S;
     if(o.wantedObservable == WO_SURFACE_AREA)

@@ -20,7 +20,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme", false, 2, "double");
         TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, ".", "string");
         TCLAP::ValueArg<std::string> dataPathArg("o", "output", "datafile for the output", false, "out.dat", "string");
-        TCLAP::ValueArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output", false, "out.conf", "string");
+        TCLAP::ValueArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output", false, "", "string");
         TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
         TCLAP::ValueArg<std::string> povArg("p", "pov", "povray filename, will be a xyz projection", false, "", "string");
         TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level:\n"
