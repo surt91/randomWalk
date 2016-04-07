@@ -14,15 +14,20 @@
 //      - also takes forever
 //      + but slightly less forever
 //
+//  slithering snake
+//      remove one step from the beginning and append randomly at the end
+//      + easy
+//      - not ergodic .. needs to be combined with some other change?
+//      - not much faster than simple changes, probably
+//
 //  pivot algorithm
 //      generate somehow one SAW (dimerization), choose a pivot and
 //      turn everything behind it clock-, or counterclockwise
 //      + generates many SAW instances
 //      + could be used as the "change" step of the large deviation scheme
 //      - could introduce too much change
-//      - how do I combine large deviation with a sampling technique?
 //
-//  pruned enriched Rosenbluth Rosenbluth (PERM)
+//  pruned enriched Rosenbluth method (PERM)
 //      grow SAWs with weights, create a population of SAWs
 //      by duplicating or killing them based on their weight
 //      if a walk reaches the length of N, take it as a sample
@@ -30,6 +35,8 @@
 //      + generates many SAW instances, quite efficiently
 //      - where can I plug in the large deviation "bias"? In the weights? How?
 
+// TODO: this version does not equilibrate for theta > -50
+//       further kind of change? Parallel Tempering?
 void SelfAvoidingWalker::change(UniformRNG &rng)
 {
     // do a pivot change
