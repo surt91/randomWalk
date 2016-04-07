@@ -53,7 +53,7 @@ def getDistribution(infile, outfile, histfile, theta, steps, num_bins=50):
     # histograms do not need to be normed, this will happen in the end
     counts, bins = np.histogram(data, num_bins)
     centers = (bins[1:] + bins[:-1])/2
-    centers_err = [(centers[i] - bins[i]) / 2 for i in range(len(centers))]
+    centers_err = [centers[i] - bins[i] for i in range(len(centers))]
 
     bs_mean, bs_err = bootstrap_histogram(data, bins=bins)
     #bs_err = histogram_simple_error(counts)
@@ -115,14 +115,18 @@ def getZtheta(list_of_ps_log):
     return Ztheta_mean
 
 
-def stichFile(infile, outfile, z):
+def stichFile(infile, outfile, z, dz):
+    data = []
     with open(infile, "r") as fin:
         with open(outfile, "w") as fout:
+            fout.write("# S S_err P(S) P(S)_err\n")
             for line in fin.readlines():
                 if line[0] == "#":
                     continue
                 nums = list(map(float, line.split()))
                 nums[2] -= z
+                nums[3] += dz
+                data.append(nums)
                 fout.write("{} {} {} {}\n".format(*nums))
 
 
