@@ -172,4 +172,3 @@ class SimulationInstance():
             print(".", flush=True, end="")
         else:
             print("-", flush=True, end="")
-        print("")

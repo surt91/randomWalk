@@ -28,6 +28,7 @@ def read_parameters():
 
 if __name__ == "__main__":
     # copy the executable
+    logging.info("copy executable")
     shutil.copy2("../src/randomWalk", ".")
 
     run = read_parameters()
@@ -43,3 +44,4 @@ if __name__ == "__main__":
             print("only known options: hero, plot")
     else:
         run()
+        print("")
