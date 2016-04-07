@@ -56,7 +56,23 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
             break;
     }
 
-    pivot(idx, symmetry);
+    // do only recalculate, if pivot was successful
+    if(pivot(idx, symmetry))
+    {
+        pointsDirty = true;
+        hullDirty = true;
+    }
+    else
+        undo_index = -1; // flag, that undo is not possible/needed
+}
+
+void SelfAvoidingWalker::undoChange()
+{
+    // no change was made (because the pivot failed)
+    if(undo_index == -1)
+        return;
+
+    pivot(undo_index, undo_value);
 
     pointsDirty = true;
     hullDirty = true;
@@ -136,14 +152,6 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
     }
 
     return !failed;
-}
-
-void SelfAvoidingWalker::undoChange()
-{
-    pivot(undo_index, undo_value);
-
-    pointsDirty = true;
-    hullDirty = true;
 }
 
 bool SelfAvoidingWalker::checkOverlapFree(std::list<double> &l) const
