@@ -5,6 +5,7 @@ import logging
 
 import numpy as np
 from scipy.interpolate import interp1d
+from scipy.integrate import simps
 
 import parameters as param
 from config import bootstrap, bootstrap_histogram, histogram_simple_error
@@ -158,12 +159,26 @@ def run():
         for i in z[1:]:
             zc.append(zc[-1] + i[0])
 
+        whole_distribution = []
         for n, T in enumerate(thetas):
             name = param.basename.format(steps=N,
                                          theta=T,
                                          **param.parameters
                                          )
-            stichFile("{}/dist_{}.dat".format(out, name), "{}/stiched_{}.dat".format(out, name), zc[n])
+            data = stichFile("{}/dist_{}.dat".format(out, name),
+                             "{}/stiched_{}.dat".format(out, name),
+                             zc[n], z[n][1])
+            whole_distribution.append(data)
+
+        whole_distribution_file = param.basename.replace("_T{theta:.5f}", "").format(steps=N, **param.parameters)
+        whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
+
+        # integrate, to get the normalization constant
+        area = simps(whole_distribution[2], whole_distribution[0])
+        with open(whole_distribution_file, "w") as f:
+            f.write("# S S_err P(S) P(S)_err\n")
+            for i in sorted(whole_distribution):
+                f.write("{} {} {} {}\n".format(i[0], i[1], i[2]/area, i[3]/area))
 
     print("plot with gnuplot")
     print("p " + ", ".join(i + " u 1:3:2:4 w xyerr" for n, i in enumerate(outfiles)))
