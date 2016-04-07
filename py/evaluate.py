@@ -3,14 +3,27 @@
 from math import exp, log, ceil
 
 import numpy as np
+from scipy.interpolate import interp1d
 
 import parameters as param
-from config import bootstrap_histogram, histogram_simple_error
+from config import bootstrap, bootstrap_histogram, histogram_simple_error
 
 
 def getAutocorrTime(data):
     # TODO: calculate the autocorrelation time
-    return 1
+    autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
+    x0 = autocorr[0]
+
+    # integrate only up to the first negative values
+    #~ m = -1
+    #~ for n, i in enumerate(autocorr):
+        #~ if i < 0:
+            #~ m = n
+            #~ break
+
+    tau = sum(autocorr)/x0
+    print("autocorrelation time:", tau)
+    return tau
 
 def getDistribution(infile, outfile, theta, steps):
     try:
@@ -36,24 +49,58 @@ def getDistribution(infile, outfile, theta, steps):
     bs_mean, bs_err = bootstrap_histogram(data, bins=bins, density=True)
     #bs_err = histogram_simple_error(counts)
 
-    print(outfile)
+    data = []
+    for s, s_err, pts, pts_err in zip(centers, centers_err, bs_mean, bs_err):
+        #~ print(i, exp(i/theta) * j)
+        try:
+            ps_log = s/theta + log(pts)
+            # gaussian erroro propagation
+            ps_log_err = pts_err/pts  + s_err/theta
+            if pts_err/pts > s_err/theta:
+                # ignore too noisy bins
+                #~ raise ValueError
+                pass
+        except ValueError:
+            pass
+        else:
+            data.append((s, s_err, ps_log, ps_log_err))
 
+    print(outfile)
     with open(outfile, "w") as f:
-        f.write("# steps S S_err P(S) P(S)_err\n")
-        for s, s_err, pts, pts_err in zip(centers, centers_err, bs_mean, bs_err):
-            #~ print(i, exp(i/theta) * j)
-            try:
-                ps = s/theta + log(pts)
-                # gaussian erroro propagation
-                ps_err = 1/pts * pts_err + s_err/theta
-                if ps_err > s_err:
-                    # ignore too noisy bins
-                    raise ValueError
-            except ValueError:
-                ps = 0
-            else:
-                f.write("{} {} {} {} {}\n".format(steps, s, s_err, ps, ps_err))
-                #f.write("{} {} {} {} {}\n".format(steps, s, s_err, pts, pts_err))
+        f.write("# S S_err P(S) P(S)_err\n")
+        for d in data:
+            f.write("{} {} {} {}\n".format(*d))
+
+    return data
+
+
+def getZtheta(list_of_ps_log):
+    # list_of_ps_log is a list in the form [[s1, ps_log1], [s2, ps_log2], ..]
+    Ztheta_mean = [(0, 0)]
+    for i in range(len(list_of_ps_log)-1):
+        l1 = list_of_ps_log[i]
+        l2 = list_of_ps_log[i+1]
+
+        # calculate a cubic spline through l1
+        x, x_err, y, y_err = zip(*l1)
+        spline_1 = interp1d(x, y, kind='cubic')
+
+        # calculate for every s in l2 the difference to l2(s) - spline_l1(s)
+        Z = [ps_log - spline_1(s) for s, _, ps_log, _ in l2 if min(x) < s < max(x)]
+        Ztheta_mean.append(bootstrap(Z))
+
+    return Ztheta_mean
+
+
+def stichFile(infile, outfile, z):
+    with open(infile, "r") as fin:
+        with open(outfile, "w") as fout:
+            for line in fin.readlines():
+                if line[0] == "#":
+                    continue
+                nums = list(map(float, line.split()))
+                nums[2] -= z
+                fout.write("{} {} {} {}\n".format(*nums))
 
 
 def run():
@@ -65,21 +112,31 @@ def run():
     outfiles = []
 
     for N in steps:
+        list_of_ps_log = []
         for T in thetas:
             name = param.basename.format(steps=N,
                                          theta=T,
-                                         typ=param.parameters["typ"],
-                                         observable=param.parameters["observable"],
-                                         iterations=param.parameters["iterations"],
-                                         seedMC=param.parameters["seedMC"],
-                                         seedR=param.parameters["seedR"]
+                                         **param.parameters
                                          )
-            getDistribution("{}/{}.dat".format(d, name), "{}/dist_{}.dat".format(out, name), T, N)
-            outfiles.append('"{}/dist_{}.dat"'.format(out, name))
+            data = getDistribution("{}/{}.dat".format(d, name), "{}/dist_{}.dat".format(out, name), T, N)
+            list_of_ps_log.append(data)
+            z = getZtheta(list_of_ps_log)
+            #~ outfiles.append('"{}/dist_{}.dat"'.format(out, name))
+            outfiles.append('"{}/stiched_{}.dat"'.format(out, name))
 
+        zc = [0]
+        for i in z[1:]:
+            zc.append(zc[-1] + i[0])
+
+        for n, T in enumerate(thetas):
+            name = param.basename.format(steps=N,
+                                         theta=T,
+                                         **param.parameters
+                                         )
+            stichFile("{}/dist_{}.dat".format(out, name), "{}/stiched_{}.dat".format(out, name), zc[n])
 
     print("plot with gnuplot")
-    print("p " + ", ".join(i + " u 2:4:3:5 w xyerr" for i in outfiles))
+    print("p " + ", ".join(i + " u 1:3:2:4 w xyerr" for n, i in enumerate(outfiles)))
 
 
 if __name__ == "__main__":
