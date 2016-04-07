@@ -27,10 +27,6 @@ def read_parameters():
 
 
 if __name__ == "__main__":
-    # copy the executable
-    logging.info("copy executable")
-    shutil.copy2("../src/randomWalk", ".")
-
     run = read_parameters()
 
     if len(sys.argv) > 1:
@@ -43,5 +39,7 @@ if __name__ == "__main__":
             print("."+sys.argv[1]+".")
             print("only known options: hero, plot")
     else:
+        logging.info("copy executable")
+        shutil.copy2("../src/randomWalk", ".")
         run()
         print("")
