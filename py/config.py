@@ -64,11 +64,31 @@ class Simulation():
 
         # in MB
         def getMem(N):
-            return 1000
+            if N < 1000:
+                return 100
+            else
+                return 500
+
 
         # time per sweep
         def getSec(N):
-            return 1
+            t = 0 # time for 1000 sweeps
+            if N <=64:
+                t = 5
+            elif N <= 128:
+                t = 15
+            elif N <=256:
+                t = 50
+            elif N <= 512:
+                t = 250
+            elif N <= 1024:
+                t = 1500
+            elif N <= 2048:
+                t = 15000
+            else:
+                t = 50000
+
+            return t/1000 * 3 # factor 3 to be sure
 
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
