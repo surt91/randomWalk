@@ -95,10 +95,11 @@ void LoopErasedWalker::change(UniformRNG &rng)
 
 void LoopErasedWalker::undoChange()
 {
+    double rejected = random_numbers[undo_index];
     random_numbers[undo_index] = undo_value;
     Step newStep(d, undo_value);
     // test if something changes
-    if(newStep == m_steps[undo_index])
+    if(newStep == Step(d, rejected))
         return;
 
     stepsDirty = true;
