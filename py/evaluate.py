@@ -18,7 +18,8 @@ logging.info("started")
 
 
 def getAutocorrTime(data):
-    # TODO: calculate the autocorrelation time
+    # just take the first 5000, should be sufficient
+    data = data[:5000]
     autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
     x0 = autocorr[0]
 
