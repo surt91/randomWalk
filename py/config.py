@@ -66,7 +66,7 @@ class Simulation():
         def getMem(N):
             if N < 1000:
                 return 100
-            else
+            else:
                 return 500
 
 
