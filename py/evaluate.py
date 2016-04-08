@@ -5,7 +5,7 @@ import logging
 
 import numpy as np
 from scipy.interpolate import interp1d
-from scipy.integrate import simps
+from scipy.integrate import simps, trapz
 
 import parameters as param
 from config import bootstrap, bootstrap_histogram, histogram_simple_error
@@ -104,6 +104,11 @@ def getZtheta(list_of_ps_log):
             logging.error("too few samples")
             Ztheta_mean.append((0,0))
             continue
+        except TypeError:
+            logging.error("too few samples")
+            Ztheta_mean.append((0,0))
+            continue
+
 
         # calculate for every s in l2 the difference to l2(s) - spline_l1(s)
         Z = [ps_log - spline_1(s) for s, _, ps_log, _ in l2 if min(x) < s < max(x)]
@@ -130,6 +135,7 @@ def stichFile(infile, outfile, z, dz):
                 nums[3] += dz
                 data.append(nums)
                 fout.write("{} {} {} {}\n".format(*nums))
+    return data
 
 
 def run():
@@ -157,8 +163,10 @@ def run():
             outfiles.append('"{}/stiched_{}.dat"'.format(out, name))
 
         zc = [0]
+        zce = [0]
         for i in z[1:]:
             zc.append(zc[-1] + i[0])
+            zce.append(zce[-1] + i[1])
 
         whole_distribution = []
         for n, T in enumerate(thetas):
@@ -168,18 +176,22 @@ def run():
                                          )
             data = stichFile("{}/dist_{}.dat".format(out, name),
                              "{}/stiched_{}.dat".format(out, name),
-                             zc[n], z[n][1])
-            whole_distribution.append(data)
+                             zc[n], zce[n])
+            whole_distribution += data
 
         whole_distribution_file = param.basename.replace("_T{theta:.5f}", "").format(steps=N, **param.parameters)
         whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
 
         # integrate, to get the normalization constant
-        area = simps(whole_distribution[2], whole_distribution[0])
+        t = list(zip(*sorted(whole_distribution)))
+        m = max(t[:][0])
+        #~ area = simps(np.exp(t[2]), t[0])  # simpson is not robust against really small numbers :/
+        area = trapz(np.exp(t[2]), t[0])
+        print(area)
         with open(whole_distribution_file, "w") as f:
             f.write("# S S_err P(S) P(S)_err\n")
             for i in sorted(whole_distribution):
-                f.write("{} {} {} {}\n".format(i[0], i[1], i[2]/area, i[3]/area))
+                f.write("{} {} {} {}\n".format(i[0], i[1], i[2]-log(area), i[3]))
 
     print("plot with gnuplot")
     print("p " + ", ".join(i + " u 1:3:2:4 w xyerr" for n, i in enumerate(outfiles)))
