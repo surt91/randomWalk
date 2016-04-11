@@ -14,6 +14,7 @@ CPP	 := main.cpp \
         ConvexHullJarvis.cpp \
         LargeDeviation.cpp \
         RNG.cpp \
+        Histogram.cpp \
         io.cpp \
         Svg.cpp \
         Povray.cpp \
