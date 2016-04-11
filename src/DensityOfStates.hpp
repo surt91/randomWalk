@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_set>
 
 #include "Logging.hpp"
 
@@ -12,6 +13,7 @@ class DensityOfStates
         void multiply(double value, double factor);
 
         friend std::ostream& operator<<(std::ostream& os, const DensityOfStates &obj);
+        DensityOfStates& operator+=(const DensityOfStates &other);
 
     protected:
         int bins;

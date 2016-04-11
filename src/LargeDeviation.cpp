@@ -20,6 +20,32 @@ void prepare(const Cmd &o, std::unique_ptr<Walker>& w, std::function<double(std:
         S = [](const std::unique_ptr<Walker> &w){ return w->A(); };
 }
 
+double getUpperBound(const Cmd &o)
+{
+    std::unique_ptr<Walker> w;
+    std::function<double(std::unique_ptr<Walker>&)> S;
+    prepare(o, w, S);
+
+    // the degenerate case is -- hopefully -- the case of maximum S for all S
+    w->degenerate();
+
+    return S(w);
+}
+
+double getLowerBound(const Cmd &o)
+{
+    if(o.wantedObservable == WO_VOLUME)
+        return 0;
+
+    double S_min = 0;
+    if(o.type == WT_RANDOM_WALK)
+        S_min = 1;
+    else
+        S_min = 4*sqrt(o.steps);
+
+    return S_min;
+}
+
 int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, std::function<double(std::unique_ptr<Walker>&)> S)
 {
     int t_eq = 0;
@@ -136,6 +162,9 @@ void metropolis(const Cmd &o)
             LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
             LOG(LOG_DEBUG) << "Iteration: " << i;
             oss << i << " " << w->L() << " " << w->A() << std::endl;
+
+            //~ w->svg("svg/eq_" + std::to_string(i) + "_1.svg", true);
+            //~ w->pov("svg/eq_" + std::to_string(i) + "_1.pov", true);
         }
     }
 
@@ -177,36 +206,48 @@ void wang_landau(const Cmd &o)
 
     // http://cdn.intechopen.com/pdfs-wm/14019.pdf
 
-    const double lnf_min = 1e-6;
-    double lnf = 1;
+    const double lnf_min = 1e-9;
 
     // Histogram and DensityOfStates need the same binning ... probably
-    Histogram H(80, 20, 100);
-    DensityOfStates g(80, 20, 100);
-    while(lnf > lnf_min)
+    double lb = getLowerBound(o);
+    double ub = getUpperBound(o);
+    int bins = (ub-lb)/2;
+    LOG(LOG_DEBUG) << lb << " " << ub << " " << bins;
+
+    DensityOfStates totalG(bins, lb-0.1, ub+0.1);
+
+    for(int i=0; i<o.iterations; ++i)
     {
-        std::cout << "ln f " << lnf << std::endl;
-        do
+        double lnf = 1;
+        Histogram H(bins, lb-0.1, ub+0.1);
+        DensityOfStates g(bins, lb-0.1, ub+0.1);
+        while(lnf > lnf_min)
         {
-            double oldS = S(w);
-            w->change(rngMC);
+            LOG(LOG_TOO_MUCH) << "ln f " << lnf;
+            do
+            {
+                double oldS = S(w);
+                w->change(rngMC);
 
-            double p_acc = exp(g[oldS] - g[S(w)]);
-            if(p_acc < rngMC())
-                w->undoChange();
+                double p_acc = exp(g[oldS] - g[S(w)]);
+                if(p_acc < rngMC())
+                    w->undoChange();
 
-            // the paper is not clear whether this is done only if the
-            // change is accepted, but I assume always, as usual for MC
-            g[S(w)] += lnf;
-            //~ std::cout << g[S(w)] << std::endl;
-            H.add(S(w));
-        } while(H.min() < 0.8 * H.mean() || H.mean() < 10);
-        // run until the histogram is flat and we have a few samples
-        H.reset();
-        lnf /= 2;
+                // the paper is not clear whether this is done only if the
+                // change is accepted, but I assume always, as usual for MC
+                g[S(w)] += lnf;
+                //~ std::cout << g[S(w)] << std::endl;
+                H.add(S(w));
+            } while(H.min() < 0.9 * H.mean() || H.mean() < 10);
+            // run until the histogram is flat and we have a few samples
+            H.reset();
+            lnf /= 2;
+        }
+
+        totalG += g;
     }
 
-    std::cout << g;
+    LOG(LOG_DEBUG) << totalG << std::endl;
 
     LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
     LOG(LOG_INFO) << "# max vmem: " << vmPeak();

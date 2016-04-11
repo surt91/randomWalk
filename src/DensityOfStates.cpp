@@ -40,8 +40,16 @@ void DensityOfStates::multiply(double value, double factor)
 std::ostream& operator<<(std::ostream& os, const DensityOfStates &obj)
 {
     os << "[";
-    for(auto i : obj.data)
-        os << i << ", ";
+    for(int i=0; i<obj.bins; ++i)
+        os << (i*obj.upper/obj.bins+obj.lower) << " " << obj.data[i] << std::endl;
     os << "] ";
     return os;
+}
+
+DensityOfStates& DensityOfStates::operator+=(const DensityOfStates &other)
+{
+    for(int i=0; i<bins; ++i)
+        data[i] += other.data[i];
+
+    return *this;
 }
