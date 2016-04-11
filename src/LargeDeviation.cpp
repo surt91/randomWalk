@@ -175,32 +175,38 @@ void wang_landau(const Cmd &o)
     std::function<double(std::unique_ptr<Walker>&)> S;
     prepare(o, w, S);
 
-    const double f_min = 1 + 1e-6;
-    double f = exp(1);
-    Histogram H(100, 0, 100);
-    DensityOfStates g(100, 0, 100);
-    while(f > f_min)
+    // http://cdn.intechopen.com/pdfs-wm/14019.pdf
+
+    const double lnf_min = 1e-6;
+    double lnf = 1;
+
+    // Histogram and DensityOfStates need the same binning ... probably
+    Histogram H(80, 20, 100);
+    DensityOfStates g(80, 20, 100);
+    while(lnf > lnf_min)
     {
-        std::cout << "f " << f << std::endl;
+        std::cout << "ln f " << lnf << std::endl;
         do
         {
             double oldS = S(w);
             w->change(rngMC);
 
-            double p_acc = g[oldS] / g[S(w)];
+            double p_acc = exp(g[oldS] - g[S(w)]);
             if(p_acc < rngMC())
                 w->undoChange();
 
             // the paper is not clear whether this is done only if the
             // change is accepted, but I assume always, as usual for MC
-            g[S(w)] *= f;
-            std::cout << g[S(w)] << std::endl;
+            g[S(w)] += lnf;
+            //~ std::cout << g[S(w)] << std::endl;
             H.add(S(w));
         } while(H.min() < 0.8 * H.mean() || H.mean() < 10);
         // run until the histogram is flat and we have a few samples
         H.reset();
-        f = sqrt(f);
+        lnf /= 2;
     }
+
+    std::cout << g;
 
     LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
     LOG(LOG_INFO) << "# max vmem: " << vmPeak();

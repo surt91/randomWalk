@@ -11,6 +11,8 @@ class DensityOfStates
         double& operator[](double value);
         void multiply(double value, double factor);
 
+        friend std::ostream& operator<<(std::ostream& os, const DensityOfStates &obj);
+
     protected:
         int bins;
         double lower;

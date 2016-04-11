@@ -44,6 +44,8 @@ void Histogram::add(double value)
 
 void Histogram::reset()
 {
+    cur_min = 0;
+    total = 0;
     for(int i=0; i<bins; ++i)
         counts[i] = 0;
 }

@@ -4,7 +4,7 @@ DensityOfStates::DensityOfStates(int bins, double lower, double upper)
     : bins(bins),
       lower(lower),
       upper(upper),
-      data(std::vector<double>(bins, 1))
+      data(std::vector<double>(bins, 0))
 {
     fail = 1.0;
 }
@@ -35,4 +35,13 @@ void DensityOfStates::multiply(double value, double factor)
 
     int idx = (value - lower) / upper * bins;
     data[idx] = data[idx] * factor;
+}
+
+std::ostream& operator<<(std::ostream& os, const DensityOfStates &obj)
+{
+    os << "[";
+    for(auto i : obj.data)
+        os << i << ", ";
+    os << "] ";
+    return os;
 }
