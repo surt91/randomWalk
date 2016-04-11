@@ -13,4 +13,5 @@
 #include "Benchmark.hpp"
 #include "stat.hpp"
 
-void run(const Cmd &o);
+void metropolis(const Cmd &o);
+void wang_landau(const Cmd &o);

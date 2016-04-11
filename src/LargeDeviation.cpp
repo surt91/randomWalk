@@ -1,5 +1,25 @@
 #include "LargeDeviation.hpp"
 
+void prepare(const Cmd &o, std::unique_ptr<Walker>& w, std::function<double(std::unique_ptr<Walker>&)>& S)
+{
+    UniformRNG rngReal(o.seedRealization);
+
+    if(o.type == WT_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
+    else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
+    else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg));
+    else
+        LOG(LOG_ERROR) << "type " << o.type << " is not known to 'metropolis'";
+    w->convexHull();
+
+    if(o.wantedObservable == WO_SURFACE_AREA)
+        S = [](const std::unique_ptr<Walker> &w){ return w->L(); };
+    else if(o.wantedObservable == WO_VOLUME)
+        S = [](const std::unique_ptr<Walker> &w){ return w->A(); };
+}
+
 int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, std::function<double(std::unique_ptr<Walker>&)> S)
 {
     int t_eq = 0;
@@ -57,12 +77,11 @@ int equilibrate(const Cmd &o, std::unique_ptr<Walker>& w1, UniformRNG& rngMC1, s
     return t_eq;
 }
 
-void run(const Cmd &o)
+void metropolis(const Cmd &o)
 {
     clock_t begin = clock();
     int fail = 0;
     int t_eq = 0;
-    UniformRNG rngReal(o.seedRealization);
     UniformRNG rngMC(o.seedMC);
     std::ofstream oss(o.data_path, std::ofstream::out);
     if(!oss.good())
@@ -81,25 +100,8 @@ void run(const Cmd &o)
     oss << "# sweeps L A\n";
 
     std::unique_ptr<Walker> w;
-    // does not work for loop erased yet
-    if(o.type == WT_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
-    else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
-    else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg));
-    else
-        LOG(LOG_ERROR) << "type " << o.type << " is not known to 'run'";
-    w->convexHull();
-
-    if(!o.conf_path.empty())
-        w->saveConfiguration(o.conf_path, false);
-
     std::function<double(std::unique_ptr<Walker>&)> S;
-    if(o.wantedObservable == WO_SURFACE_AREA)
-        S = [](const std::unique_ptr<Walker> &w){ return w->L(); };
-    else if(o.wantedObservable == WO_VOLUME)
-        S = [](const std::unique_ptr<Walker> &w){ return w->A(); };
+    prepare(o, w, S);
 
     t_eq = equilibrate(o, w, rngMC, S);
 
@@ -148,7 +150,58 @@ void run(const Cmd &o)
 
     std::string cmd("gzip -f ");
     system((cmd+o.data_path).c_str());
-    system((cmd+o.conf_path).c_str());
+    if(!o.conf_path.empty())
+        system((cmd+o.conf_path).c_str());
+
+    if(!o.svg_path.empty())
+        w->svg(o.svg_path, true);
+
+    if(!o.pov_path.empty())
+        w->pov(o.pov_path, true);
+}
+
+void wang_landau(const Cmd &o)
+{
+    clock_t begin = clock();
+    UniformRNG rngMC(o.seedMC);
+    std::ofstream oss(o.data_path, std::ofstream::out);
+    if(!oss.good())
+    {
+        LOG(LOG_ERROR) << "Path is not writable " << o.data_path;
+        throw std::invalid_argument("Path is not writable");
+    }
+
+    std::unique_ptr<Walker> w;
+    std::function<double(std::unique_ptr<Walker>&)> S;
+    prepare(o, w, S);
+
+    const double f_min = 1e-6;
+    double f = exp(1);
+    //~ DensityOfStates g;
+    Histogram H(100, 0, 100);
+    while(f > f_min)
+    {
+        while(H.min() < 0.8 * H.mean())
+        {
+            // change configuration
+            // accept with p = g(S_before) / g(S_after)
+
+            //~ g.multiply(S(w), f);
+            H.add(S(w));
+        }
+        H.reset();
+        f = sqrt(f);
+    }
+
+    LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
+    LOG(LOG_INFO) << "# max vmem: " << vmPeak();
+
+    // save runtime statistics
+    oss << "# time in seconds: " << time_diff(begin, clock()) << "\n";
+    oss << "# max vmem: " << vmPeak() << std::endl;
+
+    std::string cmd("gzip -f ");
+    system((cmd+o.data_path).c_str());
 
     if(!o.svg_path.empty())
         w->svg(o.svg_path, true);
