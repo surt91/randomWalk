@@ -9,12 +9,13 @@ class Histogram
 {
     public:
         Histogram(int bins, double lower, double upper);
-        int min();
-        double mean();
+        int min() const;
+        double mean() const;
+        int sum() const;
         void add(double value);
         void reset();
 
-        int operator[](int idx);
+        int operator[](int idx) const;
 
     protected:
         int bins;

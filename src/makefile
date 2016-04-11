@@ -15,6 +15,7 @@ CPP	 := main.cpp \
         LargeDeviation.cpp \
         RNG.cpp \
         Histogram.cpp \
+        DensityOfStates.cpp \
         io.cpp \
         Svg.cpp \
         Povray.cpp \

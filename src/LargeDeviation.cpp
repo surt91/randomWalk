@@ -175,20 +175,29 @@ void wang_landau(const Cmd &o)
     std::function<double(std::unique_ptr<Walker>&)> S;
     prepare(o, w, S);
 
-    const double f_min = 1e-6;
+    const double f_min = 1 + 1e-6;
     double f = exp(1);
-    //~ DensityOfStates g;
     Histogram H(100, 0, 100);
+    DensityOfStates g(100, 0, 100);
     while(f > f_min)
     {
-        while(H.min() < 0.8 * H.mean())
+        std::cout << "f " << f << std::endl;
+        do
         {
-            // change configuration
-            // accept with p = g(S_before) / g(S_after)
+            double oldS = S(w);
+            w->change(rngMC);
 
-            //~ g.multiply(S(w), f);
+            double p_acc = g[oldS] / g[S(w)];
+            if(p_acc < rngMC())
+                w->undoChange();
+
+            // the paper is not clear whether this is done only if the
+            // change is accepted, but I assume always, as usual for MC
+            g[S(w)] *= f;
+            std::cout << g[S(w)] << std::endl;
             H.add(S(w));
-        }
+        } while(H.min() < 0.8 * H.mean() || H.mean() < 10);
+        // run until the histogram is flat and we have a few samples
         H.reset();
         f = sqrt(f);
     }

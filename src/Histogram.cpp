@@ -8,14 +8,19 @@ Histogram::Histogram(int bins, double lower, double upper)
 {
 }
 
-int Histogram::min()
+int Histogram::min() const
 {
     return cur_min;
 }
 
-double Histogram::mean()
+double Histogram::mean() const
 {
     return (double) total / bins;
+}
+
+int Histogram::sum() const
+{
+    return total;
 }
 
 void Histogram::add(double value)
@@ -23,10 +28,9 @@ void Histogram::add(double value)
     // do not count values bigger than upper or smaller than lower
     if(value > upper || value < lower)
     {
-        LOG(LOG_ERROR) << "value out of bounds";
+        LOG(LOG_ERROR) << "value out of bounds: " << value << " not in [" << lower << "," << upper << "]";
         return;
     }
-
 
     int idx = (value - lower) / upper * bins;
     counts[idx]++;
@@ -44,7 +48,7 @@ void Histogram::reset()
         counts[i] = 0;
 }
 
-int Histogram::operator[](int idx)
+int Histogram::operator[](int idx) const
 {
     return counts[idx];
 }

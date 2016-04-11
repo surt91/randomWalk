@@ -13,6 +13,7 @@
 #include "Benchmark.hpp"
 #include "stat.hpp"
 #include "Histogram.hpp"
+#include "DensityOfStates.hpp"
 
 void metropolis(const Cmd &o);
 void wang_landau(const Cmd &o);
