@@ -26,8 +26,9 @@ ConvexHullQHull::ConvexHullQHull(const std::vector<Step>& points, bool akl)
         LOG(LOG_ERROR) << e.what();
 
         std::vector<int> dimMap(d-1);
-        for(int i=0, j=0; i<d; ++i)
+        for(int i=0; i<d; ++i)
         {
+            int j = 0;
             while(interiorPoints[j][i] == 0 && j<n)
                 ++j;
             if(j == n-1)
