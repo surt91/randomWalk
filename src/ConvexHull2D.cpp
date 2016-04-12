@@ -9,6 +9,10 @@ ConvexHull2D::ConvexHull2D(const std::vector<Step>& points, bool akl)
     if(akl)
         preprocessAklToussaint();
 
+    // invalid value, so that the getter know, to calculate them
+    m_A = -1;
+    m_L = -1;
+
     // mind that first and last entry of hullPoints_ need to be the same
 }
 
@@ -24,24 +28,35 @@ const std::vector<Step>& ConvexHull2D::hullPoints() const
 
 double ConvexHull2D::A() const
 {
-    // calculate Area in 2d -- since the algorithm only works for d=2
-    double a = 0;
-    for(size_t i=0; i<hullPoints_.size()-1; ++i)
-        a += (hullPoints_[i].x() - hullPoints_[i+1].x())
-            * (hullPoints_[i].y() + hullPoints_[i+1].y());
-    return a/2;
+    if(m_A < 0)
+    {
+        // calculate Area in 2d -- since the algorithm only works for d=2
+        double a = 0;
+        for(size_t i=0; i<hullPoints_.size()-1; ++i)
+            a += (hullPoints_[i].x() - hullPoints_[i+1].x())
+                * (hullPoints_[i].y() + hullPoints_[i+1].y());
+
+        m_A = a/2;
+    }
+
+    return m_A;
 }
 
 double ConvexHull2D::L() const
 {
-    // calculate circumference in 2d -- since the algorithm only works for d=2
-    double l = 0;
-    for(size_t i=0; i<hullPoints_.size()-1; ++i)
-        l += sqrt(
-            std::pow(hullPoints_[i].x() - hullPoints_[i+1].x(), 2)
-            + std::pow(hullPoints_[i].y() - hullPoints_[i+1].y(), 2)
-            );
-    return l;
+    if(m_L < 0)
+    {
+        // calculate circumference in 2d -- since the algorithm only works for d=2
+        double l = 0;
+        for(size_t i=0; i<hullPoints_.size()-1; ++i)
+            l += sqrt(
+                std::pow(hullPoints_[i].x() - hullPoints_[i+1].x(), 2)
+                + std::pow(hullPoints_[i].y() - hullPoints_[i+1].y(), 2)
+                );
+        m_L = l;
+    }
+
+    return m_L;
 }
 
 // special for d=2

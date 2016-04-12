@@ -28,5 +28,8 @@ class ConvexHull
         int n;
         int d;
 
+        mutable double m_A;
+        mutable double m_L;
+
         virtual void preprocessAklToussaint();
 };

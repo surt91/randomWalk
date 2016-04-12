@@ -26,7 +26,4 @@ class ConvexHullQHull : public ConvexHull
     protected:
         std::unique_ptr<orgQhull::Qhull> qhull;
         double *coords;
-
-        double m_A;
-        double m_L;
 };
