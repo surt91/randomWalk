@@ -131,6 +131,17 @@ void Walker::degenerate()
     hullDirty = true;
 }
 
+// set the random numbers such that we get an L shape in d-1 dimensions
+void Walker::degenerateMaxSurface()
+{
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99 / ceil((double) (d-1) * (i+1)/random_numbers.size());
+
+    stepsDirty = true;
+    pointsDirty = true;
+    hullDirty = true;
+}
+
 std::string Walker::print() const
 {
     std::stringstream ss;

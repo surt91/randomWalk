@@ -59,6 +59,8 @@ class Walker
         virtual void undoChange();
 
         void degenerate();
+        void degenerateMaxSurface();
+
         void setHullAlgo(hull_algorithm_t a);
 
         const ConvexHull& convexHull() const;

@@ -24,14 +24,25 @@ void prepare(const Cmd &o, std::unique_ptr<Walker>& w, std::function<double(std:
 
 double getUpperBound(const Cmd &o)
 {
+    double S_min = 0;
+
     std::unique_ptr<Walker> w;
     std::function<double(std::unique_ptr<Walker>&)> S;
     prepare(o, w, S);
 
-    // the degenerate case is -- hopefully -- the case of maximum S for all S
-    w->degenerate();
+    // the degenerate case is -- hopefully -- the case of maximum Volume
+    if(o.wantedObservable == WO_VOLUME)
+    {
+        w->degenerate();
+        S_min = S(w);
+    }
+    else
+    {
+        w->degenerateMaxSurface();
+        S_min = S(w);
+    }
 
-    return S(w);
+    return S_min;
 }
 
 double getLowerBound(const Cmd &o)
