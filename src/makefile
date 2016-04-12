@@ -41,6 +41,7 @@ LNDIRS  = -L$(PWD)/lib \
 
 INCLUDES = -I$(PWD)/include \
            -I$(PWD)/qhull/src \
+           -I$(PWD)/qhull/src/libqhullcpp
 
 CXXFLAGS = $(COPT) $(INCLUDES)
 

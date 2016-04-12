@@ -1,9 +1,10 @@
 #pragma once
 
-#include "qhull/src/libqhullcpp/Qhull.h"
-#include "qhull/src/libqhullcpp/QhullVertex.h"
-#include "qhull/src/libqhullcpp/QhullFacetList.h"
-#include "qhull/src/libqhullcpp/QhullVertexSet.h"
+#include <Qhull.h>
+#include <QhullVertex.h>
+#include <QhullFacetList.h>
+#include <QhullVertexSet.h>
+#include <QhullError.h>
 
 #include "ConvexHull.hpp"
 
@@ -25,4 +26,7 @@ class ConvexHullQHull : public ConvexHull
     protected:
         std::unique_ptr<orgQhull::Qhull> qhull;
         double *coords;
+
+        double m_A;
+        double m_L;
 };

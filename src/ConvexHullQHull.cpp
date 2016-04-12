@@ -11,8 +11,54 @@ ConvexHullQHull::ConvexHullQHull(const std::vector<Step>& points, bool akl)
         for(int j=0; j<d; ++j)
             coords[i*d + j] = interiorPoints[i][j];
 
-    // comment, dimension, count, coordinates[], command
-    qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords, ""));
+    try
+    {
+        // comment, dimension, count, coordinates[], command
+        qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords, ""));
+        m_A = qhull->volume();
+        m_L = qhull->area();
+    }
+    catch(orgQhull::QhullError &e)
+    {
+        // not full dimensional
+        // discard one dimension, calculate again
+        // this is easy since the points are on a lattice
+        LOG(LOG_ERROR) << e.what();
+
+        std::vector<int> dimMap(d-1);
+        for(int i=0, j=0; i<d; ++i)
+        {
+            while(interiorPoints[j][i] == 0 && j<n)
+                ++j;
+            if(j == n-1)
+            {
+                for(int l=0, k=0; l<d; ++l)
+                    if(l != i)
+                        dimMap[k++] = i;
+                break;
+            }
+        }
+
+        delete[] coords;
+        --d;
+        coords = new double[n*d];
+        for(int i=0; i<n; ++i)
+            for(int j=0; j<d; ++j)
+                coords[i*d + j] = interiorPoints[i][dimMap[j]];
+
+        // if it still does not work, L and A are 0
+        try
+        {
+            qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords, ""));
+            m_L = qhull->volume();
+            m_A = 0;
+        }
+        catch(orgQhull::QhullError &e)
+        {
+            m_L = 0;
+            m_A = 0;
+        }
+    }
 }
 
 ConvexHullQHull::~ConvexHullQHull()
@@ -133,10 +179,10 @@ std::vector<std::vector<Step>> ConvexHullQHull::hullFacets() const
 
 double ConvexHullQHull::A() const
 {
-    return qhull->volume();
+    return m_A;
 }
 
 double ConvexHullQHull::L() const
 {
-    return qhull->area();
+    return m_L;
 }
