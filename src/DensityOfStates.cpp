@@ -6,6 +6,7 @@ DensityOfStates::DensityOfStates(int bins, double lower, double upper)
       upper(upper),
       data(std::vector<double>(bins, 0))
 {
+    binwidth = (upper - lower) / bins;
     fail = 1.0;
 }
 
@@ -24,7 +25,7 @@ double& DensityOfStates::operator[](double value)
     if(!checkBounds(value))
         return fail;
 
-    int idx = (value - lower) / upper * (bins-1);
+    int idx = (value - lower) / binwidth;
     return data[idx];
 }
 
@@ -39,7 +40,7 @@ std::string DensityOfStates::binCentersString()
     std::stringstream out;
     out.precision(12);
     for(int i=0; i<bins; ++i)
-        out << ((i+0.5)*upper/(bins-1)+lower) << " ";
+        out << ((i+0.5)*binwidth+lower) << " ";
     return out.str();
 }
 
@@ -56,7 +57,7 @@ std::ostream& operator<<(std::ostream& os, const DensityOfStates &obj)
 {
     os << "[";
     for(int i=0; i<obj.bins; ++i)
-        os << (i*obj.upper/(obj.bins-1)+obj.lower) << " " << obj.data[i] << std::endl;
+        os << (i*obj.binwidth+obj.lower) << " " << obj.data[i] << std::endl;
     os << "] ";
     return os;
 }

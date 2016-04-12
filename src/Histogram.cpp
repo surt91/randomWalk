@@ -8,6 +8,7 @@ Histogram::Histogram(int bins, double lower, double upper)
 {
     cur_min = 0;
     total = 0;
+    binwidth = (upper - lower) / bins;
 }
 
 int Histogram::min() const
@@ -34,14 +35,18 @@ void Histogram::add(double value)
         return;
     }
 
-    int idx = (value - lower) / upper * (bins-1);
+    int idx = (value - lower) / binwidth;
     counts[idx]++;
     ++total;
 
-    // see if this was the former minimum
+    // see if this was the former minimum and update, if necessary
     if(counts[idx] - 1 == cur_min)
-        // search for the new minimum
-        cur_min = *std::min(counts.begin(), counts.end());
+    {
+        ++cur_min;
+        for(auto i=0; i<bins; ++i)
+            if(counts[i] < cur_min)
+                cur_min = counts[i];
+    }
 }
 
 void Histogram::reset()
@@ -55,4 +60,13 @@ void Histogram::reset()
 int Histogram::operator[](int idx) const
 {
     return counts[idx];
+}
+
+std::ostream& operator<<(std::ostream& os, const Histogram &obj)
+{
+    os << "[";
+    for(int i=0; i<obj.bins; ++i)
+        os << (i*obj.binwidth+obj.lower) << " " << obj.counts[i] << std::endl;
+    os << "] ";
+    return os;
 }

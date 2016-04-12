@@ -23,6 +23,8 @@ class DensityOfStates
         int bins;
         double lower;
         double upper;
+        double binwidth;
+
         double fail;
         std::vector<double> data;
 

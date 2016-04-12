@@ -52,7 +52,7 @@ double getLowerBound(const Cmd &o)
 
     double S_min = 0;
     if(o.type == WT_RANDOM_WALK)
-        S_min = 1;
+        S_min = 2;
     else
         S_min = 4*sqrt(o.steps);
 
@@ -225,19 +225,19 @@ void wang_landau(const Cmd &o)
 
     // Histogram and DensityOfStates need the same binning ... probably
     double lb = getLowerBound(o);
-    double ub = getUpperBound(o);
-    int bins = (ub-lb)/2;
+    double ub = getUpperBound(o) + 1;
+
+    // do not make a bin for every integer, since not every integer is possible
+    int bins = (ub-lb)/3;
     LOG(LOG_DEBUG) << lb << " " << ub << " " << bins;
 
-    Histogram H(bins, lb-0.1, ub+0.1);
-    DensityOfStates g(bins, lb-0.1, ub+0.1);
+    Histogram H(bins, lb, ub);
+    DensityOfStates g(bins, lb, ub);
 
     oss << "# First line are the centers of the bins\n";
     oss << "# Following lines are unnormalized, log densities of the bin\n";
     oss << "# one line per iteration of the wang landau algorithm\n";
     oss << g.binCentersString() << std::endl;
-
-    // save headers/bincenters of g to file
 
     for(int i=0; i<o.iterations; ++i)
     {
@@ -257,7 +257,7 @@ void wang_landau(const Cmd &o)
                 // change is accepted, but I assume always, as usual for MC
                 g[S(w)] += lnf;
                 H.add(S(w));
-            } while(H.min() < flatness_criterion * H.mean() || H.mean() < 10);
+            } while(H.min() < flatness_criterion * H.mean());
             // run until the histogram is flat and we have a few samples
             H.reset();
             lnf /= 2;

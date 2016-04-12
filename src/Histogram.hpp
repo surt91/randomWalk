@@ -17,10 +17,13 @@ class Histogram
 
         int operator[](int idx) const;
 
+        friend std::ostream& operator<<(std::ostream& os, const Histogram &obj);
+
     protected:
         int bins;
         double lower;
         double upper;
+        double binwidth;
 
         int cur_min;
         int total;
