@@ -189,8 +189,14 @@ void metropolis(const Cmd &o)
         w->pov(o.pov_path, true);
 }
 
+// 10.1103/PhysRevLett.86.2050 (original paper)
+// http://cdn.intechopen.com/pdfs-wm/14019.pdf (implementations hints)
 void wang_landau(const Cmd &o)
 {
+    // parameters of the algorithm
+    const double lnf_min = 1e-8;
+    const double flatness_criterion = 0.8;
+
     clock_t begin = clock();
     UniformRNG rngMC(o.seedMC);
     std::ofstream oss(o.data_path, std::ofstream::out);
@@ -203,10 +209,6 @@ void wang_landau(const Cmd &o)
     std::unique_ptr<Walker> w;
     std::function<double(std::unique_ptr<Walker>&)> S;
     prepare(o, w, S);
-
-    // http://cdn.intechopen.com/pdfs-wm/14019.pdf
-
-    const double lnf_min = 1e-9;
 
     // Histogram and DensityOfStates need the same binning ... probably
     double lb = getLowerBound(o);
@@ -236,9 +238,8 @@ void wang_landau(const Cmd &o)
                 // the paper is not clear whether this is done only if the
                 // change is accepted, but I assume always, as usual for MC
                 g[S(w)] += lnf;
-                //~ std::cout << g[S(w)] << std::endl;
                 H.add(S(w));
-            } while(H.min() < 0.9 * H.mean() || H.mean() < 10);
+            } while(H.min() < flatness_criterion * H.mean() || H.mean() < 10);
             // run until the histogram is flat and we have a few samples
             H.reset();
             lnf /= 2;
