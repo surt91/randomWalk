@@ -28,13 +28,26 @@ double& DensityOfStates::operator[](double value)
     return data[idx];
 }
 
-void DensityOfStates::multiply(double value, double factor)
+void DensityOfStates::reset()
 {
-    if(!checkBounds(value))
-        return;
+    for(int i=0; i<bins; ++i)
+        data[i] = 0;
+}
 
-    int idx = (value - lower) / upper * (bins-1);
-    data[idx] = data[idx] * factor;
+std::string DensityOfStates::binCentersString()
+{
+    std::stringstream out;
+    for(int i=0; i<bins; ++i)
+        out << ((i+0.5)*upper/(bins-1)+lower) << " ";
+    return out.str();
+}
+
+std::string DensityOfStates::dataString()
+{
+    std::stringstream out;
+    for(const auto i : data)
+        out << i << " ";
+    return out.str();
 }
 
 std::ostream& operator<<(std::ostream& os, const DensityOfStates &obj)

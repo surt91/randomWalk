@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <unordered_set>
+#include <sstream>
+#include <string>
 
 #include "Logging.hpp"
 
@@ -10,7 +11,10 @@ class DensityOfStates
     public:
         DensityOfStates(int bins, double lower, double upper);
         double& operator[](double value);
-        void multiply(double value, double factor);
+        void reset();
+
+        std::string binCentersString();
+        std::string dataString();
 
         friend std::ostream& operator<<(std::ostream& os, const DensityOfStates &obj);
         DensityOfStates& operator+=(const DensityOfStates &other);

@@ -216,13 +216,19 @@ void wang_landau(const Cmd &o)
     int bins = (ub-lb)/2;
     LOG(LOG_DEBUG) << lb << " " << ub << " " << bins;
 
-    DensityOfStates totalG(bins, lb-0.1, ub+0.1);
+    Histogram H(bins, lb-0.1, ub+0.1);
+    DensityOfStates g(bins, lb-0.1, ub+0.1);
+
+    oss << "# First line are the centers of the bins\n";
+    oss << "# Following lines are unnormalized, log densities of the bin\n";
+    oss << "# one line per iteration of the wang landau algorithm\n";
+    oss << g.binCentersString() << std::endl;
+
+    // save headers/bincenters of g to file
 
     for(int i=0; i<o.iterations; ++i)
     {
         double lnf = 1;
-        Histogram H(bins, lb-0.1, ub+0.1);
-        DensityOfStates g(bins, lb-0.1, ub+0.1);
         while(lnf > lnf_min)
         {
             LOG(LOG_TOO_MUCH) << "ln f " << lnf;
@@ -230,7 +236,6 @@ void wang_landau(const Cmd &o)
             {
                 double oldS = S(w);
                 w->change(rngMC);
-
                 double p_acc = exp(g[oldS] - g[S(w)]);
                 if(p_acc < rngMC())
                     w->undoChange();
@@ -244,11 +249,10 @@ void wang_landau(const Cmd &o)
             H.reset();
             lnf /= 2;
         }
-
-        totalG += g;
+        // save g to file
+        oss << g.dataString() << std::endl;
+        g.reset();
     }
-
-    LOG(LOG_DEBUG) << totalG << std::endl;
 
     LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
     LOG(LOG_INFO) << "# max vmem: " << vmPeak();
