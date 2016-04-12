@@ -6,6 +6,8 @@ Histogram::Histogram(int bins, double lower, double upper)
       upper(upper),
       counts(bins, 0)
 {
+    cur_min = 0;
+    total = 0;
 }
 
 int Histogram::min() const
@@ -32,7 +34,7 @@ void Histogram::add(double value)
         return;
     }
 
-    int idx = (value - lower) / upper * bins;
+    int idx = (value - lower) / upper * (bins-1);
     counts[idx]++;
     ++total;
 

@@ -24,7 +24,7 @@ double& DensityOfStates::operator[](double value)
     if(!checkBounds(value))
         return fail;
 
-    int idx = (value - lower) / upper * bins;
+    int idx = (value - lower) / upper * (bins-1);
     return data[idx];
 }
 
@@ -33,7 +33,7 @@ void DensityOfStates::multiply(double value, double factor)
     if(!checkBounds(value))
         return;
 
-    int idx = (value - lower) / upper * bins;
+    int idx = (value - lower) / upper * (bins-1);
     data[idx] = data[idx] * factor;
 }
 
@@ -41,7 +41,7 @@ std::ostream& operator<<(std::ostream& os, const DensityOfStates &obj)
 {
     os << "[";
     for(int i=0; i<obj.bins; ++i)
-        os << (i*obj.upper/obj.bins+obj.lower) << " " << obj.data[i] << std::endl;
+        os << (i*obj.upper/(obj.bins-1)+obj.lower) << " " << obj.data[i] << std::endl;
     os << "] ";
     return os;
 }
