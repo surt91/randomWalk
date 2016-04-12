@@ -11,7 +11,7 @@ import jinja2
 class Gnuplot():
     def __init__(self, number_of_steps, typ, seedMC, seedR, iterations,
                        dimension, thetas, directory, rawData, rawConf,
-                       observable, method, akl):
+                       observable, method, akl, sampling):
         self.N = number_of_steps
         self.T = thetas
         self.iterations = iterations
@@ -30,7 +30,8 @@ class Gnuplot():
             os.makedirs(self.d)
 
     def every(self):
-        pass
+        ...
+        #~ self.create("pLP", "{/Symbol s}", "{/Italic p}")
 
     def create(self, name="something", xl="", yl=""):
         template = self.env.get_template(name+".gp")

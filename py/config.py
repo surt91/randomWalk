@@ -43,9 +43,7 @@ def file_not_empty(fpath):
 
 
 class Simulation():
-    def __init__(self, number_of_steps, typ, seedMC, seedR, iterations,
-                       dimension, thetas, directory, rawData, rawConf,
-                       observable, method, akl):
+    def __init__(self, number_of_steps, thetas, iterations, **kwargs):
 
         self.Ns = number_of_steps
         self.n = iterations
@@ -53,9 +51,7 @@ class Simulation():
         self.instances = []
         for N in number_of_steps:
             for T in thetas:
-                self.instances.append(SimulationInstance(steps=N, typ=typ, seedMC=seedMC, seedR=seedR, iterations=iterations,
-                       dimension=dimension, theta=T, directory=directory, rawData=rawData, rawConf=rawConf,
-                       observable=observable, method=method, akl=akl))
+                self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
 
     def hero(self):
         logging.info("Create .sge Files for Hero")
@@ -116,8 +112,9 @@ class Simulation():
 
 class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
-                       dimension, theta, directory, rawData, rawConf,
-                       observable, method, akl):
+                       dimension, theta, directory,
+                       rawData, rawConf, observable,
+                       method, akl, sampling):
 
         self.N = steps
         self.n = iterations
@@ -132,6 +129,7 @@ class SimulationInstance():
         self.method = method
         self.akl = akl
         self.w = observable
+        self.m = sampling
 
         self.loadFile = None
 
@@ -168,6 +166,7 @@ class SimulationInstance():
                 "-w {0}".format(self.w),
                 "-q",
                 "-o {0}".format(self.filename),
+                "-m {0}".format(self.m),
                ]
 
         if self.rawConf:

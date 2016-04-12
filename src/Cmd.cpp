@@ -17,7 +17,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, 0, "integer");
         TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, 0, "integer");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
-        TCLAP::ValueArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme", false, 2, "double");
+        TCLAP::ValueArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme", false, 0, "double");
         TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, ".", "string");
         TCLAP::ValueArg<std::string> dataPathArg("o", "output", "datafile for the output", false, "out.dat", "string");
         TCLAP::ValueArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output", false, "", "string");

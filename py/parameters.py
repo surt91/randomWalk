@@ -7,12 +7,12 @@ sizes = (200,)
 thetas = (-100, -80, -50, -40, -35, -30, -27, -24, -22, -20, -19, -18, -17, -16, -15, -14, -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -3.5, -2)
 
 parameters = {
-    # what type:    1 random walk, 2 loop erased random walk
-    "typ": 1,
+    # what type
+    "typ": 1,  #1 random walk, 2 loop erased random walk, 3 self avoiding random walk
     # random seed for Monte Carlo
-    "seedMC": 0,
+    "seedMC": 1337,
     # random seed for initial configuration
-    "seedR": 0,
+    "seedR": 42,
     # how many iterations (i.e. sweeps) per theta and N
     "iterations": 100000,
     # dimension
@@ -29,12 +29,14 @@ parameters = {
     # where to save the data
     "rawData": "rawData",
     # where to save the raw data needed to reconstruct everything else
-    "rawConf": "rawConf",
+    "rawConf": False,
 
     # for which observable wen want the probabilities
-    "observable": 1, # 1: surface area, 2: volume
+    "observable": 2,  # 1: surface area, 2: volume
     # algorithm for the convex hull
-    "method": 2, # 1: qhull, 2: andrews, 4: jarvis
+    "method": 2,  # 1: qhull, 2: andrews, 4: jarvis
     # akl heuristic
-    "akl": True
+    "akl": False,
+    # which smapling methd
+    "sampling": 1,  # 1: metropolis, 2: wang landau
 }

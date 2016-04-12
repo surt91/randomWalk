@@ -37,6 +37,7 @@ void DensityOfStates::reset()
 std::string DensityOfStates::binCentersString()
 {
     std::stringstream out;
+    out.precision(12);
     for(int i=0; i<bins; ++i)
         out << ((i+0.5)*upper/(bins-1)+lower) << " ";
     return out.str();
@@ -45,6 +46,7 @@ std::string DensityOfStates::binCentersString()
 std::string DensityOfStates::dataString()
 {
     std::stringstream out;
+    out.precision(12);
     for(const auto i : data)
         out << i << " ";
     return out.str();
