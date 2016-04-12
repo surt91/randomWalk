@@ -49,13 +49,24 @@ const std::vector<std::string> TYPE_LABEL = {
 
 enum wanted_observable_t {
     WO_SURFACE_AREA = 1,    // eg circumference in d=2
-    WO_VOLUME              // eg area in d=2
+    WO_VOLUME               // eg area in d=2
 };
 
 const std::vector<std::string> WANTED_OBSERVABLE_LABEL = {
     "nan",
     "surface area (circumference in d=2)",
     "volume (area in d=2)"
+};
+
+enum sampling_method_t {
+    SM_METROPOLIS = 1,    // Metropolis sampling with a artificial temp
+    SM_WANG_LANDAU        // Direct Wang Landau Sampling of the distribution
+};
+
+const std::vector<std::string> SAMPLING_METHOD_LABEL = {
+    "nan",
+    "Metropolis",
+    "Wang Landau"
 };
 
 class Cmd
@@ -77,6 +88,7 @@ class Cmd
         int iterations;
         double theta;
         bool simpleSampling;
+        sampling_method_t sampling_method;
         hull_algorithm_t chAlg;
         wanted_observable_t wantedObservable;
 

@@ -20,5 +20,10 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    metropolis(o);
+    if(o.sampling_method == SM_METROPOLIS)
+        metropolis(o);
+    else if(o.sampling_method == SM_WANG_LANDAU)
+        wang_landau(o);
+    else
+        LOG(LOG_ERROR) << "sampling method " << o.sampling_method << " is not known";
 }

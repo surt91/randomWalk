@@ -34,38 +34,35 @@ Cmd::Cmd(int argc, char** argv)
                                                         "\tdebug3 : 7",
                                         false, 4, "integer");
 
-        std::vector<int> allowedTypes_;
-        allowedTypes_.push_back(1);
-        allowedTypes_.push_back(2);
-        allowedTypes_.push_back(3);
-        TCLAP::ValuesConstraint<int> allowedTypes(allowedTypes_);
+        std::vector<int> ty({1, 2, 3});
+        TCLAP::ValuesConstraint<int> allowedTypes(ty);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
                                                   "\trandom walk       : 1 (default)\n"
                                                   "\tlooperased walk   : 2\n"
                                                   "\tself-avoiding walk: 3",
                                      false, 1, &allowedTypes);
 
-        std::vector<int> allowedCH_;
-        allowedCH_.push_back(1);
-        allowedCH_.push_back(2);
-        allowedCH_.push_back(3);
-        allowedCH_.push_back(4);
-        TCLAP::ValuesConstraint<int> allowedCH(allowedCH_);
+        std::vector<int> ch({1, 2, 3, 4});
+        TCLAP::ValuesConstraint<int> allowedCH(ch);
         TCLAP::ValueArg<int> chAlgArg("c", "convexHullAlgo", "convex hull algorithm:\n"
                                                              "\tquickhull (QHull)     : 1 (default)\n"
                                                              "\tAndrews Monotone Chain: 2\n"
                                                              "\tGraham Scan           : 3\n"
                                                              "\tJarvis March          : 4",
                                       false, 1, &allowedCH);
-
-        std::vector<int> allowedWO_;
-        allowedWO_.push_back(1);
-        allowedWO_.push_back(2);
-        TCLAP::ValuesConstraint<int> allowedWO(allowedWO_);
+        std::vector<int> wo({1, 2});
+        TCLAP::ValuesConstraint<int> allowedWO(wo);
         TCLAP::ValueArg<int> wantedobservableArg("w", "wantedObservable", "observable for which the probability density is desired:\n"
                                                                           "\tsurface area (L)    : 1 (default)\n"
                                                                           "\tvolume       (A)    : 2",
                                                  false, 1, &allowedWO);
+
+        std::vector<int> sm({1, 2});
+        TCLAP::ValuesConstraint<int> allowedSM(sm);
+        TCLAP::ValueArg<int> samplingMethodArg("m", "samplingMethod", "Sampling Method to use:\n"
+                                                                      "\tMetropolis          : 1 (default)\n"
+                                                                      "\tWang Landau         : 2",
+                                                 false, 1, &allowedSM);
 
         // switch argument
         // -short, --long, description, default
@@ -83,6 +80,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(thetaArg);
         cmd.add(chAlgArg);
         cmd.add(wantedobservableArg);
+        cmd.add(samplingMethodArg);
         cmd.add(typeArg);
         cmd.add(svgArg);
         cmd.add(povArg);
@@ -147,6 +145,9 @@ Cmd::Cmd(int argc, char** argv)
         LOG(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
         type = (walk_type_t) typeArg.getValue();
         LOG(LOG_INFO) << "Type                       " << TYPE_LABEL[type];
+        svg_path = svgArg.getValue();
+        sampling_method = (sampling_method_t) samplingMethodArg.getValue();
+        LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
         svg_path = svgArg.getValue();
         LOG(LOG_INFO) << "Path to store the SVG      " << svg_path;
         pov_path = povArg.getValue();

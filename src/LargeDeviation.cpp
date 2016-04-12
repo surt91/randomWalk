@@ -18,6 +18,8 @@ void prepare(const Cmd &o, std::unique_ptr<Walker>& w, std::function<double(std:
         S = [](const std::unique_ptr<Walker> &w){ return w->L(); };
     else if(o.wantedObservable == WO_VOLUME)
         S = [](const std::unique_ptr<Walker> &w){ return w->A(); };
+    else
+        LOG(LOG_ERROR) << "observalbe " << o.wantedObservable << " is not known";
 }
 
 double getUpperBound(const Cmd &o)
