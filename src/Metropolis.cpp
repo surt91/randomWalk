@@ -12,7 +12,7 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
     UniformRNG rngMC(o.seedMC + 1);
 
-    if(Logging::verbosity >= LOG_DEBUG)
+    if(Logger::verbosity >= LOG_DEBUG)
         std::ofstream oss("equilibration.dat", std::ofstream::out);
 
     std::unique_ptr<Walker> w2;
@@ -44,7 +44,7 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
             }
         }
 
-        if(Logging::verbosity >= LOG_DEBUG)
+        if(Logger::verbosity >= LOG_DEBUG)
             oss << t_eq << " " << w1->L() << " " << w2->L() << " " << w1->A() << " " << w2->A() << std::endl;
 
         // fluctuation within 1%
