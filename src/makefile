@@ -12,7 +12,9 @@ CPP	 := main.cpp \
         ConvexHullQHull.cpp \
         ConvexHullAndrew.cpp \
         ConvexHullJarvis.cpp \
-        LargeDeviation.cpp \
+        Simulation.cpp \
+        Metropolis.cpp \
+        WangLandau.cpp \
         RNG.cpp \
         Histogram.cpp \
         DensityOfStates.cpp \

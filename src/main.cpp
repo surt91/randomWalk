@@ -6,7 +6,8 @@
 #include "Walker.hpp"
 #include "LoopErasedWalker.hpp"
 #include "RNG.hpp"
-#include "LargeDeviation.hpp"
+#include "Metropolis.hpp"
+#include "WangLandau.hpp"
 #include "Benchmark.hpp"
 
 
@@ -21,9 +22,15 @@ int main(int argc, char** argv)
     }
 
     if(o.sampling_method == SM_METROPOLIS)
-        metropolis(o);
+    {
+        Metropolis sim(o);
+        sim.run();
+    }
     else if(o.sampling_method == SM_WANG_LANDAU)
-        wang_landau(o);
+    {
+        WangLandau sim(o);
+        sim.run();
+    }
     else
         LOG(LOG_ERROR) << "sampling method " << o.sampling_method << " is not known";
 }

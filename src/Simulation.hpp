@@ -18,9 +18,21 @@
 #include "SelfAvoidingWalker.hpp"
 #include "RNG.hpp"
 #include "Benchmark.hpp"
-#include "stat.hpp"
-#include "Histogram.hpp"
-#include "DensityOfStates.hpp"
 
-void metropolis(const Cmd &o);
-void wang_landau(const Cmd &o);
+class Simulation
+{
+    public:
+        Simulation(const Cmd &o);
+        ~Simulation();
+
+        virtual void run() = 0;
+
+    protected:
+        Cmd o;
+        void prepare(std::unique_ptr<Walker>& w);
+        std::function<double(std::unique_ptr<Walker>&)> S;
+        std::ofstream oss;
+
+    private:
+        clock_t begin;
+};
