@@ -235,7 +235,10 @@ void wang_landau(const Cmd &o)
     oss << "# one line per iteration of the wang landau algorithm\n";
     oss << g.binCentersString() << std::endl;
 
-    // run in parallel,
+    // run in parallel, in o.parallel threads, or all if not specified
+    if(o.parallel)
+        omp_set_num_threads(o.parallel);
+
     // use dynamic schedule, since single iterations may need strongly fluctuating time
     #pragma omp parallel firstprivate(H, g) shared(oss)
     {

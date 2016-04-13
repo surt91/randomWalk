@@ -17,6 +17,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, 0, "integer");
         TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, 0, "integer");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
+        TCLAP::ValueArg<int> parallelArg("", "parallel", "use openMP to use this many cpus, zero means all (only available for Wang Landau Sampling)", false, 0, "integer");
         TCLAP::ValueArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme", false, 0, "double");
         TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, ".", "string");
         TCLAP::ValueArg<std::string> dataPathArg("o", "output", "datafile for the output", false, "out.dat", "string");
@@ -77,6 +78,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(seedRArg);
         cmd.add(seedMCArg);
         cmd.add(dimArg);
+        cmd.add(parallelArg);
         cmd.add(thetaArg);
         cmd.add(chAlgArg);
         cmd.add(wantedobservableArg);
@@ -124,16 +126,22 @@ Cmd::Cmd(int argc, char** argv)
 
         steps = numArg.getValue();
         LOG(LOG_INFO) << "Number of steps            " << steps;
+
         iterations = iterationsArg.getValue();
         LOG(LOG_INFO) << "Number of MC iterations    " << iterations;
+
         seedRealization = seedRArg.getValue();
         LOG(LOG_INFO) << "Seed for the realization   " << seedRealization;
+
         seedMC = seedMCArg.getValue();
         LOG(LOG_INFO) << "Seed for the MC simulation " << seedMC;
+
         d = dimArg.getValue();
         LOG(LOG_INFO) << "Dimension                  " << d;
+
         simpleSampling = simpleSamplingSwitch.getValue();
-        if(simpleSampling){
+        if(simpleSampling)
+        {
             LOG(LOG_INFO) << "simple sampling            ";
         }
         else
@@ -141,21 +149,35 @@ Cmd::Cmd(int argc, char** argv)
             theta = thetaArg.getValue();
             LOG(LOG_INFO) << "Theta                      " << theta;
         }
+
         wantedObservable = (wanted_observable_t) wantedobservableArg.getValue();
         LOG(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
+
         type = (walk_type_t) typeArg.getValue();
         LOG(LOG_INFO) << "Type                       " << TYPE_LABEL[type];
+
         svg_path = svgArg.getValue();
         sampling_method = (sampling_method_t) samplingMethodArg.getValue();
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
+
+        parallel = parallelArg.getValue();
+        if(sampling_method == 2)
+        {
+            LOG(LOG_INFO) << "CPUs to use                " << (parallel ? std::to_string(parallel) : "all");
+        }
+
         svg_path = svgArg.getValue();
         LOG(LOG_INFO) << "Path to store the SVG      " << svg_path;
+
         pov_path = povArg.getValue();
         LOG(LOG_INFO) << "Path to store the povray   " << pov_path;
+
         data_path = dataPathArg.getValue();
         LOG(LOG_INFO) << "Path to store the data     " << data_path;
+
         conf_path = confPathArg.getValue();
         LOG(LOG_INFO) << "Path to store the raw data " << conf_path;
+
         tmp_path = tmpPathArg.getValue();
         LOG(LOG_INFO) << "Path for temporary files   " << tmp_path;
     }
