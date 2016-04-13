@@ -11,7 +11,9 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
     RollingMean rmean1(100), rmean2(100);
 
     UniformRNG rngMC(o.seedMC + 1);
-    std::ofstream oss("equilibration.dat", std::ofstream::out);
+
+    if(Logging::verbosity >= LOG_DEBUG)
+        std::ofstream oss("equilibration.dat", std::ofstream::out);
 
     std::unique_ptr<Walker> w2;
     prepare(w2);
@@ -41,7 +43,9 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
                     w2->undoChange();
             }
         }
-        oss << t_eq << " " << w1->L() << " " << w2->L() << " " << w1->A() << " " << w2->A() << std::endl;
+
+        if(Logging::verbosity >= LOG_DEBUG)
+            oss << t_eq << " " << w1->L() << " " << w2->L() << " " << w1->A() << " " << w2->A() << std::endl;
 
         // fluctuation within 1%
         if(std::abs(rmean1.add(S(w1))/rmean2.add(S(w2)) - 1) < 0.01)
