@@ -18,8 +18,5 @@ module load gcc
 mkdir -p rawConf
 mkdir -p rawData
 
-{% if count > 1 %}
 #$ -t 1-{{ count }}:1
-{% endif %}
-
-$(sed -n ${SGE_TASK_ID}'p' {{ name }}.lst) --parallel {{ parallel }} --tmp $TMPDIR
+$(sed -n ${SGE_TASK_ID}'p' {{ name }}.lst){% if parallel %} --parallel {{ parallel }}{% endif %} --tmp $TMPDIR
