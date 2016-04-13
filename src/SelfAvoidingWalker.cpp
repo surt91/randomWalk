@@ -54,6 +54,8 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
             symmetry = rng() * tMatrix3.size(); // integer between 0 and 3
             undo_value = iMatrix3[symmetry];
             break;
+        default:
+            throw std::invalid_argument("Pivot algorithm only implemented for d=2 and d=3");
     }
 
     // do only recalculate, if pivot was successful

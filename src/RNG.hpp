@@ -31,6 +31,6 @@ class UniformRNG
 
     protected:
         std::mt19937 rng;
-        std::uniform_real_distribution<double>distribution;
+        std::uniform_real_distribution<double> distribution;
         std::function<double()> uniform;
 };
