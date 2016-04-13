@@ -43,15 +43,19 @@ def file_not_empty(fpath):
 
 
 class Simulation():
-    def __init__(self, number_of_steps, thetas, iterations, **kwargs):
+    def __init__(self, number_of_steps, thetas, iterations, sampling, **kwargs):
 
         self.Ns = number_of_steps
         self.n = iterations
 
+        # Wang landau does not have a theta
+        if sampling == 2:
+            thetas = (0,)
+
         self.instances = []
         for N in number_of_steps:
             for T in thetas:
-                self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
+                self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, sampling=sampling, **kwargs))
 
     def hero(self):
         logging.info("Create .sge Files for Hero")
@@ -106,8 +110,13 @@ class Simulation():
     # start the calculation
     def __call__(self):
         logging.info("Executing {} jobs".format(len(self.instances)))
-        with Pool() as p:
-            p.map(run_instance, self.instances)
+        # run only one Wang landau at a time, but many metropolis
+        if sampling == 2:
+            for i in self.instances:
+                i()
+        else:
+            with Pool() as p:
+                p.map(run_instance, self.instances)
 
 
 class SimulationInstance():
@@ -131,10 +140,6 @@ class SimulationInstance():
         self.w = observable
         self.m = sampling
 
-        # Wang landau does not have a theta
-        if sampling == 2:
-            self.T = (0,)
-
         self.loadFile = None
 
         if not os.path.exists(self.rawData):
@@ -146,7 +151,7 @@ class SimulationInstance():
         if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
 
-        self.basename = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w)
+        self.basename = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m)
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)
         if self.rawConf:
             self.confname = "{}/{}.dat".format(self.rawConf, self.basename)
