@@ -11,7 +11,7 @@ import jinja2
 class Gnuplot():
     def __init__(self, number_of_steps, typ, seedMC, seedR, iterations,
                        dimension, thetas, directory, rawData, rawConf,
-                       observable, method, akl, sampling):
+                       observable, method, akl, sampling, parallel):
         self.N = number_of_steps
         self.T = thetas
         self.iterations = iterations

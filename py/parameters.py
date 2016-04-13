@@ -14,7 +14,7 @@ parameters = {
     # random seed for initial configuration
     "seedR": 42,
     # how many iterations (i.e. sweeps) per theta and N
-    "iterations": 100000,
+    "iterations": 10,
     # dimension
     "dimension": 2,
 
@@ -38,5 +38,9 @@ parameters = {
     # akl heuristic
     "akl": False,
     # which smapling methd
-    "sampling": 1,  # 1: metropolis, 2: wang landau
+    "sampling": 2,  # 1: metropolis, 2: wang landau
+
+    # how many cpus (only for wang landau)
+    # for HERO: 1 - 12
+    "parallel": 10,
 }

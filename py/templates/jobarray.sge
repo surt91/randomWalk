@@ -9,9 +9,17 @@
 
 #$ -j y
 
+{% if parallel %}
+#$ -pe smp {{ parallel }}
+#$ -R y
+{% endif %}
+
 module load gcc
 mkdir -p rawConf
 mkdir -p rawData
 
+{% if count > 1 %}
 #$ -t 1-{{ count }}:1
-$(sed -n ${SGE_TASK_ID}'p' {{ name }}.lst) --tmp $TMPDIR
+{% endif %}
+
+$(sed -n ${SGE_TASK_ID}'p' {{ name }}.lst) --parallel {{ parallel }} --tmp $TMPDIR

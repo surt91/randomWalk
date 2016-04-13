@@ -47,6 +47,11 @@ class Simulation():
 
         self.Ns = number_of_steps
         self.n = iterations
+        self.sampling = sampling
+        self.kwargs = kwargs
+        if self.kwargs["parallel"] and sampling != 2:
+            print("sampling method", sampling, "does not use parallelism, set parallel to None")
+            raise
 
         # Wang landau does not have a theta
         if sampling == 2:
@@ -105,13 +110,17 @@ class Simulation():
                         f.write(" ".join(i.get_cmd()) + "\n")
                         ctr += 1
             with open(os.path.join("HERO", name+".sge"), "w") as f:
-                f.write(template.render(name=name, count=ctr, hours=math.ceil(getSec(N)*self.n/3600*2), mb=getMem(N)))
+                f.write(template.render(name=name,
+                                        count=ctr,
+                                        hours=math.ceil(getSec(N)*self.n/3600*2),
+                                        mb=getMem(N),
+                                        parallel=self.kwargs["parallel"]))
 
     # start the calculation
     def __call__(self):
         logging.info("Executing {} jobs".format(len(self.instances)))
         # run only one Wang landau at a time, but many metropolis
-        if sampling == 2:
+        if self.sampling == 2:
             for i in self.instances:
                 i()
         else:
@@ -123,7 +132,7 @@ class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
                        dimension, theta, directory,
                        rawData, rawConf, observable,
-                       method, akl, sampling):
+                       method, akl, sampling, parallel):
 
         self.N = steps
         self.n = iterations
@@ -139,6 +148,7 @@ class SimulationInstance():
         self.akl = akl
         self.w = observable
         self.m = sampling
+        self.parallel = parallel
 
         self.loadFile = None
 
@@ -151,7 +161,7 @@ class SimulationInstance():
         if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
 
-        self.basename = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m)
+        self.basename = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.d)
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)
         if self.rawConf:
             self.confname = "{}/{}.dat".format(self.rawConf, self.basename)
