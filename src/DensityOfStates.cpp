@@ -4,9 +4,9 @@ DensityOfStates::DensityOfStates(int bins, double lower, double upper)
     : bins(bins),
       lower(lower),
       upper(upper),
-      data(std::vector<double>(bins, 0))
+      binwidth((upper - lower) / bins),
+      data(bins, 0)
 {
-    binwidth = (upper - lower) / bins;
     fail = 1.0;
 }
 

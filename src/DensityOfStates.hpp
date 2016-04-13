@@ -20,10 +20,10 @@ class DensityOfStates
         DensityOfStates& operator+=(const DensityOfStates &other);
 
     protected:
-        int bins;
-        double lower;
-        double upper;
-        double binwidth;
+        const int bins;
+        const double lower;
+        const double upper;
+        const double binwidth;
 
         double fail;
         std::vector<double> data;

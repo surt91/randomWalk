@@ -4,11 +4,11 @@ Histogram::Histogram(int bins, double lower, double upper)
     : bins(bins),
       lower(lower),
       upper(upper),
+      binwidth((upper - lower) / bins),
       counts(bins, 0)
 {
     cur_min = 0;
     total = 0;
-    binwidth = (upper - lower) / bins;
 }
 
 int Histogram::min() const

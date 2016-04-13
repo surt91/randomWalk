@@ -20,10 +20,10 @@ class Histogram
         friend std::ostream& operator<<(std::ostream& os, const Histogram &obj);
 
     protected:
-        int bins;
-        double lower;
-        double upper;
-        double binwidth;
+        const int bins;
+        const double lower;
+        const double upper;
+        const double binwidth;
 
         int cur_min;
         int total;
