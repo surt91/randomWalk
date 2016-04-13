@@ -2,7 +2,8 @@
 
 void prepare(const Cmd &o, std::unique_ptr<Walker>& w, std::function<double(std::unique_ptr<Walker>&)>& S)
 {
-    UniformRNG rngReal(o.seedRealization);
+    // do use different seeds, if using openmp
+    UniformRNG rngReal(o.seedRealization * (omp_get_thread_num()+1));
 
     if(o.type == WT_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
@@ -211,7 +212,6 @@ void wang_landau(const Cmd &o)
     const double flatness_criterion = 0.8;
 
     clock_t begin = clock();
-    UniformRNG rngMC(o.seedMC);
     std::ofstream oss(o.data_path, std::ofstream::out);
     if(!oss.good())
     {
@@ -219,16 +219,12 @@ void wang_landau(const Cmd &o)
         throw std::invalid_argument("Path is not writable");
     }
 
-    std::unique_ptr<Walker> w;
-    std::function<double(std::unique_ptr<Walker>&)> S;
-    prepare(o, w, S);
-
     // Histogram and DensityOfStates need the same binning ... probably
-    double lb = getLowerBound(o);
-    double ub = getUpperBound(o) + 1;
+    const double lb = getLowerBound(o);
+    const double ub = getUpperBound(o) + 1;
 
     // do not make a bin for every integer, since not every integer is possible
-    int bins = (ub-lb)/3;
+    const int bins = (ub-lb)/3;
     LOG(LOG_DEBUG) << lb << " " << ub << " " << bins;
 
     Histogram H(bins, lb, ub);
@@ -239,32 +235,48 @@ void wang_landau(const Cmd &o)
     oss << "# one line per iteration of the wang landau algorithm\n";
     oss << g.binCentersString() << std::endl;
 
-    for(int i=0; i<o.iterations; ++i)
+    // run in parallel,
+    // use dynamic schedule, since single iterations may need strongly fluctuating time
+    #pragma omp parallel firstprivate(H, g) shared(oss)
     {
-        double lnf = 1;
-        while(lnf > lnf_min)
-        {
-            LOG(LOG_TOO_MUCH) << "ln f " << lnf;
-            do
-            {
-                double oldS = S(w);
-                w->change(rngMC);
-                double p_acc = exp(g[oldS] - g[S(w)]);
-                if(p_acc < rngMC())
-                    w->undoChange();
+        // rngs should be local to the threads, with different seeds
+        // FIXME: think about a better seed
+        UniformRNG rngMC(o.seedMC * (omp_get_thread_num()+1));
 
-                // the paper is not clear whether this is done only if the
-                // change is accepted, but I assume always, as usual for MC
-                g[S(w)] += lnf;
-                H.add(S(w));
-            } while(H.min() < flatness_criterion * H.mean());
-            // run until the histogram is flat and we have a few samples
-            H.reset();
-            lnf /= 2;
+        std::unique_ptr<Walker> w;
+        std::function<double(std::unique_ptr<Walker>&)> S;
+        prepare(o, w, S);
+
+        #pragma omp for schedule(dynamic)
+        for(int i=0; i<o.iterations; ++i)
+        {
+            double lnf = 1;
+            while(lnf > lnf_min)
+            {
+                LOG(LOG_TOO_MUCH) << "t" << omp_get_thread_num() << " : ln f " << lnf;
+                do
+                {
+                    double oldS = S(w);
+                    w->change(rngMC);
+                    double p_acc = exp(g[oldS] - g[S(w)]);
+                    if(p_acc < rngMC())
+                        w->undoChange();
+
+                    // the paper is not clear whether this is done only if the
+                    // change is accepted, but I assume always, as usual for MC
+                    g[S(w)] += lnf;
+                    H.add(S(w));
+                } while(H.min() < flatness_criterion * H.mean());
+                // run until the histogram is flat and we have a few samples
+                H.reset();
+                lnf /= 2;
+            }
+            // save g to file
+            #pragma omp critical
+            oss << g.dataString() << std::endl;
+
+            g.reset();
         }
-        // save g to file
-        oss << g.dataString() << std::endl;
-        g.reset();
     }
 
     LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
@@ -277,9 +289,9 @@ void wang_landau(const Cmd &o)
     std::string cmd("gzip -f ");
     system((cmd+o.data_path).c_str());
 
-    if(!o.svg_path.empty())
-        w->svg(o.svg_path, true);
+    //~ if(!o.svg_path.empty())
+        //~ w->svg(o.svg_path, true);
 
-    if(!o.pov_path.empty())
-        w->pov(o.pov_path, true);
+    //~ if(!o.pov_path.empty())
+        //~ w->pov(o.pov_path, true);
 }
