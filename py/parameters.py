@@ -1,6 +1,6 @@
 from numpy import arange
 
-basename = "t{typ}_w{observable}_N{steps}_n{iterations}_x{seedMC}_y{seedR}_T{theta:.5f}"
+basename = "m{sampling}_t{typ}_w{observable}_N{steps}_n{iterations}_x{seedMC}_y{seedR}_T{theta:.5f}"
 
 #~ sizes = (  32,  46,  64,  92, 128, 180, 256, 362, 512, 724, 1024, 1448, 2048)
 sizes = (200,)

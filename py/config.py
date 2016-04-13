@@ -16,7 +16,7 @@ def run_instance(i):
 
 def bootstrap(xRaw, n_resample=100, f=np.mean):
     """Bootstrap resampling, returns mean and stderror"""
-    if not xRaw:
+    if not len(xRaw):
         return float("NaN"), float("NaN")
     bootstrapSample = [f(np.random.choice(xRaw, len(xRaw), replace=True)) for i in range(n_resample)]
     return np.mean(bootstrapSample), np.std(bootstrapSample)
@@ -130,6 +130,10 @@ class SimulationInstance():
         self.akl = akl
         self.w = observable
         self.m = sampling
+
+        # Wang landau does not have a theta
+        if sampling == 2:
+            self.T = (0,)
 
         self.loadFile = None
 
