@@ -144,11 +144,6 @@ Cmd::Cmd(int argc, char** argv)
         {
             LOG(LOG_INFO) << "simple sampling            ";
         }
-        else
-        {
-            theta = thetaArg.getValue();
-            LOG(LOG_INFO) << "Theta                      " << theta;
-        }
 
         wantedObservable = (wanted_observable_t) wantedobservableArg.getValue();
         LOG(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
@@ -160,6 +155,12 @@ Cmd::Cmd(int argc, char** argv)
         sampling_method = (sampling_method_t) samplingMethodArg.getValue();
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
 
+        theta = thetaArg.getValue();
+        if(!simpleSampling && sampling_method == SM_METROPOLIS)
+        {
+            LOG(LOG_INFO) << "Theta                      " << theta;
+        }
+
         parallel = parallelArg.getValue();
         if(sampling_method == 2)
         {
@@ -167,16 +168,25 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         svg_path = svgArg.getValue();
-        LOG(LOG_INFO) << "Path to store the SVG      " << svg_path;
+        if(!svg_path.empty())
+        {
+            LOG(LOG_INFO) << "Path to store the SVG      " << svg_path;
+        }
 
         pov_path = povArg.getValue();
-        LOG(LOG_INFO) << "Path to store the povray   " << pov_path;
+        if(!svg_path.empty())
+        {
+            LOG(LOG_INFO) << "Path to store the povray   " << pov_path;
+        }
 
         data_path = dataPathArg.getValue();
         LOG(LOG_INFO) << "Path to store the data     " << data_path;
 
         conf_path = confPathArg.getValue();
-        LOG(LOG_INFO) << "Path to store the raw data " << conf_path;
+        if(!conf_path.empty())
+        {
+            LOG(LOG_INFO) << "Path to store the config   " << conf_path;
+        }
 
         tmp_path = tmpPathArg.getValue();
         LOG(LOG_INFO) << "Path for temporary files   " << tmp_path;
