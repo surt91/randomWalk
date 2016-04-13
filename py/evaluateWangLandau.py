@@ -65,6 +65,9 @@ def run():
                             "{}/WL_{}.dat".format(out, name)
                             )
 
+    print("plot with gnuplot")
+    print('p "data/WL_m2_t1_w2_N30_n100_x1337_y42_T0.00000.dat" u 1:3:2:4 w xye')
+
 
 if __name__ == "__main__":
     run()
