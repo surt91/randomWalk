@@ -28,6 +28,7 @@ QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
 CXX	= g++
 #CXX	= clang++
+#CXX	= icpc
 
 #COPT = -g
 COPT = -O3 -flto -mtune=native -fomit-frame-pointer
