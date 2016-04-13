@@ -48,8 +48,9 @@ class Simulation():
         self.Ns = number_of_steps
         self.n = iterations
         self.sampling = sampling
+        self.parallel = kwargs["parallel"]
         self.kwargs = kwargs
-        if self.kwargs["parallel"] and sampling != 2:
+        if self.parallel and sampling != 2:
             print("sampling method", sampling, "does not use parallelism, set parallel to None")
             raise
 
@@ -77,23 +78,35 @@ class Simulation():
 
         # time per sweep
         def getSec(N):
-            t = 0 # time for 1000 sweeps
-            if N <=64:
-                t = 5
-            elif N <= 128:
-                t = 15
-            elif N <=256:
-                t = 50
-            elif N <= 512:
-                t = 250
-            elif N <= 1024:
-                t = 1500
-            elif N <= 2048:
-                t = 15000
-            else:
-                t = 50000
+            if self.sampling == 1:
+                t = 0 # time for 1000 sweeps
+                if N <= 64:
+                    t = 5
+                elif N <= 128:
+                    t = 15
+                elif N <=256:
+                    t = 50
+                elif N <= 512:
+                    t = 250
+                elif N <= 1024:
+                    t = 1500
+                elif N <= 2048:
+                    t = 15000
+                else:
+                    t = 50000
 
-            return t/1000 * 3 # factor 3 to be sure
+                return t/1000 * 3 # factor 3 to be sure
+
+            if self.sampling == 2:
+                # no data yet
+                if N <= 30:
+                    t = 10
+                elif N <= 200:
+                    t = 7000
+                else:
+                    t = 86000*3  # say, 3 days
+
+                return t/self.parallel * 3 # factor 3 to be sure
 
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
@@ -114,7 +127,7 @@ class Simulation():
                                         count=ctr,
                                         hours=math.ceil(getSec(N)*self.n/3600*2),
                                         mb=getMem(N),
-                                        parallel=self.kwargs["parallel"]))
+                                        parallel=self.parallel))
 
     # start the calculation
     def __call__(self):
