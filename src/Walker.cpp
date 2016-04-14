@@ -123,8 +123,8 @@ int Walker::nRN() const
 // set the random numbers such that we get an L shape
 void Walker::degenerate()
 {
-    for(size_t i=0; i<random_numbers.size(); ++i)
-        random_numbers[i] = .99 / ceil((double) d * (i+1)/random_numbers.size());
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i] = .99 / ceil((double) d * (i+1)/numSteps);
 
     stepsDirty = true;
     pointsDirty = true;
