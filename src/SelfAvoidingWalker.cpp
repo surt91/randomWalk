@@ -66,6 +66,8 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
     }
     else
         undo_index = -1; // flag, that undo is not possible/needed
+
+    naiveChange(rng() * nRN(), rng());
 }
 
 void SelfAvoidingWalker::undoChange()
@@ -74,6 +76,7 @@ void SelfAvoidingWalker::undoChange()
     if(undo_index == -1)
         return;
 
+    naiveChangeUndo();
     pivot(undo_index, undo_value);
 
     pointsDirty = true;
@@ -154,6 +157,63 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
     }
 
     return !failed;
+}
+
+void SelfAvoidingWalker::naiveChangeUndo()
+{
+    m_steps[undo_naive_index] = undo_naive_step;
+
+    points(undo_naive_index+1);
+    hullDirty = true;
+}
+
+bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
+{
+    steps(); // steps need to be initialized
+    undo_naive_index = idx;
+    undo_naive_step = m_steps[idx];
+
+    Step newStep(d, rn);
+    // test if something changes
+    if(newStep == m_steps[idx])
+        return true;
+
+    m_steps[idx] = newStep;
+    auto p = points(idx+1);
+
+    if(!checkOverlapFree(p))
+    {
+        m_steps[idx] = undo_naive_step;
+        points(idx+1);
+        return false;
+    }
+
+    hullDirty = true;
+
+    return true;
+}
+
+//~ bool SelfAvoidingWalker::slitheringSnake(const int front, const double rn)
+//~ {
+    //~ if(front)
+//~ }
+
+bool SelfAvoidingWalker::checkOverlapFree(std::vector<Step> &l) const
+{
+    std::unordered_set<Step> steps;
+    steps.reserve(l.size());
+
+    auto it(l.begin());
+    Step p(std::vector<int>(d, 0));
+    while(it != l.end())
+    {
+        p += *it;
+        if(steps.count(p))
+            return false;
+        steps.insert(p);
+        ++it;
+    }
+    return true;
 }
 
 bool SelfAvoidingWalker::checkOverlapFree(std::list<double> &l) const

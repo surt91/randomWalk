@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <iterator>
 #include <unordered_set>
 
 #include "Logging.hpp"
@@ -152,6 +153,13 @@ class SelfAvoidingWalker : public Walker
         Step transform(Step &p, const std::vector<int> &m) const;
         bool pivot(const int index, const int op);
 
+        int undo_naive_index;
+        Step undo_naive_step;
+        Step undo_step;
+        bool naiveChange(const int idx, const double rn);
+        void naiveChangeUndo();
+
         std::list<double> dim(int N);
         bool checkOverlapFree(std::list<double> &l) const;
+        bool checkOverlapFree(std::vector<Step> &l) const;
 };
