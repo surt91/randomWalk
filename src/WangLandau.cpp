@@ -91,12 +91,15 @@ void WangLandau::run()
                 {
                     double oldS = S(w);
                     w->change(rngMC);
-                    double p_acc = exp(g[oldS] - g[S(w)]);
-                    if(p_acc < rngMC())
-                        w->undoChange();
+                    ++trys;
 
-                    // the paper is not clear whether this is done only if the
-                    // change is accepted, but I assume always, as usual for MC
+                    double p_acc = exp(g[oldS] - g[S(w)]);
+                    if(!g.checkBounds(S(w)) || p_acc < rngMC())
+                    {
+                        w->undoChange();
+                        ++fail;
+                    }
+
                     g[S(w)] += lnf;
                     H.add(S(w));
                 } while(H.min() < flatness_criterion * H.mean());
@@ -106,7 +109,9 @@ void WangLandau::run()
             }
             // save g to file
             #pragma omp critical
-            oss << g.dataString() << std::endl;
+            {
+                oss << g.dataString() << std::endl;
+            }
 
             g.reset();
         }

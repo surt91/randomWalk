@@ -29,6 +29,8 @@ class Simulation
 
     protected:
         Cmd o;
+        int fail;
+        int trys;
         void prepare(std::unique_ptr<Walker>& w);
         std::function<double(std::unique_ptr<Walker>&)> S;
         std::ofstream oss;

@@ -5,6 +5,8 @@ Simulation::Simulation(const Cmd &o)
       oss(o.data_path, std::ofstream::out)
 {
     begin = clock();
+    fail = 0;
+
     if(!oss.good())
     {
         LOG(LOG_ERROR) << "Path is not writable " << o.data_path;
@@ -21,10 +23,12 @@ Simulation::Simulation(const Cmd &o)
 
 Simulation::~Simulation()
 {
+    LOG(LOG_INFO) << "# rejected changes: " << fail << " (" << (100.*fail / trys) << "%)";
     LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
     LOG(LOG_INFO) << "# max vmem: " << vmPeak();
 
     // save runtime statistics
+    oss << "# rejected changes: " << fail << " (" << (100.*fail / trys) << "%)" << "\n";
     oss << "# time in seconds: " << time_diff(begin, clock()) << "\n";
     oss << "# max vmem: " << vmPeak() << std::endl;
 

@@ -60,9 +60,14 @@ void FastWangLandau::run()
                             ++t;
                             double oldS = S(w);
                             w->change(rngMC);
+                            ++trys;
+
                             double p_acc = exp(g[oldS] - g[S(w)]);
                             if(!g.checkBounds(S(w)) || p_acc < rngMC())
+                            {
                                 w->undoChange();
+                                ++fail;
+                            }
 
                             g[S(w)] += lnf;
                             H.add(S(w));
@@ -72,7 +77,10 @@ void FastWangLandau::run()
                     H.reset();
                     lnf /= 2;
                     if(lnf <= 1/t)
+                    {
                         secondPhase = true;
+                        LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : begin phase 2 at " << t;
+                    }
                 }
                 else
                 {

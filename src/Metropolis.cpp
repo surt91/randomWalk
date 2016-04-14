@@ -60,7 +60,6 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
 void Metropolis::run()
 {
-    int fail = 0;
     int t_eq = 0;
     UniformRNG rngMC(o.seedMC);
 
@@ -83,6 +82,7 @@ void Metropolis::run()
             // change one random number to another random number
             double oldS = S(w);
             w->change(rngMC);
+            ++trys;
 
             if(!o.simpleSampling)
             {
@@ -106,9 +106,4 @@ void Metropolis::run()
             oss << i << " " << w->L() << " " << w->A() << std::endl;
         }
     }
-
-    LOG(LOG_INFO) << "# rejected changes: " << fail << " (" << (100. * fail/((o.iterations+t_eq)*o.steps)) << "%)";
-
-    // save runtime statistics
-    oss << "# rejected changes: " << fail << " (" << (100. * fail/(o.iterations*o.steps)) << "%)" << "\n";
 }

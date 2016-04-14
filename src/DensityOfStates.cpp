@@ -14,7 +14,7 @@ bool DensityOfStates::checkBounds(double value)
 {
     if(value > upper || value < lower)
     {
-        LOG(LOG_ERROR) << "value out of bounds: " << value << " not in [" << lower << "," << upper << "]";
+        //~ LOG(LOG_ERROR) << "value out of bounds: " << value << " not in [" << lower << "," << upper << "]";
         return false;
     }
     return true;

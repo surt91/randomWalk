@@ -13,6 +13,8 @@ class DensityOfStates
         double& operator[](double value);
         void reset();
 
+        bool checkBounds(double value);
+
         std::string binCentersString();
         std::string dataString();
 
@@ -27,6 +29,4 @@ class DensityOfStates
 
         double fail;
         std::vector<double> data;
-
-        bool checkBounds(double value);
 };
