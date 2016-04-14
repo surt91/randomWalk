@@ -15,6 +15,7 @@ CPP	 := main.cpp \
         Simulation.cpp \
         Metropolis.cpp \
         WangLandau.cpp \
+        FastWangLandau.cpp \
         RNG.cpp \
         Histogram.cpp \
         DensityOfStates.cpp \
