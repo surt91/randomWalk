@@ -194,8 +194,8 @@ def run():
                 f.write("{} {} {} {}\n".format(i[0], i[1], i[2]-log(area), i[3]))
 
     print("plot with gnuplot")
-    #~ print("p " + ", ".join(i + " u 1:3:2:4 w xyerr" for n, i in enumerate(outfiles)))
-    print('p "data/whole_m2_t1_w2_N30_n100_x1337_y42_T0.00000.dat" u 1:3:2:4 w xye')
+    print("p " + ", ".join(i + " u 1:3:2:4 w xyerr" for n, i in enumerate(outfiles)))
+    print('p "{}" u 1:3:2:4 w xye'.format(whole_distribution_file))
 
 
 if __name__ == "__main__":

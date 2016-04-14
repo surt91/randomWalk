@@ -61,12 +61,13 @@ def run():
                                        theta=0,
                                        **param.parameters
                                        )
+        outname = "{}/WL_{}.dat".format(out, name)
         data = process_data("{}/{}.dat".format(d, name),
-                            "{}/WL_{}.dat".format(out, name)
+                            outname
                             )
 
     print("plot with gnuplot")
-    print('p "data/WL_m2_t1_w2_N30_n100_x1337_y42_T0.00000.dat" u 1:3:2:4 w xye')
+    print('p "{}" u 1:3:2:4 w xye'.format(outname))
 
 
 if __name__ == "__main__":
