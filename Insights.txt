@@ -1,0 +1,15 @@
+Insights, collected on the way
+
+* Metropolis Sampling
+    + works
+    - one needs to guess some temperature
+    + too many temperatures do not harm
+    + one easily (automated by a script) sees if there are not enough
+    + it is easy to calculate more
+
+* Wang Landau Sampling
+    + yields very nice results
+    + no need for post processing
+    + needs not parameters like temperatures
+    - take virtually (and probably also literally) forever,
+      especially for the self avoiding types
