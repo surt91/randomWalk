@@ -56,11 +56,15 @@ class Simulation():
 
         # Wang landau does not have a theta
         if sampling == 2:
-            thetas = (0,)
+            thetas = {0: (0,)}
 
         self.instances = []
         for N in number_of_steps:
-            for T in thetas:
+            try:
+                theta_for_N = thetas[N]
+            except KeyError:
+                theta_for_N = thetas[0]
+            for T in theta_for_N:
                 self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, sampling=sampling, **kwargs))
 
     def hero(self):

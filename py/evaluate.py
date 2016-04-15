@@ -41,7 +41,7 @@ def getDistribution(infile, outfile, histfile, theta, steps, num_bins=50):
         try:
             a = np.loadtxt(infile)
         except FileNotFoundError:
-            logging.error("cannot find " + self.filename)
+            logging.error("cannot find " + infile)
             return
 
     col = param.parameters["observable"]
@@ -148,7 +148,11 @@ def run():
 
     for N in steps:
         list_of_ps_log = []
-        for T in thetas:
+        try:
+            theta_for_N = thetas[N]
+        except KeyError:
+            theta_for_N = thetas[0]
+        for T in theta_for_N:
             name = param.basename.format(steps=N,
                                          theta=T,
                                          **param.parameters
@@ -169,7 +173,11 @@ def run():
             zce.append(zce[-1] + i[1])
 
         whole_distribution = []
-        for n, T in enumerate(thetas):
+        try:
+            theta_for_N = thetas[N]
+        except KeyError:
+            theta_for_N = thetas[0]
+        for n, T in enumerate(theta_for_N):
             name = param.basename.format(steps=N,
                                          theta=T,
                                          **param.parameters
