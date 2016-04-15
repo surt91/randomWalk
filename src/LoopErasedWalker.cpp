@@ -16,7 +16,7 @@ const std::vector<Step> LoopErasedWalker::steps() const
     int N = random_numbers.size();
     std::unordered_map<Step, int> occupied_tiles;
     // at most as many steps as random numbers, i.e. no loop erasure
-    std::vector<Step> ret(numSteps+1);
+    std::vector<Step> ret(numSteps);
 
     // p will keep track where the head is
     Step p(std::vector<int>(d, 0));
@@ -24,7 +24,7 @@ const std::vector<Step> LoopErasedWalker::steps() const
 
     int i=0;
     int index=0;
-    while(index <= numSteps)
+    while(index < numSteps)
     {
         // generate more random numbers if necessary
         if(i >= N)
