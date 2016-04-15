@@ -106,8 +106,8 @@ void benchmark()
             case WT_LOOP_ERASED_RANDOM_WALK:
                 o.steps = 10000;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
-                o.benchmark_L = 4064.59205479;
-                o.benchmark_A = 481541;
+                o.benchmark_L = 4063.70552402;
+                o.benchmark_A = 481513.5;
                 o.iterations = 10;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:

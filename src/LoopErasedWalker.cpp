@@ -20,11 +20,10 @@ const std::vector<Step> LoopErasedWalker::steps() const
 
     // p will keep track where the head is
     Step p(std::vector<int>(d, 0));
-    ret[0] = p; // start at origin
     occupied_tiles.insert({p, 0});
 
-    int i=1;
-    int index=1;
+    int i=0;
+    int index=0;
     while(index <= numSteps)
     {
         // generate more random numbers if necessary
