@@ -23,22 +23,26 @@ ConvexHullQHull::ConvexHullQHull(const std::vector<Step>& points, bool akl)
         // not full dimensional
         // discard one dimension, calculate again
         // this is easy since the points are on a lattice
-        LOG(LOG_ERROR) << e.what();
+        LOG(LOG_WARNING) << "Not full dimensional, strip one axis";
+        LOG(LOG_TOO_MUCH) << e.what();
 
         std::vector<int> dimMap(d-1);
         for(int i=0; i<d; ++i)
         {
             int j = 0;
-            while(interiorPoints[j][i] == 0 && j<n)
+            while(j < n && interiorPoints[j][i] == 0)
                 ++j;
-            if(j == n-1)
+            if(j == n)
             {
                 for(int l=0, k=0; l<d; ++l)
                     if(l != i)
-                        dimMap[k++] = i;
+                        dimMap[k++] = l;
                 break;
             }
         }
+
+        LOG(LOG_TOO_MUCH) << "points: " << interiorPoints;
+        LOG(LOG_DEBUG) << "axis left: " << dimMap;
 
         delete[] coords;
         --d;
@@ -56,6 +60,7 @@ ConvexHullQHull::ConvexHullQHull(const std::vector<Step>& points, bool akl)
         }
         catch(orgQhull::QhullError &e)
         {
+            LOG(LOG_WARNING) << "Two dimensions less than fully dimensional";
             m_L = 0;
             m_A = 0;
         }
