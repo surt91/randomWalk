@@ -67,7 +67,7 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
     else
         undo_index = -1; // flag, that undo is not possible/needed
 
-    naiveChange(rng() * nRN(), rng());
+    //~ naiveChange(rng() * nRN(), rng());
 }
 
 void SelfAvoidingWalker::undoChange()
@@ -76,7 +76,7 @@ void SelfAvoidingWalker::undoChange()
     if(undo_index == -1)
         return;
 
-    naiveChangeUndo();
+    //~ naiveChangeUndo();
     pivot(undo_index, undo_value);
 
     pointsDirty = true;
