@@ -2,6 +2,7 @@
 
 from math import exp, log, ceil
 import logging
+from multiprocessing import Pool
 
 import numpy as np
 from scipy.interpolate import interp1d
@@ -224,20 +225,23 @@ def run():
         except KeyError:
             theta_for_N = thetas[0]
 
-        # gather statistics over all data
-        # TODO: this can be easily parallelized
-        dataDict = {}
+        # find names of needed files
         nameDict = {}
         for T in theta_for_N:
             nameDict.update({T: param.basename.format(steps=N,
-                                                  theta=T,
-                                                  **param.parameters
+                                                      theta=T,
+                                                      **param.parameters
                                                  )
-                        }
-                       )
-            filename = "{}/{}.dat".format(d, nameDict[T])
-            data = getDataFromFile(filename, column)
-            dataDict.update({T: data})
+                            }
+                           )
+
+        with Pool() as p:
+            tmp = p.starmap(getDataFromFile, [("{}/{}.dat".format(d, nameDict[T]), column) for T in theta_for_N])
+
+        # load data
+        dataDict = {theta_for_N[i]: tmp[i] for i in range(len(tmp))}
+
+        # gather statistics over all data
         minimum, maximum, num_samples = getStatistics(dataDict)
 
         # https://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
