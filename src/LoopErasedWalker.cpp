@@ -42,14 +42,26 @@ const std::vector<Step> LoopErasedWalker::steps() const
         if(it != occupied_tiles.end())
         {
             int tmp = it->second;
-            for(int j=tmp+1; j<index; ++j)
+            // zero is a special case
+            if(tmp == 0)
             {
-                // loop -> p is the same
-                p += ret[j];
-                occupied_tiles.erase(p);
+                occupied_tiles.clear();
+                p = Step(std::vector<int>(d, 0));
+                occupied_tiles.insert({p, 0});
+                index = -1;
             }
-            p += s;
-            index = tmp;
+            else
+            {
+                //~ std::cout << "tmp " << tmp << std::endl;
+                for(int j=tmp+1; j<index; ++j)
+                {
+                    // loop -> p is the same
+                    p += ret[j];
+                    occupied_tiles.erase(p);
+                }
+                p += s;
+                index = tmp;
+            }
         }
         else
         {
@@ -57,8 +69,8 @@ const std::vector<Step> LoopErasedWalker::steps() const
             occupied_tiles.insert({p, index});
         }
 
-        ++i;
         ++index;
+        ++i;
     }
     random_numbers_used = i;
     LOG(LOG_TOO_MUCH) << "Random numbers used: " << random_numbers_used;
