@@ -10,7 +10,7 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
     int t_eq = 0;
     RollingMean rmean1(100), rmean2(100);
 
-    UniformRNG rngMC(o.seedMC + 1);
+    UniformRNG rngMC((o.seedMC+1)*0x243F6A8885A3);
 
     if(Logger::verbosity >= LOG_DEBUG)
         std::ofstream oss("equilibration.dat", std::ofstream::out);
