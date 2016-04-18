@@ -16,6 +16,8 @@ logging.basicConfig(level=logging.INFO,
                 datefmt='%d.%m.%YT%H:%M:%S')
 logging.info("started")
 
+proposedTheta = []
+
 
 def getAutocorrTime(data):
     # just take the first 5000, should be sufficient
@@ -23,7 +25,7 @@ def getAutocorrTime(data):
     autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
     x0 = autocorr[0]
 
-    #~ # integrate only up to the first negative values
+    # integrate only up to the first negative values
     m = -1
     for n, i in enumerate(autocorr):
         if i < 0:
@@ -89,7 +91,7 @@ def getDistribution(infile, outfile, histfile, theta, steps, num_bins=50):
     return data_p
 
 
-def getZtheta(list_of_ps_log):
+def getZtheta(list_of_ps_log, thetas):
     # list_of_ps_log is a list in the form [[s1, ps_log1], [s2, ps_log2], ..]
     Ztheta_mean = [(0, 0)]
     for i in range(len(list_of_ps_log)-1):
@@ -116,6 +118,7 @@ def getZtheta(list_of_ps_log):
         # not enough overlap
         if len(Z) < 5:
             logging.warning("not enough overlap, insert an intermediate theta")
+            proposedTheta.append((thetas[i] + thetas[i+1]) / 2)
 
         Ztheta_mean.append(bootstrap(Z))
 
@@ -162,7 +165,7 @@ def run():
                                    "{}/hist_{}.dat".format(out, name),
                                    T, N)
             list_of_ps_log.append(data)
-            z = getZtheta(list_of_ps_log)
+            z = getZtheta(list_of_ps_log, theta_for_N)
             #~ outfiles.append('"{}/dist_{}.dat"'.format(out, name))
             outfiles.append('"{}/stiched_{}.dat"'.format(out, name))
 
@@ -204,6 +207,10 @@ def run():
     print("plot with gnuplot")
     print("p " + ", ".join(i + " u 1:3:2:4 w xyerr" for n, i in enumerate(outfiles)))
     print('p "{}" u 1:3:2:4 w xye'.format(whole_distribution_file))
+
+    if proposedTheta:
+        print("consider adding following thetas:")
+        print(" ".join(map(str, set(proposedTheta))))
 
 
 if __name__ == "__main__":
