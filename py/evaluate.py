@@ -36,26 +36,67 @@ def getAutocorrTime(data):
     logging.info("autocorrelation time: " + str(tau))
     return tau
 
-def getDistribution(infile, outfile, histfile, theta, steps, num_bins=50):
+
+def getDataFromFile(filename, col):
     try:
-        a = np.loadtxt(infile+".gz")
+        a = np.loadtxt(filename+".gz")
     except FileNotFoundError:
         try:
-            a = np.loadtxt(infile)
+            a = np.loadtxt(filename)
         except FileNotFoundError:
-            logging.error("cannot find " + infile)
+            logging.error("cannot find " + filename)
             return
-
-    col = param.parameters["observable"]
 
     data = a.transpose()[col]
     t_corr = getAutocorrTime(data)
     # do only keep statistically independent samples to not underestimate the error
-    data = data[::ceil(2*t_corr)]
+    return data[::ceil(2*t_corr)]
 
 
+def getStatistics(dataDict):
+    count = 0
+    minimum = 10**10
+    maximum = 0
+    for j in dataDict.values():
+        count += len(j)
+        minimum = min(minimum, np.min(j))
+        maximum = max(maximum, np.max(j))
+
+    return minimum, maximum, count
+
+
+def averageOverSameX(whole_distribution):
+    xDict = {}
+    for x, x_err, y, y_err in whole_distribution:
+        if x not in xDict:
+            xDict.update({x: []})
+        xDict[x].append([x_err, y, y_err])
+
+    out = []
+    for x, l in xDict.items():
+        l = list(zip(*l))
+        mean_x_err = np.mean(l[0])
+        mean_y = np.mean(l[1])
+        mean_y_err = np.mean(l[2])
+        out.append([x, mean_x_err, mean_y, mean_y_err])
+
+    return out
+
+def getDistribution(data, outfile, histfile, col, theta, steps, inBins=50):
+    """reads samples from a file, outputs the distribution
+
+    :param:data:        array of the samples (already purged from correlation)
+    :param:outfile:     file to write the rescaled distribution to
+    :param:histfile:    file to write the unrescaled distribution to
+    :param:col:         in which column is the observable to be measured
+    :param:theta:       at which "temperature" was the simulation done
+    :param:steps:       how many steps are the random walks long
+    :param:inBins:      bins to be used for the histogram
+                        can be a number (how many bins)
+                        or an iterable (borders of the bins)
+    """
     # histograms do not need to be normed, this will happen in the end
-    counts, bins = np.histogram(data, num_bins)
+    counts, bins = np.histogram(data, inBins)
     centers = (bins[1:] + bins[:-1])/2
     centers_err = [centers[i] - bins[i] for i in range(len(centers))]
 
@@ -92,7 +133,33 @@ def getDistribution(infile, outfile, histfile, theta, steps, num_bins=50):
 
 
 def getZtheta(list_of_ps_log, thetas):
-    # list_of_ps_log is a list in the form [[s1, ps_log1], [s2, ps_log2], ..]
+    # list_of_ps_log is a list in the form [[s1, s1_err, ps_log1, ps_log1_err], [s2, s2_err, ps_log2, ps_log2_err], ..]
+    Ztheta_mean = [(0, 0)]
+    for i in range(len(list_of_ps_log)-1):
+        l1 = list_of_ps_log[i]
+        l2 = list_of_ps_log[i+1]
+
+        x1 = {x for x, _, _, _ in l1}
+        y1 = {x: y for x, _, y, _ in l1}
+        y1_err = {x: y_err for x, _, _, y_err in l1}
+        x2, x2_err, y2, y2_err = zip(*l2)
+
+        # calculate for every s in l2 the difference to l2(s) - l1(s)
+        Z = [y - y1[x] for x, _, y, _ in l2 if x in x1]
+        Z_err = [y_err + y1_err[x] for x, _, _, y_err in l2 if x in x1]
+
+        # not enough overlap
+        if len(Z) < 5:
+            logging.warning("not enough overlap, insert an intermediate theta")
+            proposedTheta.append((thetas[i] + thetas[i+1]) / 2)
+
+        Ztheta_mean.append(bootstrap(Z))
+
+    return Ztheta_mean
+
+
+def getZthetaInterpol(list_of_ps_log, thetas):
+    # list_of_ps_log is a list in the form [[s1, s1_err, ps_log1, ps_log1_err], [s2, s2_err, ps_log2, ps_log2_err], ..]
     Ztheta_mean = [(0, 0)]
     for i in range(len(list_of_ps_log)-1):
         l1 = list_of_ps_log[i]
@@ -110,7 +177,6 @@ def getZtheta(list_of_ps_log, thetas):
             logging.error("too few samples")
             Ztheta_mean.append((0,0))
             continue
-
 
         # calculate for every s in l2 the difference to l2(s) - spline_l1(s)
         Z = [ps_log - spline_1(s) for s, _, ps_log, _ in l2 if min(x) < s < max(x)]
@@ -149,25 +215,53 @@ def run():
 
     outfiles = []
 
+    column = param.parameters["observable"]
+
     for N in steps:
         list_of_ps_log = []
         try:
             theta_for_N = thetas[N]
         except KeyError:
             theta_for_N = thetas[0]
+
+        # gather statistics over all data
+        # TODO: this can be easily parallelized
+        dataDict = {}
+        nameDict = {}
         for T in theta_for_N:
-            name = param.basename.format(steps=N,
-                                         theta=T,
-                                         **param.parameters
-                                         )
-            data = getDistribution("{}/{}.dat".format(d, name),
-                                   "{}/dist_{}.dat".format(out, name),
-                                   "{}/hist_{}.dat".format(out, name),
-                                   T, N)
+            nameDict.update({T: param.basename.format(steps=N,
+                                                  theta=T,
+                                                  **param.parameters
+                                                 )
+                        }
+                       )
+            filename = "{}/{}.dat".format(d, nameDict[T])
+            data = getDataFromFile(filename, column)
+            dataDict.update({T: data})
+        minimum, maximum, num_samples = getStatistics(dataDict)
+
+        # https://en.wikipedia.org/wiki/Histogram#Number_of_bins_and_width
+        # guess a good number of bins with rice rule
+        num_bins = ceil(2*num_samples**(1/3))
+        # in fact, I need more bins, guess them with the sqrt choice
+        num_bins = ceil(num_samples**(1/2))
+        # TODO: assign the bins adaptive: smaller bins where more data is
+
+        bins = np.linspace(minimum, maximum, num=num_bins)
+
+        for T in theta_for_N:
+            data = getDistribution(dataDict[T],
+                                   "{}/dist_{}.dat".format(out, nameDict[T]),
+                                   "{}/hist_{}.dat".format(out, nameDict[T]),
+                                   col=param.parameters["observable"],
+                                   theta=T,
+                                   steps=N,
+                                   inBins=bins
+                                  )
             list_of_ps_log.append(data)
-            z = getZtheta(list_of_ps_log, theta_for_N)
-            #~ outfiles.append('"{}/dist_{}.dat"'.format(out, name))
-            outfiles.append('"{}/stiched_{}.dat"'.format(out, name))
+            outfiles.append('"{}/stiched_{}.dat"'.format(out, nameDict[T]))
+
+        z = getZtheta(list_of_ps_log, theta_for_N)
 
         zc = [0]
         zce = [0]
@@ -192,6 +286,10 @@ def run():
 
         whole_distribution_file = param.basename.replace("_T{theta:.5f}", "").format(steps=N, **param.parameters)
         whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
+
+        # purge values with same x, by calculating mean
+        # TODO: generate errors by bootstrapping
+        whole_distribution = averageOverSameX(whole_distribution)
 
         # integrate, to get the normalization constant
         t = list(zip(*sorted(whole_distribution)))
