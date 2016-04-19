@@ -174,7 +174,7 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         pov_path = povArg.getValue();
-        if(!svg_path.empty())
+        if(!pov_path.empty())
         {
             LOG(LOG_INFO) << "Path to store the povray   " << pov_path;
         }
