@@ -6,25 +6,36 @@
 ConvexHullQHull::ConvexHullQHull(const std::vector<Step>& points, bool akl)
             : ConvexHull(points, akl)
 {
-    coords = new double[n*d];
-    for(int i=0; i<n; ++i)
-        for(int j=0; j<d; ++j)
-            coords[i*d + j] = interiorPoints[i][j];
-
-    try
+    // test, if points are fully dimensional
+    // we need to do that first, since qhull seems to leak on exceptions
+    int num_zeros = 0;
+    for(int i=0; i<d; ++i)
     {
-        // comment, dimension, count, coordinates[], command
-        qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords, ""));
-        m_A = qhull->volume();
-        m_L = qhull->area();
+        int j = 0;
+        while(j < n && interiorPoints[j][i] == 0)
+            ++j;
+        if(j == n)
+            ++num_zeros;
     }
-    catch(orgQhull::QhullError &e)
+
+    if(num_zeros >= 2)
     {
-        // not full dimensional
-        // discard one dimension, calculate again
-        // this is easy since the points are on a lattice
-        LOG(LOG_WARNING) << "Not full dimensional, strip one axis";
-        LOG(LOG_TOO_MUCH) << e.what();
+        LOG(LOG_DEBUG) << "Two dimensions less than fully dimensional";
+        m_L = 0;
+        m_A = 0;
+        return;
+    }
+    else if(num_zeros == 1)
+    {
+        LOG(LOG_DEBUG) << "Not full dimensional, strip one axis";
+
+        if(d - num_zeros <= 1)
+        {
+            LOG(LOG_DEBUG) << "One dimensional";
+            m_L = 2*n;
+            m_A = 0;
+            return;
+        }
 
         std::vector<int> dimMap(d-1);
         for(int i=0; i<d; ++i)
@@ -37,39 +48,44 @@ ConvexHullQHull::ConvexHullQHull(const std::vector<Step>& points, bool akl)
                 for(int l=0, k=0; l<d; ++l)
                     if(l != i)
                         dimMap[k++] = l;
-                break;
             }
         }
-
-        LOG(LOG_TOO_MUCH) << "points: " << interiorPoints;
         LOG(LOG_DEBUG) << "axis left: " << dimMap;
 
-        delete[] coords;
         --d;
-        coords = new double[n*d];
+        coords = std::vector<double>(n*d);
         for(int i=0; i<n; ++i)
             for(int j=0; j<d; ++j)
                 coords[i*d + j] = interiorPoints[i][dimMap[j]];
+    }
+    else
+    {
+        coords = std::vector<double>(n*d);
+        for(int i=0; i<n; ++i)
+            for(int j=0; j<d; ++j)
+                coords[i*d + j] = interiorPoints[i][j];
+    }
 
-        // if it still does not work, L and A are 0
-        try
+    try
+    {
+        // comment, dimension, count, coordinates[], command
+        qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords.data(), ""));
+        if(num_zeros == 1)
         {
-            qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords, ""));
             m_L = qhull->volume();
             m_A = 0;
         }
-        catch(orgQhull::QhullError &e)
+        else if(num_zeros == 0)
         {
-            LOG(LOG_WARNING) << "Two dimensions less than fully dimensional";
-            m_L = 0;
-            m_A = 0;
+            m_A = qhull->volume();
+            m_L = qhull->area();
         }
     }
-}
-
-ConvexHullQHull::~ConvexHullQHull()
-{
-    delete[] coords;
+    catch(orgQhull::QhullError &e)
+    {
+        LOG(LOG_ERROR) << "Not full dimensional, but not catched!";
+        LOG(LOG_TOO_MUCH) << e.what();
+    }
 }
 
 const std::vector<Step>& ConvexHullQHull::hullPoints() const

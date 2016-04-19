@@ -12,7 +12,6 @@ class ConvexHullQHull : public ConvexHull
 {
     public:
         ConvexHullQHull(const std::vector<Step>& interiorPoints, bool akl);
-        virtual ~ConvexHullQHull();
 
         virtual double A() const;
         virtual double L() const;
@@ -25,5 +24,5 @@ class ConvexHullQHull : public ConvexHull
 
     protected:
         std::unique_ptr<orgQhull::Qhull> qhull;
-        double *coords;
+        std::vector<double> coords;
 };
