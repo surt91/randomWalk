@@ -184,7 +184,7 @@ def getZthetaInterpol(list_of_ps_log, thetas):
 
         # not enough overlap
         if len(Z) < 5:
-            logging.warning("not enough overlap, insert an intermediate theta")
+            logging.warning("not enough overlap, insert an intermediate theta, eg. {}".format((thetas[i] + thetas[i+1]) / 2))
             proposedTheta.append((thetas[i] + thetas[i+1]) / 2)
 
         Ztheta_mean.append(bootstrap(Z))
