@@ -8,3 +8,11 @@ lit/
 
 images/
 
+py2
+LoopErasedMetropolis
+LoopErasedMetropolis3D
+RandomWalkMetropolis
+RandomWalkMetropolis3D
+SelfAvoidingMetropolis
+SelfAvoidingMetropolis3D
+src/svg/

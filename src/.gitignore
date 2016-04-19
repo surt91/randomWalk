@@ -2,3 +2,12 @@ dep/
 obj/
 
 randomWalk
+
+*.dat
+*.gz
+
+*.png
+*.pov
+*.svg
+
+*.log
