@@ -121,7 +121,7 @@ int Walker::nRN() const
 }
 
 // set the random numbers such that we get an L shape
-void Walker::degenerate()
+void Walker::degenerateMaxVolume()
 {
     for(int i=0; i<numSteps; ++i)
         random_numbers[i] = .99 / ceil((double) d * (i+1)/numSteps);
@@ -136,6 +136,30 @@ void Walker::degenerateMaxSurface()
 {
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99 / ceil((double) (d-1) * (i+1)/random_numbers.size());
+
+    stepsDirty = true;
+    pointsDirty = true;
+    hullDirty = true;
+}
+
+// set the random numbers such that we get a spiral
+void Walker::degenerateSpiral()
+{
+    // TODO: find some easy construction for a spiral in arbitrary dimensions
+    // FIXME: right now, it is a straight line instead of a spiral
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99;
+
+    stepsDirty = true;
+    pointsDirty = true;
+    hullDirty = true;
+}
+
+// set the random numbers such that we get a straight line
+void Walker::degenerateStraight()
+{
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99;
 
     stepsDirty = true;
     pointsDirty = true;

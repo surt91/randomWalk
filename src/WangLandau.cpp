@@ -15,7 +15,7 @@ double WangLandau::getUpperBound()
     // the degenerate case is -- hopefully -- the case of maximum Volume
     if(o.wantedObservable == WO_VOLUME)
     {
-        w->degenerate();
+        w->degenerateMaxVolume();
         S_min = S(w);
     }
     else

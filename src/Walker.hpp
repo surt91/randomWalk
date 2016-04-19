@@ -58,8 +58,10 @@ class Walker
         virtual void change(UniformRNG &rng);
         virtual void undoChange();
 
-        void degenerate();
+        void degenerateMaxVolume();
         void degenerateMaxSurface();
+        void degenerateSpiral();
+        void degenerateStraight();
 
         void setHullAlgo(hull_algorithm_t a);
 

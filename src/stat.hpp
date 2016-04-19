@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <deque>
 
+#include <iostream>
+
 // T kann double, float oder so sein
 template <typename T>
 T mean(std::vector<T> a)
@@ -26,12 +28,18 @@ class RollingMean
     public:
         RollingMean(int n)
             : n(n),
+              m_mean(0.0),
+              count(0),
               state(n, 0)
         {}
 
         double add(double x);
+        double mean() const;
+        double var(size_t last = 0) const;
 
     protected:
         int n;
+        double m_mean;
+        size_t count;
         std::deque<double> state;
 };
