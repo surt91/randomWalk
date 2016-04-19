@@ -65,19 +65,20 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
         hullDirty = true;
     }
     else
-        undo_index = -1; // flag, that undo is not possible/needed
-
-    //~ naiveChange(rng() * nRN(), rng());
+    {
+        // if pivot was not successful, do a naive change
+        undo_index = -1;
+        naiveChange(rng() * nRN(), rng());
+    }
 }
 
 void SelfAvoidingWalker::undoChange()
 {
-    // no change was made (because the pivot failed)
+    // pivot failed -> naive change was done
     if(undo_index == -1)
-        return;
-
-    //~ naiveChangeUndo();
-    pivot(undo_index, undo_value);
+        naiveChangeUndo();
+    else
+        pivot(undo_index, undo_value);
 
     pointsDirty = true;
     hullDirty = true;
@@ -152,7 +153,7 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
         for(int i=index; i<numSteps; ++i)
             m_steps[i] = transform(m_steps[i], matrix);
 
-        pointsDirty = true;
+        points(index+1);
         hullDirty = true;
     }
 
@@ -161,6 +162,10 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
 
 void SelfAvoidingWalker::naiveChangeUndo()
 {
+    // no change happened
+    if(undo_naive_index == -1)
+        return;
+
     m_steps[undo_naive_index] = undo_naive_step;
 
     points(undo_naive_index+1);
@@ -180,11 +185,11 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
 
     m_steps[idx] = newStep;
     auto p = points(idx+1);
-
     if(!checkOverlapFree(p))
     {
         m_steps[idx] = undo_naive_step;
         points(idx+1);
+        undo_naive_index = -1;
         return false;
     }
 
@@ -200,17 +205,15 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
 
 bool SelfAvoidingWalker::checkOverlapFree(std::vector<Step> &l) const
 {
-    std::unordered_set<Step> steps;
-    steps.reserve(l.size());
+    std::unordered_set<Step> map;
+    map.reserve(l.size());
 
     auto it(l.begin());
-    Step p(std::vector<int>(d, 0));
     while(it != l.end())
     {
-        p += *it;
-        if(steps.count(p))
+        if(map.count(*it))
             return false;
-        steps.insert(p);
+        map.insert(*it);
         ++it;
     }
     return true;
@@ -218,17 +221,17 @@ bool SelfAvoidingWalker::checkOverlapFree(std::vector<Step> &l) const
 
 bool SelfAvoidingWalker::checkOverlapFree(std::list<double> &l) const
 {
-    std::unordered_set<Step> steps;
-    steps.reserve(l.size());
+    std::unordered_set<Step> map;
+    map.reserve(l.size());
 
     auto it(l.begin());
     Step p(std::vector<int>(d, 0));
     while(it != l.end())
     {
         p += Step(d, *it);
-        if(steps.count(p))
+        if(map.count(p))
             return false;
-        steps.insert(p);
+        map.insert(p);
         ++it;
     }
     return true;
