@@ -6,6 +6,7 @@ Simulation::Simulation(const Cmd &o)
 {
     begin = clock();
     fail = 0;
+    trys = 0;
 
     if(!oss.good())
     {
