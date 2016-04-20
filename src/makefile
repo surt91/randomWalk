@@ -3,15 +3,10 @@ TARGET	= randomWalk
 CPP	 := main.cpp \
         Cmd.cpp \
         Benchmark.cpp \
-        Step.cpp \
         Walker.cpp \
+        LatticeWalker.cpp \
         LoopErasedWalker.cpp \
         SelfAvoidingWalker.cpp \
-        ConvexHull.cpp \
-        ConvexHull2D.cpp \
-        ConvexHullQHull.cpp \
-        ConvexHullAndrew.cpp \
-        ConvexHullJarvis.cpp \
         Simulation.cpp \
         Metropolis.cpp \
         WangLandau.cpp \

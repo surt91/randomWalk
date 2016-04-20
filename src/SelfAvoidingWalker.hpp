@@ -5,7 +5,7 @@
 #include <unordered_set>
 
 #include "Logging.hpp"
-#include "Walker.hpp"
+#include "LatticeWalker.hpp"
 
 // transformation matrices for pivoting d=2
 static const std::vector<std::vector<int>> tMatrix2 =
@@ -133,11 +133,11 @@ static const std::vector<int> iMatrix3 =
         9
     };
 
-class SelfAvoidingWalker : public Walker
+class SelfAvoidingWalker : public LatticeWalker
 {
     public:
         SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-            : Walker(d, numSteps, rng, hull_algo)
+            : LatticeWalker(d, numSteps, rng, hull_algo)
         {
             auto l(dim(numSteps));
             LOG(LOG_DEBUG) << "Dimerization got the inital SAW";
@@ -150,16 +150,16 @@ class SelfAvoidingWalker : public Walker
         virtual void undoChange();
 
     protected:
-        Step transform(Step &p, const std::vector<int> &m) const;
+        Step<int> transform(Step<int> &p, const std::vector<int> &m) const;
         bool pivot(const int index, const int op);
 
         int undo_naive_index;
-        Step undo_naive_step;
-        Step undo_step;
+        Step<int> undo_naive_step;
+        Step<int> undo_step;
         bool naiveChange(const int idx, const double rn);
         void naiveChangeUndo();
 
         std::list<double> dim(int N);
         bool checkOverlapFree(std::list<double> &l) const;
-        bool checkOverlapFree(std::vector<Step> &l) const;
+        bool checkOverlapFree(std::vector<Step<int>> &l) const;
 };

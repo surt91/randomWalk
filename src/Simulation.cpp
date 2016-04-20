@@ -43,12 +43,13 @@ void Simulation::prepare(std::unique_ptr<Walker>& w)
     UniformRNG rngReal(o.seedRealization * (omp_get_thread_num()+1));
 
     if(o.type == WT_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rngReal, o.chAlg));
+        w = std::unique_ptr<Walker>(new LatticeWalker(o.d, o.steps, rngReal, o.chAlg));
     else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
     else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg));
     else
         LOG(LOG_ERROR) << "type " << o.type << " is not known";
-    w->convexHull();
+
+    w->updateHull();
 }

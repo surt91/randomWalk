@@ -34,12 +34,13 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
     std::unique_ptr<Walker> w;
     UniformRNG rng(o.seedRealization);
     if(o.type == WT_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new Walker(o.d, o.steps, rng, o.chAlg));
+        w = std::unique_ptr<Walker>(new LatticeWalker(o.d, o.steps, rng, o.chAlg));
     else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rng, o.chAlg));
     else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rng, o.chAlg));
-    w->steps();
+
+    w->updateSteps();
 
     LOG(LOG_TIMING) << "RW : " << time_diff(before_walker, clock());
 
@@ -50,7 +51,7 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
 {
     clock_t before_ch = clock();
     w->setHullAlgo(o.chAlg);
-    w->convexHull();
+    w->updateHull();
 
     clock_t before_output = clock();
 
@@ -64,7 +65,6 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
         LOG(LOG_ERROR) << "Wrong A  " << w->A();
         LOG(LOG_ERROR) << "expected " << o.benchmark_A;
     }
-
 
     LOG(LOG_TIMING) << "CH : " << time_diff(before_ch, before_output);
 }

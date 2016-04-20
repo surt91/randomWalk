@@ -1,6 +1,6 @@
 #include "LoopErasedWalker.hpp"
 
-const std::vector<Step>& LoopErasedWalker::steps() const
+const std::vector<Step<int>>& LoopErasedWalker::steps() const
 {
     if(!stepsDirty)
         return m_steps;
@@ -14,12 +14,12 @@ const std::vector<Step>& LoopErasedWalker::steps() const
     // then continue
 
     int N = random_numbers.size();
-    std::unordered_map<Step, int> occupied_tiles;
+    std::unordered_map<Step<int>, int> occupied_tiles;
     // at most as many steps as random numbers, i.e. no loop erasure
-    std::vector<Step> ret(numSteps);
+    std::vector<Step<int>> ret(numSteps);
 
     // p will keep track where the head is
-    Step p(std::vector<int>(d, 0));
+    Step<int> p(std::vector<int>(d, 0));
     occupied_tiles.insert({p, 0});
 
     int i=0;
@@ -34,7 +34,7 @@ const std::vector<Step>& LoopErasedWalker::steps() const
 
             std::generate(random_numbers.begin() + i, random_numbers.end(), rng);
         }
-        Step s(d, random_numbers[i]);
+        Step<int> s(d, random_numbers[i]);
         p += s;
 
         // if already occupied, erase loop
@@ -46,7 +46,7 @@ const std::vector<Step>& LoopErasedWalker::steps() const
             if(tmp == 0)
             {
                 occupied_tiles.clear();
-                p = Step(std::vector<int>(d, 0));
+                p = Step<int>(std::vector<int>(d, 0));
                 occupied_tiles.insert({p, 0});
                 index = -1;
             }
@@ -94,9 +94,9 @@ void LoopErasedWalker::change(UniformRNG &rng)
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();
 
-    Step newStep(d, random_numbers[idx]);
+    Step<int> newStep(d, random_numbers[idx]);
     // test if something changes
-    if(newStep == Step(d, undo_value))
+    if(newStep == Step<int>(d, undo_value))
         return;
 
     stepsDirty = true;
@@ -108,9 +108,9 @@ void LoopErasedWalker::undoChange()
 {
     double rejected = random_numbers[undo_index];
     random_numbers[undo_index] = undo_value;
-    Step newStep(d, undo_value);
+    Step<int> newStep(d, undo_value);
     // test if something changes
-    if(newStep == Step(d, rejected))
+    if(newStep == Step<int>(d, rejected))
         return;
 
     stepsDirty = true;

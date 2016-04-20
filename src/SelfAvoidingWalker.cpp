@@ -84,9 +84,9 @@ void SelfAvoidingWalker::undoChange()
     hullDirty = true;
 }
 
-Step SelfAvoidingWalker::transform(Step &p, const std::vector<int> &m) const
+Step<int> SelfAvoidingWalker::transform(Step<int> &p, const std::vector<int> &m) const
 {
-    Step out(std::vector<int>(d, 0));
+    Step<int> out(std::vector<int>(d, 0));
     for(int i=0; i<d; ++i)
         for(int j=0; j<d; ++j)
             out[i] += p[j] * m[i*d + j];
@@ -117,10 +117,10 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
     // first just a dry test -- most of the time it will fail and it is
     // probably cheaper to do it twice in case of success instead of
     // undo much work everytime
-    std::unordered_set<Step> overlap_test;
+    std::unordered_set<Step<int>> overlap_test;
     overlap_test.reserve(numSteps);
-    Step positioni(std::vector<int>(d, 0));
-    Step positionj(std::vector<int>(d, 0));
+    Step<int> positioni(std::vector<int>(d, 0));
+    Step<int> positionj(std::vector<int>(d, 0));
     overlap_test.insert(positioni);
     bool failed = false;
     // test for overlaps starting at the pivot point in both directions
@@ -178,7 +178,7 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
     undo_naive_index = idx;
     undo_naive_step = m_steps[idx];
 
-    Step newStep(d, rn);
+    Step<int> newStep(d, rn);
     // test if something changes
     if(newStep == m_steps[idx])
         return true;
@@ -203,9 +203,9 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
     //~ if(front)
 //~ }
 
-bool SelfAvoidingWalker::checkOverlapFree(std::vector<Step> &l) const
+bool SelfAvoidingWalker::checkOverlapFree(std::vector<Step<int>> &l) const
 {
-    std::unordered_set<Step> map;
+    std::unordered_set<Step<int>> map;
     map.reserve(l.size());
 
     auto it(l.begin());
@@ -221,14 +221,14 @@ bool SelfAvoidingWalker::checkOverlapFree(std::vector<Step> &l) const
 
 bool SelfAvoidingWalker::checkOverlapFree(std::list<double> &l) const
 {
-    std::unordered_set<Step> map;
+    std::unordered_set<Step<int>> map;
     map.reserve(l.size());
 
     auto it(l.begin());
-    Step p(std::vector<int>(d, 0));
+    Step<int> p(std::vector<int>(d, 0));
     while(it != l.end())
     {
-        p += Step(d, *it);
+        p += Step<int>(d, *it);
         if(map.count(p))
             return false;
         map.insert(p);
@@ -251,12 +251,12 @@ std::list<double> SelfAvoidingWalker::dim(int N)
             start.clear();
             double rn = rng();
             start.push_back(rn);
-            Step lastStep(d, rn);
+            Step<int> lastStep(d, rn);
 
             for(int i=1; i<N;)
             {
                 double rn2 = rng();
-                Step s(d, rn2);
+                Step<int> s(d, rn2);
                 if(s != -lastStep)  // do not allow immediate reversals
                 {
                     ++i;

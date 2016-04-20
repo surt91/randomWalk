@@ -4,7 +4,6 @@
 #include "Cmd.hpp"
 #include "Logging.hpp"
 #include "Walker.hpp"
-#include "LoopErasedWalker.hpp"
 #include "RNG.hpp"
 #include "Metropolis.hpp"
 #include "WangLandau.hpp"

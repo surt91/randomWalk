@@ -8,12 +8,14 @@
 #include <stdexcept>
 #include <algorithm>
 
+template<class T>
 class Step;
 namespace std {
     template<>
-    struct hash<Step>;
+    struct hash<Step<int>>;
 }
 
+template<class T>
 class Step
 {
     friend struct std::hash<Step>;
@@ -38,7 +40,7 @@ class Step
                 }
         };
 
-        Step(const std::vector<int> &coord)
+        Step(const std::vector<T> &coord)
               : m_d(coord.size()),
                 m_coordinates(coord)
               {};
@@ -57,69 +59,72 @@ class Step
             return atan2(m_coordinates[j], m_coordinates[i]);
         }
 
-        friend inline bool operator==(const Step &lhs, const Step &rhs);
-        friend inline bool operator!=(const Step &lhs, const Step &rhs);
+        template <class U>
+        friend inline bool operator==(const Step<U> &lhs, const Step<U> &rhs);
 
-        Step operator+(const Step &other) const
+        template <class U>
+        friend inline bool operator!=(const Step<U> &lhs, const Step<U> &rhs);
+
+        Step<T> operator+(const Step<T> &other) const
         {
             if(m_d != other.d())
                 throw std::invalid_argument("dimensions do not agree");
 
-            std::vector<int> new_coord = other.coordinates();
+            std::vector<T> new_coord = other.coordinates();
             for(int i=0; i<m_d; ++i)
                 new_coord[i] += m_coordinates[i];
 
-            return Step(new_coord);
+            return Step<T>(new_coord);
         }
 
-        Step operator-(const Step &other) const
+        Step<T> operator-(const Step<T> &other) const
         {
             if(m_d != other.d())
                 throw std::invalid_argument("dimensions do not agree");
 
-            std::vector<int> new_coord = other.coordinates();
+            std::vector<T> new_coord = other.coordinates();
             for(int i=0; i<m_d; ++i)
                 new_coord[i] -= m_coordinates[i];
 
-            return Step(new_coord);
+            return Step<T>(new_coord);
         }
 
-        Step operator-() const
+        Step<T> operator-() const
         {
-            std::vector<int> new_coord = coordinates();
+            std::vector<T> new_coord = coordinates();
             for(int i=0; i<m_d; ++i)
                 new_coord[i] *= -1;
 
-            return Step(new_coord);
+            return Step<T>(new_coord);
         }
 
-        Step operator/(const double d) const
+        Step<T> operator/(const double d) const
         {
-            std::vector<int> new_coord = coordinates();
+            std::vector<T> new_coord = coordinates();
             for(int i=0; i<m_d; ++i)
                 new_coord[i] /= d;
 
-            return Step(std::move(new_coord));
+            return Step<T>(std::move(new_coord));
         }
 
-        Step& operator+=(const Step &other)
+        Step<T>& operator+=(const Step<T> &other)
         {
             if(m_d != other.d())
                 throw std::invalid_argument("dimensions do not agree");
 
-            std::vector<int> other_coord = other.coordinates();
+            const std::vector<T> other_coord = other.coordinates();
             for(int i=0; i<m_d; ++i)
                 m_coordinates[i] += other_coord[i];
 
             return *this;
         }
 
-        Step& operator-=(const Step &other)
+        Step<T>& operator-=(const Step<T> &other)
         {
             if(m_d != other.d())
                 throw std::invalid_argument("dimensions do not agree");
 
-            std::vector<int> other_coord = other.coordinates();
+            const std::vector<T> other_coord = other.coordinates();
             for(int i=0; i<m_d; ++i)
                 m_coordinates[i] -= other_coord[i];
 
@@ -138,12 +143,12 @@ class Step
         // a point is smaller, if the x value is smaller
         // in case of a tie the smaller y value decides
         // only for 2d, since it is only needed for the 2d andrew algorithm
-        bool operator <(const Step &other) const
+        bool operator <(const Step<T> &other) const
         {
             return x() < other.x() || (x() == other.x() && y() < other.y());
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const Step &obj)
+        friend std::ostream& operator<<(std::ostream& os, const Step<T> &obj)
         {
             os << "(";
             for(auto i : obj.m_coordinates)
@@ -152,7 +157,7 @@ class Step
             return os;
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const std::vector<Step> &obj)
+        friend std::ostream& operator<<(std::ostream& os, const std::vector<Step<T>> &obj)
         {
             os << "[";
             for(const auto &i : obj)
@@ -161,7 +166,7 @@ class Step
             return os;
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const std::list<Step> &obj)
+        friend std::ostream& operator<<(std::ostream& os, const std::list<Step<T>> &obj)
         {
             os << "[";
             for(const auto &i : obj)
@@ -170,29 +175,33 @@ class Step
             return os;
         }
 
-        friend Step cross(const Step &a, const Step &b);
-        friend double dot(const Step &a, const Step &b);
-        friend double parallelness(const Step &a, const Step &b, const Step &c);
+        template <class U>
+        friend Step<U> cross(const Step<U> &a, const Step<U> &b);
 
-        const int& operator[](std::size_t idx) const { return m_coordinates[idx]; };
+        template <class U>
+        friend double dot(const Step<U> &a, const Step<U> &b);
+
+        int operator[](std::size_t idx) const { return m_coordinates[idx]; };
         int& operator[](std::size_t idx) { return m_coordinates[idx]; };
 
         // getter
-        const int& d() const { return m_d; };
-        const int& x(const int n=0) const { return m_coordinates[n]; };
-        const int& y() const { return m_coordinates[1]; }; // specialisation for 2d
-        const int& z() const { return m_coordinates[2]; }; // specialisation for 3d
-        const std::vector<int>& coordinates() const { return m_coordinates; };
+        int d() const { return m_d; };
+        T x(const int n=0) const { return m_coordinates[n]; };
+        T y() const { return m_coordinates[1]; }; // specialisation for 2d
+        T z() const { return m_coordinates[2]; }; // specialisation for 3d
+
+        const std::vector<T>& coordinates() const { return m_coordinates; };
 
     protected:
         int m_d;
-        std::vector<int> m_coordinates;
+        std::vector<T> m_coordinates;
 
     private:
 
 };
 
-inline bool operator==(const Step &lhs, const Step &rhs)
+template <class T>
+bool operator==(const Step<T> &lhs, const Step<T> &rhs)
 {
     if(lhs.m_d != rhs.m_d)
         return false;
@@ -204,25 +213,50 @@ inline bool operator==(const Step &lhs, const Step &rhs)
     return true;
 }
 
-inline bool operator!=(const Step &lhs, const Step &rhs)
+template <class T>
+bool operator!=(const Step<T> &lhs, const Step<T> &rhs)
 {
     return ! (lhs == rhs);
 }
 
+template <class T>
+Step<T> cross(const Step<T> &a, const Step<T> &b)
+{
+    if(a.m_d != b.m_d)
+        throw std::invalid_argument("dimensions do not agree");
+    if(a.m_d != 3)
+        throw std::invalid_argument("cross product only defined for d=3");
 
+    std::vector<T> ret(3);
+    ret[0] = a.y()*b.z() - a.z()*b.y();
+    ret[1] = a.z()*b.x() - a.x()*b.z();
+    ret[2] = a.x()*b.y() - a.y()*b.x();
+    return Step<T>(ret);
+}
 
-Step cross(const Step &a, const Step &b);
-double dot(const Step &a, const Step &b);
-double parallelness(const Step &a, const Step &b, const Step &c);
+template <class T>
+double dot(const Step<T> &a, const Step<T> &b)
+{
+    if(a.m_d != b.m_d)
+        throw std::invalid_argument("dimensions do not agree");
+
+    double p = 0;
+
+    for(int i=0; i<a.m_d; ++i)
+        p += a[i]*b[i];
+
+    return p;
+}
 
 namespace std {
+    // hashmap for doubles is useless, hence only int specialization
     template<>
-    struct hash<Step>
+    struct hash<Step<int>>
     {
         public:
             // very simple lcg for hashing int vectors
             // http://stackoverflow.com/a/27216842/1698412
-            size_t operator()(const Step &s) const
+            size_t operator()(const Step<int> &s) const
             {
                 std::size_t seed = 0;
                 for(auto &i : s.m_coordinates)
@@ -231,9 +265,10 @@ namespace std {
             }
     };
 
-    inline Step min(std::vector<Step> &v)
+    template <class T>
+    Step<T> min(const std::vector<Step<T>> &v)
     {
-        Step p = v[0];
+        Step<T> p = v[0];
         for(const auto &i : v)
             if(i < p)
                 p = i;

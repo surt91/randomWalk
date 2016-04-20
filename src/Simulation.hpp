@@ -14,6 +14,7 @@
 #include "Cmd.hpp"
 #include "Logging.hpp"
 #include "Walker.hpp"
+#include "LatticeWalker.hpp"
 #include "LoopErasedWalker.hpp"
 #include "SelfAvoidingWalker.hpp"
 #include "RNG.hpp"
