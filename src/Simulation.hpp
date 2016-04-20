@@ -9,6 +9,7 @@
    #include <omp.h>
 #else
    #define omp_get_thread_num() 0
+   #define omp_set_num_threads(x) 1
 #endif
 
 #include "Cmd.hpp"
