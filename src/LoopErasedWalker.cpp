@@ -1,6 +1,6 @@
 #include "LoopErasedWalker.hpp"
 
-const std::vector<Step> LoopErasedWalker::steps() const
+const std::vector<Step>& LoopErasedWalker::steps() const
 {
     if(!stepsDirty)
         return m_steps;

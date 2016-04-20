@@ -1,6 +1,6 @@
 #include "Walker.hpp"
 
-const std::vector<Step> Walker::steps() const
+const std::vector<Step>& Walker::steps() const
 {
     if(!stepsDirty)
         return m_steps;

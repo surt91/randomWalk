@@ -15,7 +15,7 @@ class LoopErasedWalker : public Walker
 
         virtual ~LoopErasedWalker() {};
 
-        virtual const std::vector<Step> steps() const;
+        virtual const std::vector<Step>& steps() const;
 
         virtual int nRN() const;
 

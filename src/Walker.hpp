@@ -72,7 +72,7 @@ class Walker
         double L() const { return convexHull().L(); };
 
         const std::vector<Step>& points(int start=1) const;
-        virtual const std::vector<Step> steps() const;
+        virtual const std::vector<Step>& steps() const;
 
         int nSteps() const;
         int nRN() const;
