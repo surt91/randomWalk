@@ -92,6 +92,8 @@ void benchmark()
 
     o.simpleSampling = true;
 
+    clock_t start = clock();
+
     for(int i=1; i<=3; ++i)
     {
         switch(i)
@@ -134,5 +136,6 @@ void benchmark()
         run_MC_simulation(o, w);
     }
 
+    LOG(LOG_TIMING) << "Total : " << time_diff(start, clock());
     LOG(LOG_TIMING) << "Mem: " << vmPeak();
 }
