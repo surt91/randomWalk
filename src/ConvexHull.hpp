@@ -17,19 +17,20 @@ class ConvexHull
         {
         }
 
+        // observables
         virtual double A() const = 0;
         virtual double L() const = 0;
+        //~ virtual std::vector<int> max_extent();
+        //~ virtual double diameter();
 
+        // hull
         virtual const std::vector<Step<T>>& hullPoints() const = 0;
-
         virtual std::vector<std::vector<Step<T>>> hullFacets() const
         {
             throw std::invalid_argument("hull facets for this algorithm not implemented");
         }
 
-        // observables
-        //~ virtual std::vector<int> max_extent();
-        //~ virtual double diameter();
+
 
     protected:
         std::vector<Step<T>> interiorPoints;
