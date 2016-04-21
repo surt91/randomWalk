@@ -48,6 +48,8 @@ void Simulation::prepare(std::unique_ptr<Walker>& w)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg));
     else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg));
+    else if(o.type == WT_REAL_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new RealWalker(o.d, o.steps, rngReal, o.chAlg));
     else
         LOG(LOG_ERROR) << "type " << o.type << " is not known";
 
