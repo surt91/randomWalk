@@ -1,11 +1,24 @@
 #include "Benchmark.hpp"
 
+/** Format time difference human readable.
+ *
+ * \param start is the timestamp at the beginning
+ * \param end is the timestamp at the end
+ * \return human readable time
+ */
 std::string time_diff(clock_t start, clock_t end)
 {
     return std::to_string((double)(end - start) / CLOCKS_PER_SEC) + "s";
 }
 
-// taken from http://stackoverflow.com/a/478960/1698412
+/** Executes the command and returns its standard out.
+ *
+ * taken from http://stackoverflow.com/a/478960/1698412
+ *
+ * \param cmd is the shell command to be executed
+ * \return standard output of the command
+
+ */
 std::string exec(const char* cmd)
 {
     std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
@@ -20,6 +33,13 @@ std::string exec(const char* cmd)
     return result;
 }
 
+/** Yields the maximum vmem needed until the call to this function
+ *
+ * This function queries /proc/PID/status for VmPeak using a call
+ * to grep. This is not very portable!
+ *
+ * \return string indicating VmPeak
+ */
 std::string vmPeak()
 {
     std::string pid = std::to_string(getpid());

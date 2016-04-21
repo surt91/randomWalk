@@ -15,6 +15,8 @@ namespace std {
     struct hash<Step<int>>;
 }
 
+/** Step class template, offers vector functions.
+ */
 template<class T>
 class Step
 {
@@ -113,8 +115,10 @@ double Step<T>::length() const
     return std::sqrt(s);
 }
 
+/** only 2D projection on axis i and j
+ */
 template <class T>
-double Step<T>::angle(int i, int j) const //only 2D projection on axis i and j
+double Step<T>::angle(int i, int j) const
 {
     return atan2(m_coordinates[j], m_coordinates[i]);
 }
@@ -213,16 +217,17 @@ Step<T>& Step<T>::operator-=(const Step<T> &other)
 template <class T>
 Step<T>& Step<T>::operator/=(const double d)
 {
-    // uncool, since my coordinates are integer
+    // uncool, since my coordinates can be integer
     for(int i=0; i<m_d; ++i)
         m_coordinates[i] = std::round(m_coordinates[i]/d);
 
     return *this;
 }
 
-// a point is smaller, if the x value is smaller
-// in case of a tie the smaller y value decides
-// only for 2d, since it is only needed for the 2d andrew algorithm
+/** a point is smaller, if the x value is smaller
+ * in case of a tie the smaller y value decides
+ * only for 2d, since it is only needed for the 2d andrew algorithm
+ */
 template <class T>
 bool Step<T>::operator<(const Step<T> &other) const
 {
@@ -294,8 +299,10 @@ namespace std {
     struct hash<Step<int>>
     {
         public:
-            // very simple lcg for hashing int vectors
-            // http://stackoverflow.com/a/27216842/1698412
+            /* very simple hashing for int vectors
+             *
+             * http://stackoverflow.com/a/27216842/1698412
+             */
             size_t operator()(const Step<int> &s) const
             {
                 std::size_t seed = 0;

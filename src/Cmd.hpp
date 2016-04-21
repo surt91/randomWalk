@@ -48,8 +48,8 @@ const std::vector<std::string> TYPE_LABEL = {
 };
 
 enum wanted_observable_t {
-    WO_SURFACE_AREA = 1,    // eg circumference in d=2
-    WO_VOLUME               // eg area in d=2
+    WO_SURFACE_AREA = 1,    ///< eg. circumference in d=2
+    WO_VOLUME               ///< eg. area in d=2
 };
 
 const std::vector<std::string> WANTED_OBSERVABLE_LABEL = {
@@ -59,8 +59,8 @@ const std::vector<std::string> WANTED_OBSERVABLE_LABEL = {
 };
 
 enum sampling_method_t {
-    SM_METROPOLIS = 1,    // Metropolis sampling with a artificial temp
-    SM_WANG_LANDAU        // Direct Wang Landau Sampling of the distribution
+    SM_METROPOLIS = 1,    ///< Metropolis sampling with a artificial temp
+    SM_WANG_LANDAU        ///< Direct Wang Landau Sampling of the distribution
 };
 
 const std::vector<std::string> SAMPLING_METHOD_LABEL = {
@@ -69,6 +69,10 @@ const std::vector<std::string> SAMPLING_METHOD_LABEL = {
     "Wang Landau"
 };
 
+/** Command line parser.
+ *
+ * This command line parser uses TCLAP (http://tclap.sourceforge.net/).
+ */
 class Cmd
 {
     public:

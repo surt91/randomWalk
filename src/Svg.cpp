@@ -3,7 +3,7 @@
 SVG::SVG(const std::string &filename, const double scale)
     : scale(scale), filename(filename)
 {
-    /* Schreibe Header */
+    /* Write Header */
     header = std::string("<?xml version='1.0' encoding='UTF-8'?> \n\
                 <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\n\
                 <svg xmlns='http://www.w3.org/2000/svg'\n\
@@ -14,12 +14,11 @@ SVG::SVG(const std::string &filename, const double scale)
     stroke = 0.1;
 }
 
-/*! \fn void svg_circle(double x, double y, int filled, double scale, FILE *file)
-    \brief Schreibt einen Kreis in die gegebene Datei im SVG Format
-
-    \param x       x-Koordinate des Kreis Mittelpunkts
-    \param y       y-Koordinate des Kreis Mittelpunkts
-    \param filled  Soll der Kreis gefüllt sein? 1: gefüllt -1: nicht gefüllt
+/** Write a circle at the given coordinate to the output SVG file.
+ *
+ * \param x       x-coordinate of the center of the circle
+ * \param y       y-coordinate of the center of the circle
+ * \param filled  fill the circle if 1, don't if 0
 */
 void SVG::circle(const double x, const double y, const int filled)
 {
@@ -34,13 +33,13 @@ void SVG::circle(const double x, const double y, const int filled)
     buffer << "/>\n";
 }
 
-/*! \fn void svg_line(double x1, double x2, double y1, double y2, double scale, FILE *file)
-    \brief Schreibt einen Kreis in die gegebene Datei im SVG Format
-
-    \param x1      x-Anfangspunkt der Linie
-    \param x2      x-Endpunkt der Linie
-    \param y1      y-Anfangspunkt der Linie
-    \param y2      y-Endpunkt der Linie
+/** Schreibt einen Kreis in die gegebene Datei im SVG Format
+ *
+ * \param x1      x-start-coordinate of the line
+ * \param x2      x-end-coordinate of the line
+ * \param y1      y-start-coordinate of the line
+ * \param y2      y-end-coordinate of the line
+ * \param color   color of the line
 */
 void SVG::line(const double x1, const double x2, const double y1, const double y2, const std::string color)
 {

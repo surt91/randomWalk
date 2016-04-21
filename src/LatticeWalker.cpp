@@ -33,7 +33,8 @@ void LatticeWalker::undoChange()
     hullDirty = true;
 }
 
-// set the random numbers such that we get an L shape
+/** set the random numbers such that we get an L shape
+ */
 void LatticeWalker::degenerateMaxVolume()
 {
     for(int i=0; i<numSteps; ++i)
@@ -44,7 +45,8 @@ void LatticeWalker::degenerateMaxVolume()
     hullDirty = true;
 }
 
-// set the random numbers such that we get an L shape in d-1 dimensions
+/** set the random numbers such that we get an L shape in d-1 dimensions
+ */
 void LatticeWalker::degenerateMaxSurface()
 {
     for(size_t i=0; i<random_numbers.size(); ++i)
@@ -55,7 +57,8 @@ void LatticeWalker::degenerateMaxSurface()
     hullDirty = true;
 }
 
-// set the random numbers such that we get a spiral
+/** set the random numbers such that we get a spiral
+ */
 void LatticeWalker::degenerateSpiral()
 {
     // TODO: find some easy construction for a spiral in arbitrary dimensions
@@ -68,7 +71,8 @@ void LatticeWalker::degenerateSpiral()
     hullDirty = true;
 }
 
-// set the random numbers such that we get a straight line
+/** set the random numbers such that we get a straight line
+ */
 void LatticeWalker::degenerateStraight()
 {
     for(size_t i=0; i<random_numbers.size(); ++i)

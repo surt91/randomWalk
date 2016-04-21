@@ -1,8 +1,10 @@
 #include "Cmd.hpp"
 
-// static verbosity level
+/// static verbosity level
 int Logger::verbosity = 0;
 
+/** Constructs the command line parser, given argc and argv.
+ */
 Cmd::Cmd(int argc, char** argv)
 {
     // TCLAP throws exceptions

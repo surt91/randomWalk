@@ -5,6 +5,15 @@ Metropolis::Metropolis(const Cmd &o)
 {
 }
 
+/** Equilibrate the walk
+ *
+ * Detects if equilibration is reached by comparing rolling means of
+ * different starting configurations.
+ *
+ * \param w1 the walk which should be equilibrated
+ * \param rngMC1 the random number generator used for w1
+ * \return the equilibration time
+ */
 int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 {
     int t_eq = 0;

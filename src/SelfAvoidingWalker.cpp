@@ -237,7 +237,13 @@ bool SelfAvoidingWalker::checkOverlapFree(std::list<double> &l) const
     return true;
 }
 
-// Madras2013, The Self-Avoiding Walk, p. 308 ff (doi 10.1007/978-1-4614-6025-1_9)
+/** Dimerization algorithm to construct a Self-Avoiding Walk
+ *
+ * Madras2013, The Self-Avoiding Walk, p. 308 ff (doi 10.1007/978-1-4614-6025-1_9)
+ *
+ * \param N number of steps
+ * \return a list of random numbers from which the random lattice walk can be constructed
+ */
 std::list<double> SelfAvoidingWalker::dim(int N)
 {
     int threshold = 10;

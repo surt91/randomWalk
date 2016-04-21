@@ -3,7 +3,7 @@
 Povray::Povray(const std::string &filename)
     : filename(filename)
 {
-    /* Schreibe Header */
+    /* Write Header */
     header = std::string(   "#version 3.6;\n"
                             "global_settings{ assumed_gamma 1.0 }\n"
                             "#include \"colors.inc\"\n"

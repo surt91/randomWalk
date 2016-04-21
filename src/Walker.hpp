@@ -12,7 +12,10 @@
 #include "Povray.hpp"
 
 
-/* Class Walker
+/** Abstract base class for all Walker classes.
+ *
+ * Offers an interface to access generic functions to manipulate,
+ * visualize and get observables the Walker and its hull.
  *
  * Saves a vector of random numbers [0,1] and generates a random walk
  * on demand.

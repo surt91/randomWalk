@@ -6,6 +6,11 @@
 #include "Logging.hpp"
 #include "Step.hpp"
 
+/** Abstract base class templates of all Convex Hull class templates.
+ *
+ * Offers pure virtual functions to access observalbes of the convex
+ * hull. Acts as an interface.
+ */
 template <class T>
 class ConvexHull
 {
@@ -29,8 +34,6 @@ class ConvexHull
         {
             throw std::invalid_argument("hull facets for this algorithm not implemented");
         }
-
-
 
     protected:
         std::vector<Step<T>> interiorPoints;
