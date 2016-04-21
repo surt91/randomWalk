@@ -11,3 +11,6 @@ randomWalk
 *.svg
 
 *.log
+
+doc/
+manual.pdf

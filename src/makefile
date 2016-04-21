@@ -1,5 +1,7 @@
 TARGET	= randomWalk
 
+DOC 	= manual.pdf
+
 CPP	 := main.cpp \
         Cmd.cpp \
         Benchmark.cpp \
@@ -78,6 +80,13 @@ $(QHULL):
 
 $(TARGET): $(OBJ) $(QHULL)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
+
+doc: $(DOC)
+$(DOC): *.cpp *.hpp
+	doxygen doc.conf
+	$(MAKE) -C doc/latex clean
+	$(MAKE) -C doc/latex
+	cp doc/latex/refman.pdf $@
 
 proper:
 	rm -rf $(OBJ)
