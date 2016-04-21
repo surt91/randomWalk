@@ -61,7 +61,7 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
 
     w->updateSteps();
 
-    LOG(LOG_TIMING) << "RW : " << time_diff(before_walker, clock());
+    LOG(LOG_TIMING) << "    " << time_diff(before_walker, clock());
 
     return w;
 }
@@ -85,7 +85,7 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
         LOG(LOG_ERROR) << "expected " << o.benchmark_A;
     }
 
-    LOG(LOG_TIMING) << "CH : " << time_diff(before_ch, before_output);
+    LOG(LOG_TIMING) << "            " << time_diff(before_ch, before_output);
 }
 
 void run_MC_simulation(const Cmd &o, std::unique_ptr<Walker> &w)
@@ -95,7 +95,7 @@ void run_MC_simulation(const Cmd &o, std::unique_ptr<Walker> &w)
     for(int i=0; i<o.iterations; ++i)
         w->change(rngMC);
 
-    LOG(LOG_TIMING) << "MC : " << time_diff(before_mc, clock());
+    LOG(LOG_TIMING) << "    MC : " << time_diff(before_mc, clock());
 }
 
 void benchmark()
@@ -145,7 +145,7 @@ void benchmark()
         for(int j=1; j<=8; ++j)
         {
             o.chAlg = (hull_algorithm_t) j;
-            LOG(LOG_INFO) << CH_LABEL[j];
+            LOG(LOG_INFO) << "        " << CH_LABEL[j];
             try{
                 run_hull(o, w);
             } catch(...) { }
