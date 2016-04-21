@@ -9,11 +9,11 @@ template <class T>
 class ConvexHullAndrew : public ConvexHull2D<T>
 {
     public:
-        ConvexHullAndrew<T>(const std::vector<Step<T>>& interiorPoints, bool akl);
+        ConvexHullAndrew<T>(const std::vector<Step<T>> &interiorPoints, bool akl);
 };
 
 template <class T>
-ConvexHullAndrew<T>::ConvexHullAndrew(const std::vector<Step<T>>& interiorPoints, bool akl)
+ConvexHullAndrew<T>::ConvexHullAndrew(const std::vector<Step<T>> &interiorPoints, bool akl)
     : ConvexHull2D<T>(interiorPoints, akl)
 {
     if(this->d != 2)
@@ -23,24 +23,28 @@ ConvexHullAndrew<T>::ConvexHullAndrew(const std::vector<Step<T>>& interiorPoints
     }
 
     int k = 0;
+    // we need to sort the points, hence we make a copy
+    if(!akl)
+        this->pointSelection = interiorPoints;
+
     this->hullPoints_ = std::vector<Step<T>>(2*this->n);
 
-    std::sort(this->interiorPoints.begin(), this->interiorPoints.end());
+    std::sort(this->pointSelection.begin(), this->pointSelection.end());
 
     // Build lower hull
     for(int i = 0; i < this->n; ++i)
     {
-        while (k >= 2 && this->cross2d_z(this->hullPoints_[k-2], this->hullPoints_[k-1], this->interiorPoints[i]) <= 0)
+        while (k >= 2 && this->cross2d_z(this->hullPoints_[k-2], this->hullPoints_[k-1], this->pointSelection[i]) <= 0)
             k--;
-        this->hullPoints_[k++] = this->interiorPoints[i];
+        this->hullPoints_[k++] = this->pointSelection[i];
     }
 
     // Build upper hull
     for (int i = this->n-2, t = k+1; i >= 0; i--)
     {
-        while (k >= t && this->cross2d_z(this->hullPoints_[k-2], this->hullPoints_[k-1], this->interiorPoints[i]) <= 0)
+        while (k >= t && this->cross2d_z(this->hullPoints_[k-2], this->hullPoints_[k-1], this->pointSelection[i]) <= 0)
             k--;
-        this->hullPoints_[k++] = this->interiorPoints[i];
+        this->hullPoints_[k++] = this->pointSelection[i];
     }
 
     // last point equals first, this makes calculation of A and L easier

@@ -10,11 +10,11 @@ template <class T>
 class ConvexHullJarvis : public ConvexHull2D<T>
 {
     public:
-        ConvexHullJarvis<T>(const std::vector<Step<T>>& interiorPoints, bool akl);
+        ConvexHullJarvis<T>(const std::vector<Step<T>> &interiorPoints, bool akl);
 };
 
 template <class T>
-ConvexHullJarvis<T>::ConvexHullJarvis(const std::vector<Step<T>>& interiorPoints, bool akl)
+ConvexHullJarvis<T>::ConvexHullJarvis(const std::vector<Step<T>> &interiorPoints, bool akl)
     : ConvexHull2D<T>(interiorPoints, akl)
 {
     if(this->d > 3)
@@ -29,11 +29,20 @@ ConvexHullJarvis<T>::ConvexHullJarvis(const std::vector<Step<T>>& interiorPoints
     }
 
     // Step < sorts by x value
-    std::unordered_set<Step<T>> candidate_points(interiorPoints.begin(), interiorPoints.end());
     Step<T> p, p1;
 
-    // find leftmost point
-    p1 = std::min(interiorPoints);
+    std::unordered_set<Step<T>> candidate_points;
+    if(!akl)
+    {
+        candidate_points = std::unordered_set<Step<T>>(interiorPoints.begin(), interiorPoints.end());
+        p1 = std::min(interiorPoints);
+    }
+    else
+    {
+        candidate_points = std::unordered_set<Step<T>>(this->pointSelection.begin(), this->pointSelection.end());
+        p1 = std::min(this->pointSelection);
+    }
+
     candidate_points.erase(p1);
     this->hullPoints_.push_back(p1);
 

@@ -15,7 +15,7 @@ template <class T>
 class ConvexHull
 {
     public:
-        ConvexHull(const std::vector<Step<T>>& interiorPoints, bool /*akl*/)
+        ConvexHull(const std::vector<Step<T>> &interiorPoints, bool /*akl*/)
             : interiorPoints(interiorPoints),
               n(interiorPoints.size()),
               d(interiorPoints[0].d())
@@ -36,7 +36,7 @@ class ConvexHull
         }
 
     protected:
-        std::vector<Step<T>> interiorPoints;
+        const std::vector<Step<T>>& interiorPoints;
         mutable std::vector<Step<T>> hullPoints_;
         int n;
         int d;

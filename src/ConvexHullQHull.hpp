@@ -8,6 +8,7 @@
 
 #include "ConvexHull.hpp"
 
+// TODO: use akl for d=2
 template <class T>
 class ConvexHullQHull : public ConvexHull<T>
 {
@@ -20,7 +21,7 @@ class ConvexHullQHull : public ConvexHull<T>
         using ConvexHull<T>::hullPoints_;
 
     public:
-        ConvexHullQHull<T>(const std::vector<Step<T>>& interiorPoints, bool akl);
+        ConvexHullQHull<T>(const std::vector<Step<T>> &interiorPoints, bool akl);
 
         virtual double A() const { return m_A; };
         virtual double L() const { return m_L; };
@@ -34,7 +35,7 @@ class ConvexHullQHull : public ConvexHull<T>
 };
 
 template <class T>
-ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>>& interiorPoints, bool akl)
+ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, bool akl)
     : ConvexHull<T>(interiorPoints, akl)
 {
     // test, if points are fully dimensional

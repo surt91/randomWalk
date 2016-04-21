@@ -7,7 +7,7 @@ class ConvexHull2D : public ConvexHull<T>
 {
     // templates are hard: http://stackoverflow.com/a/6592617/1698412
     public:
-        ConvexHull2D(const std::vector<Step<T>>& interiorPoints, bool akl);
+        ConvexHull2D(const std::vector<Step<T>> &interiorPoints, bool akl);
 
         virtual double A() const;
         virtual double L() const;
@@ -23,10 +23,11 @@ class ConvexHull2D : public ConvexHull<T>
     protected:
         static T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p);
         virtual void preprocessAklToussaint();
+        std::vector<Step<T>> pointSelection;
 };
 
 template <class T>
-ConvexHull2D<T>::ConvexHull2D(const std::vector<Step<T>>& interiorPoints, bool akl)
+ConvexHull2D<T>::ConvexHull2D(const std::vector<Step<T>> &interiorPoints, bool akl)
     : ConvexHull<T>(interiorPoints, akl)
 {
     if(this->d != 2)
@@ -156,7 +157,6 @@ void ConvexHull2D<T>::preprocessAklToussaint()
     // find and delete points inside the quadriliteral
     // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
     // do this by building a new list of vertices outside
-    std::vector<Step<T>> pointSelection;
     for(const Step<T>& i : this->interiorPoints)
     {
         if(!pointInQuadrilateral(min[0], max[1], max[0], min[1], i))
@@ -169,10 +169,9 @@ void ConvexHull2D<T>::preprocessAklToussaint()
         pointSelection.push_back(min[i]);
         pointSelection.push_back(max[i]);
     }
-    LOG(LOG_DEBUG) << "Akl Toussaint killed: "
+    LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
             << (this->n - pointSelection.size()) << "/" << this->n
             << " ("  << std::setprecision(2) << ((double) (this->n - pointSelection.size()) / this->n * 100) << "%)";
 
-    this->interiorPoints = std::move(pointSelection);
-    this->n = this->interiorPoints.size();
+    this->n = pointSelection.size();
 }
