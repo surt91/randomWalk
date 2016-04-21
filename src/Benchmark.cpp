@@ -58,6 +58,8 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
         w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rng, o.chAlg));
     else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rng, o.chAlg));
+    else if(o.type == WT_REAL_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new RealWalker(o.d, o.steps, rng, o.chAlg));
 
     w->updateSteps();
 
@@ -112,7 +114,7 @@ void benchmark()
 
     clock_t start = clock();
 
-    for(int i=1; i<=3; ++i)
+    for(int i=1; i<=4; ++i)
     {
         switch(i)
         {
@@ -137,6 +139,13 @@ void benchmark()
                 o.benchmark_A = 4252.5;
                 o.iterations = 10000;
                 break;
+            case WT_REAL_RANDOM_WALK:
+                o.steps = 100000;
+                o.type = WT_REAL_RANDOM_WALK;
+                o.benchmark_L = 910.582882728;
+                o.benchmark_A = 56424.1359587;
+                o.iterations = 10;
+                break;
         }
 
         LOG(LOG_INFO) << TYPE_LABEL[i];
@@ -144,6 +153,10 @@ void benchmark()
 
         for(int j=1; j<=8; ++j)
         {
+            // Graham not implemented
+            if(j == 5 || j == 6)
+                continue;
+
             o.chAlg = (hull_algorithm_t) j;
             LOG(LOG_INFO) << "        " << CH_LABEL[j];
             try{

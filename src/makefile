@@ -9,6 +9,7 @@ CPP	 := main.cpp \
         LatticeWalker.cpp \
         LoopErasedWalker.cpp \
         SelfAvoidingWalker.cpp \
+        RealWalker.cpp \
         Simulation.cpp \
         Metropolis.cpp \
         WangLandau.cpp \

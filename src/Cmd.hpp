@@ -37,14 +37,16 @@ const std::vector<std::string> CH_LABEL = {
 enum walk_type_t {
     WT_RANDOM_WALK = 1,
     WT_LOOP_ERASED_RANDOM_WALK,
-    WT_SELF_AVOIDING_RANDOM_WALK
+    WT_SELF_AVOIDING_RANDOM_WALK,
+    WT_REAL_RANDOM_WALK
 };
 
 const std::vector<std::string> TYPE_LABEL = {
     "nan",
     "Random Walk",
     "Loop Erased Random Walk",
-    "Self-Avoiding Random Walk"
+    "Self-Avoiding Random Walk",
+    "Real Random Walk"
 };
 
 enum wanted_observable_t {

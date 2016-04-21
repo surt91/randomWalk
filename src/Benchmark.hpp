@@ -16,6 +16,7 @@
 #include "LatticeWalker.hpp"
 #include "LoopErasedWalker.hpp"
 #include "SelfAvoidingWalker.hpp"
+#include "RealWalker.hpp"
 
 
 std::string vmPeak();
