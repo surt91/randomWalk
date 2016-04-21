@@ -13,8 +13,6 @@ class LoopErasedWalker : public LatticeWalker
         {
         };
 
-        virtual ~LoopErasedWalker() {};
-
         virtual const std::vector<Step<int>>& steps() const;
 
         virtual int nRN() const;

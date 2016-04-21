@@ -144,8 +144,6 @@ class SelfAvoidingWalker : public LatticeWalker
             random_numbers = std::vector<double>(l.begin(), l.end());
         }
 
-        virtual ~SelfAvoidingWalker() {};
-
         virtual void change(UniformRNG &rng);
         virtual void undoChange();
 

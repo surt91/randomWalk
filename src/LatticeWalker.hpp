@@ -11,8 +11,6 @@ class LatticeWalker : public SpecWalker<int>
         {
         };
 
-        virtual ~LatticeWalker() {};
-
         virtual void change(UniformRNG &rng);
         virtual void undoChange();
 
