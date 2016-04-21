@@ -82,7 +82,7 @@ $(TARGET): $(OBJ) $(QHULL)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
 doc: $(DOC)
-$(DOC): *.cpp *.hpp
+$(DOC): doc.conf *.cpp *.hpp
 	doxygen doc.conf
 	$(MAKE) -C doc/latex clean
 	$(MAKE) -C doc/latex

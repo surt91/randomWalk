@@ -17,7 +17,6 @@ std::string time_diff(clock_t start, clock_t end)
  *
  * \param cmd is the shell command to be executed
  * \return standard output of the command
-
  */
 std::string exec(const char* cmd)
 {
@@ -102,7 +101,6 @@ void run_MC_simulation(const Cmd &o, std::unique_ptr<Walker> &w)
 void benchmark()
 {
     Logger::verbosity = LOG_TIMING;
-    //~ Logger::verbosity = LOG_TOO_MUCH;
 
     Cmd o;
     o.benchmark = true;

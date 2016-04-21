@@ -3,6 +3,10 @@
 #include "Logging.hpp"
 #include "SpecWalker.hpp"
 
+/** Base class for all lattice walks.
+ *
+ * Standard lattice random walk, with immediate reversals.
+ */
 class LatticeWalker : public SpecWalker<int>
 {
     public:

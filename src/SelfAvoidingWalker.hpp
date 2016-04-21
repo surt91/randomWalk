@@ -7,7 +7,7 @@
 #include "Logging.hpp"
 #include "LatticeWalker.hpp"
 
-// transformation matrices for pivoting d=2
+/// transformation matrices for pivoting d=2
 static const std::vector<std::vector<int>> tMatrix2 =
     {
         // mirror at x-axis
@@ -31,7 +31,7 @@ static const std::vector<std::vector<int>> tMatrix2 =
               1,  0}
         )
     };
-// inverse transformations
+/// inverse transformations
 static const std::vector<int> iMatrix2 =
     {
         0,
@@ -40,7 +40,7 @@ static const std::vector<int> iMatrix2 =
         2
     };
 
-// transformation matrices for pivoting d=3
+/// transformation matrices for pivoting d=3
 static const std::vector<std::vector<int>> tMatrix3 =
     {
         // mirror at xy-plane
@@ -116,7 +116,7 @@ static const std::vector<std::vector<int>> tMatrix3 =
               0,  0,  1}
         )
     };
-// inverse transformations
+/// inverse transformations
 static const std::vector<int> iMatrix3 =
     {
         0,
@@ -133,6 +133,14 @@ static const std::vector<int> iMatrix3 =
         9
     };
 
+/** Self-Avoiding Random Walk
+ *
+ * A Walk which does not self intersect.
+ *
+ * See also:
+ * doi: 10.1007/978-1-4614-6025-1_9
+ * [wiki](https://en.wikipedia.org/wiki/Self-avoiding_walk)
+ */
 class SelfAvoidingWalker : public LatticeWalker
 {
     public:

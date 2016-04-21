@@ -45,6 +45,8 @@ static const std::vector<std::string> LABEL = {
     "\x1B[34mDebug3:  \033[0m"
 };
 
+/** Logs messages depending on a runtime set verbosity level.
+ */
 class Logger {
     public:
         Logger(log_level_t level)
