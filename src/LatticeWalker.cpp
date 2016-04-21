@@ -1,5 +1,18 @@
 #include "LatticeWalker.hpp"
 
+const std::vector<Step<int>>& LatticeWalker::steps() const
+{
+    if(!stepsDirty)
+        return m_steps;
+
+    m_steps.resize(numSteps);
+    for(int i=0; i<numSteps; ++i)
+        m_steps[i] = Step<int>(d, random_numbers[i]);
+
+    stepsDirty = false;
+    return m_steps;
+}
+
 void LatticeWalker::change(UniformRNG &rng)
 {
     steps(); // steps need to be initialized

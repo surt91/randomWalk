@@ -31,7 +31,6 @@ class Walker
             : numSteps(numSteps),
               d(d),
               rng(rng),
-              random_numbers(rng.vector(numSteps)),
               hull_algo(hull_algo)
         {
             stepsDirty = true;

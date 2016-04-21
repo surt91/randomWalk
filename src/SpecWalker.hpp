@@ -17,10 +17,10 @@
 #include "ConvexHullJarvis.hpp"
 
 
-/* Class Template SpecWalker
+/* Class Template SpecWalker.
  *
- * Implements generic things offered by the Walker interface
- * Is Base Class of all Walker Implementations
+ * Implements generic things offered by the Walker interface.
+ * Is Base Class of all Walker Implementations.
  * */
 template <class T>
 class SpecWalker : public Walker
@@ -39,13 +39,13 @@ class SpecWalker : public Walker
         const ConvexHull<T>& convexHull() const;
 
         // convenience functions
-        const std::vector<Step<T>> hullPoints() const { return convexHull().hullPoints(); };
         double A() const { return convexHull().A(); };
         double L() const { return convexHull().L(); };
 
         // get state
+        virtual const std::vector<Step<T>>& steps() const = 0;
         virtual const std::vector<Step<T>>& points(int start=1) const;
-        virtual const std::vector<Step<T>>& steps() const;
+        const std::vector<Step<T>> hullPoints() const { return convexHull().hullPoints(); };
 
         virtual int nSteps() const;
 
@@ -108,27 +108,13 @@ const std::vector<Step<T>>& SpecWalker<T>::points(int start) const
     if(m_points.size() != (size_t) numSteps + 1)
     {
         m_points.resize(numSteps + 1);
-        m_points[0] = Step<T>(std::vector<int>(d, 0));
+        m_points[0] = Step<T>(std::vector<T>(d, 0));
     }
 
     for(int i=start; i<=numSteps; ++i)
         m_points[i] = m_points[i-1] + m_steps[i-1];
 
     return m_points;
-}
-
-template <class T>
-const std::vector<Step<T>>& SpecWalker<T>::steps() const
-{
-    if(!stepsDirty)
-        return m_steps;
-
-    m_steps.resize(numSteps);
-    for(int i=0; i<numSteps; ++i)
-        m_steps[i] = Step<T>(d, random_numbers[i]);
-
-    stepsDirty = false;
-    return m_steps;
 }
 
 template <class T>
@@ -148,7 +134,7 @@ void SpecWalker<T>::svg(const std::string filename, const bool with_hull) const
     int min_x=0, max_x=0, min_y=0, max_y=0;
     for(auto i : p)
     {
-        int x1 = i[0], y1 = i[1];
+        T x1 = i[0], y1 = i[1];
         std::vector<double> point {(double) x1, (double) y1};
 
         pic.circle(x1, y1, true);
@@ -192,7 +178,7 @@ void SpecWalker<T>::pov(const std::string filename, const bool with_hull) const
     std::vector<std::vector<double>> points;
     for(auto i : p)
     {
-        int x = i[0], y = i[1], z = 0;
+        T x = i[0], y = i[1], z = 0;
         if(d > 2)
             z = i[2];
         std::vector<double> point {(double) x, (double) y, (double) z};

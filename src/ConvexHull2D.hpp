@@ -15,13 +15,13 @@ class ConvexHull2D : public ConvexHull<T>
         virtual const std::vector<Step<T>>& hullPoints() const;
 
         // d=2, geometry
-        static int cross2d_z(const Step<T>& O, const Step<T>& A, const Step<T>& B);
+        static T cross2d_z(const Step<T>& O, const Step<T>& A, const Step<T>& B);
         static bool pointInTriangle(const Step<T>& p1, const Step<T>& p2, const Step<T>& p3, const Step<T>& p);
         static bool pointInQuadrilateral(const Step<T>& p1, const Step<T>& p2, const Step<T>& p3, const Step<T>& p4, const Step<T>& p);
         static bool pointInPolygon(const std::vector<Step<T>>& poly, const Step<T>& p);
 
     protected:
-        static int side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p);
+        static T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p);
         virtual void preprocessAklToussaint();
 };
 
@@ -88,7 +88,7 @@ const std::vector<Step<T>>& ConvexHull2D<T>::hullPoints() const
 // Returns a positive value, if OAB makes a counter-clockwise turn,
 // negative for clockwise turn, and zero if the points are collinear.
 template <class T>
-int ConvexHull2D<T>::cross2d_z(const Step<T>& O, const Step<T>& A, const Step<T>& B)
+T ConvexHull2D<T>::cross2d_z(const Step<T>& O, const Step<T>& A, const Step<T>& B)
 {
     return (A.x() - O.x()) * (B.y() - O.y()) - (A.y() - O.y()) * (B.x() - O.x());
 }
@@ -127,7 +127,7 @@ bool ConvexHull2D<T>::pointInPolygon(const std::vector<Step<T>>& poly, const Ste
 
 // special for d=2
 template <class T>
-int ConvexHull2D<T>::side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p)
+T ConvexHull2D<T>::side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p)
 {
     return (p2.y() - p1.y())*(p.x() - p1.x()) + (-p2.x() + p1.x())*(p.y() - p1.y());
 }

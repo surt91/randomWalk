@@ -13,6 +13,7 @@ class Step;
 namespace std {
     template<>
     struct hash<Step<int>>;
+    struct hash<Step<double>>;
 }
 
 /** Step class template, offers vector functions.
@@ -24,10 +25,14 @@ class Step
 
     public:
         Step(){};
-        Step(int d, double rn);
+        Step(int /*d*/, double /*rn*/){throw std::invalid_argument("Step(int d, double rn) only implemented for Step<int>");};
+        Step(int d)
+            : m_d(d),
+              m_coordinates(std::vector<T>(d))
+        {};
         Step(const std::vector<T> &coord)
-              : m_d(coord.size()),
-                m_coordinates(coord)
+            : m_d(coord.size()),
+              m_coordinates(coord)
         {};
 
         // properties
@@ -69,8 +74,8 @@ class Step
         friend std::ostream& operator<<(std::ostream& os, const std::list<Step<U>> &obj);
 
         // access operators
-        int operator[](std::size_t idx) const { return m_coordinates[idx]; };
-        int& operator[](std::size_t idx) { return m_coordinates[idx]; };
+        T operator[](std::size_t idx) const { return m_coordinates[idx]; };
+        T& operator[](std::size_t idx) { return m_coordinates[idx]; };
 
         // getter
         int d() const { return m_d; };
@@ -88,8 +93,10 @@ class Step
 
 };
 
-template <class T>
-Step<T>::Step(int d, double rn)
+/** Specialization for int steps
+ */
+template <>
+inline Step<int>::Step(int d, double rn)
       : m_d(d)
 {
     m_coordinates = std::vector<int>(d, 0);
@@ -294,7 +301,6 @@ std::ostream& operator<<(std::ostream& os, const std::list<Step<T>> &obj)
 }
 
 namespace std {
-    // hashmap for doubles is useless, hence only int specialization
     template<>
     struct hash<Step<int>>
     {
@@ -308,6 +314,19 @@ namespace std {
                 std::size_t seed = 0;
                 for(auto &i : s.m_coordinates)
                     seed ^= i + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+                return seed;
+            }
+    };
+
+    template<>
+    struct hash<Step<double>>
+    {
+        public:
+            size_t operator()(const Step<double> &s) const
+            {
+                std::size_t seed = 0;
+                for(auto &i : s.m_coordinates)
+                    seed ^= std::hash<double>()(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
                 return seed;
             }
     };
