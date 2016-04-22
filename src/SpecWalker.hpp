@@ -104,7 +104,7 @@ const std::vector<Step<T>>& SpecWalker<T>::points(int start) const
 {
     if(stepsDirty)
         steps();
-    if(!pointsDirty)
+    if(!pointsDirty && !start==1)
         return m_points;
 
     if(m_points.size() != (size_t) numSteps + 1)
