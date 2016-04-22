@@ -55,7 +55,7 @@ ConvexHullJarvis<T>::ConvexHullJarvis(const std::vector<Step<T>> &interiorPoints
 
         for(auto it = candidate_points.begin(); it != candidate_points.end(); ++it)
         {
-            T orientation = this->cross2d_z(this->hullPoints_[hull_idx], *it, p);
+            T orientation = cross2d_z(this->hullPoints_[hull_idx], *it, p);
             if(orientation > 0)
                 p = *it;
             else if(orientation == 0) // colinear
@@ -75,7 +75,7 @@ ConvexHullJarvis<T>::ConvexHullJarvis(const std::vector<Step<T>> &interiorPoints
 
         for(auto it = candidate_points.begin(); it != candidate_points.end(); )
         {
-            if(this->pointInTriangle(this->hullPoints_[0],
+            if(pointInTriangle(this->hullPoints_[0],
                                this->hullPoints_[hull_idx-1],
                                this->hullPoints_[hull_idx],
                                *it))

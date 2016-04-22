@@ -34,7 +34,7 @@ ConvexHullAndrew<T>::ConvexHullAndrew(const std::vector<Step<T>> &interiorPoints
     // Build lower hull
     for(int i = 0; i < this->n; ++i)
     {
-        while (k >= 2 && this->cross2d_z(this->hullPoints_[k-2], this->hullPoints_[k-1], this->pointSelection[i]) <= 0)
+        while (k >= 2 && cross2d_z(this->hullPoints_[k-2], this->hullPoints_[k-1], this->pointSelection[i]) <= 0)
             k--;
         this->hullPoints_[k++] = this->pointSelection[i];
     }
@@ -42,7 +42,7 @@ ConvexHullAndrew<T>::ConvexHullAndrew(const std::vector<Step<T>> &interiorPoints
     // Build upper hull
     for (int i = this->n-2, t = k+1; i >= 0; i--)
     {
-        while (k >= t && this->cross2d_z(this->hullPoints_[k-2], this->hullPoints_[k-1], this->pointSelection[i]) <= 0)
+        while (k >= t && cross2d_z(this->hullPoints_[k-2], this->hullPoints_[k-1], this->pointSelection[i]) <= 0)
             k--;
         this->hullPoints_[k++] = this->pointSelection[i];
     }

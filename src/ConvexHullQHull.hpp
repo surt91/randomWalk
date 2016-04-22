@@ -6,6 +6,7 @@
 #include <QhullVertexSet.h>
 #include <QhullError.h>
 
+#include "geometry.hpp"
 #include "ConvexHull.hpp"
 
 // TODO: use akl for d=2
@@ -32,6 +33,7 @@ class ConvexHullQHull : public ConvexHull<T>
     protected:
         std::unique_ptr<orgQhull::Qhull> qhull;
         std::vector<double> coords;
+        virtual void preprocessAklToussaint();
 };
 
 template <class T>
@@ -48,6 +50,7 @@ ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, 
             ++j;
         if(j == n)
             ++num_zeros;
+        }
     }
 
     if(num_zeros >= 2)
@@ -90,9 +93,13 @@ ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, 
             for(int j=0; j<d; ++j)
                 coords[i*d + j] = interiorPoints[i][dimMap[j]];
     }
+
+    coords = std::vector<double>(n*d);
+
+    if(akl)
+        preprocessAklToussaint();
     else
     {
-        coords = std::vector<double>(n*d);
         for(int i=0; i<n; ++i)
             for(int j=0; j<d; ++j)
                 coords[i*d + j] = interiorPoints[i][j];
@@ -118,6 +125,58 @@ ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, 
         LOG(LOG_ERROR) << "Not full dimensional, but not catched!";
         LOG(LOG_TOO_MUCH) << e.what();
     }
+}
+
+// deletes points from interior points according to the Akl Toussaint heuristic
+template <class T>
+void ConvexHullQHull<T>::preprocessAklToussaint()
+{
+    if(this->d != 2)
+        throw std::invalid_argument("Only implemented for d=2");
+
+    // could be generalized longterm:
+    // - higher dimensions
+    // - more than 4 points
+
+    // find points with min/max x/y (/z/w/...)
+    std::vector<Step<T>> min(this->d, this->interiorPoints[0]);
+    std::vector<Step<T>> max(this->d, this->interiorPoints[0]);
+    for(const Step<T>& i : this->interiorPoints)
+        for(int j=0; j<this->d; ++j)
+        {
+            if(i.x(j) < min[j].x(j))
+                min[j] = i;
+            if(i.x(j) > max[j].x(j))
+                max[j] = i;
+        }
+
+    // for d=3 this needs to be a volume instead of a polygon
+    // find and delete points inside the quadriliteral
+    // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
+    // do this by building a new list of vertices outside
+    int k = 0;
+    for(const Step<T>& i : this->interiorPoints)
+        if(!pointInQuadrilateral(min[0], max[1], max[0], min[1], i))
+        {
+            for(int j=0; j<this->d; ++j)
+                coords[k*this->d + j] = i[j];
+            ++k;
+        }
+
+    // Also make sure that the min/max points are still considered
+    for(int i=0; i<this->d; ++i, k+=2)
+        for(int j=0; j<this->d; ++j)
+        {
+            coords[k*this->d + j] = min[i][j];
+            coords[(k+1)*this->d + j] = max[i][j];
+        }
+
+    LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
+            << (this->n - k) << "/" << this->n
+            << " ("  << std::setprecision(2) << ((double) (this->n - k) / this->n * 100) << "%)";
+
+    coords.resize(k*this->d);
+    this->n = k;
 }
 
 template <class T>
