@@ -18,6 +18,8 @@
 #include "LatticeWalker.hpp"
 #include "LoopErasedWalker.hpp"
 #include "SelfAvoidingWalker.hpp"
+#include "RealWalker.hpp"
+#include "GaussWalker.hpp"
 #include "RNG.hpp"
 #include "Benchmark.hpp"
 

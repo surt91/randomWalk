@@ -10,6 +10,7 @@ CPP	 := main.cpp \
         LoopErasedWalker.cpp \
         SelfAvoidingWalker.cpp \
         RealWalker.cpp \
+        GaussWalker.cpp \
         Simulation.cpp \
         Metropolis.cpp \
         WangLandau.cpp \
@@ -31,8 +32,8 @@ CXX	= g++
 #CXX	= clang++
 #CXX	= icpc
 
-#COPT = -g
-COPT = -O3 -flto -mtune=native -fomit-frame-pointer
+COPT = -g
+#COPT = -O3 -flto -mtune=native -fomit-frame-pointer
 #COPT += -DNLOG
 COPT += -fopenmp
 COPT += -std=c++11 -m64 -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color

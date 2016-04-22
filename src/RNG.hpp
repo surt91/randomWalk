@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <vector>
 #include <random>
 #include <algorithm>
@@ -10,13 +11,20 @@ std::vector<double> rng(int n, int seed=0);
 
 class UniformRNG
 {
+    protected:
+        std::mt19937 rng;
+        std::uniform_real_distribution<double> distribution;
+        std::normal_distribution<double> distribution_gaussian;
+
     public:
         UniformRNG() {}
 
         UniformRNG(int seed)
             : rng(seed),
               distribution(0.0, 1.0),
-              uniform(std::bind(distribution, rng))
+              distribution_gaussian(0.0, 1.0),
+              uniform(std::bind(distribution, rng)),
+              gaussian(std::bind(distribution_gaussian, rng))
         {}
 
         double operator()()
@@ -25,12 +33,13 @@ class UniformRNG
         }
 
         std::vector<double> vector(int n);
+        std::vector<double> vector_gaussian(int n);
+
+        std::function<double()> uniform;
+        std::function<double()> gaussian;
 
         std::string serialize_rng();
         void deserialize_rng(std::string &s);
 
-    protected:
-        std::mt19937 rng;
-        std::uniform_real_distribution<double> distribution;
-        std::function<double()> uniform;
+
 };

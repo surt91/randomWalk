@@ -30,7 +30,7 @@ class RealWalker : public SpecWalker<double>
         virtual void degenerateStraight();
 
     protected:
-        Step<double> genStep(std::vector<double>::iterator first) const;
+        virtual Step<double> genStep(std::vector<double>::iterator first) const;
 
         std::vector<double> undo_values;
 };

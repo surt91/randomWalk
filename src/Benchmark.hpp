@@ -17,6 +17,7 @@
 #include "LoopErasedWalker.hpp"
 #include "SelfAvoidingWalker.hpp"
 #include "RealWalker.hpp"
+#include "GaussWalker.hpp"
 
 
 std::string vmPeak();

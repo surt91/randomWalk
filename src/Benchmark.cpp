@@ -114,7 +114,7 @@ void benchmark()
 
     clock_t start = clock();
 
-    for(int i=1; i<=4; ++i)
+    for(int i=1; i<=5; ++i)
     {
         switch(i)
         {
@@ -145,6 +145,13 @@ void benchmark()
                 o.benchmark_L = 910.582882728;
                 o.benchmark_A = 56424.1359587;
                 o.iterations = 10;
+                break;
+            case WT_GAUSSIAN_RANDOM_WALK:
+                o.steps = 100000;
+                o.type = WT_GAUSSIAN_RANDOM_WALK;
+                o.benchmark_L = 910.582882728;
+                o.benchmark_A = 56424.1359587;
+                o.iterations = 100;
                 break;
         }
 

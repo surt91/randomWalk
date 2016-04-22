@@ -14,6 +14,14 @@ std::vector<double> UniformRNG::vector(int n)
     return v;
 }
 
+std::vector<double> UniformRNG::vector_gaussian(int n)
+{
+    std::vector<double> v(n);
+    std::generate(v.begin(), v.end(), gaussian);
+
+    return v;
+}
+
 std::string UniformRNG::serialize_rng()
 {
     std::stringstream ss;
