@@ -155,38 +155,41 @@ void Metropolis::run()
     std::unique_ptr<Walker> w;
     prepare(w);
 
-    t_eq = equilibrate(w, rngMC);
-
-    for(int i=t_eq; i<o.iterations+2*t_eq; ++i)
+    if(o.iterations > 0)
     {
-        // one sweep, i.e., one change try for each site
-        for(int j=0; j<o.steps; ++j)
-        {
-            // change one random number to another random number
-            double oldS = S(w);
-            w->change(rngMC);
-            ++trys;
+        t_eq = equilibrate(w, rngMC);
 
-            if(!o.simpleSampling)
+        for(int i=t_eq; i<o.iterations+2*t_eq; ++i)
+        {
+            // one sweep, i.e., one change try for each site
+            for(int j=0; j<o.steps; ++j)
             {
-                // Metropolis rejection
-                double p_acc = exp((oldS - S(w))/o.theta);
-                if(p_acc < rngMC())
+                // change one random number to another random number
+                double oldS = S(w);
+                w->change(rngMC);
+                ++trys;
+
+                if(!o.simpleSampling)
                 {
-                    ++fail;
-                    w->undoChange();
+                    // Metropolis rejection
+                    double p_acc = exp((oldS - S(w))/o.theta);
+                    if(p_acc < rngMC())
+                    {
+                        ++fail;
+                        w->undoChange();
+                    }
                 }
             }
-        }
-        if(i >= 2*t_eq)
-        {
-            if(!o.conf_path.empty())
-                w->saveConfiguration(o.conf_path);
+            if(i >= 2*t_eq)
+            {
+                if(!o.conf_path.empty())
+                    w->saveConfiguration(o.conf_path);
 
-            LOG(LOG_TOO_MUCH) << "Area  : " << w->L();
-            LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
-            LOG(LOG_DEBUG) << "Iteration: " << i;
-            oss << i << " " << w->L() << " " << w->A() << std::endl;
+                LOG(LOG_TOO_MUCH) << "Area  : " << w->L();
+                LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
+                LOG(LOG_DEBUG) << "Iteration: " << i;
+                oss << i << " " << w->L() << " " << w->A() << std::endl;
+            }
         }
     }
 
