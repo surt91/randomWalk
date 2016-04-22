@@ -43,13 +43,17 @@ ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, 
     // test, if points are fully dimensional
     // we need to do that first, since qhull seems to leak on exceptions
     int num_zeros = 0;
+    int zero_axis = 0;
+    std::string cmd("");
     for(int i=0; i<d; ++i)
     {
         int j = 0;
         while(j < n && interiorPoints[j][i] == 0)
             ++j;
         if(j == n)
+        {
             ++num_zeros;
+            zero_axis = i;
         }
     }
 
@@ -62,7 +66,9 @@ ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, 
     }
     else if(num_zeros == 1)
     {
-        LOG(LOG_DEBUG) << "Not full dimensional, strip one axis";
+        LOG(LOG_DEBUG) << "Not full dimensional, strip one axis: " << zero_axis;
+        // drop that dimension, see http://www.qhull.org/html/qh-optq.htm#Qb0
+        cmd = "Qb"+std::to_string(zero_axis)+":0B"+std::to_string(zero_axis)+":0";
 
         if(d - num_zeros <= 1)
         {
@@ -71,27 +77,7 @@ ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, 
             m_A = 0;
             return;
         }
-
-        std::vector<int> dimMap(d-1);
-        for(int i=0; i<d; ++i)
-        {
-            int j = 0;
-            while(j < n && interiorPoints[j][i] == 0)
-                ++j;
-            if(j == n)
-            {
-                for(int l=0, k=0; l<d; ++l)
-                    if(l != i)
-                        dimMap[k++] = l;
-            }
-        }
-        LOG(LOG_DEBUG) << "axis left: " << dimMap;
-
         --d;
-        coords = std::vector<double>(n*d);
-        for(int i=0; i<n; ++i)
-            for(int j=0; j<d; ++j)
-                coords[i*d + j] = interiorPoints[i][dimMap[j]];
     }
 
     coords = std::vector<double>(n*d);
@@ -108,7 +94,7 @@ ConvexHullQHull<T>::ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, 
     try
     {
         // comment, dimension, count, coordinates[], command
-        qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords.data(), ""));
+        qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords.data(), cmd.c_str()));
         if(num_zeros == 1)
         {
             m_L = qhull->volume();
