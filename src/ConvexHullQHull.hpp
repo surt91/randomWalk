@@ -22,7 +22,8 @@ class ConvexHullQHull : public ConvexHull<T>
         using ConvexHull<T>::hullPoints_;
 
     public:
-        ConvexHullQHull<T>(const std::vector<Step<T>> &interiorPoints, bool akl);
+        ConvexHullQHull(const std::vector<Step<T>> &interiorPoints, bool akl);
+        virtual ~ConvexHullQHull() {}
 
         virtual double A() const { return m_A; };
         virtual double L() const { return m_L; };

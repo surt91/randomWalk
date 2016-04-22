@@ -11,6 +11,7 @@ class ConvexHullJarvis : public ConvexHull2D<T>
 {
     public:
         ConvexHullJarvis<T>(const std::vector<Step<T>> &interiorPoints, bool akl);
+        virtual ~ConvexHullJarvis() {}
 };
 
 template <class T>

@@ -36,6 +36,8 @@ class SpecWalker : public Walker
         {
         }
 
+        virtual ~SpecWalker() {}
+
         const ConvexHull<T>& convexHull() const;
 
         // convenience functions

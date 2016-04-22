@@ -9,6 +9,7 @@ class ConvexHull2D : public ConvexHull<T>
     // templates are hard: http://stackoverflow.com/a/6592617/1698412
     public:
         ConvexHull2D(const std::vector<Step<T>> &interiorPoints, bool akl);
+        virtual ~ConvexHull2D() {}
 
         virtual double A() const;
         virtual double L() const;

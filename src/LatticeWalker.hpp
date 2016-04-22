@@ -14,7 +14,8 @@ class LatticeWalker : public SpecWalker<int>
             : SpecWalker<int>(d, numSteps, rng, hull_algo)
         {
             random_numbers = std::move(rng.vector(numSteps));
-        };
+        }
+        virtual ~LatticeWalker() {}
 
         virtual const std::vector<Step<int>>& steps() const;
 

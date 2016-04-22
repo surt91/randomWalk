@@ -46,6 +46,7 @@ class Walker
 
             deserialize(data);
         }
+        virtual ~Walker() {}
 
         void appendRN();
 

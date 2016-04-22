@@ -8,6 +8,7 @@ class WangLandau : public Simulation
 {
     public:
         WangLandau(const Cmd &o);
+        virtual ~WangLandau() {}
         virtual void run();
 
     protected:

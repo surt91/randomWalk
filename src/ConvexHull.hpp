@@ -21,6 +21,7 @@ class ConvexHull
               d(interiorPoints[0].d())
         {
         }
+        virtual ~ConvexHull() {}
 
         // observables
         virtual double A() const = 0;

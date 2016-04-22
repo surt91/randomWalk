@@ -25,7 +25,7 @@ class Simulation
 {
     public:
         Simulation(const Cmd &o);
-        ~Simulation();
+        virtual ~Simulation();
 
         virtual void run() = 0;
 
