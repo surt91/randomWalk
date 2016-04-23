@@ -17,7 +17,6 @@ class ConvexHull2D : public ConvexHull<T>
         virtual const std::vector<Step<T>>& hullPoints() const;
 
     protected:
-        static T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p);
         virtual void preprocessAklToussaint();
         std::vector<Step<T>> pointSelection;
 };
