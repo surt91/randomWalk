@@ -47,19 +47,19 @@ class SpecWalker : public Walker
 
         // get state
         virtual const std::vector<Step<T>>& steps() const = 0;
-        virtual const std::vector<Step<T>>& points(int start=1) const;
+        const std::vector<Step<T>>& points(int start=1) const;
         const std::vector<Step<T>> hullPoints() const { return convexHull().hullPoints(); };
 
         virtual int nSteps() const;
 
         // update state
-        virtual void updateSteps() const { steps(); };
-        virtual void updateHull() const { convexHull(); };
+        void updateSteps() const { steps(); };
+        void updateHull() const { convexHull(); };
 
         // output functions
         void svg(const std::string filename, const bool with_hull) const;
         void pov(const std::string filename, const bool with_hull) const;
-        virtual std::string print() const;
+        std::string print() const;
 
     protected:
         mutable std::vector<Step<T>> m_steps;

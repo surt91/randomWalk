@@ -48,8 +48,6 @@ class Walker
         }
         virtual ~Walker() {}
 
-        void appendRN();
-
         void setHullAlgo(hull_algorithm_t a);
 
         //~ const ConvexHull& convexHull() const;
@@ -71,7 +69,7 @@ class Walker
         virtual void degenerateStraight() = 0;
 
         virtual int nSteps() const = 0;
-        int nRN() const;
+        virtual int nRN() const;
 
         std::string serialize();
         void deserialize(std::string s);

@@ -20,14 +20,13 @@ class LoopErasedWalker : public LatticeWalker
             : LatticeWalker(d, numSteps, rng, hull_algo)
         {
         }
-        virtual ~LoopErasedWalker() {}
 
-        virtual const std::vector<Step<int>>& steps() const;
+        const std::vector<Step<int>>& steps() const;
 
-        virtual int nRN() const;
+        int nRN() const;
 
-        virtual void change(UniformRNG &rng);
-        virtual void undoChange();
+        void change(UniformRNG &rng);
+        void undoChange();
 
     protected:
         mutable int random_numbers_used;

@@ -17,13 +17,12 @@ class GaussWalker : public RealWalker
             // we need d gaussian random numbers per step, for each direction
             random_numbers = rng.vector_gaussian(d * numSteps);
         }
-        virtual ~GaussWalker() {}
 
-        virtual const std::vector<Step<double>>& steps() const;
+        const std::vector<Step<double>>& steps() const;
 
-        virtual void change(UniformRNG &rng);
-        virtual void undoChange();
+        void change(UniformRNG &rng);
+        void undoChange();
 
     protected:
-        virtual Step<double> genStep(std::vector<double>::iterator first) const;
+        Step<double> genStep(std::vector<double>::iterator first) const;
 };

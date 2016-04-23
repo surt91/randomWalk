@@ -10,7 +10,6 @@ class ConvexHullAndrew : public ConvexHull2D<T>
 {
     public:
         ConvexHullAndrew<T>(const std::vector<Step<T>> &interiorPoints, bool akl);
-        virtual ~ConvexHullAndrew() {}
 };
 
 template <class T>
