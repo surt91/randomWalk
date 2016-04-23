@@ -28,7 +28,7 @@ class Step
         Step(int /*d*/, double /*rn*/){throw std::invalid_argument("Step(int d, double rn) only implemented for Step<int>");};
         Step(int d)
             : m_d(d),
-              m_coordinates(std::vector<T>(d))
+              m_coordinates(d, 0)
         {};
         Step(const std::vector<T> &coord)
             : m_d(coord.size()),
@@ -62,6 +62,8 @@ class Step
 
         template <class U>
         friend double dot(const Step<U> &a, const Step<U> &b);
+
+        void setZero();
 
         // output operators
         template <class U>
@@ -268,6 +270,13 @@ double dot(const Step<T> &a, const Step<T> &b)
         p += a[i]*b[i];
 
     return p;
+}
+
+template <class T>
+void Step<T>::setZero()
+{
+    for(int i=0; i<m_d; ++i)
+        m_coordinates[i] = T(0);
 }
 
 template <class T>

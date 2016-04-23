@@ -27,7 +27,8 @@ class SpecWalker : public Walker
 {
     public:
         SpecWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-            : Walker(d, numSteps, rng, hull_algo)
+            : Walker(d, numSteps, rng, hull_algo),
+              m_points(numSteps+1, Step<T>(d))
         {
         }
 
@@ -104,17 +105,15 @@ const std::vector<Step<T>>& SpecWalker<T>::points(int start) const
 {
     if(stepsDirty)
         steps();
-    if(!pointsDirty && !start==1)
+    if(!pointsDirty && start!=1)
         return m_points;
 
-    if(m_points.size() != (size_t) numSteps + 1)
-    {
-        m_points.resize(numSteps + 1);
-        m_points[0] = Step<T>(std::vector<T>(d, 0));
-    }
-
     for(int i=start; i<=numSteps; ++i)
-        m_points[i] = m_points[i-1] + m_steps[i-1];
+    {
+        m_points[i].setZero();
+        m_points[i] += m_points[i-1];
+        m_points[i] += m_steps[i-1];
+    }
 
     return m_points;
 }
