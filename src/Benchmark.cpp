@@ -80,12 +80,12 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
 
     clock_t before_output = clock();
 
-    if(std::abs(w->L() - o.benchmark_L) > 0.01)
+    if(std::abs(w->L() - o.benchmark_L) > 1e-5)
     {
         LOG(LOG_ERROR) << "Wrong L  " << w->L();
         LOG(LOG_ERROR) << "expected " << o.benchmark_L;
     }
-    if(std::abs(w->A() - o.benchmark_A) > 1)
+    if(std::abs(w->A() - o.benchmark_A) > 1e-5)
     {
         LOG(LOG_ERROR) << "Wrong A  " << w->A();
         LOG(LOG_ERROR) << "expected " << o.benchmark_A;
@@ -101,7 +101,7 @@ void run_MC_simulation(const Cmd &o, std::unique_ptr<Walker> &w)
     for(int i=0; i<o.iterations; ++i)
         w->change(rngMC);
 
-    LOG(LOG_TIMING) << "    MC : " << time_diff(before_mc, clock());
+    LOG(LOG_TIMING) << "            " << time_diff(before_mc, clock());
 }
 
 void benchmark()
@@ -113,6 +113,7 @@ void benchmark()
     o.seedRealization = 13;
     o.seedMC = 42;
     o.d = 2;
+    o.wantedObservable = WO_VOLUME;
 
     o.simpleSampling = true;
 
@@ -125,7 +126,7 @@ void benchmark()
             case WT_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_RANDOM_WALK;
-                o.benchmark_L = 3747.18;
+                o.benchmark_L = 3747.1842096;
                 o.benchmark_A = 984338;
                 o.iterations = 10;
                 break;
@@ -137,45 +138,41 @@ void benchmark()
                 o.iterations = 10;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
-                o.steps = 640;
+                o.steps = 320;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
-                o.benchmark_L = 293.77;
-                o.benchmark_A = 4252.5;
+                o.benchmark_L = 153.467524349;
+                o.benchmark_A = 1614.5;
                 o.iterations = 10000;
                 break;
             case WT_REAL_RANDOM_WALK:
-                o.steps = 100000;
+                o.steps = 1000000;
                 o.type = WT_REAL_RANDOM_WALK;
-                o.benchmark_L = 910.582882728;
-                o.benchmark_A = 56424.1359587;
+                o.benchmark_L = 3301.2873826;
+                o.benchmark_A = 696563.540913;
                 o.iterations = 10;
                 break;
             case WT_GAUSSIAN_RANDOM_WALK:
-                o.steps = 100000;
+                o.steps = 1000000;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
-                o.benchmark_L = 2150.30379101;
-                o.benchmark_A = 305276.037136;
-                o.iterations = 100;
+                o.benchmark_L = 4276.37295704;
+                o.benchmark_A = 1114653.50651;
+                o.iterations = 10;
                 break;
         }
 
         LOG(LOG_INFO) << TYPE_LABEL[i];
         auto w = run_walker(o);
 
-        for(int j=1; j<=8; ++j)
+        for(int j=1; j<=4; ++j)
         {
-            // Graham not implemented
-            if(j == 5 || j == 6)
-                continue;
-
             o.chAlg = (hull_algorithm_t) j;
             LOG(LOG_INFO) << "        " << CH_LABEL[j];
             try{
                 run_hull(o, w);
-            } catch(...) { }
+            } catch(...) {
+                continue;
+            }
         }
-
-        run_MC_simulation(o, w);
     }
 
     LOG(LOG_TIMING) << "Total : " << time_diff(start, clock());
