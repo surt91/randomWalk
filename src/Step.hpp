@@ -205,9 +205,8 @@ Step<T>& Step<T>::operator+=(const Step<T> &other)
     if(m_d != other.d())
         throw std::invalid_argument("dimensions do not agree");
 
-    const std::vector<T> other_coord = other.coordinates();
     for(int i=0; i<m_d; ++i)
-        m_coordinates[i] += other_coord[i];
+        m_coordinates[i] += other.m_coordinates[i];
 
     return *this;
 }
@@ -218,9 +217,8 @@ Step<T>& Step<T>::operator-=(const Step<T> &other)
     if(m_d != other.d())
         throw std::invalid_argument("dimensions do not agree");
 
-    const std::vector<T> other_coord = other.coordinates();
     for(int i=0; i<m_d; ++i)
-        m_coordinates[i] -= other_coord[i];
+        m_coordinates[i] -= other.m_coordinates[i];
 
     return *this;
 }
