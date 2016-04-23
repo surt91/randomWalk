@@ -79,6 +79,8 @@ class Step
         T operator[](std::size_t idx) const { return m_coordinates[idx]; };
         T& operator[](std::size_t idx) { return m_coordinates[idx]; };
 
+        void swap(Step<T>&) throw();
+
         // getter
         int d() const { return m_d; };
         T x(const int n=0) const { return m_coordinates[n]; };
@@ -275,8 +277,7 @@ double dot(const Step<T> &a, const Step<T> &b)
 template <class T>
 void Step<T>::setZero()
 {
-    for(int i=0; i<m_d; ++i)
-        m_coordinates[i] = T(0);
+    std::fill(m_coordinates.begin(), m_coordinates.end(), 0);
 }
 
 template <class T>
@@ -308,6 +309,19 @@ std::ostream& operator<<(std::ostream& os, const std::list<Step<T>> &obj)
     os << "]";
     return os;
 }
+
+template <class T>
+void Step<T>::swap(Step<T>& other) throw()
+{
+    int tmp = m_d;
+    m_d = other.m_d;
+    other.m_d = tmp;
+
+    m_coordinates.swap(other.m_coordinates);
+}
+
+template<class T>
+void swap(Step<T>& lhs, Step<T>& rhs) { lhs.swap(rhs); }
 
 namespace std {
     template<>
@@ -349,4 +363,7 @@ namespace std {
                 p = i;
         return p;
     }
+
+    template <class T>
+    void swap(Step<T>& lhs, Step<T>& rhs) { lhs.swap(rhs); }
 }
