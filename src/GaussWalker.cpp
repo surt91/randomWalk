@@ -29,7 +29,7 @@ const std::vector<Step<double>>& GaussWalker::steps() const
 
 void GaussWalker::change(UniformRNG &rng)
 {
-    // We need d-1 random numbers per step to determine the d-1 angles
+    // We need d random numbers per step to determine the d directions
     steps(); // steps need to be initialized
     int idx = rng() * numSteps;
     int rnidx = idx * d;
@@ -41,8 +41,6 @@ void GaussWalker::change(UniformRNG &rng)
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
     points(idx+1);
     hullDirty = true;
-
-    return;
 }
 
 void GaussWalker::undoChange()

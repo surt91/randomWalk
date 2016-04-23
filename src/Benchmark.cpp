@@ -60,6 +60,10 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
         w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rng, o.chAlg));
     else if(o.type == WT_REAL_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new RealWalker(o.d, o.steps, rng, o.chAlg));
+    else if(o.type == WT_GAUSSIAN_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new GaussWalker(o.d, o.steps, rng, o.chAlg));
+    else
+        LOG(LOG_ERROR) << "cannot find walk type " << o.type;
 
     w->updateSteps();
 
