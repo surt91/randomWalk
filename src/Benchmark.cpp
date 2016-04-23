@@ -153,8 +153,8 @@ void benchmark()
             case WT_GAUSSIAN_RANDOM_WALK:
                 o.steps = 100000;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
-                o.benchmark_L = 910.582882728;
-                o.benchmark_A = 56424.1359587;
+                o.benchmark_L = 2150.30379101;
+                o.benchmark_A = 305276.037136;
                 o.iterations = 100;
                 break;
         }
