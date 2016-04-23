@@ -38,56 +38,51 @@ class Walker
             hullDirty = true;
         }
 
-        Walker(std::string data)
-        {
-            stepsDirty = true;
-            pointsDirty = true;
-            hullDirty = true;
-
-            deserialize(data);
-        }
         virtual ~Walker() {}
+
+        const int numSteps; ///< Number of steps the Walk should have
+        const int d;        ///< Dimension in which the Walker walks
 
         void setHullAlgo(hull_algorithm_t a);
 
-        //~ const ConvexHull& convexHull() const;
         // convenience functions
-        //~ const std::vector<Step> hullPoints() const { return convexHull().hullPoints(); };
-        virtual double A() const = 0;
-        virtual double L() const = 0;
+        virtual double A() const = 0;   ///< Returns the Volume of the convex hull
+        virtual double L() const = 0;   ///< Returns the surface area of the convex hull
 
+        /** Change the Walker by a small amount, appropiate for the type.
+         *
+         * Ensure that SpecWalker<T>::m_steps, SpecWalker<T>::m_points
+         * and SpecWalker<T>::m_convex_hull are correct
+         * afterwards, by either setting #stepsDirty, #pointsDirty and
+         * #hullDirty to true, call updateSteps(), updatePoints() or
+         * updateHull() or doing it manually in the implementation.
+         */
         virtual void change(UniformRNG &rng) = 0;
         virtual void undoChange() = 0;
 
         virtual void updateSteps() const = 0;
+        virtual void updatePoints(int start) const = 0;
         virtual void updateHull() const = 0;
-        //~ virtual const std::vector<Step<T>>& points(int start=1) const = 0;
 
         virtual void degenerateMaxVolume() = 0;
         virtual void degenerateMaxSurface() = 0;
         virtual void degenerateSpiral() = 0;
         virtual void degenerateStraight() = 0;
 
-        virtual int nSteps() const = 0;
         virtual int nRN() const;
 
         std::string serialize();
-        void deserialize(std::string s);
-
         void saveConfiguration(const std::string &filename, bool append=true);
-        void loadConfiguration(const std::string &filename, int index=0);
 
         virtual std::string print() const = 0;
         virtual void svg(const std::string filename, const bool with_hull=false) const = 0;
         virtual void pov(const std::string filename, const bool with_hull=false) const = 0;
 
     protected:
-        int numSteps;
         mutable int stepsDirty;
         mutable int pointsDirty;
         mutable int hullDirty;
 
-        int d;
         UniformRNG rng;
         mutable std::vector<double> random_numbers;
         hull_algorithm_t hull_algo;

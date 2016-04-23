@@ -50,10 +50,9 @@ class SpecWalker : public Walker
         const std::vector<Step<T>>& points(int start=1) const;
         const std::vector<Step<T>> hullPoints() const { return convexHull().hullPoints(); };
 
-        virtual int nSteps() const;
-
         // update state
         void updateSteps() const { steps(); };
+        void updatePoints(int start=1) const { points(start); };
         void updateHull() const { convexHull(); };
 
         // output functions
@@ -116,14 +115,6 @@ const std::vector<Step<T>>& SpecWalker<T>::points(int start) const
     }
 
     return m_points;
-}
-
-template <class T>
-int SpecWalker<T>::nSteps() const
-{
-    if(stepsDirty)
-        steps();
-    return numSteps;
 }
 
 template <class T>
