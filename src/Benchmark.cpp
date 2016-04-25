@@ -80,12 +80,12 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
 
     clock_t before_output = clock();
 
-    if(std::abs(w->L() - o.benchmark_L) > 1e-5)
+    if(std::abs(w->L() - o.benchmark_L) > 1e-4)
     {
         LOG(LOG_ERROR) << "Wrong L  " << w->L();
         LOG(LOG_ERROR) << "expected " << o.benchmark_L;
     }
-    if(std::abs(w->A() - o.benchmark_A) > 1e-5)
+    if(std::abs(w->A() - o.benchmark_A) > 1e-4)
     {
         LOG(LOG_ERROR) << "Wrong A  " << w->A();
         LOG(LOG_ERROR) << "expected " << o.benchmark_A;

@@ -70,6 +70,8 @@ class ConvexHull
         std::unique_ptr<orgQhull::Qhull> qhull;
         std::vector<double> coords;
         void updateHullPoints() const;
+        int countZerosAndUpdateCmd();
+        std::string cmd;
 
         // for Andrews, and Jarvis
         void runAndrews();
@@ -355,15 +357,20 @@ std::vector<std::vector<Step<T>>> ConvexHull<T>::hullFacets() const
     return facets;
 }
 
-template <class T>
-void ConvexHull<T>::runQhull()
+template <>
+inline int ConvexHull<double>::countZerosAndUpdateCmd()
+{
+    cmd = "QJ";
+    return 0;
+}
+
+template <>
+inline int ConvexHull<int>::countZerosAndUpdateCmd()
 {
     // test, if points are fully dimensional
     // we need to do that first, since qhull seems to leak on exceptions
-    // TODO: replace by QJ for T==double
     int num_zeros = 0;
     int zero_axis = 0;
-    std::string cmd("");
     for(int i=0; i<d; ++i)
     {
         int j = 0;
@@ -376,6 +383,25 @@ void ConvexHull<T>::runQhull()
         }
     }
 
+    if(num_zeros == 1)
+    {
+        LOG(LOG_DEBUG) << "Not full dimensional, strip one axis: " << zero_axis;
+        // drop that dimension, see http://www.qhull.org/html/qh-optq.htm#Qb0
+        cmd = "Qb"+std::to_string(zero_axis)+":0B"+std::to_string(zero_axis)+":0";
+    }
+
+    return num_zeros;
+}
+
+
+template <class T>
+void ConvexHull<T>::runQhull()
+{
+    // test, if points are fully dimensional
+    // we need to do that first, since qhull seems to leak on exceptions
+    // TODO: replace by QJ for T==double
+    int num_zeros = countZerosAndUpdateCmd();
+
     if(num_zeros >= 2)
     {
         LOG(LOG_DEBUG) << "Two dimensions less than fully dimensional";
@@ -385,10 +411,6 @@ void ConvexHull<T>::runQhull()
     }
     else if(num_zeros == 1)
     {
-        LOG(LOG_DEBUG) << "Not full dimensional, strip one axis: " << zero_axis;
-        // drop that dimension, see http://www.qhull.org/html/qh-optq.htm#Qb0
-        cmd = "Qb"+std::to_string(zero_axis)+":0B"+std::to_string(zero_axis)+":0";
-
         if(d - num_zeros <= 1)
         {
             LOG(LOG_DEBUG) << "One dimensional";
