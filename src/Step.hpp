@@ -17,6 +17,9 @@ namespace std {
 }
 
 /** Step class template, offers vector functions.
+ *
+ * \tparam T datatype for the coordinates of the steps.
+ *           int for steps on a lattice, double for real valued steps
  */
 template<class T>
 class Step
@@ -24,12 +27,19 @@ class Step
     friend struct std::hash<Step<T>>;
 
     public:
+        /// Default constructor, init an d=0 empty step
         Step(){};
+
+        /// Construct a d dimensional random Step from a random number.
         Step(int /*d*/, double /*rn*/){throw std::invalid_argument("Step(int d, double rn) only implemented for Step<int>");};
+
+        /// Construct a d dimensional zero Step.
         Step(int d)
             : m_d(d),
               m_coordinates(d, 0)
         {};
+
+        /// Construct a Step from a coordinate vector.
         Step(const std::vector<T> &coord)
             : m_d(coord.size()),
               m_coordinates(coord)
@@ -97,8 +107,7 @@ class Step
 
 };
 
-/** Specialization for int steps
- */
+//// Specialization for int steps.
 template <>
 inline Step<int>::Step(int d, double rn)
       : m_d(d)
@@ -116,6 +125,7 @@ inline Step<int>::Step(int d, double rn)
         }
 }
 
+/// Euclidean distance to zero.
 template <class T>
 double Step<T>::length() const
 {
@@ -126,8 +136,7 @@ double Step<T>::length() const
     return std::sqrt(s);
 }
 
-/** only 2D projection on axis i and j
- */
+/// Only 2D projection on axis i and j.
 template <class T>
 double Step<T>::angle(int i, int j) const
 {

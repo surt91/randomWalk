@@ -14,11 +14,11 @@
 #include "Walker.hpp"
 #include "ConvexHull.hpp"
 
-/* Class Template SpecWalker.
+/** Class Template SpecWalker.
  *
  * Implements generic things offered by the Walker interface.
  * Is Base Class of all Walker Implementations.
- * */
+ */
 template <class T>
 class SpecWalker : public Walker
 {

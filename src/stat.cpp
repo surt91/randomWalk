@@ -1,5 +1,7 @@
 #include "stat.hpp"
 
+/** Append a number to the rolling mean.
+ */
 double RollingMean::add(double x)
 {
     ++count;
@@ -10,11 +12,15 @@ double RollingMean::add(double x)
     return m_mean;
 }
 
+/** Return the mean of the current window.
+ */
 double RollingMean::mean() const
 {
     return m_mean;
 }
 
+/** Return the variance of the current window.
+ */
 double RollingMean::var(size_t last) const
 {
     //~ double tmp = std::accumulate(state.begin(), state.begin()+count, 0.0, [&](double part, double next){return part + (m_mean - next) * (m_mean - next);});

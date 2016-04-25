@@ -3,10 +3,7 @@
 #include "Logging.hpp"
 #include "RealWalker.hpp"
 
-/** Base class for all non-lattice walks.
- *
- * Random walk, which chooses at each step a random direction from
- * a uniform distribution and a constant distance 1.
+/** Draw the x, y, z, ... displacements from Gaussian distributions at each step.
  */
 class GaussWalker : public RealWalker
 {

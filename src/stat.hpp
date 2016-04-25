@@ -23,9 +23,15 @@ T variance(std::vector<T> a, T m=T(0))
     return tmp/a.size();
 }
 
+/** Calculates a rolling mean over the values feeded to it.
+ */
 class RollingMean
 {
     public:
+        /** Construct a RollingMean with a window of n.
+         *
+         * \param n width of the window
+         */
         RollingMean(int n)
             : n(n),
               m_mean(0.0),

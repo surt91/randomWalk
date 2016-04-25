@@ -1,5 +1,7 @@
 #include "Svg.hpp"
 
+/** Class to easily create 2d pictures in svg format.
+ */
 SVG::SVG(const std::string &filename, const double scale)
     : scale(scale), filename(filename)
 {
