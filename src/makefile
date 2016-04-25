@@ -32,8 +32,8 @@ CXX	= g++
 #CXX	= clang++
 #CXX	= icpc
 
-COPT = -g
-#COPT = -O3 -flto -mtune=native -fomit-frame-pointer
+#COPT = -g -Og
+COPT = -O3 -flto -mtune=native -mtune=corei7
 #COPT += -DNLOG
 COPT += -fopenmp
 COPT += -std=c++11 -m64 -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color
