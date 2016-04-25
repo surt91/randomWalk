@@ -12,7 +12,12 @@ thetas = {    0: (-1000, -100, -30, -20, -17, -13, -10, -9, -8, -7, -6, -5, -4, 
 
 parameters = {
     # what type
-    "typ": 2,  #1 random walk, 2 loop erased random walk, 3 self avoiding random walk
+    # 1 random walk
+    # 2 loop erased random walk
+    # 3 self avoiding random walk
+    # 4 random direction
+    # 5 Gaussian walk
+    "typ": 2,
     # random seed for Monte Carlo
     "seedMC": 1337,
     # random seed for initial configuration
@@ -37,9 +42,14 @@ parameters = {
 
     # for which observable wen want the probabilities
     "observable": 2,  # 1: surface area, 2: volume
+
     # algorithm for the convex hull
+    # qhull seems to be fastest, at least for big number of steps
+    # for small number of steps, andrews is faster
     "method": 2,  # 1: qhull, 2: andrews, 4: jarvis
+
     # akl heuristic
+    # only available in d=2, yet
     "akl": False,
     # which smapling methd
     "sampling": 1,  # 1: metropolis, 2: wang landau
