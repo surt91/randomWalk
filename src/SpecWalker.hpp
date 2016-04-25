@@ -29,11 +29,6 @@ class SpecWalker : public Walker
         {
         }
 
-        SpecWalker(std::string data)
-            : Walker(data)
-        {
-        }
-
         virtual ~SpecWalker() {}
 
         const ConvexHull<T>& convexHull() const;
