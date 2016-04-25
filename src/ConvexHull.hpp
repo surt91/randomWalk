@@ -165,14 +165,14 @@ void ConvexHull<T>::preprocessAklToussaint()
     // - more than 4 points
 
     // find points with min/max x/y (/z/w/...)
-    std::vector<Step<T>> min(d, interiorPoints[0]);
-    std::vector<Step<T>> max(d, interiorPoints[0]);
-    for(const Step<T>& i : interiorPoints)
+    std::vector<int> min(d, 0);
+    std::vector<int> max(d, 0);
+    for(int i=0; i<n; ++i)
         for(int j=0; j<d; ++j)
         {
-            if(i.x(j) < min[j].x(j))
+            if(interiorPoints[i].x(j) < interiorPoints[min[j]].x(j))
                 min[j] = i;
-            if(i.x(j) > max[j].x(j))
+            if(interiorPoints[i].x(j) > interiorPoints[max[j]].x(j))
                 max[j] = i;
         }
 
@@ -181,16 +181,15 @@ void ConvexHull<T>::preprocessAklToussaint()
     // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
     // do this by building a new list of vertices outside
     for(const Step<T>& i : interiorPoints)
-    {
-        if(!pointInQuadrilateral(min[0], max[1], max[0], min[1], i))
-            pointSelection.push_back(i);
-    }
+        if(!pointInQuadrilateral(interiorPoints[min[0]], interiorPoints[max[1]], interiorPoints[max[0]], interiorPoints[min[1]], i))
+
+            pointSelection.emplace_back(i);
 
     // Also make sure that the min/max points are still considered
     for(int i=0; i<d; ++i)
     {
-        pointSelection.push_back(min[i]);
-        pointSelection.push_back(max[i]);
+        pointSelection.push_back(interiorPoints[min[i]]);
+        pointSelection.push_back(interiorPoints[max[i]]);
     }
     LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
             << (n - pointSelection.size()) << "/" << n
@@ -211,14 +210,14 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     // - more than 4 points
 
     // find points with min/max x/y (/z/w/...)
-    std::vector<Step<T>> min(d, interiorPoints[0]);
-    std::vector<Step<T>> max(d, interiorPoints[0]);
-    for(const Step<T>& i : interiorPoints)
+    std::vector<int> min(d, 0);
+    std::vector<int> max(d, 0);
+    for(int i=0; i<n; ++i)
         for(int j=0; j<d; ++j)
         {
-            if(i.x(j) < min[j].x(j))
+            if(interiorPoints[i].x(j) < interiorPoints[min[j]].x(j))
                 min[j] = i;
-            if(i.x(j) > max[j].x(j))
+            if(interiorPoints[i].x(j) > interiorPoints[max[j]].x(j))
                 max[j] = i;
         }
 
@@ -227,19 +226,17 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
     // do this by building a new list of vertices outside
     for(const Step<T>& i : interiorPoints)
-        if(!pointInQuadrilateral(min[0], max[1], max[0], min[1], i))
-        {
+        if(!pointInQuadrilateral(interiorPoints[min[0]], interiorPoints[max[1]], interiorPoints[max[0]], interiorPoints[min[1]], i))
             for(int j=0; j<d; ++j)
-                coords.push_back(i[j]);
-        }
+                coords.emplace_back(i[j]);
 
     // Also make sure that the min/max points are still considered
     for(int i=0; i<d; ++i)
     {
         for(int j=0; j<d; ++j)
-            coords.push_back(min[i][j]);
+            coords.emplace_back(interiorPoints[min[i]][j]);
         for(int j=0; j<d; ++j)
-            coords.push_back(max[i][j]);
+            coords.emplace_back(interiorPoints[max[i]][j]);
     }
 
     int k = coords.size()/d;
