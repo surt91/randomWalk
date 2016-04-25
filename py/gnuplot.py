@@ -9,15 +9,9 @@ import jinja2
 
 
 class Gnuplot():
-    def __init__(self, number_of_steps, typ, seedMC, seedR, iterations,
-                       dimension, thetas, directory, rawData, rawConf,
-                       observable, method, akl, sampling, parallel):
-        self.N = number_of_steps
-        self.T = thetas
-        self.iterations = iterations
-        self.seedMC = seedMC
-        self.seedR = seedR
-        self.typ = typ
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
                                       loader=jinja2.FileSystemLoader("templates"))
@@ -25,29 +19,22 @@ class Gnuplot():
 
         self.d = "plots"
         self.dataPath = "../data"
-        self.rawData = rawData
-        if not os.path.exists(self.d):
-            os.makedirs(self.d)
+
+        os.makedirs(self.d, exist_ok=True)
 
     def every(self):
-        ...
-        #~ self.create("pLP", "{/Symbol s}", "{/Italic p}")
+        self.create("stiched", "{/Symbol S}", "{/Italic p}")
 
-    def create(self, name="something", xl="", yl=""):
+    def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
 
         with open(os.path.join(self.d, name+".gp"), "w") as f:
-            f.write(template.render(N=self.N,
-                                    T=self.T,
-                                    typ=self.typ,
-                                    iterations=self.iterations,
-                                    seedMC=self.seedMC,
-                                    seedR=self.seedR,
+            f.write(template.render(xlabel=xl,
+                                    ylabel=yl,
                                     path=self.dataPath,
-                                    rawPath=self.rawData,
                                     filename=name,
-                                    xlabel=xl,
-                                    ylabel=yl))
+                                    **self.kwargs,
+                                    **kwargs))
 
     @staticmethod
     def plotall():
