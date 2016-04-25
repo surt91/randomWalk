@@ -35,7 +35,7 @@ void GaussWalker::change(UniformRNG &rng)
     int rnidx = idx * d;
     undo_index = idx;
     undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx+d + 1); // +1, since the last ist exclusive
-    for(int i=0; i<d-1; ++i)
+    for(int i=0; i<d; ++i)
         random_numbers[rnidx+i] = rng.gaussian();
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
