@@ -12,10 +12,7 @@
 #include "Step.hpp"
 #include "Povray.hpp"
 #include "Walker.hpp"
-#include "ConvexHullQHull.hpp"
-#include "ConvexHullAndrew.hpp"
-#include "ConvexHullJarvis.hpp"
-
+#include "ConvexHull.hpp"
 
 /* Class Template SpecWalker.
  *
@@ -71,28 +68,7 @@ const ConvexHull<T>& SpecWalker<T>::convexHull() const
 {
     if(hullDirty)
     {
-        bool akl = false;
-        switch(hull_algo)
-        {
-            case CH_QHULL_AKL:
-                akl = true;
-            case CH_QHULL:
-                m_convex_hull = std::unique_ptr<ConvexHull<T>>(new ConvexHullQHull<T>(points(), akl));
-                break;
-            case CH_ANDREWS_AKL:
-                akl = true;
-            case CH_ANDREWS:
-                m_convex_hull = std::unique_ptr<ConvexHull<T>>(new ConvexHullAndrew<T>(points(), akl));
-                break;
-            case CH_JARVIS_AKL:
-                akl = true;
-            case CH_JARVIS:
-                m_convex_hull = std::unique_ptr<ConvexHull<T>>(new ConvexHullJarvis<T>(points(), akl));
-                break;
-            default:
-                LOG(LOG_ERROR) << "Algorithm not implemented, yet: " << CH_LABEL[hull_algo];
-                throw std::invalid_argument("this is not implemented");
-        }
+        m_convex_hull = std::unique_ptr<ConvexHull<T>>(new ConvexHull<T>(points(), hull_algo));
         hullDirty = false;
     }
 
