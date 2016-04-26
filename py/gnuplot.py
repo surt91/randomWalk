@@ -20,10 +20,14 @@ class Gnuplot():
         self.d = "plots"
         self.dataPath = "../data"
 
+        self.observable = "A" if kwargs["observable"] == 2 else "L"
+
         os.makedirs(self.d, exist_ok=True)
 
     def every(self):
-        self.create("stiched", "{/Symbol S}", "{/Italic p}")
+        self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
+        self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
+        self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
