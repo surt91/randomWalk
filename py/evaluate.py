@@ -3,6 +3,7 @@
 from math import exp, log, ceil
 import logging
 from multiprocessing import Pool
+import gzip
 
 import numpy as np
 from scipy.interpolate import interp1d
@@ -36,6 +37,15 @@ def getAutocorrTime(data):
     tau = sum(autocorr[:m])/x0
     logging.info("autocorrelation time: " + str(tau))
     return tau
+
+
+def testIfAborted(filename):
+    with gzip.open(filename+".gz") as f:
+        # it will be noted in the first 5 lines, if we aborted
+        for _ in range(5):
+            if b"# Does not equilibrate" in f.readline():
+                return True
+    return False
 
 
 def getDataFromFile(filename, col):
@@ -235,6 +245,14 @@ def run():
                             }
                            )
 
+        # remove files from evaluation, which did not equilibrate
+        not_aborted = []
+        for T in theta_for_N:
+            if not testIfAborted("{}/{}.dat".format(d, nameDict[T])):
+                not_aborted.append(T)
+        theta_for_N = not_aborted
+
+
         with Pool() as p:
             tmp = p.starmap(getDataFromFile, [("{}/{}.dat".format(d, nameDict[T]), column) for T in theta_for_N])
 
@@ -274,10 +292,6 @@ def run():
             zce.append(zce[-1] + i[1])
 
         whole_distribution = []
-        try:
-            theta_for_N = thetas[N]
-        except KeyError:
-            theta_for_N = thetas[0]
         for n, T in enumerate(theta_for_N):
             name = param.basename.format(steps=N,
                                          theta=T,

@@ -122,6 +122,13 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
           //~ && std::abs(rmean1.mean() - rmean5.mean()) < sdev
           )
             break;
+
+        if(t_eq >= o.t_eqMax)
+        {
+            // this seems to not equilibrate, abort simulation
+            return -1;
+        }
+
         ++t_eq;
     }
 
@@ -143,7 +150,6 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
 void Metropolis::run()
 {
-    int t_eq = 0;
     UniformRNG rngMC(o.seedMC);
 
     if(!o.simpleSampling)
@@ -157,9 +163,18 @@ void Metropolis::run()
 
     if(o.iterations > 0)
     {
-        t_eq = equilibrate(w, rngMC);
+        // do we have command line t_eq?
+        if(o.t_eq == -1)
+            o.t_eq = equilibrate(w, rngMC);
+        // if it is still -1, the equilibrations was aborted
+        if(o.t_eq == -1)
+        {
+            LOG(LOG_WARNING) << "Not equilibrated after " << o.t_eqMax << " sweeps. Aborting...";
+            oss << "# Does not equilibrate" << std::endl;
+            return;
+        }
 
-        for(int i=t_eq; i<o.iterations+2*t_eq; ++i)
+        for(int i=o.t_eq; i<o.iterations+2*o.t_eq; ++i)
         {
             // one sweep, i.e., one change try for each site
             for(int j=0; j<o.steps; ++j)
@@ -180,7 +195,7 @@ void Metropolis::run()
                     }
                 }
             }
-            if(i >= 2*t_eq)
+            if(i >= 2*o.t_eq)
             {
                 if(!o.conf_path.empty())
                     w->saveConfiguration(o.conf_path);

@@ -94,6 +94,8 @@ class Cmd
         walk_type_t type;
         int d;
         int iterations;
+        int t_eq;
+        int t_eqMax;
         int parallel;
         double theta;
         bool simpleSampling;

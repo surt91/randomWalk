@@ -16,6 +16,8 @@ Cmd::Cmd(int argc, char** argv)
         // -short, --long, description, required, default, type
         TCLAP::ValueArg<int> numArg("N", "steps", "how many steps", false, 100, "integer");
         TCLAP::ValueArg<int> iterationsArg("n", "iterations", "how many MC tries", false, 100, "integer");
+        TCLAP::ValueArg<int> t_eqArg("", "t_eq", "equilibration time to use", false, -1, "integer");
+        TCLAP::ValueArg<int> t_eqMaxArg("", "t_eq_max", "maximum number equilibration time, abort simulation if not equilibrated ", false, 1e5, "integer");
         TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, 0, "integer");
         TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, 0, "integer");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
@@ -79,6 +81,8 @@ Cmd::Cmd(int argc, char** argv)
         // Add to the parser
         cmd.add(numArg);
         cmd.add(iterationsArg);
+        cmd.add(t_eqArg);
+        cmd.add(t_eqMaxArg);
         cmd.add(seedRArg);
         cmd.add(seedMCArg);
         cmd.add(dimArg);
@@ -133,6 +137,15 @@ Cmd::Cmd(int argc, char** argv)
 
         iterations = iterationsArg.getValue();
         LOG(LOG_INFO) << "Number of MC iterations    " << iterations;
+
+        t_eq = t_eqArg.getValue();
+        if(t_eq >= 0)
+        {
+            LOG(LOG_INFO) << "Set equilibration time to  " << t_eq;
+        }
+
+        t_eqMax = t_eqMaxArg.getValue();
+        LOG(LOG_INFO) << "Abort simulation if t_eq > " << t_eqMax;
 
         seedRealization = seedRArg.getValue();
         LOG(LOG_INFO) << "Seed for the realization   " << seedRealization;
