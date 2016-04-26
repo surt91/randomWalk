@@ -19,6 +19,7 @@ class Gnuplot():
 
         self.d = "plots"
         self.dataPath = "../data"
+        self.rawDataPath = "../rawData"
 
         self.observable = "A" if kwargs["observable"] == 2 else "L"
 
@@ -28,6 +29,7 @@ class Gnuplot():
         self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
         self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
         self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
+        self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
@@ -36,6 +38,7 @@ class Gnuplot():
             f.write(template.render(xlabel=xl,
                                     ylabel=yl,
                                     path=self.dataPath,
+                                    raw=self.rawDataPath,
                                     filename=name,
                                     **self.kwargs,
                                     **kwargs))
