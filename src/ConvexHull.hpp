@@ -78,7 +78,7 @@ class ConvexHull
         void runJarvis();
         void preprocessAklToussaint();
 
-        std::vector<Step<T>> pointSelection;
+        std::vector<int> pointSelection;
 
 };
 
@@ -163,6 +163,7 @@ void ConvexHull<T>::preprocessAklToussaint()
     // could be generalized longterm:
     // - higher dimensions
     // - more than 4 points
+    pointSelection.reserve(n);
 
     // find points with min/max x/y (/z/w/...)
     std::vector<int> min(d, 0);
@@ -180,15 +181,16 @@ void ConvexHull<T>::preprocessAklToussaint()
     // find and delete points inside the quadriliteral
     // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
     // do this by building a new list of vertices outside
-    for(const Step<T>& i : interiorPoints)
-        if(!pointInQuadrilateral(interiorPoints[min[0]], interiorPoints[max[1]], interiorPoints[max[0]], interiorPoints[min[1]], i))
+    //~ for(const Step<T>& i : interiorPoints)
+    for(int i=0; i<n; ++i)
+        if(!pointInQuadrilateral(interiorPoints[min[0]], interiorPoints[max[1]], interiorPoints[max[0]], interiorPoints[min[1]], interiorPoints[i]))
             pointSelection.emplace_back(i);
 
     // Also make sure that the min/max points are still considered
     for(int i=0; i<d; ++i)
     {
-        pointSelection.emplace_back(interiorPoints[min[i]]);
-        pointSelection.emplace_back(interiorPoints[max[i]]);
+        pointSelection.emplace_back(min[i]);
+        pointSelection.emplace_back(max[i]);
     }
     LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
             << (n - pointSelection.size()) << "/" << n
@@ -203,6 +205,8 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
 {
     if(d != 2)
         throw std::invalid_argument("Only implemented for d=2");
+
+    coords.reserve(d*n);
 
     // could be generalized longterm:
     // - higher dimensions
@@ -254,8 +258,7 @@ void ConvexHull<T>::updateHullPoints() const
     for(const auto &v : vl)
     {
         auto coord = v.point().coordinates();
-        std::vector<T> s(coord, coord+d);
-        hullPoints_.emplace_back(std::move(s));
+        hullPoints_.emplace_back(std::vector<T>(coord, coord+d));
     }
 
     if(d==2) // for 2D we can order the points clockwise
@@ -459,30 +462,42 @@ void ConvexHull<T>::runAndrews()
     int k = 0;
     // we need to sort the points, hence we make a copy
     if(algorithm != CH_ANDREWS_AKL)
-        pointSelection = interiorPoints;
+    {
+        pointSelection = std::vector<int>(n);
+        for(int i=0; i<n; ++i)
+            pointSelection[i] = i;
+    }
 
-    hullPoints_ = std::vector<Step<T>>(2*n);
+    std::vector<int> hullPointMap(2*n);
 
-    std::sort(pointSelection.begin(), pointSelection.end());
+    std::sort(pointSelection.begin(), pointSelection.end(),
+        [&](const int a, const int b) -> bool
+        {
+            return interiorPoints[a] < interiorPoints[b];
+        }
+    );
 
     // Build lower hull
-    for(int i = 0; i < n; ++i)
+    for(int i=0; i<n; ++i)
     {
-        while (k >= 2 && cross2d_z(hullPoints_[k-2], hullPoints_[k-1], pointSelection[i]) <= 0)
+        while (k>=2 && cross2d_z(interiorPoints[hullPointMap[k-2]], interiorPoints[hullPointMap[k-1]], interiorPoints[pointSelection[i]]) <= 0)
             k--;
-        hullPoints_[k++] = pointSelection[i];
+        hullPointMap[k++] = pointSelection[i];
     }
 
     // Build upper hull
-    for (int i = n-2, t = k+1; i >= 0; i--)
+    for(int i=n-2, t=k+1; i>=0; --i)
     {
-        while (k >= t && cross2d_z(hullPoints_[k-2], hullPoints_[k-1], pointSelection[i]) <= 0)
+        while (k>=t && cross2d_z(interiorPoints[hullPointMap[k-2]], interiorPoints[hullPointMap[k-1]], interiorPoints[pointSelection[i]]) <= 0)
             k--;
-        hullPoints_[k++] = pointSelection[i];
+        hullPointMap[k++] = pointSelection[i];
     }
 
+    hullPoints_ = std::vector<Step<T>>(k);
+    for(int i=0; i<k; ++i)
+        hullPoints_[i] = interiorPoints[hullPointMap[i]];
+
     // last point equals first, this makes calculation of A and L easier
-    hullPoints_.resize(k);
 }
 
 template <class T>
@@ -510,8 +525,9 @@ void ConvexHull<T>::runJarvis()
     }
     else
     {
-        candidate_points = std::unordered_set<Step<T>>(pointSelection.begin(), pointSelection.end());
-        p1 = std::min(pointSelection);
+        for(int i=0; i<n; ++i)
+            candidate_points.insert(interiorPoints[pointSelection[i]]);
+        p1 = std::min(interiorPoints);
     }
 
     candidate_points.erase(p1);
