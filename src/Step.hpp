@@ -34,13 +34,13 @@ class Step
         Step(int /*d*/, double /*rn*/){throw std::invalid_argument("Step(int d, double rn) only implemented for Step<int>");};
 
         /// Construct a d dimensional zero Step.
-        Step(int d)
+        explicit Step(int d)
             : m_d(d),
               m_coordinates(d, 0)
         {};
 
         /// Construct a Step from a coordinate vector.
-        Step(const std::vector<T> &coord)
+        explicit Step(const std::vector<T> &coord)
             : m_d(coord.size()),
               m_coordinates(coord)
         {};
