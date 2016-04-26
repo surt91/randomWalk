@@ -172,7 +172,7 @@ void ConvexHull<T>::preprocessAklToussaint()
         {
             if(interiorPoints[i][j] < interiorPoints[min[j]][j])
                 min[j] = i;
-            if(interiorPoints[i][j]) > interiorPoints[max[j]][j]))
+            if(interiorPoints[i][j] > interiorPoints[max[j]][j])
                 max[j] = i;
         }
 
@@ -216,7 +216,7 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
         {
             if(interiorPoints[i][j] < interiorPoints[min[j]][j])
                 min[j] = i;
-            if(interiorPoints[i][j]) > interiorPoints[max[j]][j]))
+            if(interiorPoints[i][j] > interiorPoints[max[j]][j])
                 max[j] = i;
         }
 
