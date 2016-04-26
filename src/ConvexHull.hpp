@@ -170,9 +170,9 @@ void ConvexHull<T>::preprocessAklToussaint()
     for(int i=0; i<n; ++i)
         for(int j=0; j<d; ++j)
         {
-            if(interiorPoints[i].x(j) < interiorPoints[min[j]].x(j))
+            if(interiorPoints[i][j] < interiorPoints[min[j]][j])
                 min[j] = i;
-            if(interiorPoints[i].x(j) > interiorPoints[max[j]].x(j))
+            if(interiorPoints[i][j]) > interiorPoints[max[j]][j]))
                 max[j] = i;
         }
 
@@ -182,14 +182,13 @@ void ConvexHull<T>::preprocessAklToussaint()
     // do this by building a new list of vertices outside
     for(const Step<T>& i : interiorPoints)
         if(!pointInQuadrilateral(interiorPoints[min[0]], interiorPoints[max[1]], interiorPoints[max[0]], interiorPoints[min[1]], i))
-
             pointSelection.emplace_back(i);
 
     // Also make sure that the min/max points are still considered
     for(int i=0; i<d; ++i)
     {
-        pointSelection.push_back(interiorPoints[min[i]]);
-        pointSelection.push_back(interiorPoints[max[i]]);
+        pointSelection.emplace_back(interiorPoints[min[i]]);
+        pointSelection.emplace_back(interiorPoints[max[i]]);
     }
     LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
             << (n - pointSelection.size()) << "/" << n
@@ -215,9 +214,9 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     for(int i=0; i<n; ++i)
         for(int j=0; j<d; ++j)
         {
-            if(interiorPoints[i].x(j) < interiorPoints[min[j]].x(j))
+            if(interiorPoints[i][j] < interiorPoints[min[j]][j])
                 min[j] = i;
-            if(interiorPoints[i].x(j) > interiorPoints[max[j]].x(j))
+            if(interiorPoints[i][j]) > interiorPoints[max[j]][j]))
                 max[j] = i;
         }
 
