@@ -204,7 +204,7 @@ template <class T>
 void ConvexHull<T>::preprocessAklToussaintQHull()
 {
     if(d != 2)
-        throw std::invalid_argument("Only implemented for d=2");
+        throw std::invalid_argument("Akl heuristic only implemented for d=2");
 
     coords.reserve(d*n);
 
