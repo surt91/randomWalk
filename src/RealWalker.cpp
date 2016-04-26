@@ -77,12 +77,13 @@ void RealWalker::undoChange()
     hullDirty = true;
 }
 
-/** Set the random numbers such that we get an L shape.
+/** Set the random numbers such that we get an half circle shape.
  */
 void RealWalker::degenerateMaxVolume()
 {
+    // FIXME: this works only for d=2
     for(int i=0; i<numSteps; ++i)
-        random_numbers[i] = .99 / ceil((double) d * (i+1)/numSteps);
+        random_numbers[i] = .5 / (i+1);
 
     stepsDirty = true;
     pointsDirty = true;

@@ -20,6 +20,11 @@ class GaussWalker : public RealWalker
         void change(UniformRNG &rng);
         void undoChange();
 
+        void changeSingle(UniformRNG &rng);
+        void undoChangeSingle();
+
+        virtual void degenerateMaxVolume();
+
     protected:
         Step<double> genStep(std::vector<double>::iterator first) const;
 };

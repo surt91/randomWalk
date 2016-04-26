@@ -53,3 +53,60 @@ void GaussWalker::undoChange()
     points(undo_index+1);
     hullDirty = true;
 }
+
+/** Change only one component of the gauss steps.
+ *
+ * This seems to not offer great advantages
+ */
+void GaussWalker::changeSingle(UniformRNG &rng)
+{
+    // We need d random numbers per step to determine the d directions
+    steps(); // steps need to be initialized
+    int rnidx = rng() * numSteps * d;
+    int idx = rnidx / d;
+    undo_index = rnidx;
+    undo_value = random_numbers[rnidx];
+    random_numbers[rnidx] = rng.gaussian();
+
+    m_steps[idx] = genStep(random_numbers.begin() + idx*d);
+    points(idx+1);
+    hullDirty = true;
+}
+
+/** Undo the single component change.
+ */
+void GaussWalker::undoChangeSingle()
+{
+    random_numbers[undo_index] = undo_value;
+    int idx = undo_index / d;
+
+    m_steps[idx] = genStep(random_numbers.begin() + idx*d);
+    points(idx+1);
+    hullDirty = true;
+}
+
+
+/** Set the random numbers such that we get an half circle shape.
+ *
+ * The distance will be chosen as 5, which should correspond to something
+ * at least as rare as a 5 sigma event (in fact far, far rarer ),
+ * i.e. bigger than most gaussian walks.
+ */
+void GaussWalker::degenerateMaxVolume()
+{
+    // FIXME: works only for d=2
+    // I am not sure how the greatest volume in d=3 is constructed
+    double r = 1.5;
+    for(int i=0; i<numSteps; ++i)
+    {
+        double theta = M_PI / (i+1);
+        random_numbers[i*d] = r * sin(theta);
+        random_numbers[i*d+1] = r * cos(theta);
+        for(int j=2; j<d; ++j)
+            random_numbers[i*d+j] = i < numSteps/2 ? 0 : r;
+    }
+
+    stepsDirty = true;
+    pointsDirty = true;
+    hullDirty = true;
+}
