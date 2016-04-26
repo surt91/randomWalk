@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "Step.hpp"
 
 /** 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
@@ -37,6 +39,47 @@ bool pointInQuadrilateral(const Step<T>& p1, const Step<T>& p2, const Step<T>& p
     bool checkSide3 = side(p3, p4, p) >= 0;
     bool checkSide4 = side(p4, p1, p) >= 0;
     return checkSide1 && checkSide2 && checkSide3 && checkSide4;
+}
+
+/** Test if point p is inside the octoliteral formed by p1 to p8.
+ *
+ * Sequence of the points matters, must be counterclockwise.
+ */
+template <class T>
+bool pointInOcto(const Step<T>& p1,
+                 const Step<T>& p2,
+                 const Step<T>& p3,
+                 const Step<T>& p4,
+                 const Step<T>& p5,
+                 const Step<T>& p6,
+                 const Step<T>& p7,
+                 const Step<T>& p8,
+                 const Step<T>& p)
+{
+    bool checkSide1 = side(p1, p2, p) >= 0;
+    bool checkSide2 = side(p2, p3, p) >= 0;
+    bool checkSide3 = side(p3, p4, p) >= 0;
+    bool checkSide4 = side(p4, p5, p) >= 0;
+    bool checkSide5 = side(p5, p6, p) >= 0;
+    bool checkSide6 = side(p6, p7, p) >= 0;
+    bool checkSide7 = side(p7, p8, p) >= 0;
+    bool checkSide8 = side(p8, p1, p) >= 0;
+    return checkSide1 && checkSide2 && checkSide3 && checkSide4
+        && checkSide5 && checkSide6 && checkSide7 && checkSide8;
+}
+
+/** Test if point p is inside the Polygon formed by the N points in the array.
+ *
+ * Sequence of the points matters, must be counterclockwise.
+ */
+template <class T, size_t N>
+bool pointInPoly(const std::array<Step<T>&, N>& poly, const Step<T>& p)
+{
+    bool inside = side(poly[N-1], poly[0], p) >= 0;
+    for(size_t i=1; i<N; ++i)
+        inside = inside && (side(poly[i-1], poly[i], p) >= 0);
+
+    return inside;
 }
 
 /** Test if point p is inside the polygon formed by the points in poly.

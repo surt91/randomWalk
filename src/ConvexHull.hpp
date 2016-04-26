@@ -168,7 +168,14 @@ void ConvexHull<T>::preprocessAklToussaint()
     // find points with min/max x/y (/z/w/...)
     std::vector<int> min(d, 0);
     std::vector<int> max(d, 0);
+    // also some bonus points: min x+y, min x-y, max x+y, max x-y
+    int minxpy = 0;
+    int maxxpy = 0;
+    int minxmy = 0;
+    int maxxmy = 0;
+    // TODO: generalize to arbitrary dimensions
     for(int i=0; i<n; ++i)
+    {
         for(int j=0; j<d; ++j)
         {
             if(interiorPoints[i][j] < interiorPoints[min[j]][j])
@@ -176,14 +183,30 @@ void ConvexHull<T>::preprocessAklToussaint()
             if(interiorPoints[i][j] > interiorPoints[max[j]][j])
                 max[j] = i;
         }
+        if(interiorPoints[i][0] + interiorPoints[i][1] < interiorPoints[minxpy][0] + interiorPoints[minxpy][1])
+            minxpy = i;
+        if(interiorPoints[i][0] + interiorPoints[i][1] > interiorPoints[maxxpy][0] + interiorPoints[maxxpy][1])
+            maxxpy = i;
+        if(interiorPoints[i][0] - interiorPoints[i][1] < interiorPoints[minxmy][0] - interiorPoints[minxmy][1])
+            minxmy = i;
+        if(interiorPoints[i][0] - interiorPoints[i][1] > interiorPoints[maxxmy][0] - interiorPoints[maxxmy][1])
+            maxxmy = i;
+    }
 
     // for d=3 this needs to be a volume instead of a polygon
     // find and delete points inside the quadriliteral
     // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
     // do this by building a new list of vertices outside
-    //~ for(const Step<T>& i : interiorPoints)
     for(int i=0; i<n; ++i)
-        if(!pointInQuadrilateral(interiorPoints[min[0]], interiorPoints[max[1]], interiorPoints[max[0]], interiorPoints[min[1]], interiorPoints[i]))
+        if(!pointInOcto(interiorPoints[min[0]],
+                        interiorPoints[minxmy],
+                        interiorPoints[max[1]],
+                        interiorPoints[maxxpy],
+                        interiorPoints[max[0]],
+                        interiorPoints[maxxmy],
+                        interiorPoints[min[1]],
+                        interiorPoints[minxpy],
+                        interiorPoints[i]))
             pointSelection.emplace_back(i);
 
     // Also make sure that the min/max points are still considered
@@ -192,6 +215,17 @@ void ConvexHull<T>::preprocessAklToussaint()
         pointSelection.emplace_back(min[i]);
         pointSelection.emplace_back(max[i]);
     }
+
+    // ensure that we do not add the same point twice
+    if(maxxmy != max[0] && maxxmy != min[1])
+        pointSelection.emplace_back(maxxmy);
+    if(maxxpy != max[0] && maxxpy != max[1])
+        pointSelection.emplace_back(maxxpy);
+    if(minxpy != min[0] && minxpy != min[1])
+        pointSelection.emplace_back(minxpy);
+    if(minxmy != min[0] && minxmy != max[1])
+        pointSelection.emplace_back(minxmy);
+
     LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
             << (n - pointSelection.size()) << "/" << n
             << " ("  << std::setprecision(2) << ((double) (n - pointSelection.size()) / n * 100) << "%)";
@@ -215,7 +249,14 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     // find points with min/max x/y (/z/w/...)
     std::vector<int> min(d, 0);
     std::vector<int> max(d, 0);
+    // also some bonus points: min x+y, min x-y, max x+y, max x-y
+    int minxpy = 0;
+    int maxxpy = 0;
+    int minxmy = 0;
+    int maxxmy = 0;
+    // TODO: generalize to arbitrary dimensions
     for(int i=0; i<n; ++i)
+    {
         for(int j=0; j<d; ++j)
         {
             if(interiorPoints[i][j] < interiorPoints[min[j]][j])
@@ -223,13 +264,30 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
             if(interiorPoints[i][j] > interiorPoints[max[j]][j])
                 max[j] = i;
         }
+        if(interiorPoints[i][0] + interiorPoints[i][1] < interiorPoints[minxpy][0] + interiorPoints[minxpy][1])
+            minxpy = i;
+        if(interiorPoints[i][0] + interiorPoints[i][1] > interiorPoints[maxxpy][0] + interiorPoints[maxxpy][1])
+            maxxpy = i;
+        if(interiorPoints[i][0] - interiorPoints[i][1] < interiorPoints[minxmy][0] - interiorPoints[minxmy][1])
+            minxmy = i;
+        if(interiorPoints[i][0] - interiorPoints[i][1] > interiorPoints[maxxmy][0] - interiorPoints[maxxmy][1])
+            maxxmy = i;
+    }
 
     // for d=3 this needs to be a volume instead of a polygon
     // find and delete points inside the quadriliteral
     // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
     // do this by building a new list of vertices outside
     for(const Step<T>& i : interiorPoints)
-        if(!pointInQuadrilateral(interiorPoints[min[0]], interiorPoints[max[1]], interiorPoints[max[0]], interiorPoints[min[1]], i))
+        if(!pointInOcto(interiorPoints[min[0]],
+                        interiorPoints[minxmy],
+                        interiorPoints[max[1]],
+                        interiorPoints[maxxpy],
+                        interiorPoints[max[0]],
+                        interiorPoints[maxxmy],
+                        interiorPoints[min[1]],
+                        interiorPoints[minxpy],
+                        i))
             for(int j=0; j<d; ++j)
                 coords.emplace_back(i[j]);
 
@@ -241,6 +299,19 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
         for(int j=0; j<d; ++j)
             coords.emplace_back(interiorPoints[max[i]][j]);
     }
+    // ensure that we do not add the same point twice
+    if(maxxmy != max[0] && maxxmy != min[1])
+        for(int j=0; j<d; ++j)
+            coords.emplace_back(interiorPoints[maxxmy][j]);
+    if(maxxpy != max[0] && maxxpy != max[1])
+        for(int j=0; j<d; ++j)
+            coords.emplace_back(interiorPoints[maxxpy][j]);
+    if(minxpy != min[0] && minxpy != min[1])
+        for(int j=0; j<d; ++j)
+            coords.emplace_back(interiorPoints[minxpy][j]);
+    if(minxmy != min[0] && minxmy != max[1])
+        for(int j=0; j<d; ++j)
+            coords.emplace_back(interiorPoints[minxmy][j]);
 
     int k = coords.size()/d;
     LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
