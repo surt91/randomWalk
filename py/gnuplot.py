@@ -26,10 +26,11 @@ class Gnuplot():
         os.makedirs(self.d, exist_ok=True)
 
     def every(self):
+        self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
         self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
         self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
         self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
-        self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
+        self.create("scaled", "{/Symbol %s} / {/Italic T%s}" % (self.observable, "" if self.observable == "A" else "^{1/2}"), "{/Italic T%s p}" % ("" if self.observable == "A" else "^{1/2}"))
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
