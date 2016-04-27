@@ -13,3 +13,9 @@ Insights, collected on the way
     + needs not parameters like temperatures
     - take virtually (and probably also literally) forever,
       especially for the self avoiding types
+
+* Gaussian random walks
+    - do not equilibrate for small theta
+
+* Scaling
+    o works better for real valued walks than lattice walks (maybe better for N -> infty)
