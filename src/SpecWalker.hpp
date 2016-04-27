@@ -89,6 +89,8 @@ const std::vector<Step<T>>& SpecWalker<T>::points(int start) const
         m_points[i] += m_steps[i-1];
     }
 
+    pointsDirty = false;
+
     return m_points;
 }
 
