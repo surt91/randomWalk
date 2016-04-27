@@ -56,16 +56,15 @@ bool pointInOcto(const Step<T>& p1,
                  const Step<T>& p8,
                  const Step<T>& p)
 {
-    bool checkSide1 = side(p1, p2, p) >= 0;
-    bool checkSide2 = side(p2, p3, p) >= 0;
-    bool checkSide3 = side(p3, p4, p) >= 0;
-    bool checkSide4 = side(p4, p5, p) >= 0;
-    bool checkSide5 = side(p5, p6, p) >= 0;
-    bool checkSide6 = side(p6, p7, p) >= 0;
-    bool checkSide7 = side(p7, p8, p) >= 0;
-    bool checkSide8 = side(p8, p1, p) >= 0;
-    return checkSide1 && checkSide2 && checkSide3 && checkSide4
-        && checkSide5 && checkSide6 && checkSide7 && checkSide8;
+    // compare opposite sites first
+    return side(p1, p2, p) >= 0
+        && side(p3, p4, p) >= 0
+        && side(p5, p6, p) >= 0
+        && side(p7, p8, p) >= 0
+        && side(p2, p3, p) >= 0
+        && side(p4, p5, p) >= 0
+        && side(p6, p7, p) >= 0
+        && side(p8, p1, p) >= 0;
 }
 
 /** Test if point p is inside the Polygon formed by the N points in the array.

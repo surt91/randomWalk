@@ -24,7 +24,9 @@ namespace std {
 template<class T>
 class Step
 {
-    friend struct std::hash<Step<T>>;
+    protected:
+        int m_d;
+        std::vector<T> m_coordinates;
 
     public:
         /// Default constructor, init an d=0 empty step
@@ -99,15 +101,11 @@ class Step
 
         const std::vector<T>& coordinates() const { return m_coordinates; };
 
-    protected:
-        int m_d;
-        std::vector<T> m_coordinates;
-
     private:
-
+        friend struct std::hash<Step<T>>;
 };
 
-//// Specialization for int steps.
+/// Specialization for int steps.
 template <>
 inline Step<int>::Step(int d, double rn)
       : m_d(d)
