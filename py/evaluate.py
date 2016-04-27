@@ -39,6 +39,24 @@ def getAutocorrTime(data):
     return tau
 
 
+def getMinMaxTime(filenames):
+    times = []
+    mems = []
+    for filename in filenames:
+        with gzip.open(filename+".gz", "rt") as f:
+            for i in f.readlines():
+                if "# Does not equilibrate" in i:
+                    break
+                if "# time in seconds" in i:
+                    s = i.split(":")[-1].strip().strip("s")
+                    times.append(float(s))
+                if "# max vmem: VmPeak" in i:
+                    s = i.split(":")[-1].strip().strip(" kB")
+                    mems.append(float(s))
+    logging.info("times between {:.0f}s - {:.0f}s".format(min(times), max(times)))
+    logging.info("memory between {:.0f}kB - {:.0f}kB".format(min(mems), max(mems)))
+
+
 def testIfAborted(filename):
     with gzip.open(filename+".gz") as f:
         # it will be noted in the first 5 lines, if we aborted
@@ -233,6 +251,8 @@ def run():
     column = param.parameters["observable"]
 
     for N in steps:
+        logging.info("N = {}".format(N))
+
         list_of_ps_log = []
         try:
             theta_for_N = thetas[N]
@@ -258,6 +278,7 @@ def run():
                 logging.info("not equilibrated: N={}, theta={}".format(N, T))
         theta_for_N = not_aborted
 
+        getMinMaxTime("{}/{}.dat".format(d, n) for n in nameDict.values())
 
         with Pool() as p:
             tmp = p.starmap(getDataFromFile, [("{}/{}.dat".format(d, nameDict[T]), column) for T in theta_for_N])
