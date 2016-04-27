@@ -29,11 +29,13 @@ class SpecWalker : public Walker
             : Walker(d, numSteps, rng, hull_algo),
               m_points(numSteps+1, Step<T>(d))
         {
+            setHullAlgo(hull_algo);
         }
 
         virtual ~SpecWalker() {}
 
         const ConvexHull<T>& convexHull() const;
+        void setHullAlgo(hull_algorithm_t a);
 
         // convenience functions
         double A() const { return convexHull().A(); };
@@ -65,13 +67,21 @@ const ConvexHull<T>& SpecWalker<T>::convexHull() const
 {
     if(hullDirty)
     {
-        points();
-        m_convex_hull.setHullAlgo(hull_algo);
+        points(); // ensure that we have points // The lazy evaluation is error prone ...
         m_convex_hull.run(&m_points);
         hullDirty = false;
     }
 
     return m_convex_hull;
+}
+
+/// Changes the algorithm used to calculate the hull.
+template <class T>
+void SpecWalker<T>::setHullAlgo(hull_algorithm_t a)
+{
+    m_convex_hull.setHullAlgo(a);
+    hullDirty = true;
+    hull_algo = a;
 }
 
 template <class T>

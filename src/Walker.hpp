@@ -43,7 +43,7 @@ class Walker
         const int numSteps; ///< Number of steps the Walk should have
         const int d;        ///< Dimension in which the Walker walks
 
-        void setHullAlgo(hull_algorithm_t a);
+        virtual void setHullAlgo(hull_algorithm_t a) = 0;
 
         // convenience functions
         virtual double A() const = 0;   ///< Returns the Volume of the convex hull

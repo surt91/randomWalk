@@ -1,13 +1,5 @@
 #include "Walker.hpp"
 
-/** Changes the algorithm used to calculate the hull.
- */
-void Walker::setHullAlgo(hull_algorithm_t a)
-{
-    hullDirty = true;
-    hull_algo = a;
-}
-
 /** Get the number of random numbers used.
  */
 int Walker::nRN() const
