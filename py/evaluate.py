@@ -294,6 +294,9 @@ def run():
         num_bins = ceil(2*num_samples**(1/3))
         # in fact, I need more bins, guess them with the sqrt choice
         num_bins = ceil(num_samples**(1/2))
+        # but ensure that we only get max 1 bin per 2 x-axis values
+        # since sometimes they are discrete, which can result in artifacts
+        num_bins = min(num_bins, (maximum - minimum)//2)
         # TODO: assign the bins adaptive: smaller bins where more data is
 
         bins = np.linspace(minimum, maximum, num=num_bins)
