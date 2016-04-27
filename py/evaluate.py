@@ -140,6 +140,10 @@ def getDistribution(data, outfile, histfile, col, theta, steps, inBins=50):
         for d in zip(centers, centers_err, bs_mean, bs_err):
             f.write("{} {} {} {}\n".format(*d))
 
+    if not data_p:
+        data_p.append([np.nan, np.nan, np.nan, np.nan])
+        logging.info("no good data from T={}".format(theta))
+
     return data_p
 
 
@@ -250,6 +254,8 @@ def run():
         for T in theta_for_N:
             if not testIfAborted("{}/{}.dat".format(d, nameDict[T])):
                 not_aborted.append(T)
+            else:
+                logging.info("not equilibrated: N={}, theta={}".format(N, T))
         theta_for_N = not_aborted
 
 
@@ -280,6 +286,7 @@ def run():
                                    steps=N,
                                    inBins=bins
                                   )
+            # only append, if we got some good data from the file
             list_of_ps_log.append(data)
             outfiles.append('"{}/stiched_{}.dat"'.format(out, nameDict[T]))
 
