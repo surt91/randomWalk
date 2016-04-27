@@ -147,7 +147,7 @@ class Simulation():
 
 class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
-                       dimension, theta, directory,
+                       dimension, theta, t_eq, directory,
                        rawData, rawConf, observable,
                        method, akl, sampling, parallel):
 
@@ -166,6 +166,7 @@ class SimulationInstance():
         self.w = observable
         self.m = sampling
         self.parallel = parallel
+        self.t_eq = t_eq
 
         self.loadFile = None
 
@@ -207,6 +208,11 @@ class SimulationInstance():
 
         if self.rawConf:
             opts.append("-O {0}".format(self.confname))
+
+        try:
+            opts.append("--t_eq {0:.0f}".format(self.t_eq[self.N][self.T]))
+        except KeyError:
+            pass
 
         if self.akl:
             opts.append("-a")

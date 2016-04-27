@@ -10,6 +10,11 @@ thetas = {    0: (-1000, -100, -30, -20, -17, -13, -10, -9, -8, -7, -6, -5, -4, 
             256: (-1000, -500, -200, -100, -50, -40, -30, -27, -25, -22, -20, -17, -15, -13, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, -0.7, -0.5, 5, 10, 100),
          }
 
+t_eq = { 32: {-12: 2e4, -10: 2e4},
+         64: {-23: 2e4, -20: 2e4, -19: 2e5, -18: 2e5, -17: 2e5},
+        128: {-45: 2e4, -42: 1e5, -40: 1e5},
+       }
+
 parameters = {
     # what type
     # 1 random walk
@@ -30,8 +35,11 @@ parameters = {
     # list of lengths of the walks
     "number_of_steps": sizes,
 
-    # list of different thetas
+    # dict[N] of different thetas
     "thetas": thetas,
+
+    # dict[N][theta] of equilibration times
+    "t_eq": t_eq,
 
     # where to save the temporary evaluation results
     "directory": "data",
