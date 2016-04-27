@@ -2,10 +2,10 @@
 
 {% block content %}
 
+set log xy
+
 {% for N in number_of_steps %}
     {{ header(filename+N|string, xlabel, ylabel) }}
-
-    set log xy
 
     plot \
     {% for theta in thetas[N] %}
