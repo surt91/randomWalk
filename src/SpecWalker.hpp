@@ -18,6 +18,8 @@
  *
  * Implements generic things offered by the Walker interface.
  * Is Base Class of all Walker Implementations.
+ *
+ * \tparam T datatype of the coordinates of Step (int or double)
  */
 template <class T>
 class SpecWalker : public Walker
@@ -55,7 +57,7 @@ class SpecWalker : public Walker
     protected:
         mutable std::vector<Step<T>> m_steps;
         mutable std::vector<Step<T>> m_points;
-        mutable std::unique_ptr<ConvexHull<T>> m_convex_hull;
+        mutable ConvexHull<T> m_convex_hull;
 };
 
 template <class T>
@@ -63,11 +65,13 @@ const ConvexHull<T>& SpecWalker<T>::convexHull() const
 {
     if(hullDirty)
     {
-        m_convex_hull = std::unique_ptr<ConvexHull<T>>(new ConvexHull<T>(points(), hull_algo));
+        points();
+        m_convex_hull.setHullAlgo(hull_algo);
+        m_convex_hull.run(&m_points);
         hullDirty = false;
     }
 
-    return *m_convex_hull;
+    return m_convex_hull;
 }
 
 template <class T>
