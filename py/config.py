@@ -147,7 +147,7 @@ class Simulation():
 
 class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
-                       dimension, theta, t_eq, directory,
+                       dimension, theta, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
                        method, akl, sampling, parallel):
 
@@ -167,6 +167,7 @@ class SimulationInstance():
         self.m = sampling
         self.parallel = parallel
         self.t_eq = t_eq
+        self.t_corr = t_corr
 
         self.loadFile = None
 
@@ -178,6 +179,11 @@ class SimulationInstance():
             os.makedirs(self.rawData)
         if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
+
+        try:
+            self.n = int(self.n * self.t_corr[self.N][self.T])
+        except KeyError:
+            pass
 
         self.basename = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)
@@ -191,6 +197,8 @@ class SimulationInstance():
         return "RW:N={}.t={}.T={}".format(self.N, self.t, self.T)
 
     def get_cmd(self):
+
+
         opts = ["./randomWalk",
                 "-N {0}".format(self.N),
                 "-x {0}".format(self.x),

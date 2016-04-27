@@ -21,7 +21,7 @@ logging.info("started")
 proposedTheta = []
 
 
-def getAutocorrTime(data):
+def getAutocorrTime(data, T="?"):
     # just take the first 5000, should be sufficient
     data = data[:5000]
     autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
@@ -35,7 +35,7 @@ def getAutocorrTime(data):
             break
 
     tau = sum(autocorr[:m])/x0
-    logging.info("autocorrelation time: " + str(tau))
+    logging.info("theta = {}, t_corr: {:.1f}".format(T, tau))
     return tau
 
 
@@ -66,7 +66,7 @@ def testIfAborted(filename):
     return False
 
 
-def getDataFromFile(filename, col):
+def getDataFromFile(filename, col, T="?"):
     try:
         a = np.loadtxt(filename+".gz")
     except FileNotFoundError:
@@ -77,7 +77,7 @@ def getDataFromFile(filename, col):
             return
 
     data = a.transpose()[col]
-    t_corr = getAutocorrTime(data)
+    t_corr = getAutocorrTime(data, T=T)
     # do only keep statistically independent samples to not underestimate the error
     return data[::ceil(2*t_corr)]
 
@@ -281,7 +281,7 @@ def run():
         getMinMaxTime("{}/{}.dat".format(d, n) for n in nameDict.values())
 
         with Pool() as p:
-            tmp = p.starmap(getDataFromFile, [("{}/{}.dat".format(d, nameDict[T]), column) for T in theta_for_N])
+            tmp = p.starmap(getDataFromFile, [("{}/{}.dat".format(d, nameDict[T]), column, T) for T in theta_for_N])
 
         # load data
         dataDict = {theta_for_N[i]: tmp[i] for i in range(len(tmp))}

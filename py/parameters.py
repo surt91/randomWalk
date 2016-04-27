@@ -15,6 +15,8 @@ t_eq = { 32: {-12: 2e4, -10: 2e4},
         128: {-45: 2e4, -42: 1e5, -40: 1e5},
        }
 
+t_corr = {}
+
 parameters = {
     # what type
     # 1 random walk
@@ -40,6 +42,10 @@ parameters = {
 
     # dict[N][theta] of equilibration times
     "t_eq": t_eq,
+
+    # dict[N][theta] of estimated autocorrelation times
+    # will be used to take by factor t_corr more samples
+    "t_corr": t_corr,
 
     # where to save the temporary evaluation results
     "directory": "data",
