@@ -166,6 +166,6 @@ class SelfAvoidingWalker : public LatticeWalker
         void naiveChangeUndo();
 
         std::list<double> dim(int N);
-        bool checkOverlapFree(std::list<double> &l) const;
-        bool checkOverlapFree(std::vector<Step<int>> &l) const;
+        bool checkOverlapFree(const std::list<double> &l) const;
+        bool checkOverlapFree(const std::vector<Step<int>> &l) const;
 };
