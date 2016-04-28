@@ -40,11 +40,15 @@ class SpecWalker : public Walker
         // convenience functions
         double A() const { return convexHull().A(); };
         double L() const { return convexHull().L(); };
+        std::vector<double> maxExtent();
+        double maxDiameter();
+        double r();
+        double r2();
 
         // get state
         virtual const std::vector<Step<T>>& steps() const = 0;
         const std::vector<Step<T>>& points(int start=1) const;
-        const std::vector<Step<T>> hullPoints() const { return convexHull().hullPoints(); };
+        const std::vector<Step<T>>& hullPoints() const { return convexHull().hullPoints(); };
 
         // update state
         void updateSteps() const { steps(); };
@@ -190,4 +194,49 @@ std::string SpecWalker<T>::print() const
         ss << i << " ";
     ss << "\n";
     return ss.str();
+}
+
+template <class T>
+std::vector<double> SpecWalker<T>::maxExtent()
+{
+    std::vector<double> maxE(d, 0);
+    int n_hullpoints = hullPoints().size();
+    for(int i=0; i<n_hullpoints; ++i)
+        for(int j=0; j<i; ++j)
+        {
+            Step<T> diff(hullPoints()[i] - hullPoints()[j]);
+            for(int k=0; k<d; ++k)
+                if(std::abs(diff[k]) > maxE[k])
+                    maxE[k] = std::abs(diff[k]);
+        }
+
+    return maxE;
+}
+
+template <class T>
+double SpecWalker<T>::maxDiameter()
+{
+    double maxD = 0;
+    int n_hullpoints = hullPoints().size();
+    for(int i=0; i<n_hullpoints; ++i)
+        for(int j=0; j<i; ++j)
+        {
+            double diameter = (hullPoints()[i] - hullPoints()[j]).length();
+            if(diameter > maxD)
+                maxD = diameter;
+        }
+
+    return maxD;
+}
+
+template <class T>
+double SpecWalker<T>::r()
+{
+    return (points().front() - points().back()).length();
+}
+
+template <class T>
+double SpecWalker<T>::r2()
+{
+    return r() * r();
 }

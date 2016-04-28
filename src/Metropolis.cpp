@@ -156,7 +156,7 @@ void Metropolis::run()
         oss << "# large deviation simulation at theta=" << o.theta << " and steps=" << o.steps << "\n";
     else
         oss << "# simple sampling simulation with steps=" << o.steps << "\n";
-    oss << "# sweeps L A\n";
+    oss << "# sweeps L A r r2 maxDiameter maxX maxY\n";
 
     std::unique_ptr<Walker> w;
     prepare(w);
@@ -203,7 +203,16 @@ void Metropolis::run()
                 LOG(LOG_TOO_MUCH) << "Area  : " << w->L();
                 LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
                 LOG(LOG_DEBUG) << "Iteration: " << i;
-                oss << i << " " << w->L() << " " << w->A() << std::endl;
+                auto maxE = w->maxExtent();
+                oss << i << " "
+                    << w->L() << " "
+                    << w->A() << " "
+                    << w->r() << " "
+                    << w->r2() << " "
+                    << w->maxDiameter() << " "
+                    << maxE[0] << " "
+                    << maxE[1]
+                    << std::endl;
             }
         }
     }

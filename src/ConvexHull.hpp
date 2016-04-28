@@ -59,8 +59,6 @@ class ConvexHull
         // observables
         double A() const;
         double L() const;
-        //~ std::vector<T> max_extent();
-        //~ double diameter();
 
         // hull
         const std::vector<Step<T>>& hullPoints() const;
