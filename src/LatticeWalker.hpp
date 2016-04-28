@@ -13,7 +13,7 @@ class LatticeWalker : public SpecWalker<int>
         LatticeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
             : SpecWalker<int>(d, numSteps, rng, hull_algo)
         {
-            random_numbers = std::move(rng.vector(numSteps));
+            random_numbers = rng.vector(numSteps);
         }
         virtual ~LatticeWalker() {}
 
