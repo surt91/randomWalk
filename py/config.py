@@ -180,11 +180,6 @@ class SimulationInstance():
         if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
 
-        try:
-            self.n = int(self.n * self.t_corr[self.N][self.T])
-        except KeyError:
-            pass
-
         self.basename = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)
         if self.rawConf:
@@ -197,12 +192,19 @@ class SimulationInstance():
         return "RW:N={}.t={}.T={}".format(self.N, self.t, self.T)
 
     def get_cmd(self):
+        it = self.n
+        try:
+            it = int(self.n * self.t_corr[self.N][self.T])
+        except KeyError:
+            pass
+
+
         opts = ["./randomWalk",
                 "-N {0}".format(self.N),
                 "-x {0}".format(self.x),
                 "-y {0}".format(self.y),
                 "-T {0:.5f}".format(self.T),
-                "-n {0}".format(self.n),
+                "-n {0}".format(it),
                 "-c {:d}".format(self.method),
                 "-d {:d}".format(self.D),
                 "-t {0}".format(self.t),
