@@ -1,10 +1,7 @@
 #include "LoopErasedWalker.hpp"
 
-const std::vector<Step<int>>& LoopErasedWalker::steps() const
+void LoopErasedWalker::updateSteps()
 {
-    if(!stepsDirty)
-        return m_steps;
-
     // add steps
     // save their coordinates in a hashmap with their index
     // if a new coordinate is already in the hashmap, rease the loop
@@ -76,8 +73,6 @@ const std::vector<Step<int>>& LoopErasedWalker::steps() const
     LOG(LOG_TOO_MUCH) << "Random numbers used: " << random_numbers_used;
 
     m_steps = ret;
-    stepsDirty = false;
-    return m_steps;
 }
 
 int LoopErasedWalker::nRN() const
@@ -87,7 +82,6 @@ int LoopErasedWalker::nRN() const
 
 void LoopErasedWalker::change(UniformRNG &rng)
 {
-    steps(); // steps need to be initialized
     // I should do this in a far more clever way
     int idx = rng() * nRN();
     undo_index = idx;
@@ -99,9 +93,9 @@ void LoopErasedWalker::change(UniformRNG &rng)
     if(newStep == Step<int>(d, undo_value))
         return;
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }
 
 void LoopErasedWalker::undoChange()
@@ -113,7 +107,7 @@ void LoopErasedWalker::undoChange()
     if(newStep == Step<int>(d, rejected))
         return;
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }

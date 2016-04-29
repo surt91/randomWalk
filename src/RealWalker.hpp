@@ -16,10 +16,11 @@ class RealWalker : public SpecWalker<double>
         {
             // we need d-1 random numbers per step, for each angle one
             random_numbers = rng.vector((d-1) * numSteps);
+            updateSteps();
         }
         virtual ~RealWalker() {}
 
-        virtual const std::vector<Step<double>>& steps() const;
+        virtual void updateSteps();
 
         virtual void change(UniformRNG &rng);
         virtual void undoChange();

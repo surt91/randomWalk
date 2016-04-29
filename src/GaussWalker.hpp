@@ -13,9 +13,10 @@ class GaussWalker : public RealWalker
         {
             // we need d gaussian random numbers per step, for each direction
             random_numbers = rng.vector_gaussian(d * numSteps);
+            updateSteps();
         }
 
-        const std::vector<Step<double>>& steps() const;
+        virtual void updateSteps();
 
         void change(UniformRNG &rng);
         void undoChange();

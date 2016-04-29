@@ -1,21 +1,14 @@
 #include "LatticeWalker.hpp"
 
-const std::vector<Step<int>>& LatticeWalker::steps() const
+void LatticeWalker::updateSteps()
 {
-    if(!stepsDirty)
-        return m_steps;
-
     m_steps.resize(numSteps);
     for(int i=0; i<numSteps; ++i)
         m_steps[i] = Step<int>(d, random_numbers[i]);
-
-    stepsDirty = false;
-    return m_steps;
 }
 
 void LatticeWalker::change(UniformRNG &rng)
 {
-    steps(); // steps need to be initialized
     int idx = rng() * nRN();
     undo_index = idx;
     undo_value = random_numbers[idx];
@@ -27,10 +20,8 @@ void LatticeWalker::change(UniformRNG &rng)
         return;
 
     m_steps[idx] = newStep;
-    points(idx+1);
-    hullDirty = true;
-
-    return;
+    updatePoints(idx+1);
+    updateHull();
 }
 
 void LatticeWalker::undoChange()
@@ -42,8 +33,8 @@ void LatticeWalker::undoChange()
         return;
 
     m_steps[undo_index] = newStep;
-    points(undo_index+1);
-    hullDirty = true;
+    updatePoints(undo_index+1);
+    updateHull();
 }
 
 /** set the random numbers such that we get an L shape
@@ -53,9 +44,9 @@ void LatticeWalker::degenerateMaxVolume()
     for(int i=0; i<numSteps; ++i)
         random_numbers[i] = .99 / ceil((double) d * (i+1)/numSteps);
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }
 
 /** set the random numbers such that we get an L shape in d-1 dimensions
@@ -65,9 +56,9 @@ void LatticeWalker::degenerateMaxSurface()
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99 / ceil((double) (d-1) * (i+1)/random_numbers.size());
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }
 
 /** set the random numbers such that we get a spiral
@@ -79,9 +70,9 @@ void LatticeWalker::degenerateSpiral()
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99;
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }
 
 /** set the random numbers such that we get a straight line
@@ -91,7 +82,7 @@ void LatticeWalker::degenerateStraight()
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99;
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }

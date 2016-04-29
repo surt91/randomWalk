@@ -19,9 +19,10 @@ class LoopErasedWalker : public LatticeWalker
         LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
             : LatticeWalker(d, numSteps, rng, hull_algo)
         {
+            updateSteps();
         }
 
-        const std::vector<Step<int>>& steps() const;
+        virtual void updateSteps();
 
         int nRN() const;
 

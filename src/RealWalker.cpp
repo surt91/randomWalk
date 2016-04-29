@@ -37,23 +37,16 @@ Step<double> RealWalker::genStep(std::vector<double>::iterator first) const
 }
 
 // TODO: d-1 rn per step, to determine the angles
-const std::vector<Step<double>>& RealWalker::steps() const
+void RealWalker::updateSteps()
 {
-    if(!stepsDirty)
-        return m_steps;
-
     m_steps.resize(numSteps);
     for(int i=0; i<numSteps; ++i)
         m_steps[i] = genStep(random_numbers.begin() + i*(d-1));
-
-    stepsDirty = false;
-    return m_steps;
 }
 
 void RealWalker::change(UniformRNG &rng)
 {
     // We need d-1 random numbers per step to determine the d-1 angles
-    steps(); // steps need to be initialized
     int idx = rng() * numSteps;
     int rnidx = idx * (d-1);
     undo_index = idx;
@@ -62,8 +55,8 @@ void RealWalker::change(UniformRNG &rng)
         random_numbers[rnidx + i] = rng();
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
-    points(idx+1);
-    hullDirty = true;
+    updatePoints(idx+1);
+    updateHull();
 }
 
 void RealWalker::undoChange()
@@ -73,8 +66,8 @@ void RealWalker::undoChange()
         random_numbers[undo_index * (d-1) + t++] = i;
 
     m_steps[undo_index] = genStep(undo_values.begin());
-    points(undo_index+1);
-    hullDirty = true;
+    updatePoints(undo_index+1);
+    updateHull();
 }
 
 /** Set the random numbers such that we get an half circle shape.
@@ -85,9 +78,9 @@ void RealWalker::degenerateMaxVolume()
     for(int i=0; i<numSteps; ++i)
         random_numbers[i] = .5 / (i+1);
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }
 
 /** Set the random numbers such that we get an L shape in d-1 dimensions.
@@ -97,9 +90,9 @@ void RealWalker::degenerateMaxSurface()
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99 / ceil((double) (d-1) * (i+1)/random_numbers.size());
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }
 
 /** Set the random numbers such that we get a spiral.
@@ -111,9 +104,9 @@ void RealWalker::degenerateSpiral()
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99;
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }
 
 /** Set the random numbers such that we get a straight line.
@@ -123,7 +116,7 @@ void RealWalker::degenerateStraight()
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99;
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }

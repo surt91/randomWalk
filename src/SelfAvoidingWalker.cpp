@@ -106,7 +106,6 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
             break;
     }
 
-    steps(); // make sure steps is up to date
     // FIXME: pivot the shorter end
     // first just a dry test -- most of the time it will fail and it is
     // probably cheaper to do it twice in case of success instead of
@@ -147,8 +146,8 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
         for(int i=index; i<numSteps; ++i)
             m_steps[i] = transform(m_steps[i], matrix);
 
-        points(index+1);
-        hullDirty = true;
+        updatePoints(index+1);
+        updateHull();
     }
 
     return !failed;
@@ -162,13 +161,12 @@ void SelfAvoidingWalker::naiveChangeUndo()
 
     m_steps[undo_naive_index] = undo_naive_step;
 
-    points(undo_naive_index+1);
-    hullDirty = true;
+    updatePoints(undo_naive_index+1);
+    updateHull();
 }
 
 bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
 {
-    steps(); // steps need to be initialized
     undo_naive_index = idx;
     undo_naive_step = m_steps[idx];
 
@@ -178,17 +176,17 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
         return true;
 
     m_steps[idx] = newStep;
-    points(idx+1);
+    updatePoints(idx+1);
 
     if(!checkOverlapFree(points()))
     {
         m_steps[idx] = undo_naive_step;
-        points(idx+1);
+        updatePoints(idx+1);
         undo_naive_index = -1;
         return false;
     }
 
-    hullDirty = true;
+    updateHull();
 
     return true;
 }

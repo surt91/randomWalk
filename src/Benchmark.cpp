@@ -18,9 +18,12 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
     else
         LOG(LOG_ERROR) << "cannot find walk type " << o.type;
 
-    w->updateSteps();
+    clock_t before_points = clock();
+    LOG(LOG_TIMING) << "    " << time_diff(before_walker, before_points);
 
-    LOG(LOG_TIMING) << "    " << time_diff(before_walker, clock());
+    w->updatePoints();
+
+    LOG(LOG_TIMING) << "    " << time_diff(before_points, clock());
 
     return w;
 }
@@ -29,7 +32,6 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
 {
     clock_t before_ch = clock();
     w->setHullAlgo(o.chAlg);
-    w->updateHull();
 
     clock_t before_output = clock();
 

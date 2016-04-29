@@ -46,14 +46,14 @@ class SpecWalker : public Walker
         double r2();
 
         // get state
-        virtual const std::vector<Step<T>>& steps() const = 0;
-        const std::vector<Step<T>>& points(int start=1) const;
+        const std::vector<Step<T>>& steps() const { return m_steps; };
+        const std::vector<Step<T>>& points() const { return m_points; };
         const std::vector<Step<T>>& hullPoints() const { return convexHull().hullPoints(); };
 
         // update state
-        void updateSteps() const { steps(); };
-        void updatePoints(int start=1) const { points(start); };
-        void updateHull() const { convexHull(); };
+        virtual void updateSteps() = 0;
+        virtual void updatePoints(int start=1);
+        virtual void updateHull();
 
         // output functions
         void svg(const std::string filename, const bool with_hull) const;
@@ -61,21 +61,20 @@ class SpecWalker : public Walker
         std::string print() const;
 
     protected:
-        mutable std::vector<Step<T>> m_steps;
-        mutable std::vector<Step<T>> m_points;
-        mutable ConvexHull<T> m_convex_hull;
+        std::vector<Step<T>> m_steps;
+        std::vector<Step<T>> m_points;
+        ConvexHull<T> m_convex_hull;
 };
+
+template <class T>
+void SpecWalker<T>::updateHull()
+{
+    m_convex_hull.run(&m_points);
+}
 
 template <class T>
 const ConvexHull<T>& SpecWalker<T>::convexHull() const
 {
-    if(hullDirty)
-    {
-        points(); // ensure that we have points // The lazy evaluation is error prone ...
-        m_convex_hull.run(&m_points);
-        hullDirty = false;
-    }
-
     return m_convex_hull;
 }
 
@@ -84,28 +83,19 @@ template <class T>
 void SpecWalker<T>::setHullAlgo(hull_algorithm_t a)
 {
     m_convex_hull.setHullAlgo(a);
-    hullDirty = true;
+    updateHull();
     hull_algo = a;
 }
 
 template <class T>
-const std::vector<Step<T>>& SpecWalker<T>::points(int start) const
+void SpecWalker<T>::updatePoints(int start)
 {
-    if(stepsDirty)
-        steps();
-    if(!pointsDirty && start!=1)
-        return m_points;
-
     for(int i=start; i<=numSteps; ++i)
     {
         m_points[i].setZero();
         m_points[i] += m_points[i-1];
         m_points[i] += m_steps[i-1];
     }
-
-    pointsDirty = false;
-
-    return m_points;
 }
 
 template <class T>
@@ -141,7 +131,7 @@ void SpecWalker<T>::svg(const std::string filename, const bool with_hull) const
     points.clear();
     if(with_hull)
     {
-        const std::vector<Step<T>> h = convexHull().hullPoints();
+        const std::vector<Step<T>> h = hullPoints();
         for(auto &i : h)
         {
             std::vector<double> point {(double) i[0], (double) i[1]};

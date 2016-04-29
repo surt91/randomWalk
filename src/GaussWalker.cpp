@@ -14,17 +14,11 @@ Step<double> GaussWalker::genStep(std::vector<double>::iterator first) const
     return Step<double>(std::vector<double>(first, first+d));
 }
 
-const std::vector<Step<double>>& GaussWalker::steps() const
+void GaussWalker::updateSteps()
 {
-    if(!stepsDirty)
-        return m_steps;
-
     m_steps.resize(numSteps);
     for(int i=0; i<numSteps; ++i)
         m_steps[i] = genStep(random_numbers.begin() + i*d);
-
-    stepsDirty = false;
-    return m_steps;
 }
 
 void GaussWalker::change(UniformRNG &rng)
@@ -39,8 +33,8 @@ void GaussWalker::change(UniformRNG &rng)
         random_numbers[rnidx+i] = rng.gaussian();
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
-    points(idx+1);
-    hullDirty = true;
+    updatePoints(idx+1);
+    updateHull();
 }
 
 void GaussWalker::undoChange()
@@ -50,8 +44,8 @@ void GaussWalker::undoChange()
         random_numbers[undo_index*d + t++] = i;
 
     m_steps[undo_index] = genStep(undo_values.begin());
-    points(undo_index+1);
-    hullDirty = true;
+    updatePoints(undo_index+1);
+    updateHull();
 }
 
 /** Change only one component of the gauss steps.
@@ -69,8 +63,8 @@ void GaussWalker::changeSingle(UniformRNG &rng)
     random_numbers[rnidx] = rng.gaussian();
 
     m_steps[idx] = genStep(random_numbers.begin() + idx*d);
-    points(idx+1);
-    hullDirty = true;
+    updatePoints(idx+1);
+    updateHull();
 }
 
 /** Undo the single component change.
@@ -81,10 +75,9 @@ void GaussWalker::undoChangeSingle()
     int idx = undo_index / d;
 
     m_steps[idx] = genStep(random_numbers.begin() + idx*d);
-    points(idx+1);
-    hullDirty = true;
+    updatePoints(idx+1);
+    updateHull();
 }
-
 
 /** Set the random numbers such that we get an half circle shape.
  *
@@ -96,7 +89,7 @@ void GaussWalker::degenerateMaxVolume()
 {
     // FIXME: works only for d=2
     // I am not sure how the greatest volume in d=3 is constructed
-    double r = 1.5;
+    double r = 2;
     for(int i=0; i<numSteps; ++i)
     {
         double theta = M_PI / (i+1);
@@ -106,7 +99,7 @@ void GaussWalker::degenerateMaxVolume()
             random_numbers[i*d+j] = i < numSteps/2 ? 0 : r;
     }
 
-    stepsDirty = true;
-    pointsDirty = true;
-    hullDirty = true;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }

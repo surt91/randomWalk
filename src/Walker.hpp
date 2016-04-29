@@ -33,9 +33,6 @@ class Walker
               rng(rng),
               hull_algo(hull_algo)
         {
-            stepsDirty = true;
-            pointsDirty = true;
-            hullDirty = true;
         }
 
         virtual ~Walker() {}
@@ -64,9 +61,9 @@ class Walker
         virtual void change(UniformRNG &rng) = 0;
         virtual void undoChange() = 0;
 
-        virtual void updateSteps() const = 0;
-        virtual void updatePoints(int start) const = 0;
-        virtual void updateHull() const = 0;
+        virtual void updateSteps() = 0;
+        virtual void updatePoints(int start=1) = 0;
+        virtual void updateHull() = 0;
 
         virtual void degenerateMaxVolume() = 0;
         virtual void degenerateMaxSurface() = 0;
@@ -83,10 +80,6 @@ class Walker
         virtual void pov(const std::string filename, const bool with_hull=false) const = 0;
 
     protected:
-        mutable int stepsDirty;
-        mutable int pointsDirty;
-        mutable int hullDirty;
-
         UniformRNG rng;
         mutable std::vector<double> random_numbers;
         hull_algorithm_t hull_algo;
