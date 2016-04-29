@@ -132,19 +132,22 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
         ++t_eq;
     }
 
-    LOG(LOG_INFO) << "Equilibration estimate: t_eq = " << t_eq;
-    LOG(LOG_INFO) << "plot with gnuplot (for L):";
-    LOG(LOG_INFO) << "p 'equilibration.dat' u 1:2 w l t 'random', "
-                     "'' u 1:4 w l t 'maxVolume', "
-                     "'' u 1:6 w l t 'maxSurface', "
-                     "'' u 1:8 w l t 'spiral', "
-                     "'' u 1:10 w l t 'straightLine'";
-    LOG(LOG_INFO) << "plot with gnuplot (for A):";
-    LOG(LOG_INFO) << "p 'equilibration.dat' u 1:3 w l t 'random', "
-                     "'' u 1:5 w l t 'maxVolume', "
-                     "'' u 1:7 w l t 'maxSurface', "
-                     "'' u 1:9 w l t 'spiral', "
-                     "'' u 1:11 w l t 'straightLine'";
+    if(!muted)
+    {
+        LOG(LOG_INFO) << "Equilibration estimate: t_eq = " << t_eq;
+        LOG(LOG_INFO) << "plot with gnuplot (for L):";
+        LOG(LOG_INFO) << "p 'equilibration.dat' u 1:2 w l t 'random', "
+                         "'' u 1:4 w l t 'maxVolume', "
+                         "'' u 1:6 w l t 'maxSurface', "
+                         "'' u 1:8 w l t 'spiral', "
+                         "'' u 1:10 w l t 'straightLine'";
+        LOG(LOG_INFO) << "plot with gnuplot (for A):";
+        LOG(LOG_INFO) << "p 'equilibration.dat' u 1:3 w l t 'random', "
+                         "'' u 1:5 w l t 'maxVolume', "
+                         "'' u 1:7 w l t 'maxSurface', "
+                         "'' u 1:9 w l t 'spiral', "
+                         "'' u 1:11 w l t 'straightLine'";
+    }
     return t_eq;
 }
 
@@ -214,6 +217,11 @@ void Metropolis::run()
                     << maxE[1]
                     << std::endl;
             }
+
+            sum_L += w->L();
+            sum_A += w->A();
+            sum_r += w->r();
+            sum_r2 += w->r2();
         }
     }
 

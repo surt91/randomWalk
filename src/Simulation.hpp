@@ -14,6 +14,7 @@
 
 #include "Cmd.hpp"
 #include "Logging.hpp"
+#include "stat.hpp"
 #include "Walker.hpp"
 #include "LatticeWalker.hpp"
 #include "LoopErasedWalker.hpp"
@@ -21,7 +22,6 @@
 #include "RealWalker.hpp"
 #include "GaussWalker.hpp"
 #include "RNG.hpp"
-#include "Benchmark.hpp"
 
 class Simulation
 {
@@ -31,6 +31,13 @@ class Simulation
 
         virtual void run() = 0;
 
+        void mute() {muted=true;};
+
+        double sum_L;
+        double sum_A;
+        double sum_r;
+        double sum_r2;
+
     protected:
         Cmd o;
         int fails;
@@ -38,6 +45,7 @@ class Simulation
         void prepare(std::unique_ptr<Walker>& w);
         std::function<double(std::unique_ptr<Walker>&)> S;
         std::ofstream oss;
+        bool muted;
 
     private:
         clock_t begin;

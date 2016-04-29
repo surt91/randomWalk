@@ -2,17 +2,21 @@
 
 #include <algorithm>
 #include <deque>
-
+#include <ctime>
+#include <string>
 #include <iostream>
+#include <cstdio>
+#include <memory>
 
-// T kann double, float oder so sein
+// TODO: ifdef für unix?
+#include <unistd.h> //for getpid
+
 template <typename T>
 T mean(std::vector<T> a)
 {
     return std::accumulate(a.begin(), a.end(), T(0.0)) / a.size();
 }
 
-// T kann double, float oder so sein
 template <typename T>
 T variance(std::vector<T> a, T m=T(0))
 {
@@ -22,6 +26,10 @@ T variance(std::vector<T> a, T m=T(0))
     T tmp = std::accumulate(a.begin(), a.end(), T(0.0), [&](T part, T next){return part + (m - next) * (m - next);});
     return tmp/a.size();
 }
+
+std::string vmPeak();
+
+std::string time_diff(clock_t start, clock_t end);
 
 /** Calculates a rolling mean over the values feeded to it.
  */
