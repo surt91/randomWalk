@@ -149,7 +149,7 @@ class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
                        dimension, theta, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
-                       method, akl, sampling, parallel):
+                       method, akl, sampling, parallel, **not_used):
 
         self.N = steps
         self.n = iterations
@@ -197,8 +197,6 @@ class SimulationInstance():
         return "RW:N={}.t={}.T={}".format(self.N, self.t, self.T)
 
     def get_cmd(self):
-
-
         opts = ["./randomWalk",
                 "-N {0}".format(self.N),
                 "-x {0}".format(self.x),

@@ -10,7 +10,7 @@ from scipy.interpolate import interp1d
 from scipy.integrate import simps, trapz
 
 import parameters as param
-from config import bootstrap, bootstrap_histogram, histogram_simple_error
+from config import bootstrap, bootstrap_histogram, histogram_simple_error, SimulationInstance
 
 
 logging.basicConfig(level=logging.INFO,
@@ -262,12 +262,8 @@ def run():
         # find names of needed files
         nameDict = {}
         for T in theta_for_N:
-            nameDict.update({T: param.basename.format(steps=N,
-                                                      theta=T,
-                                                      **param.parameters
-                                                 )
-                            }
-                           )
+            i = SimulationInstance(steps=N, theta=T, **param.parameters)
+            nameDict.update({T: i.basename})
 
         # remove files from evaluation, which did not equilibrate
         not_aborted = []
@@ -324,12 +320,8 @@ def run():
 
         whole_distribution = []
         for n, T in enumerate(theta_for_N):
-            name = param.basename.format(steps=N,
-                                         theta=T,
-                                         **param.parameters
-                                         )
-            data = stichFile("{}/dist_{}.dat".format(out, name),
-                             "{}/stiched_{}.dat".format(out, name),
+            data = stichFile("{}/dist_{}.dat".format(out, nameDict[T]),
+                             "{}/stiched_{}.dat".format(out, nameDict[T]),
                              zc[n], zce[n])
             whole_distribution += data
 
