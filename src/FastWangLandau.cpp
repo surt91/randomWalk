@@ -60,13 +60,13 @@ void FastWangLandau::run()
                             ++t;
                             double oldS = S(w);
                             w->change(rngMC);
-                            ++trys;
+                            ++tries;
 
                             double p_acc = exp(g[oldS] - g[S(w)]);
                             if(!g.checkBounds(S(w)) || p_acc < rngMC())
                             {
                                 w->undoChange();
-                                ++fail;
+                                ++fails;
                             }
 
                             g[S(w)] += lnf;

@@ -182,7 +182,7 @@ void Metropolis::run()
                 // change one random number to another random number
                 double oldS = S(w);
                 w->change(rngMC);
-                ++trys;
+                ++tries;
 
                 if(!o.simpleSampling)
                 {
@@ -190,7 +190,7 @@ void Metropolis::run()
                     double p_acc = exp((oldS - S(w))/o.theta);
                     if(p_acc < rngMC())
                     {
-                        ++fail;
+                        ++fails;
                         w->undoChange();
                     }
                 }

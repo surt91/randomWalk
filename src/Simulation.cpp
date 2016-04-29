@@ -5,8 +5,8 @@ Simulation::Simulation(const Cmd &o)
       oss(o.data_path, std::ofstream::out)
 {
     begin = clock();
-    fail = 0;
-    trys = 0;
+    fails = 0;
+    tries = 0;
 
     if(!oss.good())
     {
@@ -24,12 +24,12 @@ Simulation::Simulation(const Cmd &o)
 
 Simulation::~Simulation()
 {
-    LOG(LOG_INFO) << "# rejected changes: " << fail << " (" << (100.*fail / trys) << "%)";
+    LOG(LOG_INFO) << "# rejected changes: " << fails << " (" << (100.*fails / tries) << "%)";
     LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
     LOG(LOG_INFO) << "# max vmem: " << vmPeak();
 
     // save runtime statistics
-    oss << "# rejected changes: " << fail << " (" << (100.*fail / trys) << "%)" << "\n";
+    oss << "# rejected changes: " << fails << " (" << (100.*fails / tries) << "%)" << "\n";
     oss << "# time in seconds: " << time_diff(begin, clock()) << "\n";
     oss << "# max vmem: " << vmPeak() << std::endl;
 
