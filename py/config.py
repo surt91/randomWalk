@@ -192,12 +192,12 @@ class SimulationInstance():
         return "RW:N={}.t={}.T={}".format(self.N, self.t, self.T)
 
     def get_cmd(self):
-        it = self.n
         try:
             it = int(self.n * self.t_corr[self.N][self.T])
         except KeyError:
             pass
-
+        else:
+            it = self.n
 
         opts = ["./randomWalk",
                 "-N {0}".format(self.N),

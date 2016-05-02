@@ -83,6 +83,7 @@ def getDataFromFile(filename, col, T="?"):
 
 
 def getStatistics(dataDict):
+    logging.info("collecting statistics")
     count = 0
     minimum = 10**10
     maximum = 0
@@ -315,7 +316,7 @@ def run():
         num_bins = ceil(num_samples**(1/2))
         # but ensure that we only get max 1 bin per 2 x-axis values
         # since sometimes they are discrete, which can result in artifacts
-        num_bins = min(num_bins, (maximum - minimum)//2)
+        num_bins = min(num_bins, (maximum - minimum))
         # TODO: assign the bins adaptive: smaller bins where more data is
 
         bins = np.linspace(minimum, maximum, num=num_bins)
@@ -364,7 +365,6 @@ def run():
         m = max(t[:][0])
         #~ area = simps(np.exp(t[2]), t[0])  # simpson is not robust against really small numbers :/
         area = trapz(np.exp(t[2]), t[0])
-        print(area)
         with open(whole_distribution_file, "w") as f:
             f.write("# S S_err P(S) P(S)_err\n")
             for i in sorted(whole_distribution):
@@ -376,7 +376,7 @@ def run():
 
     if proposedTheta:
         print("consider adding following thetas:")
-        print(" ".join(map(str, set(proposedTheta))))
+        print(" ".join(map(str, proposedTheta)))
 
 
 if __name__ == "__main__":
