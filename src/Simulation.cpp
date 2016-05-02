@@ -2,8 +2,8 @@
 
 Simulation::Simulation(const Cmd &o)
     : o(o),
-      muted(false),
-      oss(o.data_path, std::ofstream::out)
+      oss(o.data_path, std::ofstream::out),
+      muted(false)
 {
     begin = clock();
     fails = 0;
