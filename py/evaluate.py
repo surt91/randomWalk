@@ -94,6 +94,29 @@ def getStatistics(dataDict):
     return minimum, maximum, count
 
 
+def getPercentileBasedBins(dataDict, numBins=100):
+    logging.info("determining nice bins for flat histogram")
+    rawData = np.concatenate(list(dataDict.values()))
+
+    # numBins bins, defined by their numBins+1 edges
+    percentiles = np.linspace(0, 100, numBins+1)
+    tmp = np.percentile(rawData, percentiles)
+
+
+    # ensure max 1 bin per 3 unit scale
+    right = 0
+    bins = [0]
+    for i in tmp:
+        if ceil(i) - 3 <= right:
+            continue
+        right = ceil(i)
+        bins.append(right)
+
+    print(bins)
+
+    return bins
+
+
 def averageOverSameX(whole_distribution):
     xDict = {}
     for x, x_err, y, y_err in whole_distribution:
@@ -296,6 +319,10 @@ def run():
         # TODO: assign the bins adaptive: smaller bins where more data is
 
         bins = np.linspace(minimum, maximum, num=num_bins)
+
+        # get bins, such that every bin contains roughly the same amount
+        # of data points (total)
+        bins = getPercentileBasedBins(dataDict, num_bins)
 
         for T in theta_for_N:
             data = getDistribution(dataDict[T],
