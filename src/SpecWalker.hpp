@@ -191,10 +191,11 @@ std::vector<double> SpecWalker<T>::maxExtent()
 {
     std::vector<double> maxE(d, 0);
     int n_hullpoints = hullPoints().size();
+    Step<T> diff;
     for(int i=0; i<n_hullpoints; ++i)
         for(int j=0; j<i; ++j)
         {
-            Step<T> diff(hullPoints()[i] - hullPoints()[j]);
+            diff = hullPoints()[i] - hullPoints()[j];
             for(int k=0; k<d; ++k)
                 if(std::abs(diff[k]) > maxE[k])
                     maxE[k] = std::abs(diff[k]);
@@ -228,5 +229,6 @@ double SpecWalker<T>::r()
 template <class T>
 double SpecWalker<T>::r2()
 {
-    return r() * r();
+    double tmp = r();
+    return tmp * tmp;
 }

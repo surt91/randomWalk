@@ -80,7 +80,7 @@ void SelfAvoidingWalker::undoChange()
 
 Step<int> SelfAvoidingWalker::transform(Step<int> &p, const std::vector<int> &m) const
 {
-    Step<int> out(std::vector<int>(d, 0));
+    Step<int> out(d);
     for(int i=0; i<d; ++i)
         for(int j=0; j<d; ++j)
             out[i] += p[j] * m[i*d + j];

@@ -108,9 +108,9 @@ class Step
 /// Specialization for int steps.
 template <>
 inline Step<int>::Step(int d, double rn)
-      : m_d(d)
+      : m_d(d),
+        m_coordinates(d, 0)
 {
-    m_coordinates = std::vector<int>(d, 0);
     for(int i=0; i<d; ++i)
         if(rn * d < i+1) // direction i
         {
@@ -166,11 +166,11 @@ Step<T> Step<T>::operator+(const Step<T> &other) const
     if(m_d != other.d())
         throw std::invalid_argument("dimensions do not agree");
 
-    std::vector<T> new_coord = other.coordinates();
+    Step<T> new_step(other);
     for(int i=0; i<m_d; ++i)
-        new_coord[i] += m_coordinates[i];
+        new_step[i] += m_coordinates[i];
 
-    return Step<T>(new_coord);
+    return new_step;
 }
 
 template <class T>
@@ -179,21 +179,21 @@ Step<T> Step<T>::operator-(const Step<T> &other) const
     if(m_d != other.d())
         throw std::invalid_argument("dimensions do not agree");
 
-    std::vector<T> new_coord = other.coordinates();
+    Step<T> new_step(other);
     for(int i=0; i<m_d; ++i)
-        new_coord[i] -= m_coordinates[i];
+        new_step[i] -= m_coordinates[i];
 
-    return Step<T>(new_coord);
+    return new_step;
 }
 
 template <class T>
 Step<T> Step<T>::operator-() const
 {
-    std::vector<T> new_coord = coordinates();
+    Step<T> new_step(*this);
     for(int i=0; i<m_d; ++i)
-        new_coord[i] *= -1;
+        new_step[i] *= -1;
 
-    return Step<T>(new_coord);
+    return new_step;
 }
 
 template <class T>
@@ -209,7 +209,8 @@ Step<T> Step<T>::operator/(const double d) const
 template <class T>
 Step<T>& Step<T>::operator+=(const Step<T> &other)
 {
-    if(m_d != other.d())
+    // TODO: replace by assert
+    if(m_d != other.m_d)
         throw std::invalid_argument("dimensions do not agree");
 
     for(int i=0; i<m_d; ++i)
@@ -258,11 +259,11 @@ Step<T> cross(const Step<T> &a, const Step<T> &b)
     if(a.m_d != 3)
         throw std::invalid_argument("cross product only defined for d=3");
 
-    std::vector<T> ret(3);
+    Step<T> ret(3);
     ret[0] = a.y()*b.z() - a.z()*b.y();
     ret[1] = a.z()*b.x() - a.x()*b.z();
     ret[2] = a.x()*b.y() - a.y()*b.x();
-    return Step<T>(ret);
+    return ret;
 }
 
 template <class T>

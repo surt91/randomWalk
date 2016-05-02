@@ -16,7 +16,7 @@ void LoopErasedWalker::updateSteps()
     std::vector<Step<int>> ret(numSteps);
 
     // p will keep track where the head is
-    Step<int> p(std::vector<int>(d, 0));
+    Step<int> p(d);
     occupied_tiles.emplace(p, 0);
 
     int i=0;
@@ -43,7 +43,7 @@ void LoopErasedWalker::updateSteps()
             if(tmp == 0)
             {
                 occupied_tiles.clear();
-                p = Step<int>(std::vector<int>(d, 0));
+                p = Step<int>(d);
                 occupied_tiles.emplace(p, 0);
                 index = -1;
             }
