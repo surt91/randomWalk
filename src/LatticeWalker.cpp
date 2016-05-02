@@ -2,9 +2,10 @@
 
 void LatticeWalker::updateSteps()
 {
-    m_steps.resize(numSteps);
+    m_steps.clear();
+    m_steps.reserve(numSteps);
     for(int i=0; i<numSteps; ++i)
-        m_steps[i] = Step<int>(d, random_numbers[i]);
+        m_steps.emplace_back(d, random_numbers[i]);
 }
 
 void LatticeWalker::change(UniformRNG &rng)
