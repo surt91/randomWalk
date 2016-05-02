@@ -1,6 +1,8 @@
 #pragma once
 
 #include <algorithm>
+#include <numeric>
+#include <vector>
 #include <deque>
 #include <ctime>
 #include <string>
