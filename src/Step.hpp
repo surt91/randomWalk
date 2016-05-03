@@ -13,6 +13,7 @@ class Step;
 namespace std {
     template<>
     struct hash<Step<int>>;
+    template<>
     struct hash<Step<double>>;
 }
 
