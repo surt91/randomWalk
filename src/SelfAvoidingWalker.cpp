@@ -65,7 +65,9 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
     else
     {
         undo_index = -1;
-        naiveChange(rng() * nRN(), rng());
+        auto idx = rng() * nRN();
+        auto val = rng();
+        naiveChange(idx, val);
     }
 }
 
