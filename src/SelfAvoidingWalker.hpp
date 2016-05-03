@@ -164,6 +164,7 @@ class SelfAvoidingWalker : public LatticeWalker
         int undo_naive_index;
         Step<int> undo_naive_step;
         Step<int> undo_step;
+        int undo_symmetry;
         bool naiveChange(const int idx, const double rn);
         void naiveChangeUndo();
 

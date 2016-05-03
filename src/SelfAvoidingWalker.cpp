@@ -48,11 +48,11 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
     {
         case 2:
             symmetry = rng() * tMatrix2.size(); // integer between 0 and 3
-            undo_value = iMatrix2[symmetry];
+            undo_symmetry = iMatrix2[symmetry];
             break;
         case 3:
             symmetry = rng() * tMatrix3.size(); // integer between 0 and 3
-            undo_value = iMatrix3[symmetry];
+            undo_symmetry = iMatrix3[symmetry];
             break;
         default:
             throw std::invalid_argument("Pivot algorithm only implemented for d=2 and d=3");
@@ -75,7 +75,7 @@ void SelfAvoidingWalker::undoChange()
     if(undo_index == -1)
         naiveChangeUndo();
     else
-        pivot(undo_index, undo_value);
+        pivot(undo_index, undo_symmetry);
 }
 
 Step<int> SelfAvoidingWalker::transform(Step<int> &p, const std::vector<int> &m) const
