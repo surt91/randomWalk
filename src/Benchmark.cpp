@@ -59,7 +59,7 @@ void run_simulation(const Cmd &o, double expected_mean_A,
     Metropolis s(o);
     s.mute();
     s.run();
-    const double threshold = 1e-4;
+    const double threshold = 1e-2;
     // 1e3 iterations, should be 10% accurate (?)
     if(std::abs(s.sum_L / o.iterations - expected_mean_L) > threshold)
     {
