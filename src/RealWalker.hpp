@@ -17,6 +17,7 @@ class RealWalker : public SpecWalker<double>
             // we need d-1 random numbers per step, for each angle one
             random_numbers = rng.vector((d-1) * numSteps);
             updateSteps();
+            updatePoints();
         }
         virtual ~RealWalker() {}
 

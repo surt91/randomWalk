@@ -20,6 +20,7 @@ class LoopErasedWalker : public LatticeWalker
             : LatticeWalker(d, numSteps, rng, hull_algo)
         {
             updateSteps();
+            updatePoints();
         }
 
         virtual void updateSteps();

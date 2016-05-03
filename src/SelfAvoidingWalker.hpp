@@ -151,6 +151,7 @@ class SelfAvoidingWalker : public LatticeWalker
             LOG(LOG_DEBUG) << "Dimerization got the inital SAW";
             random_numbers = std::vector<double>(l.begin(), l.end());
             updateSteps();
+            updatePoints();
         }
 
         void change(UniformRNG &rng);

@@ -15,6 +15,7 @@ class LatticeWalker : public SpecWalker<int>
         {
             random_numbers = rng.vector(numSteps);
             updateSteps();
+            updatePoints();
         }
         virtual ~LatticeWalker() {}
 

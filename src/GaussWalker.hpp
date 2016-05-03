@@ -14,6 +14,7 @@ class GaussWalker : public RealWalker
             // we need d gaussian random numbers per step, for each direction
             random_numbers = rng.vector_gaussian(d * numSteps);
             updateSteps();
+            updatePoints();
         }
 
         virtual void updateSteps();
