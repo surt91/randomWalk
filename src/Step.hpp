@@ -179,9 +179,9 @@ Step<T> Step<T>::operator-(const Step<T> &other) const
     if(m_d != other.d())
         throw std::invalid_argument("dimensions do not agree");
 
-    Step<T> new_step(other);
+    Step<T> new_step(*this);
     for(int i=0; i<m_d; ++i)
-        new_step[i] -= m_coordinates[i];
+        new_step[i] -= other.m_coordinates[i];
 
     return new_step;
 }
