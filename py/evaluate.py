@@ -264,6 +264,36 @@ def stichFile(infile, outfile, z, dz):
     return data
 
 
+def eval_simplesampling(name, outdir):
+    if name is None:
+        with open("{}/simple.dat".format(out), "w") as f:
+            f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... \n")
+    else:
+        a = np.loadtxt(name)
+        a = a.transpose()
+        r = a[3]
+        r2 = a[4]
+        maxDiameter = a[5]
+        maxX = a[6]
+        maxY = a[7]
+
+        with open("{}/simple.dat".format(out), "a") as f:
+            s = ""
+            s += "{} {} ".format(*bootstrap(r))
+            s += "{} {} ".format(*bootstrap(r, f=np.var))
+            s += "{} {} ".format(*bootstrap(r2))
+            s += "{} {} ".format(*bootstrap(r2, f=np.var))
+            s += "{} {} ".format(*bootstrap(maxDiameter))
+            s += "{} {} ".format(*bootstrap(maxDiameter, f=np.var))
+            s += "{} {} ".format(*bootstrap(maxX))
+            s += "{} {} ".format(*bootstrap(maxX, f=np.var))
+            s += "{} {} ".format(*bootstrap(maxY))
+            s += "{} {} ".format(*bootstrap(maxY, f=np.var))
+            s += "\n"
+
+            f.write(s)
+
+
 def run():
     thetas = param.parameters["thetas"]
     steps = param.parameters["number_of_steps"]
@@ -271,6 +301,9 @@ def run():
     out = param.parameters["directory"]
 
     outfiles = []
+
+    # prepare file
+    eval_simplesampling(None, out)
 
     column = param.parameters["observable"]
 
@@ -288,6 +321,9 @@ def run():
         for T in theta_for_N:
             i = SimulationInstance(steps=N, theta=T, **param.parameters)
             nameDict.update({T: i.basename})
+
+        if float("inf") in theta_for_N:
+            eval_simplesampling(nameDict[float("inf")], out)
 
         # remove files from evaluation, which did not equilibrate
         not_aborted = []

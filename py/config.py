@@ -201,7 +201,6 @@ class SimulationInstance():
                 "-N {0}".format(self.N),
                 "-x {0}".format(self.x),
                 "-y {0}".format(self.y),
-                "-T {0:.5f}".format(self.T),
                 "-n {0}".format(it),
                 "-c {:d}".format(self.method),
                 "-d {:d}".format(self.D),
@@ -211,6 +210,11 @@ class SimulationInstance():
                 "-o {0}".format(self.filename),
                 "-m {0}".format(self.m),
                ]
+
+        if self.T != float("inf"):
+            opts.append("-T {0:.5f}".format(self.T))
+        else:
+            opts.append("--simplesampling")
 
         if self.rawConf:
             opts.append("-O {0}".format(self.confname))
