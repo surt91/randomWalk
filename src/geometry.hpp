@@ -67,6 +67,27 @@ bool pointInOcto(const Step<T>& p1,
         && side(p8, p1, p) >= 0;
 }
 
+/** Test if point p is inside the octahedron formed by the given vertices
+ */
+template <class T>
+bool pointInOctahedron(const Step<T>& x,
+                       const Step<T>& X,
+                       const Step<T>& y,
+                       const Step<T>& Y,
+                       const Step<T>& z,
+                       const Step<T>& Z,
+                       const Step<T>& p)
+{
+    return side(X, Y, Z, p) >= 0
+        && side(X, Z, y, p) >= 0
+        && side(X, z, Y, p) >= 0
+        && side(X, y, z, p) >= 0
+        && side(x, Z, Y, p) >= 0
+        && side(x, y, Z, p) >= 0
+        && side(x, Y, z, p) >= 0
+        && side(x, z, y, p) >= 0;
+}
+
 /** Test if point p is inside the Polygon formed by the N points in the array.
  *
  * Sequence of the points matters, must be counterclockwise.
@@ -105,4 +126,36 @@ template <class T>
 T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p)
 {
     return (p2.y() - p1.y())*(p.x() - p1.x()) + (-p2.x() + p1.x())*(p.y() - p1.y());
+}
+
+/** Test on which side of the plane p1, p2, p3 the point p lies.
+ *
+ * p1, p2, p3 must be ordered counter clockwise (seen from outside / the front).
+ *
+ * >0 for behind, <0 for in front, 0 for on the plane.
+ *
+ * This implementation does only work for d=3.
+ */
+template <class T>
+T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p3, const Step<T>& p)
+{
+    // calculate dot product of
+    //   1. vector from p to some point on the face
+    //   2. normal vector (obtained by cross product)
+    // if they have a parallel component -> behind -> dot > 0
+    // if they have a anitparallel component -> infront -> dot < 0
+
+    //~ return dot(p1-p, cross(p2-p1, p3-p1));
+
+    // formulate it directly by hand, to avoid temporaries
+    // totally premature optimization, but speeds it up somewhat
+    auto c1x = p2.x() - p1.x();
+    auto c2x = p3.x() - p1.x();
+    auto c1y = p2.y() - p1.y();
+    auto c2y = p3.y() - p1.y();
+    auto c1z = p2.z() - p1.z();
+    auto c2z = p3.z() - p1.z();
+    return  (p1.x()-p.x()) * (c1y*c2z - c1z*c2y)
+          + (p1.y()-p.y()) * (c1z*c2x - c1x*c2z)
+          + (p1.z()-p.z()) * (c1x*c2y - c1y*c2x);
 }

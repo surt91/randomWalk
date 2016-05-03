@@ -270,8 +270,8 @@ void ConvexHull<T>::preprocessAklToussaint()
 template <class T>
 void ConvexHull<T>::preprocessAklToussaintQHull()
 {
-    if(d != 2)
-        throw std::invalid_argument("Akl heuristic only implemented for d=2");
+    if(d != 2 && d != 3)
+        throw std::invalid_argument("Akl heuristic only implemented for d=2 and d=3");
 
     // could be generalized longterm:
     // - higher dimensions
@@ -283,12 +283,7 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     // find points with min/max x/y (/z/w/...)
     std::vector<Step<T>*> min(d, &p[0]);
     std::vector<Step<T>*> max(d, &p[0]);
-    // also some bonus points: min x+y, min x-y, max x+y, max x-y
-    Step<T>* minxpy = &p[0];
-    Step<T>* maxxpy = &p[0];
-    Step<T>* minxmy = &p[0];
-    Step<T>* maxxmy = &p[0];
-    // TODO: generalize to arbitrary dimensions
+
     for(int i=0; i<n; ++i)
     {
         for(int j=0; j<d; ++j)
@@ -298,32 +293,72 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
             if(p[i][j] > max[j]->x(j))
                 max[j] = &p[i];
         }
-        if(p[i][0] + p[i][1] < minxpy->x(0) + minxpy->x(1))
-            minxpy = &p[i];
-        if(p[i][0] + p[i][1] > maxxpy->x(0) + maxxpy->x(1))
-            maxxpy = &p[i];
-        if(p[i][0] - p[i][1] < minxmy->x(0) - minxmy->x(1))
-            minxmy = &p[i];
-        if(p[i][0] - p[i][1] > maxxmy->x(0) - maxxmy->x(1))
-            maxxmy = &p[i];
     }
 
-    // for d=3 this needs to be a volume instead of a polygon
-    // find and delete points inside the quadriliteral
-    // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
-    // do this by building a new list of vertices outside
-    for(int i=0; i<n; ++i)
-        if(!pointInOcto(*min[0],
-                        *minxmy,
-                        *max[1],
-                        *maxxpy,
-                        *max[0],
-                        *maxxmy,
-                        *min[1],
-                        *minxpy,
-                        p[i]))
+    if(d == 2)
+    {
+        // also some bonus points: min x+y, min x-y, max x+y, max x-y
+        Step<T>* minxpy = &p[0];
+        Step<T>* maxxpy = &p[0];
+        Step<T>* minxmy = &p[0];
+        Step<T>* maxxmy = &p[0];
+        // TODO: generalize to arbitrary dimensions
+        for(int i=0; i<n; ++i)
+        {
+            if(p[i][0] + p[i][1] < minxpy->x(0) + minxpy->x(1))
+                minxpy = &p[i];
+            if(p[i][0] + p[i][1] > maxxpy->x(0) + maxxpy->x(1))
+                maxxpy = &p[i];
+            if(p[i][0] - p[i][1] < minxmy->x(0) - minxmy->x(1))
+                minxmy = &p[i];
+            if(p[i][0] - p[i][1] > maxxmy->x(0) - maxxmy->x(1))
+                maxxmy = &p[i];
+        }
+
+        // for d=3 this needs to be a volume instead of a polygon
+        // find and delete points inside the quadriliteral
+        // http://totologic.blogspot.de/2014/01/accurate-point-in-triangle-test.html
+        // do this by building a new list of vertices outside
+        for(int i=0; i<n; ++i)
+            if(!pointInOcto(*min[0],
+                            *minxmy,
+                            *max[1],
+                            *maxxpy,
+                            *max[0],
+                            *maxxmy,
+                            *min[1],
+                            *minxpy,
+                            p[i]))
+                for(int j=0; j<d; ++j)
+                    coords.emplace_back(p[i][j]);
+
+        // ensure that we do not add the same point twice
+        if(maxxmy != max[0] && maxxmy != min[1])
             for(int j=0; j<d; ++j)
-                coords.emplace_back(p[i][j]);
+                coords.emplace_back(maxxmy->x(j));
+        if(maxxpy != max[0] && maxxpy != max[1])
+            for(int j=0; j<d; ++j)
+                coords.emplace_back(maxxpy->x(j));
+        if(minxpy != min[0] && minxpy != min[1])
+            for(int j=0; j<d; ++j)
+                coords.emplace_back(minxpy->x(j));
+        if(minxmy != min[0] && minxmy != max[1])
+            for(int j=0; j<d; ++j)
+                coords.emplace_back(minxmy->x(j));
+    }
+    if(d == 3)
+    {
+        for(int i=0; i<n; ++i)
+            if(!pointInOctahedron(*min[0],
+                                  *max[0],
+                                  *min[1],
+                                  *max[1],
+                                  *min[2],
+                                  *max[2],
+                                  p[i]))
+                for(int j=0; j<d; ++j)
+                    coords.emplace_back(p[i][j]);
+    }
 
     // Also make sure that the min/max points are still considered
     for(int i=0; i<d; ++i)
@@ -333,22 +368,9 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
         for(int j=0; j<d; ++j)
             coords.emplace_back(max[i]->x(j));
     }
-    // ensure that we do not add the same point twice
-    if(maxxmy != max[0] && maxxmy != min[1])
-        for(int j=0; j<d; ++j)
-            coords.emplace_back(maxxmy->x(j));
-    if(maxxpy != max[0] && maxxpy != max[1])
-        for(int j=0; j<d; ++j)
-            coords.emplace_back(maxxpy->x(j));
-    if(minxpy != min[0] && minxpy != min[1])
-        for(int j=0; j<d; ++j)
-            coords.emplace_back(minxpy->x(j));
-    if(minxmy != min[0] && minxmy != max[1])
-        for(int j=0; j<d; ++j)
-            coords.emplace_back(minxmy->x(j));
 
     int k = coords.size()/d;
-    LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
+    LOG(LOG_DEBUG) << "Akl Toussaint killed: "
             << (n - k) << "/" << n
             << " ("  << std::setprecision(2) << ((double) (n - k) / n * 100) << "%)";
 
@@ -479,7 +501,7 @@ inline int ConvexHull<int>::countZerosAndUpdateCmd()
     for(int i=0; i<d; ++i)
     {
         int j = 0;
-        while(j < n && (*interiorPoints)[j][i] == 0)
+        while(j < n && coords[j*d+i] == 0)
             ++j;
         if(j == n)
         {
@@ -504,7 +526,15 @@ void ConvexHull<T>::runQhull()
 {
     // test, if points are fully dimensional
     // we need to do that first, since qhull seems to leak on exceptions
-    // TODO: replace by QJ for T==double
+
+    if(algorithm != CH_QHULL_AKL)
+    {
+        coords = std::vector<double>(n*d);
+        for(int i=0; i<n; ++i)
+            for(int j=0; j<d; ++j)
+                coords[i*d + j] = (*interiorPoints)[i][j];
+    }
+
     int num_zeros = countZerosAndUpdateCmd();
 
     if(num_zeros >= 2)
@@ -524,14 +554,6 @@ void ConvexHull<T>::runQhull()
             return;
         }
         --d;
-    }
-
-    if(algorithm != CH_QHULL_AKL)
-    {
-        coords = std::vector<double>(n*d);
-        for(int i=0; i<n; ++i)
-            for(int j=0; j<d; ++j)
-                coords[i*d + j] = (*interiorPoints)[i][j];
     }
 
     try
