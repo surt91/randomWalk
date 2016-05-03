@@ -28,7 +28,7 @@ void GaussWalker::change(UniformRNG &rng)
     int idx = rng() * numSteps;
     int rnidx = idx * d;
     undo_index = idx;
-    undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx+d + 1); // +1, since the last ist exclusive
+    undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx + d);
     for(int i=0; i<d; ++i)
         random_numbers[rnidx+i] = rng.gaussian();
 

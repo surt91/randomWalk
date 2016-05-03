@@ -50,7 +50,7 @@ void RealWalker::change(UniformRNG &rng)
     int idx = rng() * numSteps;
     int rnidx = idx * (d-1);
     undo_index = idx;
-    undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx + d); // +1, since the last ist exclusive
+    undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx + d);
     for(int i=0; i<d-1; ++i)
         random_numbers[rnidx + i] = rng();
 
