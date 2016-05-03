@@ -195,8 +195,6 @@ class SimulationInstance():
         try:
             it = int(self.n * self.t_corr[self.N][self.T])
         except KeyError:
-            pass
-        else:
             it = self.n
 
         opts = ["./randomWalk",
