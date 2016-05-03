@@ -348,16 +348,55 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     }
     if(d == 3)
     {
+        std::vector<Step<T>*> sumPoints(8, &p[0]);
+        std::vector<T> sums(8, 0);
+        std::vector<std::vector<int>> signs(
+            {
+                { 1, 1, 1},
+                { 1, 1,-1},
+                { 1,-1, 1},
+                {-1, 1, 1},
+                { 1,-1,-1},
+                {-1, 1,-1},
+                {-1,-1, 1},
+                {-1,-1,-1}
+            });
+
+        for(int k=0; k<8; ++k)
+            for(int i=0; i<n; ++i)
+            {
+                auto tmp = p[i][0]*signs[k][0]
+                         + p[i][1]*signs[k][1]
+                         + p[i][2]*signs[k][2];
+                if(tmp > sums[k])
+                {
+                    sumPoints[k] = &p[i];
+                    sums[k] = tmp;
+                }
+            }
+
         for(int i=0; i<n; ++i)
-            if(!pointInOctahedron(*min[0],
-                                  *max[0],
-                                  *min[1],
-                                  *max[1],
-                                  *min[2],
-                                  *max[2],
-                                  p[i]))
+            if(!pointInQuattuordecaeder(*min[0],
+                                        *max[0],
+                                        *min[1],
+                                        *max[1],
+                                        *min[2],
+                                        *max[2],
+                                        *sumPoints[0],
+                                        *sumPoints[1],
+                                        *sumPoints[2],
+                                        *sumPoints[3],
+                                        *sumPoints[4],
+                                        *sumPoints[5],
+                                        *sumPoints[6],
+                                        *sumPoints[7],
+                                        p[i]))
                 for(int j=0; j<d; ++j)
                     coords.emplace_back(p[i][j]);
+
+        for(int k=0; k<8; ++k)
+            for(int j=0; j<d; ++j)
+                coords.emplace_back(sumPoints[k]->x(j));
     }
 
     // Also make sure that the min/max points are still considered

@@ -88,6 +88,53 @@ bool pointInOctahedron(const Step<T>& x,
         && side(x, z, y, p) >= 0;
 }
 
+/** Test if point p is inside the Quattuordecaeder (star tetraeder)
+ * formed by the given vertices
+ * https://upload.wikimedia.org/wikipedia/commons/1/19/Stella_octangula.png
+ */
+template <class T>
+bool pointInQuattuordecaeder(const Step<T>& x,
+                             const Step<T>& X,
+                             const Step<T>& y,
+                             const Step<T>& Y,
+                             const Step<T>& z,
+                             const Step<T>& Z,
+                             const Step<T>& ppp,
+                             const Step<T>& ppm,
+                             const Step<T>& pmp,
+                             const Step<T>& mpp,
+                             const Step<T>& pmm,
+                             const Step<T>& mpm,
+                             const Step<T>& mmp,
+                             const Step<T>& mmm,
+                             const Step<T>& p)
+{
+    return side(x, mpm, mmm, p) >= 0
+        && side(x, mmm, mmp, p) >= 0
+        && side(x, mmp, mpp, p) >= 0
+        && side(x, mpp, mpm, p) >= 0
+        && side(y, pmp, mmp, p) >= 0
+        && side(y, mmp, mmm, p) >= 0
+        && side(y, mmm, pmm, p) >= 0
+        && side(y, pmm, pmp, p) >= 0
+        && side(z, mmm, mpm, p) >= 0
+        && side(z, mpm, ppm, p) >= 0
+        && side(z, ppm, pmm, p) >= 0
+        && side(z, pmm, mmm, p) >= 0
+        && side(X, ppp, pmp, p) >= 0
+        && side(X, pmp, pmm, p) >= 0
+        && side(X, pmm, ppm, p) >= 0
+        && side(X, ppm, ppp, p) >= 0
+        && side(Y, mpp, ppp, p) >= 0
+        && side(Y, ppp, ppm, p) >= 0
+        && side(Y, ppm, mpm, p) >= 0
+        && side(Y, mpm, mpp, p) >= 0
+        && side(Z, ppp, mpp, p) >= 0
+        && side(Z, mpp, mmp, p) >= 0
+        && side(Z, mmp, pmp, p) >= 0
+        && side(Z, pmp, ppp, p) >= 0;
+}
+
 /** Test if point p is inside the Polygon formed by the N points in the array.
  *
  * Sequence of the points matters, must be counterclockwise.
