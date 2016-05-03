@@ -59,24 +59,24 @@ void run_simulation(const Cmd &o, double expected_mean_A,
     Metropolis s(o);
     s.mute();
     s.run();
-
+    const double threshold = 1e-4;
     // 1e3 iterations, should be 10% accurate (?)
-    if(std::abs(s.sum_L / o.iterations - expected_mean_L) > 1e-1)
+    if(std::abs(s.sum_L / o.iterations - expected_mean_L) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <L>  " << s.sum_L / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_L;
     }
-    if(std::abs(s.sum_A / o.iterations - expected_mean_A) > 1e-1)
+    if(std::abs(s.sum_A / o.iterations - expected_mean_A) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <A>  " << s.sum_A / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_A;
     }
-    if(std::abs(s.sum_r / o.iterations - expected_mean_r) > 1e-1)
+    if(std::abs(s.sum_r / o.iterations - expected_mean_r) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <r>  " << s.sum_r / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_r;
     }
-    if(std::abs(s.sum_r2 / o.iterations - expected_mean_r2) > 1e-1)
+    if(std::abs(s.sum_r2 / o.iterations - expected_mean_r2) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <r2>  " << s.sum_r2 / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_r2;
