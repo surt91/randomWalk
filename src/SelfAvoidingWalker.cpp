@@ -35,6 +35,14 @@
 //      + generates many SAW instances, quite efficiently
 //      - where can I plug in the large deviation "bias"? In the weights? How?
 
+void SelfAvoidingWalker::updateSteps()
+{
+    m_steps.clear();
+    m_steps.reserve(numSteps);
+    for(int i=0; i<numSteps; ++i)
+        m_steps.emplace_back(d, random_numbers[i]);
+}
+
 // TODO: this version does not equilibrate for theta > -50
 //       further kind of change? Parallel Tempering?
 void SelfAvoidingWalker::change(UniformRNG &rng)
@@ -106,6 +114,8 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
         case 3:
             matrix = tMatrix3[op];
             break;
+        default:
+            throw std::invalid_argument("Pivot algorithm only implemented for d<=3");
     }
 
     // FIXME: pivot the shorter end

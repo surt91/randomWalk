@@ -14,20 +14,11 @@ class LatticeWalker : public SpecWalker<int>
             : SpecWalker<int>(d, numSteps, rng, hull_algo)
         {
             random_numbers = rng.vector(numSteps);
-            updateSteps();
-            updatePoints();
+            init();
         }
-        virtual ~LatticeWalker() {}
 
-        virtual void updateSteps();
+        void updateSteps();
 
-        virtual void change(UniformRNG &rng);
-        virtual void undoChange();
-
-        virtual void degenerateMaxVolume();
-        virtual void degenerateMaxSurface();
-        virtual void degenerateSpiral();
-        virtual void degenerateStraight();
-
-    protected:
+        void change(UniformRNG &rng);
+        void undoChange();
 };

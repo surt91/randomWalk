@@ -13,17 +13,17 @@
  * doi: 10.1.1.56.2276
  * [wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)
  */
-class LoopErasedWalker : public LatticeWalker
+class LoopErasedWalker : public SpecWalker<int>
 {
     public:
         LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-            : LatticeWalker(d, numSteps, rng, hull_algo)
+            : SpecWalker<int>(d, numSteps, rng, hull_algo)
         {
-            updateSteps();
-            updatePoints();
+            random_numbers = rng.vector(numSteps);
+            init();
         }
 
-        virtual void updateSteps();
+        void updateSteps();
 
         int nRN() const;
 

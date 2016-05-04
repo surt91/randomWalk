@@ -16,23 +16,17 @@ class RealWalker : public SpecWalker<double>
         {
             // we need d-1 random numbers per step, for each angle one
             random_numbers = rng.vector((d-1) * numSteps);
-            updateSteps();
-            updatePoints();
+            init();
         }
-        virtual ~RealWalker() {}
+        ~RealWalker() {}
 
-        virtual void updateSteps();
+        void updateSteps();
 
-        virtual void change(UniformRNG &rng);
-        virtual void undoChange();
-
-        virtual void degenerateMaxVolume();
-        virtual void degenerateMaxSurface();
-        virtual void degenerateSpiral();
-        virtual void degenerateStraight();
+        void change(UniformRNG &rng);
+        void undoChange();
 
     protected:
-        virtual Step<double> genStep(std::vector<double>::iterator first) const;
+        Step<double> genStep(std::vector<double>::iterator first) const;
 
         std::vector<double> undo_values;
 };

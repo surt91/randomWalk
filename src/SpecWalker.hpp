@@ -29,10 +29,11 @@ class SpecWalker : public Walker
             : Walker(d, numSteps, rng, hull_algo),
               m_points(numSteps+1, Step<T>(d))
         {
-            setHullAlgo(hull_algo);
         }
 
         virtual ~SpecWalker() {}
+
+        void init();
 
         const ConvexHull<T>& convexHull() const;
         void setHullAlgo(hull_algorithm_t a);
@@ -60,11 +61,25 @@ class SpecWalker : public Walker
         void pov(const std::string filename, const bool with_hull) const;
         std::string print() const;
 
+        virtual void degenerateMaxVolume();
+        virtual void degenerateMaxSurface();
+        virtual void degenerateSpiral();
+        virtual void degenerateStraight();
+
     protected:
         std::vector<Step<T>> m_steps;
         std::vector<Step<T>> m_points;
         ConvexHull<T> m_convex_hull;
 };
+
+/// do initialization, e.g. calculate the steps and the hull
+template <class T>
+void SpecWalker<T>::init()
+{
+    updateSteps();
+    updatePoints();
+    setHullAlgo(hull_algo); // does also update hull
+}
 
 template <class T>
 void SpecWalker<T>::updateHull()
@@ -231,4 +246,113 @@ double SpecWalker<T>::r2()
 {
     double tmp = r();
     return tmp * tmp;
+}
+
+/** set the random numbers such that we get an L shape
+ */
+template <>
+inline void SpecWalker<int>::degenerateMaxVolume()
+{
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i] = .99 / ceil((double) d * (i+1)/numSteps);
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
+
+/** set the random numbers such that we get an L shape in d-1 dimensions
+ */
+template <>
+inline void SpecWalker<int>::degenerateMaxSurface()
+{
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99 / ceil((double) (d-1) * (i+1)/random_numbers.size());
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
+
+/** set the random numbers such that we get a spiral
+ */
+template <>
+inline void SpecWalker<int>::degenerateSpiral()
+{
+    // TODO: find some easy construction for a spiral in arbitrary dimensions
+    // FIXME: right now, it is a straight line instead of a spiral
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99;
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
+
+/** set the random numbers such that we get a straight line
+ */
+template <>
+inline void SpecWalker<int>::degenerateStraight()
+{
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99;
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
+
+/** Set the random numbers such that we get an half circle shape.
+ */
+template <>
+inline void SpecWalker<double>::degenerateMaxVolume()
+{
+    // FIXME: this works only for d=2
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i] = .5 / (i+1);
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
+
+/** Set the random numbers such that we get an L shape in d-1 dimensions.
+ */
+template <>
+inline void SpecWalker<double>::degenerateMaxSurface()
+{
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99 / ceil((double) (d-1) * (i+1)/random_numbers.size());
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
+
+/** Set the random numbers such that we get a spiral.
+ */
+template <>
+inline void SpecWalker<double>::degenerateSpiral()
+{
+    // TODO: find some easy construction for a spiral in arbitrary dimensions
+    // FIXME: right now, it is a straight line instead of a spiral
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99;
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
+
+/** Set the random numbers such that we get a straight line.
+ */
+template <>
+inline void SpecWalker<double>::degenerateStraight()
+{
+    for(size_t i=0; i<random_numbers.size(); ++i)
+        random_numbers[i] = .99;
+
+    updateSteps();
+    updatePoints();
+    updateHull();
 }

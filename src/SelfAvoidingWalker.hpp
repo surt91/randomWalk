@@ -109,18 +109,18 @@ static const int iMatrix3[] =
  * doi: 10.1007/978-1-4614-6025-1_9
  * [wiki](https://en.wikipedia.org/wiki/Self-avoiding_walk)
  */
-class SelfAvoidingWalker : public LatticeWalker
+class SelfAvoidingWalker : public SpecWalker<int>
 {
     public:
         SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-            : LatticeWalker(d, numSteps, rng, hull_algo)
+            : SpecWalker<int>(d, numSteps, rng, hull_algo)
         {
             auto l(dim(numSteps));
-            LOG(LOG_DEBUG) << "Dimerization got the inital SAW";
             random_numbers = std::vector<double>(l.begin(), l.end());
-            updateSteps();
-            updatePoints();
+            init();
         }
+
+        void updateSteps();
 
         void change(UniformRNG &rng);
         void undoChange();
