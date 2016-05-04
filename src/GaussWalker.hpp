@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Logging.hpp"
-#include "RealWalker.hpp"
+#include "SpecWalker.hpp"
 
-/** Draw the x, y, z, ... displacements from Gaussian distributions at each step.
+/** A walk with displacements drawn from a gaussian distribution (model for brownian motion).
+ *
+ * Draw the x, y, z, ... displacements from Gaussian distributions at each step.
  */
 class GaussWalker : public SpecWalker<double>
 {

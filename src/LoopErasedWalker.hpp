@@ -3,7 +3,7 @@
 #include <unordered_map>
 
 #include "Logging.hpp"
-#include "LatticeWalker.hpp"
+#include "SpecWalker.hpp"
 
 /** Loop Erased Random Walk
  *

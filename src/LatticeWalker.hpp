@@ -3,9 +3,10 @@
 #include "Logging.hpp"
 #include "SpecWalker.hpp"
 
-/** Base class for all lattice walks.
+/** Random Walk on a Hypercubic lattice.
  *
  * Standard lattice random walk, with immediate reversals.
+ * Th lattice constant is unity.
  */
 class LatticeWalker : public SpecWalker<int>
 {

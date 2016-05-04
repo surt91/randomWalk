@@ -5,7 +5,7 @@
 #include <unordered_set>
 
 #include "Logging.hpp"
-#include "LatticeWalker.hpp"
+#include "SpecWalker.hpp"
 
 /// transformation matrices for pivoting d=2
 static const int tMatrix2[][4] =

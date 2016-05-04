@@ -3,7 +3,7 @@
 #include "Logging.hpp"
 #include "SpecWalker.hpp"
 
-/** Base class for all non-lattice walks.
+/** A walk with fixed step length but random direction.
  *
  * Random walk, which chooses at each step a random direction from
  * a uniform distribution and a constant distance 1.
