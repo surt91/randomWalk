@@ -20,18 +20,16 @@ Step<double> RealWalker::genStep(std::vector<double>::iterator first) const
         theta[i] = *first++ * M_PI;
     theta[d-2] = *first++ * 2*M_PI;
 
-    s[d-1] = r * cos(theta[0]);
-
     for(int i=0; i<d-1; ++i)
     {
         s[i] = r;
         for(int j=0; j<i; ++j)
             s[i] *= sin(theta[j]);
 
-        if(i<d-2)
-            s[i] *= cos(theta[i]);
-        else
-            s[i] *= sin(theta[i]);
+        if(i == d-2)
+            s[i+1] = s[i] * sin(theta[i]);
+
+        s[i] *= cos(theta[i]);
     }
     return s;
 }
