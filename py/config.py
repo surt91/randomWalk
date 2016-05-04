@@ -142,7 +142,8 @@ class Simulation():
                 i()
         else:
             with Pool() as p:
-                p.map(run_instance, self.instances)
+                # chunksize of 1 for such for optimal parallelness
+                p.map(run_instance, self.instances, 1)
 
 
 class SimulationInstance():
