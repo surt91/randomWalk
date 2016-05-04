@@ -32,13 +32,24 @@ CXX	= g++
 #CXX	= clang++
 #CXX	= icpc
 
-#COPT = -g -Og
-COPT = -O3 -flto -mtune=native -mtune=corei7
+#for debugging
+COPT = -g -Og
+
+# for clang sanitizers
+#COPT = -O1 -g -fsanitize=address -fno-omit-frame-pointer
+#COPT = -fsanitize=memory -fno-omit-frame-pointer -g -O2 -fsanitize-memory-track-origins
+#COPT = -fsanitize=undefined -O2
+
+# for production
+#COPT = -O3 -flto -mtune=native -mtune=corei7
 #COPT += -DNLOG
+
 COPT += -fopenmp
 COPT += -std=c++11 -m64 -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color
 
-WARNLEVEL= -Wall -Wextra -pedantic
+WARNLEVEL= -Wall -Wextra -Wpedantic
+#WARNLEVEL += -Wfloat-equal -Wshadow -Wextra-semi -Wdocumentation -Wdeprecated
+#WANRLEVEL += -Weverything -Wno-c++98-compat -Wno-c++98-compat-bind-to-temporary-copy -Wno-padded
 
 LNDIRS  = -L$(PWD)/lib \
           -L$(PWD)/qhull/lib
