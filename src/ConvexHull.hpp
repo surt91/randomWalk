@@ -350,7 +350,7 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     {
         std::vector<Step<T>*> sumPoints(8, &p[0]);
         std::vector<T> sums(8, 0);
-        std::vector<std::vector<int>> signs(
+        int signs[][3] =
             {
                 { 1, 1, 1},
                 { 1, 1,-1},
@@ -360,7 +360,7 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
                 {-1, 1,-1},
                 {-1,-1, 1},
                 {-1,-1,-1}
-            });
+            };
 
         for(int k=0; k<8; ++k)
             for(int i=0; i<n; ++i)

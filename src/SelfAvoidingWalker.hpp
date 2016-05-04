@@ -8,31 +8,23 @@
 #include "LatticeWalker.hpp"
 
 /// transformation matrices for pivoting d=2
-static const std::vector<std::vector<int>> tMatrix2 =
+static const int tMatrix2[][4] =
     {
         // mirror at x-axis
-        std::vector<int>(
             { 1,  0,
-              0, -1}
-        ),
+              0, -1},
         // mirror at y-axis
-        std::vector<int>(
             {-1,  0,
-              0,  1}
-        ),
+              0,  1},
         // rotate by pi/2
-        std::vector<int>(
             { 0,  1,
-             -1,  0}
-        ),
+             -1,  0},
         // rotate by -pi/2
-        std::vector<int>(
             { 0, -1,
               1,  0}
-        )
     };
 /// inverse transformations
-static const std::vector<int> iMatrix2 =
+static const int iMatrix2[] =
     {
         0,
         1,
@@ -41,83 +33,59 @@ static const std::vector<int> iMatrix2 =
     };
 
 /// transformation matrices for pivoting d=3
-static const std::vector<std::vector<int>> tMatrix3 =
+static const int tMatrix3[][9] =
     {
         // mirror at xy-plane
-        std::vector<int>(
             { 1,  0,  0,
               0,  1,  0,
-              0,  0, -1}
-        ),
+              0,  0, -1},
         // mirror at zy-plane
-        std::vector<int>(
             {-1,  0,  0,
               0,  1,  0,
-              0,  0,  1}
-        ),
+              0,  0,  1},
         // mirror at xz-plane
-        std::vector<int>(
             { 1,  0,  0,
               0, -1,  0,
-              0,  0,  1}
-        ),
+              0,  0,  1},
         // rotate by pi/2 around x-axis
-        std::vector<int>(
             { 1,  0,  0,
               0,  0,  1,
-              0, -1,  0}
-        ),
+              0, -1,  0},
         // rotate by pi around x-axis
-        std::vector<int>(
             { 1,  0,  0,
               0, -1,  0,
-              0,  0, -1}
-        ),
+              0,  0, -1},
         // rotate by -pi/2 around x-axis
-        std::vector<int>(
             { 1,  0,  0,
               0,  0, -1,
-              0,  1,  0}
-        ),
+              0,  1,  0},
         // rotate by pi/2 around y-axis
-        std::vector<int>(
             { 0,  0,  1,
               0,  1,  0,
-             -1,  0,  0}
-        ),
+             -1,  0,  0},
         // rotate by pi around y-axis
-        std::vector<int>(
             {-1,  0,  0,
               0,  1,  0,
-              0,  0, -1}
-        ),
+              0,  0, -1},
         // rotate by -pi/2 around y-axis
-        std::vector<int>(
             { 0,  0, -1,
               0,  1,  0,
-              1,  0,  0}
-        ),
+              1,  0,  0},
         // rotate by pi/2 around z-axis
-        std::vector<int>(
             { 0, -1,  0,
               1,  0,  0,
-              0,  0,  1}
-        ),
+              0,  0,  1},
         // rotate by pi around z-axis
-        std::vector<int>(
             {-1,  0,  0,
               0, -1,  0,
-              0,  0,  1}
-        ),
+              0,  0,  1},
         // rotate by -pi/2 around z-axis
-        std::vector<int>(
             { 0,  1,  0,
              -1,  0,  0,
               0,  0,  1}
-        )
     };
 /// inverse transformations
-static const std::vector<int> iMatrix3 =
+static const int iMatrix3[] =
     {
         0,
         1,
@@ -158,7 +126,7 @@ class SelfAvoidingWalker : public LatticeWalker
         void undoChange();
 
     protected:
-        Step<int> transform(Step<int> &p, const std::vector<int> &m) const;
+        Step<int> transform(Step<int> &p, const int *m) const;
         bool pivot(const int index, const int op);
 
         int undo_naive_index;
