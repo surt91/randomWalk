@@ -2,6 +2,12 @@
 
 #include <array>
 
+#include <Qhull.h>
+#include <QhullVertex.h>
+#include <QhullFacetList.h>
+#include <QhullVertexSet.h>
+#include <QhullError.h>
+
 #include "Step.hpp"
 
 /** 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
@@ -86,6 +92,15 @@ bool pointInOctahedron(const Step<T>& x,
         && side(x, y, Z, p) >= 0
         && side(x, Y, z, p) >= 0
         && side(x, z, y, p) >= 0;
+}
+
+template <class T>
+bool pointInFacets(orgQhull::QhullFacetList fl, const Step<T>& p)
+{
+    for(auto &f : fl)
+        if(side(f, p) < 0)
+            return false;
+    return true;
 }
 
 /** Test if point p is inside the Quattuordecaeder (star tetraeder)
@@ -205,4 +220,23 @@ T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p3, const Step<T>& p
     return  (p1.x()-p.x()) * (c1y*c2z - c1z*c2y)
           + (p1.y()-p.y()) * (c1z*c2x - c1x*c2z)
           + (p1.z()-p.z()) * (c1x*c2y - c1y*c2x);
+}
+
+/** Test on which side of the qhull facet f the point p lies.
+ *
+ * >0 for behind, <0 for in front, 0 for on the plane.
+ *
+ * This implementation does only work for d=3.
+ */
+template <class T>
+T side(orgQhull::QhullFacet& f, const Step<T>& p)
+{
+    // same principle as above
+    auto v = (pointT*) f.getFacetT()->vertices->e[0].p;
+    auto normal = f.getFacetT()->normal;
+
+    auto s = (v[0]-p.x()) * normal[0]
+           + (v[1]-p.y()) * normal[1]
+           + (v[2]-p.z()) * normal[2];
+    return s < 0 ? -1 : 1;
 }

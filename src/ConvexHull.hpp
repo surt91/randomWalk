@@ -295,6 +295,15 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
         }
     }
 
+    // Also make sure that the min/max points are still considered
+    for(int i=0; i<d; ++i)
+    {
+        for(int j=0; j<d; ++j)
+            coords.emplace_back(min[i]->x(j));
+        for(int j=0; j<d; ++j)
+            coords.emplace_back(max[i]->x(j));
+    }
+
     if(d == 2)
     {
         // also some bonus points: min x+y, min x-y, max x+y, max x-y
@@ -348,8 +357,9 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     }
     if(d == 3)
     {
-        std::vector<Step<T>*> sumPoints(8, &p[0]);
-        std::vector<T> sums(8, 0);
+        const int numAddPoints = 8;
+        std::vector<Step<T>*> sumPoints(numAddPoints, &p[0]);
+        std::vector<T> sums(numAddPoints, 0);
         int signs[][3] =
             {
                 { 1, 1, 1},
@@ -359,10 +369,22 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
                 { 1,-1,-1},
                 {-1, 1,-1},
                 {-1,-1, 1},
-                {-1,-1,-1}
+                {-1,-1,-1},
+                //~ { 1, 1, 0},
+                //~ { 1,-1, 0},
+                //~ {-1,-1, 0},
+                //~ {-1, 1, 0},
+                //~ { 1, 0, 1},
+                //~ { 1, 0,-1},
+                //~ {-1, 0, 1},
+                //~ {-1, 0,-1},
+                //~ { 0, 1, 1},
+                //~ { 0, 1,-1},
+                //~ { 0,-1, 1},
+                //~ { 0,-1,-1}
             };
 
-        for(int k=0; k<8; ++k)
+        for(int k=0; k<numAddPoints; ++k)
             for(int i=0; i<n; ++i)
             {
                 auto tmp = p[i][0]*signs[k][0]
@@ -375,37 +397,24 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
                 }
             }
 
-        for(int i=0; i<n; ++i)
-            if(!pointInQuattuordecaeder(*min[0],
-                                        *max[0],
-                                        *min[1],
-                                        *max[1],
-                                        *min[2],
-                                        *max[2],
-                                        *sumPoints[0],
-                                        *sumPoints[1],
-                                        *sumPoints[2],
-                                        *sumPoints[3],
-                                        *sumPoints[4],
-                                        *sumPoints[5],
-                                        *sumPoints[6],
-                                        *sumPoints[7],
-                                        p[i]))
-                for(int j=0; j<d; ++j)
-                    coords.emplace_back(p[i][j]);
-
-        for(int k=0; k<8; ++k)
+        for(int k=0; k<numAddPoints; ++k)
             for(int j=0; j<d; ++j)
                 coords.emplace_back(sumPoints[k]->x(j));
-    }
 
-    // Also make sure that the min/max points are still considered
-    for(int i=0; i<d; ++i)
-    {
-        for(int j=0; j<d; ++j)
-            coords.emplace_back(min[i]->x(j));
-        for(int j=0; j<d; ++j)
-            coords.emplace_back(max[i]->x(j));
+        cmd = "";
+        auto zeros = countZerosAndUpdateCmd();
+        if(zeros >= 2)
+            return;
+        cmd += " Qt";
+
+        // replace by something less overkill
+        // a custom gift wrapping implementation?
+        auto q = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, coords.size()/d, coords.data(), cmd.c_str()));
+
+        for(int i=0; i<n; ++i)
+            if(!pointInFacets(q->facetList(), p[i]))
+                for(int j=0; j<d; ++j)
+                    coords.emplace_back(p[i][j]);
     }
 
     int k = coords.size()/d;
@@ -537,12 +546,13 @@ inline int ConvexHull<int>::countZerosAndUpdateCmd()
     // we need to do that first, since qhull seems to leak on exceptions
     int num_zeros = 0;
     int zero_axis = 0;
+    int limit = coords.size() / d;
     for(int i=0; i<d; ++i)
     {
         int j = 0;
-        while(j < n && coords[j*d+i] == 0)
+        while(j < limit && coords[j*d+i] == 0)
             ++j;
-        if(j == n)
+        if(j == limit)
         {
             ++num_zeros;
             zero_axis = i;
