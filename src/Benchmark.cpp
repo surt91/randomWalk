@@ -35,12 +35,12 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
 
     clock_t before_output = clock();
 
-    if(std::abs(w->L() - o.benchmark_L) > 1e-4)
+    if(std::abs((w->L() - o.benchmark_L)/o.benchmark_L) > 1e-6)
     {
         LOG(LOG_ERROR) << "Wrong L  " << w->L();
         LOG(LOG_ERROR) << "expected " << o.benchmark_L;
     }
-    if(std::abs(w->A() - o.benchmark_A) > 1e-4)
+    if(std::abs((w->A() - o.benchmark_A)/o.benchmark_L) > 1e-6)
     {
         LOG(LOG_ERROR) << "Wrong A  " << w->A();
         LOG(LOG_ERROR) << "expected " << o.benchmark_A;
@@ -137,10 +137,10 @@ void benchmark()
                 o.steps = 100;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
                 o.iterations = 1000;
-                expected_mean_L = 85.33;
-                expected_mean_A = 349.06;
-                expected_mean_r = 28.74;
-                expected_mean_r2 = 845.95;
+                expected_mean_L = 84.8574757548;
+                expected_mean_A = 344.535;
+                expected_mean_r = 28.6759;
+                expected_mean_r2 = 845.092;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 130;
@@ -257,8 +257,8 @@ void benchmark()
             case WT_REAL_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_REAL_RANDOM_WALK;
-                o.benchmark_L = 3301.2873826;
-                o.benchmark_A = 696563.540913;
+                o.benchmark_L = 1412091.10;
+                o.benchmark_A = 115804398.6;
                 o.iterations = 10;
                 break;
             case WT_GAUSSIAN_RANDOM_WALK:
