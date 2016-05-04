@@ -23,6 +23,8 @@
 #include "GaussWalker.hpp"
 #include "RNG.hpp"
 
+/** Abstract Base Class, derive classes that sample random walks.
+ */
 class Simulation
 {
     public:

@@ -1,9 +1,5 @@
 #include "Povray.hpp"
 
-/** Class to easily create 3d renderings.
- *
- * Especially of random walks and their hulls.
- */
 Povray::Povray(const std::string &filename)
     : filename(filename)
 {

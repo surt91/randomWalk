@@ -10,6 +10,10 @@
 
 #include "Logging.hpp"
 
+/** Class to easily create 3d renderings.
+ *
+ * Especially of random walks and their hulls.
+ */
 class Povray
 {
     public:

@@ -9,6 +9,11 @@
 
 std::vector<double> rng(int n, int seed=0);
 
+/** Wrapper for the random number generator.
+ *
+ * Uses a c++11 std Mersenne Twister generator, to yield random
+ * numbers from different distributions.
+ */
 class UniformRNG
 {
     protected:
