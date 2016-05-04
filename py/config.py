@@ -10,6 +10,7 @@ import numpy as np
 import jinja2
 
 import parameters as para
+from timing import time
 
 def run_instance(i):
     i()
@@ -84,22 +85,31 @@ class Simulation():
         def getSec(N):
             if self.sampling == 1:
                 t = 0 # time for 1000 sweeps
-                if N <= 64:
-                    t = 5
-                elif N <= 128:
-                    t = 15
-                elif N <=256:
-                    t = 50
-                elif N <= 512:
-                    t = 250
-                elif N <= 1024:
-                    t = 1500
-                elif N <= 2048:
-                    t = 15000
-                else:
-                    t = 50000
+                max_t_corr = 1
+                try:
+                    # correct according to maximum t_corr
+                    max_t_corr = max(param.t_corr[N].values())
+                except KeyError:
+                    pass
+                try:
+                    time[self.kwargs["typ"]][self.kwargs["dimension"]][N]
+                except:
+                    if N <= 64:
+                        t = 5
+                    elif N <= 128:
+                        t = 15
+                    elif N <=256:
+                        t = 50
+                    elif N <= 512:
+                        t = 250
+                    elif N <= 1024:
+                        t = 1500
+                    elif N <= 2048:
+                        t = 15000
+                    else:
+                        t = 50000
 
-                return t/1000 * 3 # factor 3 to be sure
+                return t/1000 * max_t_corr
 
             if self.sampling == 2:
                 # no data yet
