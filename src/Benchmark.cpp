@@ -93,25 +93,26 @@ void benchmark()
     o.benchmark = true;
     o.seedRealization = 13;
     o.seedMC = 42;
-    o.d = 2;
     o.wantedObservable = WO_VOLUME;
 
+    o.t_eq = -1;
+    o.t_eqMax = 1000;
     o.simpleSampling = true;
 
     clock_t start = clock();
     LOG(LOG_INFO) << "Starting Simulations";
 
     o.data_path = "bench.tmp";
+
+    o.d = 2;
     o.chAlg = CH_ANDREWS_AKL;
     for(int i=1; i<=5; ++i)
     {
-        o.t_eq = -1;
-        o.t_eqMax = 1000;
-        o.simpleSampling = true;
-        double expected_mean_L;
-        double expected_mean_A;
-        double expected_mean_r;
-        double expected_mean_r2;
+        double expected_mean_L = 0;
+        double expected_mean_A = 0;
+        double expected_mean_r = 0;
+        double expected_mean_r2 = 0;
+
         switch(i)
         {
             case WT_RANDOM_WALK:
@@ -175,6 +176,7 @@ void benchmark()
 
     for(int i=1; i<=5; ++i)
     {
+        o.d = 2;
         switch(i)
         {
             case WT_RANDOM_WALK:
@@ -218,6 +220,61 @@ void benchmark()
         auto w = run_walker(o);
 
         for(int j=1; j<=4; ++j)
+        {
+            o.chAlg = (hull_algorithm_t) j;
+            LOG(LOG_INFO) << "        " << CH_LABEL[j];
+            try{
+                run_hull(o, w);
+            } catch(...) {
+                continue;
+            }
+        }
+
+        o.d = 3;
+        switch(i)
+        {
+            case WT_RANDOM_WALK:
+                o.steps = 1000000;
+                o.type = WT_RANDOM_WALK;
+                o.benchmark_L = 2247256.21308;
+                o.benchmark_A = 258027553;
+                o.iterations = 10;
+                break;
+            case WT_LOOP_ERASED_RANDOM_WALK:
+                o.steps = 10000;
+                o.type = WT_LOOP_ERASED_RANDOM_WALK;
+                o.benchmark_L = 165485.186039;
+                o.benchmark_A = 3460280;
+                o.iterations = 10;
+                break;
+            case WT_SELF_AVOIDING_RANDOM_WALK:
+                o.steps = 320;
+                o.type = WT_SELF_AVOIDING_RANDOM_WALK;
+                o.benchmark_L = 1705.20312604;
+                o.benchmark_A = 4176.16666667;
+                o.iterations = 10000;
+                break;
+            case WT_REAL_RANDOM_WALK:
+                o.steps = 1000000;
+                o.type = WT_REAL_RANDOM_WALK;
+                o.benchmark_L = 3301.2873826;
+                o.benchmark_A = 696563.540913;
+                o.iterations = 10;
+                break;
+            case WT_GAUSSIAN_RANDOM_WALK:
+                o.steps = 1000000;
+                o.type = WT_GAUSSIAN_RANDOM_WALK;
+                o.benchmark_L = 4847891.6674;
+                o.benchmark_A = 774054054.25;
+                o.iterations = 10;
+                break;
+        }
+
+        LOG(LOG_INFO) << "3D " << TYPE_LABEL[i];
+        o.chAlg = CH_QHULL;
+        w = run_walker(o);
+
+        for(int j=1; j<=2; ++j)
         {
             o.chAlg = (hull_algorithm_t) j;
             LOG(LOG_INFO) << "        " << CH_LABEL[j];
