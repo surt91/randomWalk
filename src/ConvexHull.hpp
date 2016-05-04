@@ -401,11 +401,9 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
             for(int j=0; j<d; ++j)
                 coords.emplace_back(sumPoints[k]->x(j));
 
-        cmd = "";
         auto zeros = countZerosAndUpdateCmd();
         if(zeros >= 2)
             return;
-        cmd += " Qt";
 
         // replace by something less overkill
         // a custom gift wrapping implementation?
