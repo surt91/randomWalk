@@ -266,10 +266,10 @@ def stichFile(infile, outfile, z, dz):
 
 def eval_simplesampling(name, outdir):
     if name is None:
-        with open("{}/simple.dat".format(out), "w") as f:
+        with open("{}/simple.dat".format(outdir), "w") as f:
             f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... \n")
     else:
-        a = np.loadtxt(name)
+        a = np.loadtxt("rawData/" + name+".dat.gz")
         a = a.transpose()
         r = a[3]
         r2 = a[4]
@@ -277,7 +277,7 @@ def eval_simplesampling(name, outdir):
         maxX = a[6]
         maxY = a[7]
 
-        with open("{}/simple.dat".format(out), "a") as f:
+        with open("{}/simple.dat".format(outdir), "a") as f:
             s = ""
             s += "{} {} ".format(*bootstrap(r))
             s += "{} {} ".format(*bootstrap(r, f=np.var))
