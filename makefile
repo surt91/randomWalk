@@ -1,21 +1,16 @@
 CODE	= randomWalk
-ARTICLE = self_avoiding_ld.pdf
 
-all: $(CODE) $(ARTICLE) test
+all: $(CODE) test
 
 .DELETE_ON_ERROR:
-.PHONY: clean proper $(ARTICLE) $(CODE) test
-
-self_avoiding_ld.pdf:
-	$(MAKE) -C Article/self_avoiding
-	cp Article/paper.pdf $@
+.PHONY: clean proper $(CODE) test
 
 randomWalk:
 	$(MAKE) -C src
 	cp src/$@ $@
 
 test: randomWalk | tmp
-	./$< --test
+	./$< -b
 	rm -rf tmp
 
 tmp:
@@ -23,9 +18,7 @@ tmp:
 
 proper:
 	$(MAKE) proper -C src
-	$(MAKE) proper -C Article
 
 clean: proper
 	rm -rf  $(CODE)
 	$(MAKE) clean -C src
-	$(MAKE) clean -C Article

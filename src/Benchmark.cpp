@@ -16,7 +16,10 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
     else if(o.type == WT_GAUSSIAN_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new GaussWalker(o.d, o.steps, rng, o.chAlg));
     else
+    {
         LOG(LOG_ERROR) << "cannot find walk type " << o.type;
+        exit(1);
+    }
 
     clock_t before_points = clock();
     LOG(LOG_TIMING) << "    " << time_diff(before_walker, before_points);
@@ -39,11 +42,13 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
     {
         LOG(LOG_ERROR) << "Wrong L  " << w->L();
         LOG(LOG_ERROR) << "expected " << o.benchmark_L;
+        exit(1);
     }
     if(std::abs((w->A() - o.benchmark_A)/o.benchmark_L) > 1e-6)
     {
         LOG(LOG_ERROR) << "Wrong A  " << w->A();
         LOG(LOG_ERROR) << "expected " << o.benchmark_A;
+        exit(1);
     }
 
     LOG(LOG_TIMING) << "            " << time_diff(before_ch, before_output);
@@ -65,21 +70,25 @@ void run_simulation(const Cmd &o, double expected_mean_A,
     {
         LOG(LOG_ERROR) << "Wrong <L>  " << s.sum_L / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_L;
+        exit(1);
     }
     if(std::abs(s.sum_A / o.iterations - expected_mean_A) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <A>  " << s.sum_A / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_A;
+        exit(1);
     }
     if(std::abs(s.sum_r / o.iterations - expected_mean_r) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <r>  " << s.sum_r / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_r;
+        exit(1);
     }
     if(std::abs(s.sum_r2 / o.iterations - expected_mean_r2) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <r2>  " << s.sum_r2 / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_r2;
+        exit(1);
     }
 
     LOG(LOG_TIMING) << "    " << time_diff(before_mc, clock());

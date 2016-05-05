@@ -45,18 +45,20 @@ COPT = -g -Og
 #COPT += -DNLOG
 
 COPT += -fopenmp
-COPT += -std=c++11 -m64 -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color
+COPT += -std=c++11 -m64 -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color=auto
 
-WARNLEVEL= -Wall -Wextra -Wpedantic
+WARNLEVEL= -Wall -Wextra -Wpedantic -Werror
 #WARNLEVEL += -Wfloat-equal -Wshadow -Wextra-semi -Wdocumentation -Wdeprecated
 #WANRLEVEL += -Weverything -Wno-c++98-compat -Wno-c++98-compat-bind-to-temporary-copy -Wno-padded
 
-LNDIRS  = -L$(PWD)/lib \
-          -L$(PWD)/qhull/lib
+LNDIRS  = -L. \
+          -Llib \
+          -Lqhull/lib
 
-INCLUDES = -I$(PWD)/include \
-           -I$(PWD)/qhull/src \
-           -I$(PWD)/qhull/src/libqhullcpp
+INCLUDES = -I. \
+           -Iinclude \
+           -Iqhull/src \
+           -Iqhull/src/libqhullcpp
 
 CXXFLAGS = $(COPT) $(INCLUDES)
 
