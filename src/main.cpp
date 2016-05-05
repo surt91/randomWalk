@@ -9,7 +9,11 @@
 #include "WangLandau.hpp"
 #include "Benchmark.hpp"
 
-
+/** \mainpage randomWalk
+ *
+ * Program to gather the distrbution of different kinds of random walks
+ * by different sampling techniques.
+ */
 int main(int argc, char** argv)
 {
     Cmd o(argc, argv);

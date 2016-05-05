@@ -38,7 +38,7 @@ class SpecWalker : public Walker
         const ConvexHull<T>& convexHull() const;
         void setHullAlgo(hull_algorithm_t a);
 
-        // convenience functions
+        ///\name observables
         double A() const { return convexHull().A(); };
         double L() const { return convexHull().L(); };
         std::vector<double> maxExtent();
@@ -46,27 +46,29 @@ class SpecWalker : public Walker
         double r();
         double r2();
 
-        // get state
+        ///\name get state
         const std::vector<Step<T>>& steps() const { return m_steps; };
         const std::vector<Step<T>>& points() const { return m_points; };
         const std::vector<Step<T>>& hullPoints() const { return convexHull().hullPoints(); };
 
-        // update state
+        ///\name update state
         virtual void updateSteps() = 0;
         virtual void updatePoints(int start=1);
         virtual void updateHull();
 
-        // output functions
+        ///\name output functions
         void svg(const std::string filename, const bool with_hull) const;
         void pov(const std::string filename, const bool with_hull) const;
         std::string print() const;
 
+        ///\name degenerate cases
         virtual void degenerateMaxVolume();
         virtual void degenerateMaxSurface();
         virtual void degenerateSpiral();
         virtual void degenerateStraight();
 
     protected:
+        ///\name fields
         std::vector<Step<T>> m_steps;
         std::vector<Step<T>> m_points;
         ConvexHull<T> m_convex_hull;
