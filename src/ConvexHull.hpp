@@ -600,7 +600,6 @@ void ConvexHull<T>::runQhull()
             m_A = 0;
             return;
         }
-        --d;
     }
 
     try
@@ -622,6 +621,8 @@ void ConvexHull<T>::runQhull()
     {
         LOG(LOG_ERROR) << "Not full dimensional, but not catched!";
         LOG(LOG_ERROR) << e.what();
+        LOG(LOG_ERROR) << "#discarded axes: " << num_zeros;
+        LOG(LOG_ERROR) << "coords: " << coords;
     }
 }
 
