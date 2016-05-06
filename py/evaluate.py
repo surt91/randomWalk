@@ -103,17 +103,14 @@ def getPercentileBasedBins(dataDict, numBins=100):
     percentiles = np.linspace(0, 100, numBins+1)
     tmp = np.percentile(rawData, percentiles)
 
-
     # ensure max 1 bin per 3 unit scale
     right = 0
     bins = [0]
     for i in tmp:
-        if ceil(i) - 3 <= right:
+        if ceil(i) - 2 <= right:
             continue
         right = ceil(i)
         bins.append(right)
-
-    print(bins)
 
     return bins
 
