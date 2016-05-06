@@ -2,5 +2,5 @@
 
 # do not allow commit, if
 # compile and tests fail,
-make clean && make || exit 1
+make || exit 1
 
