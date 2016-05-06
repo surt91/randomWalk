@@ -88,7 +88,7 @@ class Simulation():
                 max_t_corr = 1
                 try:
                     # correct according to maximum t_corr
-                    max_t_corr = max(param.t_corr[N].values())
+                    max_t_corr = max(para.t_corr[N].values())
                 except KeyError:
                     pass
                 try:
