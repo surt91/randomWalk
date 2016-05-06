@@ -1,3 +1,6 @@
 [submodule "src/qhull"]
 	path = src/qhull
 	url = git@github.com:qhull/qhull.git
+[submodule "src/tclap"]
+	path = src/tclap
+	url = git@github.com:mirror/tclap.git

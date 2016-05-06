@@ -52,12 +52,9 @@ WARNLEVEL= -Wall -Wextra -Wpedantic -Werror
 #WARNLEVEL += -Wfloat-equal -Wshadow -Wextra-semi -Wdocumentation -Wdeprecated
 #WANRLEVEL += -Weverything -Wno-c++98-compat -Wno-c++98-compat-bind-to-temporary-copy -Wno-padded
 
-LNDIRS  = -L. \
-          -Llib \
-          -Lqhull/lib
+LNDIRS  = -Lqhull/lib
 
-INCLUDES = -I. \
-           -Iinclude \
+INCLUDES = -Itclap/include \
            -Iqhull/src \
            -Iqhull/src/libqhullcpp
 
