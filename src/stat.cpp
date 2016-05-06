@@ -41,9 +41,9 @@ double RollingMean::var(size_t last) const
  * \param end is the timestamp at the end
  * \return human readable time
  */
-std::string time_diff(clock_t start, clock_t end)
+std::string time_diff(clock_t start, clock_t end, int op)
 {
-    return std::to_string((double)(end - start) / CLOCKS_PER_SEC) + "s";
+    return std::to_string((double)(end - start) / CLOCKS_PER_SEC / (double) op) + "s";
 }
 
 /** Executes the command and returns its standard out.

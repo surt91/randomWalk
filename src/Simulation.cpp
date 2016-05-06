@@ -36,13 +36,14 @@ Simulation::~Simulation()
         LOG(LOG_INFO) << "# mean A: " << (sum_A / o.iterations);
         LOG(LOG_INFO) << "# mean r: " << (sum_r / o.iterations);
         LOG(LOG_INFO) << "# mean r2: " << (sum_r2 / o.iterations);
-        LOG(LOG_INFO) << "# time in seconds: " << time_diff(begin, clock());
+        LOG(LOG_INFO) << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations);
         LOG(LOG_INFO) << "# max vmem: " << vmPeak();
     }
 
     // save runtime statistics
     oss << "# rejected changes: " << fails << " (" << (100.*fails / tries) << "%)" << "\n";
-    oss << "# time in seconds: " << time_diff(begin, clock()) << "\n";
+    // time will be overestimated because of the equilibration
+    oss << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations) << "\n";
     oss << "# max vmem: " << vmPeak() << std::endl;
 
     std::string cmd("gzip -f ");

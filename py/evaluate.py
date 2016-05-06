@@ -53,7 +53,7 @@ def getMinMaxTime(filenames):
                 if "# max vmem: VmPeak" in i:
                     s = i.split(":")[-1].strip().strip(" kB")
                     mems.append(float(s))
-    logging.info("times between {:.0f}s - {:.0f}s".format(min(times), max(times)))
+    logging.info("time/sweep between {:.2f}s - {:.2f}s".format(min(times), max(times)+0.0051))
     logging.info("memory between {:.0f}kB - {:.0f}kB".format(min(mems), max(mems)))
 
 

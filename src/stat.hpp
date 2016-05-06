@@ -31,7 +31,7 @@ T variance(std::vector<T> a, T m=T(0))
 
 std::string vmPeak();
 
-std::string time_diff(clock_t start, clock_t end);
+std::string time_diff(clock_t start, clock_t end, int op=1);
 
 /** Calculates a rolling mean over the values feeded to it.
  */
