@@ -34,7 +34,7 @@ CXX	= g++
 #CXX	= icpc
 
 #for debugging
-COPT = -g -Og
+#COPT = -g -Og
 
 # for clang sanitizers
 #COPT = -O1 -g -fsanitize=address -fno-omit-frame-pointer
@@ -42,7 +42,7 @@ COPT = -g -Og
 #COPT = -fsanitize=undefined -O2
 
 # for production
-#COPT = -O3 -flto -mtune=native -mtune=corei7
+COPT = -O3 -flto -mtune=native -mtune=corei7
 #COPT += -DNLOG
 
 COPT += -fopenmp
