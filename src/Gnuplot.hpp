@@ -26,10 +26,11 @@ class Gnuplot
 
     private:
         std::string filename;
+        std::string filename_animate;
         std::string filename_points;
         std::string filename_hull;
         std::stringstream buffer;
+        std::stringstream buffer_animate;
         std::stringstream buffer_points;
         std::stringstream buffer_hull;
-        std::string header;
 };
