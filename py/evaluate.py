@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 from math import exp, log, ceil
 import logging
 from multiprocessing import Pool
@@ -291,7 +292,7 @@ def eval_simplesampling(name, outdir):
             f.write(s)
 
 
-def run():
+def run(flatHistogram=True):
     thetas = param.parameters["thetas"]
     steps = param.parameters["number_of_steps"]
     d = param.parameters["rawData"]
@@ -356,7 +357,8 @@ def run():
 
         # get bins, such that every bin contains roughly the same amount
         # of data points (total)
-        bins = getPercentileBasedBins(dataDict, num_bins)
+        if flatHistogram:
+            bins = getPercentileBasedBins(dataDict, num_bins)
 
         for T in theta_for_N:
             data = getDistribution(dataDict[T],
@@ -413,4 +415,14 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    # decide which histogram type to use:
+    # equi spaced histograms seem to be better for Gaussian walks
+    # percentile based, flat histograms, lead to similar errors for all bins
+    if "--noFlat" in sys.argv:
+        flatHistogram = False
+        logging.info("Using equi-spaced histogram")
+    else:
+        logging.info("Using percentile-based histogram")
+        flatHistogram = True
+
+    run(flatHistogram)
