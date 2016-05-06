@@ -28,6 +28,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output", false, "", "string");
         TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
         TCLAP::ValueArg<std::string> povArg("p", "pov", "povray filename, will be a xyz projection", false, "", "string");
+        TCLAP::ValueArg<std::string> gpArg("g", "gnuplot", "gnuplot filename, will be a xyz projection", false, "", "string");
         TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level:\n"
                                                         "\tquiet  : 0\n"
                                                         "\talways : 1\n"
@@ -94,6 +95,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(typeArg);
         cmd.add(svgArg);
         cmd.add(povArg);
+        cmd.add(gpArg);
         cmd.add(dataPathArg);
         cmd.add(confPathArg);
         cmd.add(tmpPathArg);
@@ -194,6 +196,12 @@ Cmd::Cmd(int argc, char** argv)
         if(!pov_path.empty())
         {
             LOG(LOG_INFO) << "Path to store the povray   " << pov_path;
+        }
+
+        gp_path = gpArg.getValue();
+        if(!gp_path.empty())
+        {
+            LOG(LOG_INFO) << "Path to store the gnuplot   " << gp_path;
         }
 
         data_path = dataPathArg.getValue();

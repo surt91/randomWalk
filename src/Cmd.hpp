@@ -88,6 +88,7 @@ class Cmd
         std::string conf_path;
         std::string svg_path;
         std::string pov_path;
+        std::string gp_path;
         int steps;
         int seedRealization;
         int seedMC;

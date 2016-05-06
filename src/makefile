@@ -21,6 +21,7 @@ CPP	 := main.cpp \
         io.cpp \
         Svg.cpp \
         Povray.cpp \
+        Gnuplot.cpp \
         stat.cpp
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)

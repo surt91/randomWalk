@@ -8,9 +8,10 @@
 #include "io.hpp"
 #include "Cmd.hpp"
 #include "Svg.hpp"
+#include "Povray.hpp"
+#include "Gnuplot.hpp"
 #include "RNG.hpp"
 #include "Step.hpp"
-#include "Povray.hpp"
 #include "Walker.hpp"
 #include "ConvexHull.hpp"
 
@@ -56,9 +57,10 @@ class SpecWalker : public Walker
         virtual void updatePoints(int start=1);
         virtual void updateHull();
 
-        ///\name output functions
+        ///\name visualization
         void svg(const std::string filename, const bool with_hull) const;
         void pov(const std::string filename, const bool with_hull) const;
+        void gp(const std::string filename, const bool with_hull) const;
         std::string print() const;
 
         ///\name degenerate cases
@@ -68,7 +70,6 @@ class SpecWalker : public Walker
         virtual void degenerateStraight();
 
     protected:
-        ///\name fields
         std::vector<Step<T>> m_steps;
         std::vector<Step<T>> m_points;
         ConvexHull<T> m_convex_hull;
@@ -164,6 +165,39 @@ template <class T>
 void SpecWalker<T>::pov(const std::string filename, const bool with_hull) const
 {
     Povray pic(filename);
+    const std::vector<Step<T>> p = points();
+    std::vector<std::vector<double>> points;
+    for(auto i : p)
+    {
+        T x = i[0], y = i[1], z = 0;
+        if(d > 2)
+            z = i[2];
+        std::vector<double> point {(double) x, (double) y, (double) z};
+
+        points.push_back(point);
+    }
+    pic.polyline(points);
+
+    points.clear();
+    if(with_hull && d > 2)
+    {
+        const std::vector<std::vector<Step<T>>> h = convexHull().hullFacets();
+        for(auto &i : h)
+        {
+            std::vector<double> p1 {(double) i[0][0], (double) i[0][1], (double) i[0][2]};
+            std::vector<double> p2 {(double) i[1][0], (double) i[1][1], (double) i[1][2]};
+            std::vector<double> p3 {(double) i[2][0], (double) i[2][1], (double) i[2][2]};
+            pic.facet(p1, p2, p3);
+        }
+    }
+
+    pic.save();
+}
+
+template <class T>
+void SpecWalker<T>::gp(const std::string filename, const bool with_hull) const
+{
+    Gnuplot pic(filename);
     const std::vector<Step<T>> p = points();
     std::vector<std::vector<double>> points;
     for(auto i : p)

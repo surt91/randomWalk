@@ -240,4 +240,7 @@ void Metropolis::run()
 
     if(!o.pov_path.empty())
         w->pov(o.pov_path, true);
+
+    if(!o.gp_path.empty())
+        w->gp(o.gp_path, true);
 }
