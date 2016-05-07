@@ -4,10 +4,10 @@ Gnuplot::Gnuplot(const std::string &f)
     : filename(f)
 {
     /* Write Header */
-    filename += ".gp";
     filename_animate = filename + ".animate.gp";
     filename_points = filename + ".points.dat";
     filename_hull = filename + ".hull.dat";
+    filename += ".gp";
 
     buffer << "unset key\n"
               "unset border\n"
