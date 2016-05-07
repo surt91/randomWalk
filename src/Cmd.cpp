@@ -201,7 +201,7 @@ Cmd::Cmd(int argc, char** argv)
         gp_path = gpArg.getValue();
         if(!gp_path.empty())
         {
-            LOG(LOG_INFO) << "Path to store the gnuplot   " << gp_path;
+            LOG(LOG_INFO) << "Path to store the gnuplot  " << gp_path;
         }
 
         data_path = dataPathArg.getValue();
