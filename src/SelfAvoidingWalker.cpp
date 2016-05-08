@@ -69,11 +69,13 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
     // choose the change algorithm randomly
     // 20% pivot chance, 80% naive change
     if(rng() > 0.8)
+    {
         pivot(idx, symmetry);
+    }
     else
     {
         undo_index = -1;
-        auto idx = rng() * nRN();
+        int idx = rng() * nRN();
         auto val = rng();
         naiveChange(idx, val);
     }

@@ -195,7 +195,7 @@ void Metropolis::run()
                 if(!o.simpleSampling)
                 {
                     // Metropolis rejection
-                    double p_acc = exp((oldS - S(w))/o.theta);
+                    double p_acc = std::exp((oldS - S(w))/o.theta);
                     if(p_acc < rngMC())
                     {
                         ++fails;
