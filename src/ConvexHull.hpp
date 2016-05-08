@@ -72,8 +72,7 @@ class ConvexHull
         std::unique_ptr<orgQhull::Qhull> qhull;
         std::vector<double> coords;
         void updateHullPoints() const;
-        int countZerosAndUpdateCmd();
-        std::string cmd;
+        int countZerosAndUpdateCmd(std::string &cmd);
 
         // for Andrews, and Jarvis
         void runAndrews();
@@ -401,7 +400,8 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
             for(int j=0; j<d; ++j)
                 coords.emplace_back(sumPoints[k]->x(j));
 
-        auto zeros = countZerosAndUpdateCmd();
+        std::string cmd;
+        auto zeros = countZerosAndUpdateCmd(cmd);
         if(zeros >= 2)
             return;
 
@@ -531,14 +531,14 @@ std::vector<std::vector<Step<T>>> ConvexHull<T>::hullFacets() const
 }
 
 template <>
-inline int ConvexHull<double>::countZerosAndUpdateCmd()
+inline int ConvexHull<double>::countZerosAndUpdateCmd(std::string &cmd)
 {
     cmd = "QJ";
     return 0;
 }
 
 template <>
-inline int ConvexHull<int>::countZerosAndUpdateCmd()
+inline int ConvexHull<int>::countZerosAndUpdateCmd(std::string &cmd)
 {
     // test, if points are fully dimensional
     // we need to do that first, since qhull seems to leak on exceptions
@@ -582,7 +582,8 @@ void ConvexHull<T>::runQhull()
                 coords[i*d + j] = (*interiorPoints)[i][j];
     }
 
-    int num_zeros = countZerosAndUpdateCmd();
+    std::string cmd;
+    int num_zeros = countZerosAndUpdateCmd(cmd);
 
     if(num_zeros >= 2)
     {
