@@ -3,7 +3,7 @@ all: randomWalk test
 .DELETE_ON_ERROR:
 .PHONY: clean proper
 
-randomWalk: src
+randomWalk: $(shell find src | sed 's/ /\\ /g')
 	$(MAKE) -C src
 	cp -p src/$@ $@
 
