@@ -46,7 +46,7 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
         LOG(LOG_ERROR) << "expected " << o.benchmark_L;
         exit(1);
     }
-    if(std::abs((w->A() - o.benchmark_A)/o.benchmark_L) > 1e-6)
+    if(std::abs((w->A() - o.benchmark_A)/o.benchmark_A) > 1e-6)
     {
         LOG(LOG_ERROR) << "Wrong A  " << w->A();
         LOG(LOG_ERROR) << "expected " << o.benchmark_A;
