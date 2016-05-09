@@ -268,12 +268,12 @@ def stichFile(infile, outfile, z, dz):
     return data
 
 
-def eval_simplesampling(name, outdir):
+def eval_simplesampling(name, outdir, N=0):
     if name is None:
         with open("{}/simple.dat".format(outdir), "w") as f:
             f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... \n")
     else:
-        a = np.loadtxt("rawData/" + name+".dat.gz")
+        a = np.loadtxt("rawData/" + name + ".dat.gz")
         a = a.transpose()
         r = a[3]
         r2 = a[4]
@@ -282,7 +282,7 @@ def eval_simplesampling(name, outdir):
         maxY = a[7]
 
         with open("{}/simple.dat".format(outdir), "a") as f:
-            s = ""
+            s = "{} ".format(N)
             s += "{} {} ".format(*bootstrap(r))
             s += "{} {} ".format(*bootstrap(r, f=np.var))
             s += "{} {} ".format(*bootstrap(r2))
@@ -327,7 +327,7 @@ def run(flatHistogram=True):
             nameDict.update({T: i.basename})
 
         if float("inf") in theta_for_N:
-            eval_simplesampling(nameDict[float("inf")], out)
+            eval_simplesampling(nameDict[float("inf")], out, N)
 
         # remove files from evaluation, which did not equilibrate
         not_aborted = []
