@@ -8,7 +8,8 @@ randomWalk: $(shell find src | sed 's/ /\\ /g')
 	cp -p src/$@ $@
 
 test: randomWalk
-	./$< -b > test || rm test
+	touch test
+	./$< -b
 
 proper:
 	$(MAKE) proper -C src
