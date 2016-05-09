@@ -20,5 +20,5 @@ proper:
 	$(MAKE) proper -C src
 
 clean: proper
-	rm -rf  $(CODE)
+	rm -rf $(CODE) test
 	$(MAKE) clean -C src
