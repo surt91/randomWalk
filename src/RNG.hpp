@@ -43,6 +43,9 @@ class UniformRNG
         std::function<double()> uniform;
         std::function<double()> gaussian;
 
+        double levy(const double c, const double alpha);
+        double cauchy(const double a);
+
         std::string serialize_rng();
         void deserialize_rng(std::string &s);
 

@@ -15,6 +15,8 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
         w = std::unique_ptr<Walker>(new RealWalker(o.d, o.steps, rng, o.chAlg));
     else if(o.type == WT_GAUSSIAN_RANDOM_WALK)
         w = std::unique_ptr<Walker>(new GaussWalker(o.d, o.steps, rng, o.chAlg));
+    else if(o.type == WT_LEVY_FLIGHT)
+        w = std::unique_ptr<Walker>(new LevyWalker(o.d, o.steps, rng, o.chAlg));
     else
     {
         LOG(LOG_ERROR) << "cannot find walk type " << o.type;
@@ -115,7 +117,7 @@ void benchmark()
 
     o.d = 2;
     o.chAlg = CH_ANDREWS_AKL;
-    for(int i=1; i<=5; ++i)
+    for(int i=1; i<=6; ++i)
     {
         double expected_mean_L = 0;
         double expected_mean_A = 0;
@@ -169,6 +171,15 @@ void benchmark()
                 expected_mean_r = 15.67;
                 expected_mean_r2 = 281.49;
                 break;
+            case WT_LEVY_FLIGHT:
+                o.steps = 130;
+                o.type = WT_LEVY_FLIGHT;
+                o.iterations = 1000;
+                expected_mean_L = 1721.50;
+                expected_mean_A = 96667.18;
+                expected_mean_r = 759.03;
+                expected_mean_r2 = 7875699.19;
+                break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
         run_simulation(o, expected_mean_A,
@@ -183,7 +194,7 @@ void benchmark()
 
     LOG(LOG_INFO) << "Starting Hull Comparison";
 
-    for(int i=1; i<=5; ++i)
+    for(int i=1; i<=6; ++i)
     {
         o.d = 2;
         switch(i)
@@ -221,6 +232,13 @@ void benchmark()
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
                 o.benchmark_L = 4276.37295704;
                 o.benchmark_A = 1114653.50651;
+                o.iterations = 10;
+                break;
+            case WT_LEVY_FLIGHT:
+                o.steps = 1000000;
+                o.type = WT_LEVY_FLIGHT;
+                o.benchmark_L = 3996395.14;
+                o.benchmark_A = 250835051540;
                 o.iterations = 10;
                 break;
         }
@@ -273,6 +291,13 @@ void benchmark()
             case WT_GAUSSIAN_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
+                o.benchmark_L = 4847891.6674;
+                o.benchmark_A = 774054054.25;
+                o.iterations = 10;
+                break;
+            case WT_LEVY_FLIGHT:
+                o.steps = 1000000;
+                o.type = WT_LEVY_FLIGHT;
                 o.benchmark_L = 4847891.6674;
                 o.benchmark_A = 774054054.25;
                 o.iterations = 10;

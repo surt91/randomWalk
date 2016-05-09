@@ -21,6 +21,7 @@
 #include "../walker/SelfAvoidingWalker.hpp"
 #include "../walker/RealWalker.hpp"
 #include "../walker/GaussWalker.hpp"
+#include "../walker/LevyWalker.hpp"
 #include "../RNG.hpp"
 
 /** Abstract Base Class, derive classes that sample random walks.

@@ -35,3 +35,59 @@ void UniformRNG::deserialize_rng(std::string &s)
     ss << s;
     ss >> rng;
 }
+
+/** Generates a Levy distributed random number
+ * This code is taken from the GSL (and slightly modified)
+ *
+ * http://www.gnu.org/software/gsl/
+ */
+double UniformRNG::levy(const double c, const double alpha)
+{
+    double u, v, t, s;
+
+    u = M_PI * (uniform() - 0.5);
+
+    // cauchy case
+    if (alpha == 1)
+    {
+        t = tan (u);
+        return c * t;
+    }
+
+    do
+    {
+        // exponentailly distributed random number
+        // also from gsl
+        v = -log1p(-uniform());
+    }
+    while (v == 0);
+
+    // gaussian case
+    if (alpha == 2)
+    {
+        t = 2 * sin (u) * sqrt(v);
+        return c * t;
+    }
+
+  t = sin(alpha * u) / pow(cos(u), 1 / alpha);
+  s = pow(cos ((1 - alpha) * u) / v, (1 - alpha) / alpha);
+
+  return c * t * s;
+}
+
+/* Generates a Cauchy (Lorentz) distributed random number
+ * This code is taken from the GSL (and slightly modified)
+ *
+ * http://www.gnu.org/software/gsl/
+ */
+double UniformRNG::cauchy(const double a)
+{
+    double u;
+    do
+    {
+        u = uniform();
+    }
+    while (u == 0.5);
+
+    return a * tan(M_PI * u);
+}

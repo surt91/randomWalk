@@ -14,6 +14,7 @@ CPP	 := main.cpp \
         walker/SelfAvoidingWalker.cpp \
         walker/RealWalker.cpp \
         walker/GaussWalker.cpp \
+        walker/LevyWalker.cpp \
         simulation/Simulation.cpp \
         simulation/Metropolis.cpp \
         simulation/WangLandau.cpp \

@@ -40,14 +40,15 @@ Cmd::Cmd(int argc, char** argv)
                                                         "\tdebug3 : 7",
                                         false, 4, "integer");
 
-        std::vector<int> wt({1, 2, 3, 4, 5});
+        std::vector<int> wt({1, 2, 3, 4, 5, 6});
         TCLAP::ValuesConstraint<int> allowedWT(wt);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
                                                   "\tlattice random walk : 1 (default)\n"
                                                   "\tlooperased walk     : 2\n"
                                                   "\tself-avoiding walk  : 3\n"
                                                   "\treal random walk    : 4\n"
-                                                  "\tgaussian random walk: 5",
+                                                  "\tGaussian random walk: 5\n"
+                                                  "\tLevy flight         : 6",
                                      false, 1, &allowedWT);
 
         std::vector<int> ch({1, 2, 3, 4});

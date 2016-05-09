@@ -15,6 +15,7 @@
 #include "walker/SelfAvoidingWalker.hpp"
 #include "walker/RealWalker.hpp"
 #include "walker/GaussWalker.hpp"
+#include "walker/LevyWalker.hpp"
 #include "simulation/Metropolis.hpp"
 
 
