@@ -1,24 +1,18 @@
-CODE	= randomWalk
-
-all: $(CODE) test
+all: randomWalk test
 
 .DELETE_ON_ERROR:
-.PHONY: clean proper $(CODE) test
+.PHONY: clean proper
 
-randomWalk:
+randomWalk: src
 	$(MAKE) -C src
-	cp src/$@ $@
+	cp -p src/$@ $@
 
-test: randomWalk | tmp
-	./$< -b > test
-	rm -rf tmp
-
-tmp:
-	mkdir $@
+test: randomWalk
+	./$< -b > test || rm test
 
 proper:
 	$(MAKE) proper -C src
 
 clean: proper
-	rm -rf $(CODE) test
+	rm -rf randomWalk test
 	$(MAKE) clean -C src
