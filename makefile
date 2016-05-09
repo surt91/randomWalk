@@ -10,7 +10,7 @@ randomWalk:
 	cp src/$@ $@
 
 test: randomWalk | tmp
-	./$< -b
+	./$< -b > test
 	rm -rf tmp
 
 tmp:
