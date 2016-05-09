@@ -91,6 +91,8 @@ class Simulation():
                     max_t_corr = max(para.t_corr[N].values())
                 except KeyError:
                     pass
+                except ValueError:
+                    pass
                 try:
                     time[self.kwargs["typ"]][self.kwargs["dimension"]][N]
                 except:
