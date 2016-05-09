@@ -298,8 +298,8 @@ void benchmark()
             case WT_LEVY_FLIGHT:
                 o.steps = 1000000;
                 o.type = WT_LEVY_FLIGHT;
-                o.benchmark_L = 4847891.6674;
-                o.benchmark_A = 774054054.25;
+                o.benchmark_L = 930201855038;
+                o.benchmark_A = 1.61739030652e+16;
                 o.iterations = 10;
                 break;
         }
