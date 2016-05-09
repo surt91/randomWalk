@@ -83,7 +83,7 @@ dep/%.d: %.cpp | dep
 	@mkdir -p $(@D)
 	@set -e; rm -f $@; \
 	$(CXX) $(WARNLEVEL) $(CXXFLAGS) -MM $< > $@.$$$$; \
-	sed 's,\($*\)\.o[ :]*,obj/\1.o $@: ,g' < $@.$$$$ > $@; \
+	sed 's,\($(*F)\)\.o[ :]*,obj/\1.o $@: ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 obj/%.o: %.cpp | obj
