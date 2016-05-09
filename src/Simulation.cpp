@@ -45,6 +45,7 @@ Simulation::~Simulation()
     // time will be overestimated because of the equilibration
     oss << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations) << "\n";
     oss << "# max vmem: " << vmPeak() << std::endl;
+    oss.close();
 
     std::string cmd("gzip -f ");
     system((cmd+o.data_path).c_str());

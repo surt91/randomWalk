@@ -34,7 +34,6 @@ Step<double> RealWalker::genStep(std::vector<double>::iterator first) const
     return s;
 }
 
-// TODO: d-1 rn per step, to determine the angles
 void RealWalker::updateSteps()
 {
     m_steps.resize(numSteps);

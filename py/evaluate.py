@@ -357,7 +357,6 @@ def run(flatHistogram=True):
         # but ensure that we only get max 1 bin per 2 x-axis values
         # since sometimes they are discrete, which can result in artifacts
         num_bins = min(num_bins, (maximum - minimum))
-        # TODO: assign the bins adaptive: smaller bins where more data is
 
         bins = np.linspace(minimum, maximum, num=num_bins)
 

@@ -50,7 +50,8 @@ static const std::vector<std::string> LABEL = {
 class Logger {
     public:
         Logger(log_level_t level)
-            : level(level)
+            : level(level),
+              ss()
         {
             ss.precision(12);
         }
@@ -69,7 +70,6 @@ class Logger {
 
     protected:
         log_level_t level;
-        std::string msg;
         std::stringstream ss;
 };
 

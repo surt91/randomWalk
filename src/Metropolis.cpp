@@ -211,7 +211,7 @@ void Metropolis::run()
                 LOG(LOG_TOO_MUCH) << "Area  : " << w->L();
                 LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
                 LOG(LOG_DEBUG) << "Iteration: " << i;
-                auto maxE = w->maxExtent();
+
                 oss << i << " "
                     << w->L() << " "
                     << w->A() << " ";
@@ -219,6 +219,7 @@ void Metropolis::run()
                 // some observables are only interesting during simple sampling
                 if(o.simpleSampling)
                 {
+                    auto maxE = w->maxExtent();
                     oss << w->r() << " "
                         << w->r2() << " "
                         << w->maxDiameter() << " "

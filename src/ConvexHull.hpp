@@ -431,6 +431,10 @@ void ConvexHull<T>::updateHullPoints() const
 
     for(const auto &v : vl)
     {
+        // FIXME: for d>=3, if the points are in a hyperplane, coord will have (d-1)*(n+1) entries instead of d*(n+1)
+        // This leads to a invalid read
+        // It must be determined which dimension was dropped and zeros
+        // need to be written into hullPoints_
         auto coord = v.point().coordinates();
         hullPoints_.emplace_back(std::vector<T>(coord, coord+d));
     }
