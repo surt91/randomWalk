@@ -193,7 +193,7 @@ def getDistribution(data, outfile, histfile, col, theta, steps, inBins=50):
     return data_p
 
 
-def getZtheta(list_of_ps_log, thetas):
+def getZtheta(list_of_ps_log, thetas, outNames):
     # list_of_ps_log is a list in the form [[s1, s1_err, ps_log1, ps_log1_err], [s2, s2_err, ps_log2, ps_log2_err], ..]
     Ztheta_mean = [(0, 0)]
     for i in range(len(list_of_ps_log)-1):
@@ -208,6 +208,13 @@ def getZtheta(list_of_ps_log, thetas):
         # calculate for every s in l2 the difference to l2(s) - l1(s)
         Z = [y - y1[x] for x, _, y, _ in l2 if x in x1]
         Z_err = [y_err + y1_err[x] for x, _, _, y_err in l2 if x in x1]
+
+        # save S Z err to a file, to see later if there is a dependence on S (-> not equilibrated)
+        with open(outNames[i], "w") as f:
+            f.write("# s z err\n")
+            for xyee, z, err in zip(l1, Z, Z_err):
+                s = xyee[0]
+                f.write("{} {} {}\n".format(s, z, err))
 
         # not enough overlap
         if len(Z) < 5:
@@ -378,7 +385,7 @@ def run(flatHistogram=True):
             list_of_ps_log.append(data)
             outfiles.append('"{}/stiched_{}.dat"'.format(out, nameDict[T]))
 
-        z = getZtheta(list_of_ps_log, theta_for_N)
+        z = getZtheta(list_of_ps_log, theta_for_N, ["{}/Z_{}.dat".format(out, nameDict[T]) for T in theta_for_N])
 
         zc = [0]
         zce = [0]
