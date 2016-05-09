@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <memory>
 
-// TODO: ifdef für unix?
+// TODO: ifdef for unix?
 #include <unistd.h> //for getpid
 
 template <typename T>
