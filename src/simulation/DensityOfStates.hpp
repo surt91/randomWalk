@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 
 class DensityOfStates
 {

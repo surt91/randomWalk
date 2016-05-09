@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Simulation.hpp"
-#include "stat.hpp"
+#include "../stat.hpp"
 
 /** Standard Metropolis Monte Carlo sampling.
  *

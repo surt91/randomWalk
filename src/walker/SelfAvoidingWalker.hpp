@@ -4,7 +4,7 @@
 #include <iterator>
 #include <unordered_set>
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 #include "SpecWalker.hpp"
 
 /// transformation matrices for pivoting d=2

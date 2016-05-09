@@ -4,25 +4,25 @@ DOC 	= manual.pdf
 
 CPP	 := main.cpp \
         Cmd.cpp \
-        Benchmark.cpp \
-        Walker.cpp \
-        LatticeWalker.cpp \
-        LoopErasedWalker.cpp \
-        SelfAvoidingWalker.cpp \
-        RealWalker.cpp \
-        GaussWalker.cpp \
-        Simulation.cpp \
-        Metropolis.cpp \
-        WangLandau.cpp \
-        FastWangLandau.cpp \
         RNG.cpp \
-        Histogram.cpp \
-        DensityOfStates.cpp \
         io.cpp \
-        Svg.cpp \
-        Povray.cpp \
-        Gnuplot.cpp \
-        stat.cpp
+        stat.cpp \
+        Benchmark.cpp \
+        walker/Walker.cpp \
+        walker/LatticeWalker.cpp \
+        walker/LoopErasedWalker.cpp \
+        walker/SelfAvoidingWalker.cpp \
+        walker/RealWalker.cpp \
+        walker/GaussWalker.cpp \
+        simulation/Simulation.cpp \
+        simulation/Metropolis.cpp \
+        simulation/WangLandau.cpp \
+        simulation/FastWangLandau.cpp \
+        simulation/Histogram.cpp \
+        simulation/DensityOfStates.cpp \
+        visualization/Svg.cpp \
+        visualization/Povray.cpp \
+        visualization/Gnuplot.cpp \
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 DEP	 = $(CPP:%.cpp=dep/%.d)
@@ -34,7 +34,7 @@ CXX	= g++
 #CXX	= icpc
 
 #for debugging
-#COPT = -g -Og
+COPT = -g -Og
 
 # for clang sanitizers
 #COPT = -O1 -g -fsanitize=address -fno-omit-frame-pointer
@@ -42,7 +42,7 @@ CXX	= g++
 #COPT = -fsanitize=undefined -O2
 
 # for production
-COPT = -O3 -flto -mtune=native -mtune=corei7
+#COPT = -O3 -flto -mtune=native -mtune=corei7
 #COPT += -DNLOG
 
 COPT += -fopenmp
@@ -79,12 +79,14 @@ obj dep:
 # perfect dependencies, see https://www.gnu.org/software/make/manual/make.pdf
 dep/%.d: %.cpp | dep
 	@echo Dep: $@
+	@mkdir -p $(@D)
 	@set -e; rm -f $@; \
 	$(CXX) $(WARNLEVEL) $(CXXFLAGS) -MM $< > $@.$$$$; \
 	sed 's,\($*\)\.o[ :]*,obj/\1.o $@: ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 obj/%.o: %.cpp | obj
+	@mkdir -p $(@D)
 	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
 
 $(QHULL):

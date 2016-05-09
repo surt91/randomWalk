@@ -7,7 +7,7 @@
 #include <vector>
 #include <stdexcept>
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 
 /** Class to easily create 2d pictures in svg format.
  */

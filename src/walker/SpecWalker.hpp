@@ -5,15 +5,15 @@
 #include <sstream>
 #include <memory>
 
-#include "io.hpp"
-#include "Cmd.hpp"
-#include "Svg.hpp"
-#include "Povray.hpp"
-#include "Gnuplot.hpp"
-#include "RNG.hpp"
-#include "Step.hpp"
+#include "../io.hpp"
+#include "../Cmd.hpp"
+#include "../visualization/Svg.hpp"
+#include "../visualization/Povray.hpp"
+#include "../visualization/Gnuplot.hpp"
+#include "../RNG.hpp"
+#include "../Step.hpp"
+#include "../ConvexHull.hpp"
 #include "Walker.hpp"
-#include "ConvexHull.hpp"
 
 /** Abstract Class Template SpecWalker.
  *

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 #include "SpecWalker.hpp"
 
 /** A walk with displacements drawn from a gaussian distribution (model for brownian motion).

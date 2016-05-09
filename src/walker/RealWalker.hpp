@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 #include "SpecWalker.hpp"
 
 /** A walk with fixed step length but random direction.

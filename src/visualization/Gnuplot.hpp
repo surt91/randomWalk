@@ -8,27 +8,29 @@
 #include <cmath>
 #include <stdexcept>
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 
-/** Class to easily create 3d renderings.
+/** Class to easily create 2d/3d plots with gnuplot.
  *
  * Especially of random walks and their hulls.
  */
-class Povray
+class Gnuplot
 {
     public:
-        Povray(const std::string &filename);
+        Gnuplot(const std::string &filename);
 
-        void box(const double x, const double y, const double z, const double dx, const double dy, const double dz);
         void polyline(const std::vector<std::vector<double>> &points);
         void facet(const std::vector<double> &x, const std::vector<double> &y, const std::vector<double> &z);
-
-        double stroke;
 
         void save();
 
     private:
         std::string filename;
+        std::string filename_animate;
+        std::string filename_points;
+        std::string filename_hull;
         std::stringstream buffer;
-        std::string header;
+        std::stringstream buffer_animate;
+        std::stringstream buffer_points;
+        std::stringstream buffer_hull;
 };

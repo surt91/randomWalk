@@ -9,13 +9,13 @@
 #include "RNG.hpp"
 #include "stat.hpp"
 #include "Logging.hpp"
-#include "Walker.hpp"
-#include "LatticeWalker.hpp"
-#include "LoopErasedWalker.hpp"
-#include "SelfAvoidingWalker.hpp"
-#include "RealWalker.hpp"
-#include "GaussWalker.hpp"
-#include "Metropolis.hpp"
+#include "walker/Walker.hpp"
+#include "walker/LatticeWalker.hpp"
+#include "walker/LoopErasedWalker.hpp"
+#include "walker/SelfAvoidingWalker.hpp"
+#include "walker/RealWalker.hpp"
+#include "walker/GaussWalker.hpp"
+#include "simulation/Metropolis.hpp"
 
 
 void benchmark();

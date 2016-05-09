@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 
 class Histogram
 {

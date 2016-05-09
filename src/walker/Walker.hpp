@@ -5,12 +5,9 @@
 #include <sstream>
 #include <memory>
 
-#include "io.hpp"
-#include "Cmd.hpp"
-#include "Svg.hpp"
-#include "RNG.hpp"
-#include "Povray.hpp"
-
+#include "../io.hpp"
+#include "../Cmd.hpp"
+#include "../RNG.hpp"
 
 /** Abstract base class for all Walker classes.
  *

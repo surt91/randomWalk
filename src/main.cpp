@@ -3,10 +3,10 @@
 
 #include "Cmd.hpp"
 #include "Logging.hpp"
-#include "Walker.hpp"
 #include "RNG.hpp"
-#include "Metropolis.hpp"
-#include "WangLandau.hpp"
+#include "walker/Walker.hpp"
+#include "simulation/Metropolis.hpp"
+#include "simulation/WangLandau.hpp"
 #include "Benchmark.hpp"
 
 /** \mainpage randomWalk

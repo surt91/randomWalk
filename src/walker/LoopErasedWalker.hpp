@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 #include "SpecWalker.hpp"
 
 /** Loop Erased Random Walk

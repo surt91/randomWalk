@@ -12,16 +12,16 @@
    #define omp_set_num_threads(x) 1
 #endif
 
-#include "Cmd.hpp"
-#include "Logging.hpp"
-#include "stat.hpp"
-#include "Walker.hpp"
-#include "LatticeWalker.hpp"
-#include "LoopErasedWalker.hpp"
-#include "SelfAvoidingWalker.hpp"
-#include "RealWalker.hpp"
-#include "GaussWalker.hpp"
-#include "RNG.hpp"
+#include "../Cmd.hpp"
+#include "../Logging.hpp"
+#include "../stat.hpp"
+#include "../walker/Walker.hpp"
+#include "../walker/LatticeWalker.hpp"
+#include "../walker/LoopErasedWalker.hpp"
+#include "../walker/SelfAvoidingWalker.hpp"
+#include "../walker/RealWalker.hpp"
+#include "../walker/GaussWalker.hpp"
+#include "../RNG.hpp"
 
 /** Abstract Base Class, derive classes that sample random walks.
  */

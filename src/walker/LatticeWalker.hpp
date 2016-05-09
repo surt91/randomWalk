@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Logging.hpp"
+#include "../Logging.hpp"
 #include "SpecWalker.hpp"
 
 /** Random Walk on a Hypercubic lattice.
