@@ -32,6 +32,8 @@ class Gnuplot():
         self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
         self.create("scaled", "{/Symbol %s} / {/Italic T%s}" % (self.observable, "" if self.observable == "A" else "^{1/2}"), "{/Italic T%s p}" % ("" if self.observable == "A" else "^{1/2}"))
         self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
+        self.create("r", "{/Italic r}", "{/Italic N}")
+        self.create("r2", "{/Italic r^2}", "{/Italic N}")
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
