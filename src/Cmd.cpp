@@ -73,6 +73,12 @@ Cmd::Cmd(int argc, char** argv)
                                                                       "\tWang Landau         : 2",
                                                  false, 1, &allowedSM);
 
+        TCLAP::MultiArg<double> wangLandauBordersMArg("e", "energyBorder", "specifies inside which energy ranges, i.e., "
+                                                                           "volumes or areas, the Wang Landau sampling "
+                                                                           "should be run parallel. If this is smaller "
+                                                                           "than the 'parallel' argument, not all cores "
+                                                                           "will be used.", false, "double");
+
         // switch argument
         // -short, --long, description, default
         TCLAP::SwitchArg aklHeuristicSwitch("a", "aklHeuristic", "enables the Akl Toussaint heuristic", false);
@@ -93,6 +99,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(chAlgArg);
         cmd.add(wantedobservableArg);
         cmd.add(samplingMethodArg);
+        cmd.add(wangLandauBordersMArg);
         cmd.add(typeArg);
         cmd.add(svgArg);
         cmd.add(povArg);

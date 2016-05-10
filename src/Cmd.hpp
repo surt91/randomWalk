@@ -102,6 +102,7 @@ class Cmd
         int parallel;
         double theta;
         bool simpleSampling;
+        std::vector<double> wangLandauBorders;
         sampling_method_t sampling_method;
         hull_algorithm_t chAlg;
         wanted_observable_t wantedObservable;
