@@ -20,6 +20,7 @@ class WangLandau : public Simulation
         virtual void run();
 
     protected:
+        void findStart(std::unique_ptr<Walker>& w, double lb, double ub, UniformRNG& rng);
         double getLowerBound();
         double getUpperBound();
 };

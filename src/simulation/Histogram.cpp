@@ -31,7 +31,7 @@ void Histogram::add(double value)
     // do not count values bigger than upper or smaller than lower
     if(value > upper || value < lower)
     {
-        LOG(LOG_ERROR) << "value out of bounds: " << value << " not in [" << lower << "," << upper << "]";
+        //~ LOG(LOG_ERROR) << "value out of bounds: " << value << " not in [" << lower << "," << upper << "]";
         return;
     }
 
