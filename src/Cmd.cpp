@@ -134,6 +134,15 @@ Cmd::Cmd(int argc, char** argv)
             Logger::verbosity = verboseArg.getValue();
         LOG(LOG_INFO) << "Verbosity                  " << Logger::verbosity;
 
+        type = (walk_type_t) typeArg.getValue();
+        LOG(LOG_INFO) << "Type                       " << TYPE_LABEL[type];
+
+        steps = numArg.getValue();
+        LOG(LOG_INFO) << "Number of steps            " << steps;
+
+        d = dimArg.getValue();
+        LOG(LOG_INFO) << "Dimension                  " << d;
+
         bool aklHeuristic = aklHeuristicSwitch.getValue();
         int tmp = chAlgArg.getValue();
         tmp = (tmp-1)*2 + 1;
@@ -142,45 +151,42 @@ Cmd::Cmd(int argc, char** argv)
         chAlg = (hull_algorithm_t) tmp;
         LOG(LOG_INFO) << "Convex Hull Algorithm      " << CH_LABEL[chAlg];
 
-        steps = numArg.getValue();
-        LOG(LOG_INFO) << "Number of steps            " << steps;
-
-        iterations = iterationsArg.getValue();
-        LOG(LOG_INFO) << "Number of MC iterations    " << iterations;
-
-        t_eq = t_eqArg.getValue();
-        if(t_eq >= 0)
-        {
-            LOG(LOG_INFO) << "Set equilibration time to  " << t_eq;
-        }
-
-        t_eqMax = t_eqMaxArg.getValue();
-        LOG(LOG_INFO) << "Abort simulation if t_eq > " << t_eqMax;
-
         seedRealization = seedRArg.getValue();
         LOG(LOG_INFO) << "Seed for the realization   " << seedRealization;
 
         seedMC = seedMCArg.getValue();
         LOG(LOG_INFO) << "Seed for the MC simulation " << seedMC;
 
-        d = dimArg.getValue();
-        LOG(LOG_INFO) << "Dimension                  " << d;
-
-        simpleSampling = simpleSamplingSwitch.getValue();
-        if(simpleSampling)
-        {
-            LOG(LOG_INFO) << "simple sampling            ";
-        }
-
         wantedObservable = (wanted_observable_t) wantedobservableArg.getValue();
         LOG(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
-
-        type = (walk_type_t) typeArg.getValue();
-        LOG(LOG_INFO) << "Type                       " << TYPE_LABEL[type];
 
         svg_path = svgArg.getValue();
         sampling_method = (sampling_method_t) samplingMethodArg.getValue();
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
+
+        iterations = iterationsArg.getValue();
+        if(sampling_method == SM_WANG_LANDAU)
+            iterations = 1;
+        LOG(LOG_INFO) << "Number of MC iterations    " << iterations;
+
+        simpleSampling = simpleSamplingSwitch.getValue();
+        if(simpleSampling && sampling_method == SM_METROPOLIS)
+        {
+            LOG(LOG_INFO) << "simple sampling            ";
+        }
+
+        t_eq = t_eqArg.getValue();
+        if(sampling_method == SM_METROPOLIS)
+            if(t_eq >= 0)
+            {
+                LOG(LOG_INFO) << "Set equilibration time to  " << t_eq;
+            }
+
+        t_eqMax = t_eqMaxArg.getValue();
+        if(sampling_method == SM_METROPOLIS)
+        {
+            LOG(LOG_INFO) << "Abort simulation if t_eq > " << t_eqMax;
+        }
 
         theta = thetaArg.getValue();
         if(!simpleSampling && sampling_method == SM_METROPOLIS)
@@ -188,8 +194,15 @@ Cmd::Cmd(int argc, char** argv)
             LOG(LOG_INFO) << "Theta                      " << theta;
         }
 
+        wangLandauBorders = wangLandauBordersMArg.getValue();
+        if(sampling_method == SM_WANG_LANDAU)
+        {
+            std::sort(wangLandauBorders.begin(), wangLandauBorders.end());
+            LOG(LOG_INFO) << "Borders for Wang Landau Sampling: \n                  " << wangLandauBorders;
+        }
+
         parallel = parallelArg.getValue();
-        if(sampling_method == 2)
+        if(sampling_method == SM_WANG_LANDAU)
         {
             LOG(LOG_INFO) << "CPUs to use                " << (parallel ? std::to_string(parallel) : "all");
         }
