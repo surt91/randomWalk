@@ -162,7 +162,7 @@ class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
                        dimension, theta, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
-                       method, akl, sampling, parallel, **not_used):
+                       method, akl, sampling, parallel, energies, **not_used):
 
         self.N = steps
         self.n = iterations
@@ -181,6 +181,7 @@ class SimulationInstance():
         self.parallel = parallel
         self.t_eq = t_eq
         self.t_corr = t_corr
+        self.energies = energies
 
         self.loadFile = None
 
@@ -211,17 +212,17 @@ class SimulationInstance():
             it = self.n
 
         opts = ["./randomWalk",
-                "-N {0}".format(self.N),
-                "-x {0}".format(self.x),
-                "-y {0}".format(self.y),
-                "-n {0}".format(it),
+                "-N {}".format(self.N),
+                "-x {}".format(self.x),
+                "-y {}".format(self.y),
+                "-n {}".format(it),
                 "-c {:d}".format(self.method),
                 "-d {:d}".format(self.D),
-                "-t {0}".format(self.t),
-                "-w {0}".format(self.w),
+                "-t {}".format(self.t),
+                "-w {}".format(self.w),
                 "-q",
-                "-o {0}".format(self.filename),
-                "-m {0}".format(self.m),
+                "-o {}".format(self.filename),
+                "-m {}".format(self.m),
                ]
 
         if self.T != float("inf"):
@@ -239,6 +240,9 @@ class SimulationInstance():
 
         if self.akl:
             opts.append("-a")
+
+        for e in self.energies[self.T]:
+            opts.append("-e {}".format(e))
 
         #~ if self.loadFile:
             #~ opts.append("-f {0}".format(self.loadFile))

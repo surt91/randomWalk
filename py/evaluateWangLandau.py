@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
+import gzip
 
 import numpy as np
 
@@ -15,38 +16,29 @@ logging.info("started")
 
 
 def process_data(infile, outfile):
-    try:
-        a = np.loadtxt(infile+".gz")
-    except FileNotFoundError:
-        try:
-            a = np.loadtxt(infile)
-        except FileNotFoundError:
-            logging.error("cannot find " + infile)
-            return
+    with gzip.open(infile+".gz", "rt") as f:
+        even = True
+        centers = []
+        data = []
+        for l in f.readlines():
+            if "#" in l:
+                continue
+            if even:
+                centers.append([float(i) for i in l.split()])
+                even = False
+            else:
+                data.append([float(i) for i in l.split()])
+                even = True
 
-    centers = a[0]
-    centers_err = [(centers[1] - centers[0]) / 2 for _ in centers]
-    data = a[1:]
-
-    # normalize before bootstrapping
-    for n in range(len(data)):
-        data[n] -= np.max(data[n])
-        area = np.trapz(np.exp(data[n]), centers)
-        data[n] -= np.log(area)
-
-    data = data.transpose()
-
-    bs_mean = []
-    bs_err = []
-    for n, c in enumerate(centers):
-        d, e = bootstrap(data[n])
-        bs_mean.append(d)
-        bs_err.append(e)
+    # TODO: stich it together -> overlap needed
+    # TODO: normalize
+    centers = [j for i in centers for j in i]
+    data = [j for i in data for j in i]
 
     with open(outfile, "w") as f:
-        f.write("# S P(S) P(S)_err\n")
-        for d in zip(centers, centers_err, bs_mean, bs_err):
-            f.write("{} {} {} {}\n".format(*d))
+        f.write("# S err P(S) P(S)_err\n")
+        for d in zip(centers, data):
+            f.write("{} {}\n".format(*d))
 
 
 def run():

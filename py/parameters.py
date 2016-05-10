@@ -17,6 +17,10 @@ t_eq = { 32: {-12: 2e4, -10: 2e4},
 
 t_corr = {}
 
+energies = {    32: [20, 100, 200, 300, 400, 600, 800],
+                64: [20, 100, 200, 300, 400, 600, 800, 1000, 1200, 1400],
+           }
+
 parameters = {
     # what type
     # 1 random walk
@@ -24,6 +28,7 @@ parameters = {
     # 3 self avoiding random walk
     # 4 random direction
     # 5 Gaussian walk
+    # 6 Levy flight
     "typ": 2,
     # random seed for Monte Carlo
     "seedMC": 1337,
@@ -46,6 +51,9 @@ parameters = {
     # dict[N][theta] of estimated autocorrelation times
     # will be used to take by factor t_corr more samples
     "t_corr": t_corr,
+
+    # dict[N] list of energy borders, used for Wang landau Sampling
+    "energies": energies,
 
     # where to save the temporary evaluation results
     "directory": "data",
