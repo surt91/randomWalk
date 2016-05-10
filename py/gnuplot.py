@@ -34,6 +34,7 @@ class Gnuplot():
         self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
         self.create("r", "{/Italic r}", "{/Italic N}")
         self.create("r2", "{/Italic r^2}", "{/Italic N}")
+        self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
