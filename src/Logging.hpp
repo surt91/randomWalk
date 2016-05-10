@@ -85,6 +85,5 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T> &v)
 {
     for(auto i : v)
         os << i << " ";
-    os << "\n";
     return os;
 }
