@@ -31,6 +31,7 @@ Simulation::~Simulation()
 {
     if(!muted)
     {
+		LOG(LOG_INFO) << "# proposed changes: " << tries << "\n";
         LOG(LOG_INFO) << "# rejected changes: " << fails << " (" << (100.*fails / tries) << "%)";
         LOG(LOG_INFO) << "# mean L: " << (sum_L / o.iterations);
         LOG(LOG_INFO) << "# mean A: " << (sum_A / o.iterations);
@@ -41,6 +42,7 @@ Simulation::~Simulation()
     }
 
     // save runtime statistics
+    oss << "# proposed changes: " << tries << "\n";
     oss << "# rejected changes: " << fails << " (" << (100.*fails / tries) << "%)" << "\n";
     // time will be overestimated because of the equilibration
     oss << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations) << "\n";
