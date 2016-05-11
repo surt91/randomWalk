@@ -78,6 +78,11 @@ Cmd::Cmd(int argc, char** argv)
                                                                            "should be run parallel. If this is smaller "
                                                                            "than the 'parallel' argument, not all cores "
                                                                            "will be used.", false, "double");
+        TCLAP::ValueArg<int> wangLandauOverlapArg("E", "energyOverlap", "specifies how many bins between adjacent ranges "
+                                                                        "should overlap. (default 10)",
+                                                                        false, 10, "integer");
+        TCLAP::ValueArg<int> wangLandauBinsArg("B", "energyBins", "specifies how many bins each range should have (default 100)",
+                                                                      false, 100, "integer");
 
         // switch argument
         // -short, --long, description, default
@@ -100,6 +105,8 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(wantedobservableArg);
         cmd.add(samplingMethodArg);
         cmd.add(wangLandauBordersMArg);
+        cmd.add(wangLandauBinsArg);
+        cmd.add(wangLandauOverlapArg);
         cmd.add(typeArg);
         cmd.add(svgArg);
         cmd.add(povArg);
@@ -195,10 +202,14 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         wangLandauBorders = wangLandauBordersMArg.getValue();
+        wangLandauBins = wangLandauBinsArg.getValue();
+        wangLandauOverlap = wangLandauOverlapArg.getValue();
         if(sampling_method == SM_WANG_LANDAU)
         {
             std::sort(wangLandauBorders.begin(), wangLandauBorders.end());
-            LOG(LOG_INFO) << "Borders for Wang Landau Sampling: \n                  " << wangLandauBorders;
+            LOG(LOG_INFO) << "Borders of ranges for Wang Landau Sampling: \n                  " << wangLandauBorders;
+            LOG(LOG_INFO) << "Bins each range:           " << wangLandauBins;
+            LOG(LOG_INFO) << "Overlap between ranges:    " << wangLandauOverlap;
         }
 
         parallel = parallelArg.getValue();

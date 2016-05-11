@@ -103,6 +103,8 @@ class Cmd
         double theta;
         bool simpleSampling;
         std::vector<double> wangLandauBorders;
+        int wangLandauBins;
+        int wangLandauOverlap;
         sampling_method_t sampling_method;
         hull_algorithm_t chAlg;
         wanted_observable_t wantedObservable;
