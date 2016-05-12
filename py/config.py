@@ -76,10 +76,16 @@ class Simulation():
         # in MB
         def getMem(N):
             if N < 1000:
-                return 100
+                m = 100
             else:
-                return 500
+                m = 300
 
+            if self.parallel is None:
+                p = 1
+            else:
+                p = self.parallel
+
+            return m*p
 
         # time per sweep
         def getSec(N):
@@ -131,7 +137,12 @@ class Simulation():
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
                                       loader=jinja2.FileSystemLoader("templates"))
-        template = self.env.get_template("jobarray.sge")
+        if self.sampling == 1:
+            template = self.env.get_template("jobarray.sge")
+        elif self.sampling == 2:
+            template = self.env.get_template("jobarrayOMP.sge")
+        else:
+            raise
 
         # create .sge files for Hero
         for N in self.Ns:
