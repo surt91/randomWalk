@@ -13,7 +13,7 @@
  * doi: 10.1.1.56.2276
  * [wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)
  */
-class LoopErasedWalker : public SpecWalker<int>
+class LoopErasedWalker final : public SpecWalker<int>
 {
     public:
         LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
@@ -23,12 +23,12 @@ class LoopErasedWalker : public SpecWalker<int>
             init();
         }
 
-        void updateSteps();
+        void updateSteps() final;
 
-        int nRN() const;
+        int nRN() const final;
 
-        void change(UniformRNG &rng);
-        void undoChange();
+        void change(UniformRNG &rng) final;
+        void undoChange() final;
 
     protected:
         mutable int random_numbers_used;

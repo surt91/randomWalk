@@ -9,7 +9,7 @@
  * a uniform distribution and a step distance from a heavy tailed Levy
  * distribution.
  */
-class LevyWalker : public SpecWalker<double>
+class LevyWalker final : public SpecWalker<double>
 {
     public:
         LevyWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
@@ -25,10 +25,10 @@ class LevyWalker : public SpecWalker<double>
         }
         ~LevyWalker() {}
 
-        void updateSteps();
+        void updateSteps() final;
 
-        void change(UniformRNG &rng);
-        void undoChange();
+        void change(UniformRNG &rng) final;
+        void undoChange() final;
 
     protected:
         Step<double> genStep(std::vector<double>::iterator first) const;

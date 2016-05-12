@@ -7,7 +7,7 @@
  *
  * Draw the x, y, z, ... displacements from Gaussian distributions at each step.
  */
-class GaussWalker : public SpecWalker<double>
+class GaussWalker final : public SpecWalker<double>
 {
     public:
         GaussWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
@@ -18,10 +18,10 @@ class GaussWalker : public SpecWalker<double>
             init();
         }
 
-        void updateSteps();
+        void updateSteps() final;
 
-        void change(UniformRNG &rng);
-        void undoChange();
+        void change(UniformRNG &rng) final;
+        void undoChange() final;
 
         void changeSingle(UniformRNG &rng);
         void undoChangeSingle();

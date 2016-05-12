@@ -8,7 +8,7 @@
  * Random walk, which chooses at each step a random direction from
  * a uniform distribution and a constant distance 1.
  */
-class RealWalker : public SpecWalker<double>
+class RealWalker final : public SpecWalker<double>
 {
     public:
         RealWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
@@ -20,10 +20,10 @@ class RealWalker : public SpecWalker<double>
         }
         ~RealWalker() {}
 
-        void updateSteps();
+        void updateSteps() final;
 
-        void change(UniformRNG &rng);
-        void undoChange();
+        void change(UniformRNG &rng) final;
+        void undoChange() final;
 
     protected:
         Step<double> genStep(std::vector<double>::iterator first) const;

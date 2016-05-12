@@ -109,7 +109,7 @@ static const int iMatrix3[] =
  * doi: 10.1007/978-1-4614-6025-1_9
  * [wiki](https://en.wikipedia.org/wiki/Self-avoiding_walk)
  */
-class SelfAvoidingWalker : public SpecWalker<int>
+class SelfAvoidingWalker final : public SpecWalker<int>
 {
     public:
         SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
@@ -120,10 +120,10 @@ class SelfAvoidingWalker : public SpecWalker<int>
             init();
         }
 
-        void updateSteps();
+        void updateSteps() final;
 
-        void change(UniformRNG &rng);
-        void undoChange();
+        void change(UniformRNG &rng) final;
+        void undoChange() final;
 
     protected:
         Step<int> transform(Step<int> &p, const int *m) const;

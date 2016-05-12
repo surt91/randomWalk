@@ -8,7 +8,7 @@
  * Standard lattice random walk, with immediate reversals.
  * Th lattice constant is unity.
  */
-class LatticeWalker : public SpecWalker<int>
+class LatticeWalker final : public SpecWalker<int>
 {
     public:
         LatticeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
@@ -18,8 +18,8 @@ class LatticeWalker : public SpecWalker<int>
             init();
         }
 
-        void updateSteps();
+        void updateSteps() final;
 
-        void change(UniformRNG &rng);
-        void undoChange();
+        void change(UniformRNG &rng) final;
+        void undoChange() final;
 };

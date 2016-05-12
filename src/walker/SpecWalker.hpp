@@ -40,12 +40,12 @@ class SpecWalker : public Walker
         void setHullAlgo(hull_algorithm_t a);
 
         ///\name observables
-        double A() const { return convexHull().A(); };
-        double L() const { return convexHull().L(); };
-        std::vector<double> maxExtent();
-        double maxDiameter();
-        double r();
-        double r2();
+        double A() const final { return convexHull().A(); };
+        double L() const final { return convexHull().L(); };
+        std::vector<double> maxExtent() final;
+        double maxDiameter() final ;
+        double r() final ;
+        double r2() final;
 
         ///\name get state
         const std::vector<Step<T>>& steps() const { return m_steps; };
@@ -53,15 +53,15 @@ class SpecWalker : public Walker
         const std::vector<Step<T>>& hullPoints() const { return convexHull().hullPoints(); };
 
         ///\name update state
-        virtual void updateSteps() = 0;
-        virtual void updatePoints(int start=1);
-        virtual void updateHull();
+        virtual void updateSteps() override = 0;
+        virtual void updatePoints(int start=1) override;
+        virtual void updateHull() override;
 
         ///\name visualization
-        void svg(const std::string filename, const bool with_hull) const;
-        void pov(const std::string filename, const bool with_hull) const;
-        void gp(const std::string filename, const bool with_hull) const;
-        std::string print() const;
+        void svg(const std::string filename, const bool with_hull) const final;
+        void pov(const std::string filename, const bool with_hull) const final;
+        void gp(const std::string filename, const bool with_hull) const final;
+        std::string print() const final;
 
         ///\name degenerate cases
         virtual void degenerateMaxVolume();
