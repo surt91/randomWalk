@@ -122,7 +122,11 @@ class Simulation():
                 else:
                     t = 86000*3  # say, 3 days
 
-                return t/self.parallel * 3 # factor 3 to be sure
+                if self.parallel is None:
+                    p = 1
+                else:
+                    p = self.parallel
+                return t/p * 3 # factor 3 to be sure
 
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
