@@ -55,6 +55,9 @@ parameters = {
     # dict[N] list of energy borders, used for Wang landau Sampling
     "energies": energies,
 
+    "nbins": 100,
+    "overlap":  10,
+
     # where to save the temporary evaluation results
     "directory": "data",
     # where to save the data

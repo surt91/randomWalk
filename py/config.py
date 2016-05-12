@@ -166,7 +166,7 @@ class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
                        dimension, theta, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
-                       method, akl, sampling, parallel, energies, **not_used):
+                       method, akl, sampling, parallel, energies, nbins, overlap, **not_used):
 
         self.N = steps
         self.n = iterations
@@ -186,6 +186,8 @@ class SimulationInstance():
         self.t_eq = t_eq
         self.t_corr = t_corr
         self.energies = energies
+        self.nbins = nbins
+        self.overlap = overlap
 
         self.loadFile = None
 
@@ -248,6 +250,8 @@ class SimulationInstance():
         else:
             for e in self.energies[self.N]:
                 opts.append("-e {}".format(e))
+            opts.append("-B {}".format(self.nbins))
+            opts.append("-E {}".format(self.overlap))
 
         #~ if self.loadFile:
             #~ opts.append("-f {0}".format(self.loadFile))
