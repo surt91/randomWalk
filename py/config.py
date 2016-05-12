@@ -225,11 +225,6 @@ class SimulationInstance():
                 "-m {}".format(self.m),
                ]
 
-        if self.T != float("inf"):
-            opts.append("-T {0:.5f}".format(self.T))
-        else:
-            opts.append("--simplesampling")
-
         if self.rawConf:
             opts.append("-O {0}".format(self.confname))
 
@@ -241,8 +236,14 @@ class SimulationInstance():
         if self.akl:
             opts.append("-a")
 
-        for e in self.energies[self.T]:
-            opts.append("-e {}".format(e))
+        if self.method == 1:
+            if self.T != float("inf"):
+                opts.append("-T {0:.5f}".format(self.T))
+            else:
+                opts.append("--simplesampling")
+        else:
+            for e in self.energies[self.T]:
+                opts.append("-e {}".format(e))
 
         #~ if self.loadFile:
             #~ opts.append("-f {0}".format(self.loadFile))
