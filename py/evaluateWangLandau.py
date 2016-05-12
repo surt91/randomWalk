@@ -4,6 +4,8 @@ import logging
 import gzip
 
 import numpy as np
+from scipy.interpolate import interp1d
+from scipy.integrate import trapz
 
 import parameters as param
 from config import bootstrap, bootstrap_histogram, histogram_simple_error
@@ -30,16 +32,48 @@ def process_data(infile, outfile):
                 data.append([float(i) for i in l.split()])
                 even = True
 
-    # TODO: stich it together -> overlap needed
-    # TODO: normalize
+    # sort them
+    centers, data = (list(x) for x in zip(*sorted(zip(centers, data))))
+
+    stichInterpol(centers, data)
+
+    # flatten
     centers = [j for i in centers for j in i]
-    data = [j for i in data for j in i]
+    data = np.array([j for i in data for j in i])
+
+    # normalize
+    data -= np.max(data)
+    area = trapz(np.exp(data), centers)
+    data -= np.log(area)
 
     with open(outfile, "w") as f:
         f.write("# S err P(S) P(S)_err\n")
         for d in zip(centers, data):
             f.write("{} {}\n".format(*d))
 
+
+def stichInterpol(centers, data):
+    for i in range(len(data)-1):
+
+        try:
+            spline_1 = interp1d(centers[i], data[i], kind='cubic')
+        except ValueError:
+            logging.error("too few samples")
+            continue
+        except TypeError:
+            logging.error("too few samples")
+            continue
+
+        # calculate for every x the difference to y(x) - spline_1(x)
+        Z = [y - spline_1(x) for x, y in zip(centers[i+1], data[i+1]) if min(centers[i]) < x < max(centers[i])]
+
+        # not enough overlap
+        if len(Z) < 3:
+            logging.warning("not enough overlap")
+
+        z, err = bootstrap(Z)
+        for j in range(len(data[i+1])):
+            data[i+1][j] -= z
 
 def run():
     steps = param.parameters["number_of_steps"]
