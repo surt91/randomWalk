@@ -1,6 +1,6 @@
 #include "Histogram.hpp"
 
-Histogram::Histogram(int num_bins, double lower, double upper)
+Histogram::Histogram(const int num_bins, const double lower, const double upper)
     : num_bins(num_bins),
       lower(lower),
       upper(upper),
@@ -20,8 +20,8 @@ Histogram::Histogram(int num_bins, double lower, double upper)
     bins.emplace_back(upper);
 }
 
-Histogram::Histogram(std::vector<double> bins)
-    : num_bins(bins.size()),
+Histogram::Histogram(const std::vector<double> bins)
+    : num_bins(bins.size()-1),
       lower(bins.front()),
       upper(bins.back()),
       m_cur_min(0),
@@ -29,6 +29,7 @@ Histogram::Histogram(std::vector<double> bins)
       m_sum(0),
       above(0),
       below(0),
+      bins(bins),
       data(num_bins, 0)
 {
 }
@@ -41,9 +42,15 @@ Histogram::Histogram(std::vector<double> bins)
 void Histogram::add(double where, double what)
 {
     if(where >= upper)
+    {
         above += what;
+        return;
+    }
     if(where < lower)
+    {
         below += what;
+        return;
+    }
 
     int idx = std::upper_bound(bins.begin(), bins.end(), where) - bins.begin();
     --idx;
@@ -135,7 +142,7 @@ std::ostream& operator<<(std::ostream& os, const Histogram &obj)
 {
     os << "[";
     for(int i=0; i<obj.num_bins; ++i)
-        os << obj.bins[i] << " < " << obj.data[i] << " < " << obj.bins[i+1] << std::endl;
+        os << "[" <<obj.bins[i] << " - " << obj.bins[i+1] << "] :" << obj.data[i] << std::endl;
     os << "] ";
     return os;
 }

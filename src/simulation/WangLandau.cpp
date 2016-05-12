@@ -66,13 +66,25 @@ void WangLandau::run()
 
     const int num_ranges = o.wangLandauBorders.size() - 1;
 
-    std::vector<double> bins;
-    bins.reserve(num_ranges * o.wangLandauBins);
+    std::vector<std::vector<double>> bins(num_ranges);
     for(int i=0; i<num_ranges; ++i)
-        for(int j=0; j<num_ranges; ++j)
-        {
-            bins.emplace_back();
-        }
+    {
+        const double lb = o.wangLandauBorders[i];
+        const double ub = o.wangLandauBorders[i+1];
+        const double binwidth = (ub - lb) / o.wangLandauBins;
+
+        bins[i].reserve(o.wangLandauBins + 1 + o.wangLandauOverlap);
+
+        // overlap to the left, but not for the leftmost
+
+        if(i > 0)
+            for(int j=0; j<o.wangLandauOverlap; ++j)
+                bins[i].emplace_back(bins[i-1][j + o.wangLandauBins - (i==1 ? o.wangLandauOverlap : 0)]);
+
+        for(int j=0; j<o.wangLandauBins; ++j)
+            bins[i].emplace_back(lb + j*binwidth);
+        bins[i].emplace_back(ub);
+    }
 
     oss.precision(12);
     oss << "# Two lines belong together.\n";
@@ -88,17 +100,12 @@ void WangLandau::run()
     #pragma omp parallel for schedule(dynamic)
     for(int i=0; i<num_ranges; ++i)
     {
-        // Histogram and DensityOfStates need the same binning
-        // FIXME: Histograms of adjacent energy regions should overlap a bit
-        const double lb = o.wangLandauBorders[i];
-        const double ub = o.wangLandauBorders[i+1];
-        // do not make a bin for every integer, since not every integer is possible
-        const int bins = (ub-lb)/3;
+        const double lb = bins[i].front();
+        const double ub = bins[i].back();
+        LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " [" << lb << ", " << ub << "] : [" << bins[i] << "]";
 
-        LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " " << lb << " " << ub << " " << bins;
-
-        Histogram H(bins, lb, ub);
-        Histogram g(bins, lb, ub);
+        Histogram H(bins[i]);
+        Histogram g(bins[i]);
 
         // rngs should be local to the threads, with different seeds
         // FIXME: think about a better seed
