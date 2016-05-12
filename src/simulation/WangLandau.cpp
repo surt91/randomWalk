@@ -76,12 +76,8 @@ void WangLandau::run()
         bins[i].reserve(o.wangLandauBins + 1 + o.wangLandauOverlap);
 
         // overlap to the left, but not for the leftmost
-
-        if(i > 0)
-            for(int j=0; j<o.wangLandauOverlap; ++j)
-                bins[i].emplace_back(bins[i-1][j + o.wangLandauBins - (i==1 ? o.wangLandauOverlap : 0)]);
-
-        for(int j=0; j<o.wangLandauBins; ++j)
+        int start = i>0 ? -o.wangLandauOverlap : 0;
+        for(int j=start; j<o.wangLandauBins; ++j)
             bins[i].emplace_back(lb + j*binwidth);
         bins[i].emplace_back(ub);
     }
