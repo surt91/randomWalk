@@ -66,6 +66,15 @@ void WangLandau::run()
 
     const int num_ranges = o.wangLandauBorders.size() - 1;
 
+    std::vector<double> bins;
+    bins.reserve(num_ranges * o.wangLandauBins);
+    for(int i=0; i<num_ranges; ++i)
+        for(int j=0; j<num_ranges; ++j)
+        {
+            bins.emplace_back();
+        }
+
+    oss.precision(12);
     oss << "# Two lines belong together.\n";
     oss << "# First lines are the centers of the bins.\n";
     oss << "# Second lines are unnormalized, log densities of the bin.\n";
@@ -89,7 +98,7 @@ void WangLandau::run()
         LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " " << lb << " " << ub << " " << bins;
 
         Histogram H(bins, lb, ub);
-        DensityOfStates g(bins, lb, ub);
+        Histogram g(bins, lb, ub);
 
         // rngs should be local to the threads, with different seeds
         // FIXME: think about a better seed
@@ -119,7 +128,7 @@ void WangLandau::run()
                     ++fails;
                 }
 
-                g[S(w)] += lnf;
+                g.add(S(w), lnf);
                 H.add(S(w));
             } while(H.min() < flatness_criterion * H.mean() || H.min() == 0);
             // run until the histogram is flat and we have a few samples
@@ -129,8 +138,8 @@ void WangLandau::run()
         // save g to file
         #pragma omp critical
         {
-            oss << g.binCentersString() << "\n";
-            oss << g.dataString() << std::endl;
+            oss << g.centers() << "\n";
+            oss << g.get_data() << std::endl;
         }
     }
 }

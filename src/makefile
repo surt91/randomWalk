@@ -20,7 +20,6 @@ CPP	 := main.cpp \
         simulation/WangLandau.cpp \
         simulation/FastWangLandau.cpp \
         simulation/Histogram.cpp \
-        simulation/DensityOfStates.cpp \
         visualization/Svg.cpp \
         visualization/Povray.cpp \
         visualization/Gnuplot.cpp \

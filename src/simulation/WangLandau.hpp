@@ -2,7 +2,6 @@
 
 #include "Simulation.hpp"
 #include "Histogram.hpp"
-#include "DensityOfStates.hpp"
 
 /** Wang Landau Sampling of the distribution of a given observable.
  *

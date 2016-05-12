@@ -20,12 +20,12 @@ void FastWangLandau::run()
     LOG(LOG_DEBUG) << lb << " " << ub << " " << bins;
 
     Histogram H(bins, lb, ub);
-    DensityOfStates g(bins, lb, ub);
+    Histogram g(bins, lb, ub);
 
     oss << "# First line are the centers of the bins\n";
     oss << "# Following lines are unnormalized, log densities of the bin\n";
     oss << "# one line per iteration of the wang landau algorithm\n";
-    oss << g.binCentersString() << std::endl;
+    oss << g.centers() << std::endl;
 
     // run in parallel, in o.parallel threads, or all if not specified
     if(o.parallel)
@@ -63,13 +63,13 @@ void FastWangLandau::run()
                             ++tries;
 
                             double p_acc = exp(g[oldS] - g[S(w)]);
-                            if(!g.checkBounds(S(w)) || p_acc < rngMC())
+                            if(S(w) < lb || S(w) > ub || p_acc < rngMC())
                             {
                                 w->undoChange();
                                 ++fails;
                             }
 
-                            g[S(w)] += lnf;
+                            g.add(S(w), lnf);
                             H.add(S(w));
                         }
 
@@ -88,16 +88,16 @@ void FastWangLandau::run()
                     double oldS = S(w);
                     w->change(rngMC);
                     double p_acc = exp(g[oldS] - g[S(w)]);
-                    if(!g.checkBounds(S(w)) || p_acc < rngMC())
+                    if(S(w) < lb || S(w) > ub || p_acc < rngMC())
                         w->undoChange();
 
-                    g[S(w)] += lnf;
+                    g.add(S(w), lnf);
                 }
             }
             // save g to file
             #pragma omp critical
             {
-                oss << g.dataString() << std::endl;
+                oss << g.get_data() << std::endl;
             }
 
             g.reset();
