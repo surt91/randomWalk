@@ -242,7 +242,7 @@ class SimulationInstance():
             else:
                 opts.append("--simplesampling")
         else:
-            for e in self.energies[self.T]:
+            for e in self.energies[self.N]:
                 opts.append("-e {}".format(e))
 
         #~ if self.loadFile:
