@@ -206,6 +206,11 @@ Cmd::Cmd(int argc, char** argv)
         wangLandauOverlap = wangLandauOverlapArg.getValue();
         if(sampling_method == SM_WANG_LANDAU)
         {
+            if(wangLandauBorders.size() < 2)
+            {
+                LOG(LOG_ERROR) << "specify at least two borders: -e <lower> -e <upper>";
+                exit(1);
+            }
             std::sort(wangLandauBorders.begin(), wangLandauBorders.end());
             LOG(LOG_INFO) << "Borders of ranges for Wang Landau Sampling: \n                  " << wangLandauBorders;
             LOG(LOG_INFO) << "Bins each range:           " << wangLandauBins;
