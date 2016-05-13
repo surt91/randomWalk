@@ -253,7 +253,7 @@ class SimulationInstance():
         if self.akl:
             opts.append("-a")
 
-        if self.method == 1:
+        if self.m == 1:
             if self.T != float("inf"):
                 opts.append("-T {0:.5f}".format(self.T))
             else:
