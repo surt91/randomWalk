@@ -188,8 +188,8 @@ void benchmark()
                 o.iterations = 1000;
                 expected_mean_L = 40.8028679341;
                 expected_mean_A = 86.4985600763;
-                expected_mean_r = 147.159380854;
-                expected_mean_r2 = 46.3547296503;
+                expected_mean_r = 11.398686363;
+                expected_mean_r2 = 147.159380854;
                 break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
