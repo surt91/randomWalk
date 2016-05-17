@@ -10,14 +10,14 @@
 
 #include "../Logging.hpp"
 
-/** Class to easily create 2d/3d plots with gnuplot.
+/** Class to easily create 3d plots with gnuplot.
  *
  * Especially of random walks and their hulls.
  */
-class Gnuplot
+class Gnuplot3D
 {
     public:
-        Gnuplot(const std::string &filename);
+        Gnuplot3D(const std::string &filename);
 
         void polyline(const std::vector<std::vector<double>> &points);
         void facet(const std::vector<double> &x, const std::vector<double> &y, const std::vector<double> &z);

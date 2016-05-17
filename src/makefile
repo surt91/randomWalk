@@ -23,7 +23,8 @@ CPP	 := main.cpp \
         simulation/Histogram.cpp \
         visualization/Svg.cpp \
         visualization/Povray.cpp \
-        visualization/Gnuplot.cpp \
+        visualization/Gnuplot2D.cpp \
+        visualization/Gnuplot3D.cpp \
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 DEP	 = $(CPP:%.cpp=dep/%.d)

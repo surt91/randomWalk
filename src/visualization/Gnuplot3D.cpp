@@ -1,6 +1,6 @@
-#include "Gnuplot.hpp"
+#include "Gnuplot3D.hpp"
 
-Gnuplot::Gnuplot(const std::string &f)
+Gnuplot3D::Gnuplot3D(const std::string &f)
     : filename(f)
 {
     /* Write Header */
@@ -52,13 +52,13 @@ Gnuplot::Gnuplot(const std::string &f)
                       "# ffmpeg -f image2 -pattern_type glob -i \"animate*.png\" -vcodec libx264 out.mp4\n";
 }
 
-void Gnuplot::polyline(const std::vector<std::vector<double>> &points)
+void Gnuplot3D::polyline(const std::vector<std::vector<double>> &points)
 {
     for(size_t i=1; i<points.size(); ++i)
         buffer_points << points[i][0] << " " << points[i][1] << " " << points[i][2] << "\n";
 }
 
-void Gnuplot::facet(const std::vector<double> &a, const std::vector<double> &b, const std::vector<double> &c)
+void Gnuplot3D::facet(const std::vector<double> &a, const std::vector<double> &b, const std::vector<double> &c)
 {
     buffer_hull << a[0] << " " << a[1] << " " << a[2] << "\n"
                 << b[0] << " " << b[1] << " " << b[2] << "\n\n"
@@ -67,7 +67,7 @@ void Gnuplot::facet(const std::vector<double> &a, const std::vector<double> &b, 
                 << "\n\n";
 }
 
-void Gnuplot::save()
+void Gnuplot3D::save()
 {
     std::ofstream oss(filename);
     std::ofstream oss_a(filename_animate);
