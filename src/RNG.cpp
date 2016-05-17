@@ -38,11 +38,13 @@ void UniformRNG::deserialize_rng(std::string &s)
     ss >> rng;
 }
 
+/// Generates uniformly distributed random numbers
 double UniformRNG::uniform()
 {
     return std::uniform_real_distribution<double>(0.0, 1.0)(rng);
 }
 
+/// Generates normal distributed random numbers
 double UniformRNG::gaussian(const double mu, const double sigma)
 {
     return std::normal_distribution<double>(mu, sigma)(rng);
