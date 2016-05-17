@@ -18,18 +18,12 @@ class UniformRNG
 {
     protected:
         std::mt19937 rng;
-        std::uniform_real_distribution<double> distribution;
-        std::normal_distribution<double> distribution_gaussian;
 
     public:
         UniformRNG() {}
 
         UniformRNG(int seed)
-            : rng(seed),
-              distribution(0.0, 1.0),
-              distribution_gaussian(0.0, 1.0),
-              uniform(std::bind(distribution, rng)),
-              gaussian(std::bind(distribution_gaussian, rng))
+            : rng(seed)
         {}
 
         double operator()()
@@ -38,13 +32,12 @@ class UniformRNG
         }
 
         std::vector<double> vector(int n);
-        std::vector<double> vector_gaussian(int n);
+        std::vector<double> vector_gaussian(int n, const double mu=0., const double sigma=1.);
 
-        std::function<double()> uniform;
-        std::function<double()> gaussian;
-
+        double uniform();
+        double gaussian(const double mu=0., const double sigma=1.);
         double levy(const double c, const double alpha);
-        double cauchy(const double a);
+        double cauchy(const double a=1.);
 
         std::string serialize_rng();
         void deserialize_rng(std::string &s);

@@ -168,10 +168,10 @@ void benchmark()
                 o.steps = 130;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
                 o.iterations = 1000;
-                expected_mean_L = 58.86;
-                expected_mean_A = 187.81;
-                expected_mean_r = 15.67;
-                expected_mean_r2 = 281.49;
+                expected_mean_L = 59.1868262964;
+                expected_mean_A = 189.601620782;
+                expected_mean_r = 15.8136986085;
+                expected_mean_r2 = 285.623373981;
                 break;
             case WT_LEVY_FLIGHT:
                 o.steps = 130;
@@ -186,9 +186,9 @@ void benchmark()
                 o.steps = 130;
                 o.type = WT_CORRELATED_RANDOM_WALK;
                 o.iterations = 1000;
-                expected_mean_L = 24.0018845992;
-                expected_mean_A = 31.1288772367;
-                expected_mean_r = 6.31402055569;
+                expected_mean_L = 40.8028679341;
+                expected_mean_A = 86.4985600763;
+                expected_mean_r = 147.159380854;
                 expected_mean_r2 = 46.3547296503;
                 break;
         }
@@ -237,20 +237,20 @@ void benchmark()
             case WT_GAUSSIAN_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
-                o.benchmark_L = 4276.37295704;
-                o.benchmark_A = 1114653.50651;
+                o.benchmark_L = 4426.65933311;
+                o.benchmark_A = 1380225.20046;
                 break;
             case WT_LEVY_FLIGHT:
                 o.steps = 1000000;
                 o.type = WT_LEVY_FLIGHT;
-                o.benchmark_L = 3996395.14;
-                o.benchmark_A = 250835051540;
+                o.benchmark_L = 1103099.53017;
+                o.benchmark_A = 29503698362.2;
                 break;
             case WT_CORRELATED_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_CORRELATED_RANDOM_WALK;
-                o.benchmark_L = 1692.90145431;
-                o.benchmark_A = 199213.324395;
+                o.benchmark_L = 2443.76382544;
+                o.benchmark_A = 403708.247784;
                 break;
         }
 
@@ -298,20 +298,20 @@ void benchmark()
             case WT_GAUSSIAN_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
-                o.benchmark_L = 4847891.6674;
-                o.benchmark_A = 774054054.25;
+                o.benchmark_L = 4610931.2558;
+                o.benchmark_A = 728392022.451;
                 break;
             case WT_LEVY_FLIGHT:
                 o.steps = 1000000;
                 o.type = WT_LEVY_FLIGHT;
-                o.benchmark_L = 930201855038;
-                o.benchmark_A = 1.61739030652e+16;
+                o.benchmark_L = 687169048832;
+                o.benchmark_A = 1.65702708575e+16;
                 break;
             case WT_CORRELATED_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_CORRELATED_RANDOM_WALK;
-                o.benchmark_L = 2792810.69195;
-                o.benchmark_A = 146367767;
+                o.benchmark_L = 2535998.2343;
+                o.benchmark_A = 241570113.447;
                 break;
         }
 

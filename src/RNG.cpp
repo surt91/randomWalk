@@ -9,15 +9,17 @@ std::vector<double> rng(int n, int seed)
 std::vector<double> UniformRNG::vector(int n)
 {
     std::vector<double> v(n);
-    std::generate(v.begin(), v.end(), uniform);
+    for(auto &i : v)
+        i = uniform();
 
     return v;
 }
 
-std::vector<double> UniformRNG::vector_gaussian(int n)
+std::vector<double> UniformRNG::vector_gaussian(int n, const double mu, const double sigma)
 {
     std::vector<double> v(n);
-    std::generate(v.begin(), v.end(), gaussian);
+    for(auto &i : v)
+        i = gaussian(mu, sigma);
 
     return v;
 }
@@ -34,6 +36,16 @@ void UniformRNG::deserialize_rng(std::string &s)
     std::stringstream ss;
     ss << s;
     ss >> rng;
+}
+
+double UniformRNG::uniform()
+{
+    return std::uniform_real_distribution<double>(0.0, 1.0)(rng);
+}
+
+double UniformRNG::gaussian(const double mu, const double sigma)
+{
+    return std::normal_distribution<double>(mu, sigma)(rng);
 }
 
 /** Generates a Levy distributed random number
