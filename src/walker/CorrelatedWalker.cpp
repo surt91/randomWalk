@@ -25,21 +25,24 @@ void CorrelatedWalker::updateSteps()
         m_steps[i] = genStep(random_numbers.begin() + i*d);
 }
 
-void CorrelatedWalker::updatePoints(int start)
+void CorrelatedWalker::updatePoints(int /*start*/)
 {
     Step<double> s(d);
-    std::vector<double> theta(d-1);
+    std::vector<double> theta(d-1, 0);
 
-    for(int i=start; i<=numSteps; ++i)
+    // we can not start at 'start' because we need to add up all angles
+    for(int i=1; i<=numSteps; ++i)
     {
         m_points[i].setZero();
         m_points[i] += m_points[i-1];
 
         // http://en.wikipedia.org/wiki/N-sphere#Spherical_coordinates
         double r = m_steps[i-1][0];
+
+        // the angle is always added to
         for(int k=0; k<d-2; ++k)
-            theta[k] = m_steps[i-1][k+1] * M_PI;
-        theta[d-2] = m_steps[i-1][d-1] * 2*M_PI;
+            theta[k] += m_steps[i-1][k+1] / 2; // because only from 0 to pi
+        theta[d-2] += m_steps[i-1][d-1];
 
         for(int k=0; k<d-1; ++k)
         {
@@ -64,8 +67,9 @@ void CorrelatedWalker::change(UniformRNG &rng)
     int rnidx = idx * d;
     undo_index = idx;
     undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx + d);
-    for(int i=0; i<d; ++i)
-        random_numbers[rnidx + i] = rng();
+    random_numbers[rnidx] = rng.uniform();
+    for(int i=1; i<d; ++i)
+        random_numbers[rnidx + i] = rng.gaussian();
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
     updatePoints(idx+1);
