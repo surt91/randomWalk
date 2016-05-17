@@ -58,6 +58,8 @@ class Logger {
 
         ~Logger()
         {
+            if(level <= 3)
+                ss << " (in '" << __FILE__ << "': '" << __func__ << "': line " << __LINE__ << ")";
             if(level <= verbosity)
                 std::cout << LABEL[level] << ss.str() << std::endl;
         }
