@@ -16,6 +16,7 @@
 #include "walker/RealWalker.hpp"
 #include "walker/GaussWalker.hpp"
 #include "walker/LevyWalker.hpp"
+#include "walker/CorrelatedWalker.hpp"
 #include "simulation/Metropolis.hpp"
 
 

@@ -17,6 +17,8 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
         w = std::unique_ptr<Walker>(new GaussWalker(o.d, o.steps, rng, o.chAlg));
     else if(o.type == WT_LEVY_FLIGHT)
         w = std::unique_ptr<Walker>(new LevyWalker(o.d, o.steps, rng, o.chAlg));
+    else if(o.type == WT_CORRELATED_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new CorrelatedWalker(o.d, o.steps, rng, o.chAlg));
     else
     {
         LOG(LOG_ERROR) << "cannot find walk type " << o.type;
@@ -117,7 +119,7 @@ void benchmark()
 
     o.d = 2;
     o.chAlg = CH_ANDREWS_AKL;
-    for(int i=1; i<=6; ++i)
+    for(int i=1; i<=7; ++i)
     {
         double expected_mean_L = 0;
         double expected_mean_A = 0;
@@ -180,6 +182,15 @@ void benchmark()
                 expected_mean_r = 759.03;
                 expected_mean_r2 = 7875699.19;
                 break;
+            case WT_CORRELATED_RANDOM_WALK:
+                o.steps = 130;
+                o.type = WT_CORRELATED_RANDOM_WALK;
+                o.iterations = 1000;
+                expected_mean_L = 24.0018845992;
+                expected_mean_A = 31.1288772367;
+                expected_mean_r = 6.31402055569;
+                expected_mean_r2 = 46.3547296503;
+                break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
         run_simulation(o, expected_mean_A,
@@ -194,7 +205,7 @@ void benchmark()
 
     LOG(LOG_INFO) << "Starting Hull Comparison";
 
-    for(int i=1; i<=6; ++i)
+    for(int i=1; i<=7; ++i)
     {
         o.d = 2;
         switch(i)
@@ -204,42 +215,42 @@ void benchmark()
                 o.type = WT_RANDOM_WALK;
                 o.benchmark_L = 3747.1842096;
                 o.benchmark_A = 984338;
-                o.iterations = 10;
                 break;
             case WT_LOOP_ERASED_RANDOM_WALK:
                 o.steps = 10000;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
                 o.benchmark_L = 4063.70552402;
                 o.benchmark_A = 481513.5;
-                o.iterations = 10;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 320;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
                 o.benchmark_L = 153.467524349;
                 o.benchmark_A = 1614.5;
-                o.iterations = 10000;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_REAL_RANDOM_WALK;
                 o.benchmark_L = 3301.2873826;
                 o.benchmark_A = 696563.540913;
-                o.iterations = 10;
                 break;
             case WT_GAUSSIAN_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
                 o.benchmark_L = 4276.37295704;
                 o.benchmark_A = 1114653.50651;
-                o.iterations = 10;
                 break;
             case WT_LEVY_FLIGHT:
                 o.steps = 1000000;
                 o.type = WT_LEVY_FLIGHT;
                 o.benchmark_L = 3996395.14;
                 o.benchmark_A = 250835051540;
-                o.iterations = 10;
+                break;
+            case WT_CORRELATED_RANDOM_WALK:
+                o.steps = 1000000;
+                o.type = WT_CORRELATED_RANDOM_WALK;
+                o.benchmark_L = 1692.90145431;
+                o.benchmark_A = 199213.324395;
                 break;
         }
 
@@ -265,42 +276,42 @@ void benchmark()
                 o.type = WT_RANDOM_WALK;
                 o.benchmark_L = 2247256.21308;
                 o.benchmark_A = 258027553;
-                o.iterations = 10;
                 break;
             case WT_LOOP_ERASED_RANDOM_WALK:
                 o.steps = 10000;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
                 o.benchmark_L = 165485.186039;
                 o.benchmark_A = 3460280;
-                o.iterations = 10;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 320;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
                 o.benchmark_L = 1705.20312604;
                 o.benchmark_A = 4176.16666667;
-                o.iterations = 10000;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_REAL_RANDOM_WALK;
                 o.benchmark_L = 1412091.10;
                 o.benchmark_A = 115804398.6;
-                o.iterations = 10;
                 break;
             case WT_GAUSSIAN_RANDOM_WALK:
                 o.steps = 1000000;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
                 o.benchmark_L = 4847891.6674;
                 o.benchmark_A = 774054054.25;
-                o.iterations = 10;
                 break;
             case WT_LEVY_FLIGHT:
                 o.steps = 1000000;
                 o.type = WT_LEVY_FLIGHT;
                 o.benchmark_L = 930201855038;
                 o.benchmark_A = 1.61739030652e+16;
-                o.iterations = 10;
+                break;
+            case WT_CORRELATED_RANDOM_WALK:
+                o.steps = 1000000;
+                o.type = WT_CORRELATED_RANDOM_WALK;
+                o.benchmark_L = 2792810.69195;
+                o.benchmark_A = 146367767;
                 break;
         }
 

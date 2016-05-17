@@ -70,6 +70,8 @@ void Simulation::prepare(std::unique_ptr<Walker>& w)
         w = std::unique_ptr<Walker>(new GaussWalker(o.d, o.steps, rngReal, o.chAlg));
     else if(o.type == WT_LEVY_FLIGHT)
         w = std::unique_ptr<Walker>(new LevyWalker(o.d, o.steps, rngReal, o.chAlg));
+    else if(o.type == WT_CORRELATED_RANDOM_WALK)
+        w = std::unique_ptr<Walker>(new CorrelatedWalker(o.d, o.steps, rngReal, o.chAlg));
     else
         LOG(LOG_ERROR) << "type " << o.type << " is not known";
 
