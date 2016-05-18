@@ -11,3 +11,22 @@ Documentatation
 ---------------
 
 Doxygen documentation is at https://hendrik.schawe.me/randomWalk
+
+
+Dependencies
+------------
+
+* C++11 compatible compiler
+* numpy
+* scipy
+* gnuplot
+
+
+Usage
+-----
+
+1. Compile and run test with a call to `make` from the root directory.
+2. Change the `./py/parameters.py` to the wanted values.
+3. Change into `./py`, call `python3 call.py` and wait for it to finish.
+4. `python3 evaluate.py` will evaluate the results and `python3 gnuplot.py`
+    will create plots in `py/plots`.
