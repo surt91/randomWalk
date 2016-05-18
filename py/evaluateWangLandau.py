@@ -37,6 +37,11 @@ def process_data(infile, outfile):
 
     stichInterpol(centers, data)
 
+    # flatten and remove overlap
+    #~ overlap = param.parameters["overlap"]
+    #~ centers = [j for i in centers for j in i[overlap//2:-overlap//2]]
+    #~ data = np.array([j for i in data for j in i[overlap//2:-overlap//2]])
+
     # flatten
     centers = [j for i in centers for j in i]
     data = np.array([j for i in data for j in i])
@@ -74,6 +79,7 @@ def stichInterpol(centers, data):
         z, err = bootstrap(Z)
         for j in range(len(data[i+1])):
             data[i+1][j] -= z
+
 
 def run():
     steps = param.parameters["number_of_steps"]
