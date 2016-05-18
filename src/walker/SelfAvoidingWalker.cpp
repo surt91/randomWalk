@@ -35,6 +35,108 @@
 //      + generates many SAW instances, quite efficiently
 //      - where can I plug in the large deviation "bias"? In the weights? How?
 
+/// transformation matrices for pivoting d=2
+static const int tMatrix2[][4] =
+{
+    // mirror at x-axis
+        { 1,  0,
+          0, -1},
+    // mirror at y-axis
+        {-1,  0,
+          0,  1},
+    // rotate by pi/2
+        { 0,  1,
+         -1,  0},
+    // rotate by -pi/2
+        { 0, -1,
+          1,  0}
+};
+/// inverse transformations
+static const int iMatrix2[] =
+{
+    0,
+    1,
+    3,
+    2
+};
+
+/// transformation matrices for pivoting d=3
+static const int tMatrix3[][9] =
+{
+    // mirror at xy-plane
+        { 1,  0,  0,
+          0,  1,  0,
+          0,  0, -1},
+    // mirror at zy-plane
+        {-1,  0,  0,
+          0,  1,  0,
+          0,  0,  1},
+    // mirror at xz-plane
+        { 1,  0,  0,
+          0, -1,  0,
+          0,  0,  1},
+    // rotate by pi/2 around x-axis
+        { 1,  0,  0,
+          0,  0,  1,
+          0, -1,  0},
+    // rotate by pi around x-axis
+        { 1,  0,  0,
+          0, -1,  0,
+          0,  0, -1},
+    // rotate by -pi/2 around x-axis
+        { 1,  0,  0,
+          0,  0, -1,
+          0,  1,  0},
+    // rotate by pi/2 around y-axis
+        { 0,  0,  1,
+          0,  1,  0,
+         -1,  0,  0},
+    // rotate by pi around y-axis
+        {-1,  0,  0,
+          0,  1,  0,
+          0,  0, -1},
+    // rotate by -pi/2 around y-axis
+        { 0,  0, -1,
+          0,  1,  0,
+          1,  0,  0},
+    // rotate by pi/2 around z-axis
+        { 0, -1,  0,
+          1,  0,  0,
+          0,  0,  1},
+    // rotate by pi around z-axis
+        {-1,  0,  0,
+          0, -1,  0,
+          0,  0,  1},
+    // rotate by -pi/2 around z-axis
+        { 0,  1,  0,
+         -1,  0,  0,
+          0,  0,  1}
+};
+/// inverse transformations
+static const int iMatrix3[] =
+{
+    0,
+    1,
+    2,
+    5,
+    4,
+    3,
+    8,
+    7,
+    6,
+    11,
+    10,
+    9
+};
+
+SelfAvoidingWalker::SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
+    : SpecWalker<int>(d, numSteps, rng, hull_algo)
+{
+    auto l(dim(numSteps));
+    random_numbers = std::vector<double>(l.begin(), l.end());
+    init();
+}
+
 void SelfAvoidingWalker::updateSteps()
 {
     m_steps.clear();

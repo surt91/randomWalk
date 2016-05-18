@@ -18,7 +18,6 @@ class Metropolis : public Simulation
 {
     public:
         Metropolis(const Cmd &o);
-        virtual ~Metropolis() {}
         void run();
 
     protected:

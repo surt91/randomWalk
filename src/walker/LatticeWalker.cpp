@@ -1,5 +1,12 @@
 #include "LatticeWalker.hpp"
 
+LatticeWalker::LatticeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
+    : SpecWalker<int>(d, numSteps, rng, hull_algo)
+{
+    random_numbers = rng.vector(numSteps);
+    init();
+}
+
 void LatticeWalker::updateSteps()
 {
     m_steps.clear();

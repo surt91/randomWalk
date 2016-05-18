@@ -1,5 +1,13 @@
 #include "GaussWalker.hpp"
 
+GaussWalker::GaussWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
+    : SpecWalker<double>(d, numSteps, rng, hull_algo)
+{
+    // we need d gaussian random numbers per step, for each direction
+    random_numbers = rng.vector_gaussian(d * numSteps);
+    init();
+}
+
 /** Generate a step by unit distance and angles determined by the
  * d-1 random numbers after first (inclusive first).
  *

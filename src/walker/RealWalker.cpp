@@ -1,5 +1,13 @@
 #include "RealWalker.hpp"
 
+RealWalker::RealWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
+    : SpecWalker<double>(d, numSteps, rng, hull_algo)
+{
+    // we need d-1 random numbers per step, for each angle one
+    random_numbers = rng.vector((d-1) * numSteps);
+    init();
+}
+
 /** Generate a step by unit distance and angles determined by the
  * d-1 random numbers after first (inclusive first).
  *

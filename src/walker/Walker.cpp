@@ -1,5 +1,13 @@
 #include "Walker.hpp"
 
+Walker::Walker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
+    : numSteps(numSteps),
+      d(d),
+      rng(rng),
+      hull_algo(hull_algo)
+{
+}
+
 /** Get the number of random numbers used.
  */
 int Walker::nRN() const

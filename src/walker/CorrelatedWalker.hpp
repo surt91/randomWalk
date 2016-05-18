@@ -17,20 +17,7 @@
 class CorrelatedWalker final : public SpecWalker<double>
 {
     public:
-        CorrelatedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-            : SpecWalker<double>(d, numSteps, rng, hull_algo)
-        {
-            // we need d random numbers per step, for each angle difference one and a distance
-            // we generate d per step and overwrite unnecessary ones afterwards
-            // TODO: replace Gaussian by wrapped normal
-            random_numbers = rng.vector_gaussian(d * numSteps);
-            // and for the distance a uniformly distributed one
-            for(int i=0; i<numSteps; ++i)
-                random_numbers[i*d] = rng.uniform();
-
-            init();
-        }
-        ~CorrelatedWalker() {}
+        CorrelatedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
 
         void updateSteps() final;
         void updatePoints(int start=1) final;
