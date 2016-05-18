@@ -84,7 +84,10 @@ const std::vector<std::string> SAMPLING_METHOD_LABEL = {
 class Cmd
 {
     public:
-        Cmd() {};
+        Cmd()
+            : mu(0.0),
+              sigma(1.0)
+            {}
         Cmd(int argc, char** argv);
 
         std::string tmp_path;
@@ -110,6 +113,9 @@ class Cmd
         sampling_method_t sampling_method;
         hull_algorithm_t chAlg;
         wanted_observable_t wantedObservable;
+
+        double mu;
+        double sigma;
 
         bool benchmark;
         double benchmark_A;

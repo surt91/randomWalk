@@ -25,7 +25,13 @@ class CorrelatedWalker final : public SpecWalker<double>
         void change(UniformRNG &rng) final;
         void undoChange() final;
 
+        void setP1(double mu) final;
+        void setP2(double sigma) final;
+
     protected:
+        double mu;
+        double sigma;
+
         Step<double> genStep(std::vector<double>::iterator first) const;
 
         std::vector<double> undo_values;

@@ -32,6 +32,9 @@ class Walker
 
         virtual void setHullAlgo(hull_algorithm_t a) = 0;
 
+        virtual void setP1(double /*p1*/) { LOG(LOG_WARNING) << "P1 not used for this type of random walk"; };
+        virtual void setP2(double /*p2*/) { LOG(LOG_WARNING) << "P2 not used for this type of random walk"; };
+
         // convenience functions
         virtual double A() const = 0;   ///< Returns the Volume of the convex hull
         virtual double L() const = 0;   ///< Returns the surface area of the convex hull

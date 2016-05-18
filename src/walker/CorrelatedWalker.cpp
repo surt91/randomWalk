@@ -1,7 +1,9 @@
 #include "CorrelatedWalker.hpp"
 
 CorrelatedWalker::CorrelatedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-    : SpecWalker<double>(d, numSteps, rng, hull_algo)
+    : SpecWalker<double>(d, numSteps, rng, hull_algo),
+      mu(0.0),
+      sigma(1.0)
 {
     // we need d random numbers per step, for each angle difference one and a distance
     // we generate d per step and overwrite unnecessary ones afterwards
@@ -27,9 +29,31 @@ Step<double> CorrelatedWalker::genStep(std::vector<double>::iterator first) cons
     Step<double> s(d);
 
     for(int i=0; i<d; ++i)
-        s[i] = *first++;
+        s[i] = *first++ * sigma + mu;
 
     return s;
+}
+
+void CorrelatedWalker::setP1(double p1)
+{
+    // this is expensive, so ask first, if something changes
+    if(mu == p1)
+        return;
+    mu = p1;
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
+
+void CorrelatedWalker::setP2(double p2)
+{
+    // this is expensive, so ask first, if something changes
+    if(sigma == p2)
+        return;
+    sigma = p2;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }
 
 void CorrelatedWalker::updateSteps()

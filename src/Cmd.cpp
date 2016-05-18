@@ -23,6 +23,8 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
         TCLAP::ValueArg<int> parallelArg("", "parallel", "use openMP to use this many cpus, zero means all (only available for Wang Landau Sampling)", false, 0, "integer");
         TCLAP::ValueArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme", false, 0, "double");
+        TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, 0.0, "double");
+        TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, 1.0, "double");
         TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, ".", "string");
         TCLAP::ValueArg<std::string> dataPathArg("o", "output", "datafile for the output", false, "out.dat", "string");
         TCLAP::ValueArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output", false, "", "string");
@@ -109,6 +111,8 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(wangLandauBinsArg);
         cmd.add(wangLandauOverlapArg);
         cmd.add(typeArg);
+        cmd.add(muArg);
+        cmd.add(sigmaArg);
         cmd.add(svgArg);
         cmd.add(povArg);
         cmd.add(gpArg);
@@ -144,6 +148,17 @@ Cmd::Cmd(int argc, char** argv)
 
         type = (walk_type_t) typeArg.getValue();
         LOG(LOG_INFO) << "Type                       " << TYPE_LABEL[type];
+
+        mu = muArg.getValue();
+        if(mu != 0.0)
+        {
+            LOG(LOG_INFO) << "mu                         " << mu;
+        }
+        sigma = sigmaArg.getValue();
+        if(sigma != 1.0)
+        {
+            LOG(LOG_INFO) << "sigma                      " << sigma;
+        }
 
         steps = numArg.getValue();
         LOG(LOG_INFO) << "Number of steps            " << steps;
