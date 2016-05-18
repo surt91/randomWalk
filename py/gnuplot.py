@@ -26,15 +26,18 @@ class Gnuplot():
         os.makedirs(self.d, exist_ok=True)
 
     def every(self):
-        self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
-        self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
-        self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
-        self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
-        self.create("scaled", "{/Symbol %s} / {/Italic T%s}" % (self.observable, "" if self.observable == "A" else "^{1/2}"), "{/Italic T%s p}" % ("" if self.observable == "A" else "^{1/2}"))
-        self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
-        self.create("r", "{/Italic r}", "{/Italic N}")
-        self.create("r2", "{/Italic r^2}", "{/Italic N}")
-        self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
+        if self.kwargs["sampling"] == 1:
+            self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
+            self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
+            self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
+            self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
+            self.create("scaled", "{/Symbol %s} / {/Italic T%s}" % (self.observable, "" if self.observable == "A" else "^{1/2}"), "{/Italic T%s p}" % ("" if self.observable == "A" else "^{1/2}"))
+            self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
+            self.create("r", "{/Italic r}", "{/Italic N}")
+            self.create("r2", "{/Italic r^2}", "{/Italic N}")
+            self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
+        elif self.kwargs["sampling"] == 2:
+            self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
