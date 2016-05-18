@@ -10,7 +10,7 @@ double WangLandau::getUpperBound()
     double S_min = 0;
 
     std::unique_ptr<Walker> w;
-    prepare(w);
+    prepare(w, o);
 
     // the degenerate case is -- hopefully -- the case of maximum Volume
     if(o.wantedObservable == WO_VOLUME)
@@ -109,7 +109,7 @@ void WangLandau::run()
         UniformRNG rngMC((o.seedMC+id) * (id+1));
 
         std::unique_ptr<Walker> w;
-        prepare(w);
+        prepare(w, o);
 
         findStart(w, lb, ub, rngMC);
         LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " " << lb << " < " << S(w) << " < " << ub << " start!";

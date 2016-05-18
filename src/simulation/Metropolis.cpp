@@ -32,7 +32,7 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
     std::ofstream oss("equilibration.dat", std::ofstream::out);
 
     std::unique_ptr<Walker> w2;
-    prepare(w2);
+    prepare(w2, o);
     w2->degenerateMaxVolume();
 
     //~ std::unique_ptr<Walker> w3;
@@ -167,7 +167,7 @@ void Metropolis::run()
     oss << "\n";
 
     std::unique_ptr<Walker> w;
-    prepare(w);
+    prepare(w, o);
 
     if(o.iterations > 0)
     {

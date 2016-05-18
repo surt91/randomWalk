@@ -5,25 +5,7 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
     clock_t before_walker = clock();
     std::unique_ptr<Walker> w;
     UniformRNG rng(o.seedRealization);
-    if(o.type == WT_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new LatticeWalker(o.d, o.steps, rng, o.chAlg));
-    else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rng, o.chAlg));
-    else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rng, o.chAlg));
-    else if(o.type == WT_REAL_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new RealWalker(o.d, o.steps, rng, o.chAlg));
-    else if(o.type == WT_GAUSSIAN_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new GaussWalker(o.d, o.steps, rng, o.chAlg));
-    else if(o.type == WT_LEVY_FLIGHT)
-        w = std::unique_ptr<Walker>(new LevyWalker(o.d, o.steps, rng, o.chAlg));
-    else if(o.type == WT_CORRELATED_RANDOM_WALK)
-        w = std::unique_ptr<Walker>(new CorrelatedWalker(o.d, o.steps, rng, o.chAlg));
-    else
-    {
-        LOG(LOG_ERROR) << "cannot find walk type " << o.type;
-        exit(1);
-    }
+    Simulation::prepare(w, o);
 
     clock_t before_points = clock();
     LOG(LOG_TIMING) << "    " << time_diff(before_walker, before_points);

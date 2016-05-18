@@ -39,7 +39,7 @@ void FastWangLandau::run()
         UniformRNG rngMC((o.seedMC+id) * (id+1));
 
         std::unique_ptr<Walker> w;
-        prepare(w);
+        prepare(w, o);
 
         // use dynamic schedule, since single iterations may need strongly fluctuating time
         #pragma omp for schedule(dynamic)

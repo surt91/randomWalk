@@ -34,6 +34,7 @@ class Simulation
         virtual ~Simulation();
 
         virtual void run() = 0;
+        static void prepare(std::unique_ptr<Walker>& w, const Cmd &o);
 
         void mute() {muted=true;};
 
@@ -46,7 +47,6 @@ class Simulation
         Cmd o;
         int fails;
         int tries;
-        void prepare(std::unique_ptr<Walker>& w);
         std::function<double(std::unique_ptr<Walker>&)> S;
         std::ofstream oss;
         bool muted;
