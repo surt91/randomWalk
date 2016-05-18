@@ -16,20 +16,21 @@ logging.basicConfig(level=logging.INFO,
                 datefmt='%d.%m.%YT%H:%M:%S')
 
 
-def process_data(infile, outformat):
-    with gzip.open(infile+".gz", "rt") as f:
-        even = True
-        centers = []
-        data = []
-        for l in f.readlines():
-            if "#" in l:
-                continue
-            if even:
-                centers.append([float(i) for i in l.split()])
-                even = False
-            else:
-                data.append([float(i) for i in l.split()])
-                even = True
+def process_data(infiles, outformat):
+    centers = []
+    data = []
+    for infile in infiles:
+        with gzip.open(infile+".gz", "rt") as f:
+            even = True
+            for l in f.readlines():
+                if "#" in l:
+                    continue
+                if even:
+                    centers.append([float(i) for i in l.split()])
+                    even = False
+                else:
+                    data.append([float(i) for i in l.split()])
+                    even = True
 
     # sort them
     centers, data = (list(x) for x in zip(*sorted(zip(centers, data))))
@@ -105,12 +106,16 @@ def run():
     outfiles = []
 
     for N in steps:
-        name = SimulationInstance(steps=N, **param.parameters).basename
         outname = param.basename.format(steps=N, **param.parameters)
         outbase = "{}/{{}}_{}.dat".format(out, outname)
-        data = process_data("{}/{}.dat".format(d, name),
+        if param.parameters["parallel"] is None:
+            p = 1
+        else:
+            p = param.parameters["parallel"]
+        names = ["{}/{}.dat".format(d, SimulationInstance(steps=N, energy=param.parameters["energies"][N][i:i+p+1], **param.parameters).basename) for i in range(len(energies[N])-1)]
+        data = process_data(names,
                             outbase
-                            )
+                           )
 
     print("plot with gnuplot")
     print('p "{}" u 1:2 w xye'.format(outbase.format("WL")))

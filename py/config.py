@@ -44,29 +44,30 @@ def file_not_empty(fpath):
 
 
 class Simulation():
-    def __init__(self, number_of_steps, thetas, iterations, sampling, **kwargs):
+    def __init__(self, number_of_steps, thetas, iterations, **kwargs):
 
         self.Ns = number_of_steps
         self.n = iterations
-        self.sampling = sampling
+        self.sampling = kwargs["sampling"]
         self.parallel = kwargs["parallel"]
+        if self.parallel is None:
+            p = 1
+        else:
+            p = self.parallel
+        energies = kwargs["energies"]
         self.kwargs = kwargs
         if self.parallel and sampling != 2:
             print("sampling method", sampling, "does not use parallelism, set parallel to None")
             raise
 
-        # Wang landau does not have a theta
-        if sampling == 2:
-            thetas = {0: (0,)}
-
         self.instances = []
         for N in number_of_steps:
-            try:
-                theta_for_N = thetas[N]
-            except KeyError:
-                theta_for_N = thetas[0]
-            for T in theta_for_N:
-                self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, sampling=sampling, **kwargs))
+            if self.sampling == 1:
+                for T in thetas[N]:
+                    self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
+            if self.sampling == 2:
+                for i in range(len(energies[N])-1):
+                    self.instances.append(SimulationInstance(steps=N, energy=energies[N][i:i+p+1], iterations=iterations, **kwargs))
 
     def hero(self):
         logging.info("Create .sge Files for Hero")
@@ -137,12 +138,7 @@ class Simulation():
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
                                       loader=jinja2.FileSystemLoader("templates"))
-        if self.sampling == 1:
-            template = self.env.get_template("jobarray.sge")
-        elif self.sampling == 2:
-            template = self.env.get_template("jobarrayOMP.sge")
-        else:
-            raise
+        template = self.env.get_template("jobarray.sge")
 
         # create .sge files for Hero
         for N in self.Ns:
@@ -163,21 +159,16 @@ class Simulation():
     # start the calculation
     def __call__(self):
         logging.info("Executing {} jobs".format(len(self.instances)))
-        # run only one Wang landau at a time, but many metropolis
-        if self.sampling == 2:
-            for i in self.instances:
-                i()
-        else:
-            with Pool() as p:
-                # chunksize of 1 for such for optimal parallelness
-                p.map(run_instance, self.instances, 1)
+        with Pool() as p:
+            # chunksize of 1 for such for optimal parallelness
+            p.map(run_instance, self.instances, 1)
 
 
 class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
                        dimension, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
-                       method, akl, sampling, parallel, energies, nbins, overlap, theta=None, **not_used):
+                       method, akl, sampling, parallel, nbins, overlap, theta=None, energy=None, **not_used):
 
         self.N = steps
         self.n = iterations
@@ -196,7 +187,7 @@ class SimulationInstance():
         self.parallel = parallel
         self.t_eq = t_eq
         self.t_corr = t_corr
-        self.energies = energies
+        self.energy = energy
         self.nbins = nbins
         self.overlap = overlap
 
@@ -211,10 +202,22 @@ class SimulationInstance():
         if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
 
+        # change the seeds for every job in the array
+        if sampling == 1:
+            if self.T == float("inf"):
+                t = 0
+            else:
+                t = self.T
+            self.x += int(1e5*t)
+            self.y += int(1e5*t)
+        elif sampling == 2:
+            self.x += self.energy[0]
+            self.y += self.energy[0]
+
         if sampling == 1:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
         elif sampling == 2:
-            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energies[self.N][0], eend=self.energies[self.N][-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
+            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
 
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)
         if self.rawConf:
@@ -263,7 +266,7 @@ class SimulationInstance():
             else:
                 opts.append("--simplesampling")
         else:
-            for e in self.energies[self.N]:
+            for e in self.energy:
                 opts.append("-e {}".format(e))
             opts.append("-B {}".format(self.nbins))
             opts.append("-E {}".format(self.overlap))

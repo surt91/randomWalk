@@ -1,8 +1,8 @@
 from numpy import arange
 
-basename = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_x{seedMC}_y{seedR}"
-basetheta = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_x{seedMC}_y{seedR}_T{theta:.5f}"
-basee = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_x{seedMC}_y{seedR}_e{estart:.5f}-{eend:.5f}"
+basename = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}"
+basetheta = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_T{theta:.5f}"
+basee = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_e{estart:.5f}-{eend:.5f}"
 
 sizes = (32, 64)
 
