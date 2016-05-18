@@ -400,7 +400,7 @@ def run(flatHistogram=True):
                              zc[n], zce[n])
             whole_distribution += data
 
-        whole_distribution_file = param.basename.replace("_T{theta:.5f}", "").format(steps=N, **param.parameters)
+        whole_distribution_file = param.basename.format(steps=N, **param.parameters)
         whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
 
         # purge values with same x, by calculating mean

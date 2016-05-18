@@ -8,6 +8,9 @@ from multiprocessing import Pool
 import jinja2
 
 
+def makebase(name, **kwargs):
+    return name.format(**kwargs)
+
 class Gnuplot():
     def __init__(self, **kwargs):
         self.kwargs = kwargs
@@ -16,6 +19,7 @@ class Gnuplot():
                                       lstrip_blocks=True,
                                       loader=jinja2.FileSystemLoader("templates"))
         self.env.globals.update(zip=zip)
+        self.env.globals.update(makebase=lambda *x, **y: makebase(*x, **y, **self.kwargs))
 
         self.d = "plots"
         self.dataPath = "../data"
@@ -51,6 +55,7 @@ class Gnuplot():
                                     path=self.dataPath,
                                     raw=self.rawDataPath,
                                     filename=name,
+                                    param=self.kwargs,
                                     **self.kwargs,
                                     **kwargs))
 

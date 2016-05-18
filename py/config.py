@@ -175,9 +175,9 @@ class Simulation():
 
 class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
-                       dimension, theta, t_eq, t_corr, directory,
+                       dimension, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
-                       method, akl, sampling, parallel, energies, nbins, overlap, **not_used):
+                       method, akl, sampling, parallel, energies, nbins, overlap, theta=None, **not_used):
 
         self.N = steps
         self.n = iterations
@@ -211,7 +211,11 @@ class SimulationInstance():
         if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
 
-        self.basename = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
+        if sampling == 1:
+            self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
+        elif sampling == 2:
+            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energies[self.N][0], eend=self.energies[self.N][-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
+
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)
         if self.rawConf:
             self.confname = "{}/{}.dat".format(self.rawConf, self.basename)
@@ -226,7 +230,7 @@ class SimulationInstance():
         try:
             it = int(self.n * self.t_corr[self.N][self.T])
         except KeyError:
-            it = self.n
+            it = int(self.n)
 
         opts = ["./randomWalk",
                 "-N {}".format(self.N),

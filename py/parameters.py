@@ -1,24 +1,24 @@
 from numpy import arange
 
-basename = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_x{seedMC}_y{seedR}_T{theta:.5f}"
+basename = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_x{seedMC}_y{seedR}"
+basetheta = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_x{seedMC}_y{seedR}_T{theta:.5f}"
+basee = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations}_x{seedMC}_y{seedR}_e{estart:.5f}-{eend:.5f}"
 
-sizes = (32, 64, 128, 256)
+sizes = (32, 64)
 
 # thetas for the system sizes, missing sizes will get the 0 entry
-thetas = {    0: (-1000, -100, -30, -20, -17, -13, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, -0.7, -0.5, 5, 10, 100),
-            128: (-1000, -500, -200, -100, -50, -30, -25, -20, -17, -15, -13, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, -0.7, -0.5, 5, 10, 100),
-            256: (-1000, -500, -200, -100, -50, -40, -30, -27, -25, -22, -20, -17, -15, -13, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, -0.7, -0.5, 5, 10, 100),
+thetas = { 32: (1, 10, float("inf"), -10, -5, -4, -3, -2, -1),
+           64: (1, 3,  10, float("inf"), -20, -13, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1),
          }
 
-t_eq = { 32: {-12: 2e4, -10: 2e4},
-         64: {-23: 2e4, -20: 2e4, -19: 2e5, -18: 2e5, -17: 2e5},
-        128: {-45: 2e4, -42: 1e5, -40: 1e5},
+t_eq = {
        }
 
-t_corr = {}
+t_corr = {
+         }
 
 energies = {    32: [20, 100, 200, 300, 400, 600, 800],
-                64: [20, 100, 200, 300, 400, 600, 800, 1000, 1200, 1400],
+                64: [100, 500, 1000, 2000, 3000, 5000, 7000, 10000, 15000, 20000],
            }
 
 parameters = {
@@ -82,4 +82,8 @@ parameters = {
     # how many cpus (only for wang landau), None means all
     # for HERO: 1 - 12
     "parallel": None,
+
+    "basename": basename,
+    "basetheta": basetheta,
+    "basee": basee
 }

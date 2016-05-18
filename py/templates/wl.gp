@@ -6,7 +6,7 @@
 
 plot \
 {% for N in number_of_steps %}
-    "{{ path }}/WL_m{{ sampling }}_t{{ typ }}_w{{ observable }}_d{{ dimension }}_N{{ N }}_n{{ iterations }}_x{{ seedMC }}_y{{ seedR }}_T0.00000.dat" u 1:2 w p t "{{ N }}", \
+    "{{ path }}/WL_{{ makebase(basename, steps=N) }}.dat" u 1:2 w p t "{{ N }}", \
 {% endfor %}
 
 {% endblock content %}

@@ -8,7 +8,7 @@ from scipy.interpolate import interp1d
 from scipy.integrate import trapz
 
 import parameters as param
-from config import bootstrap, bootstrap_histogram, histogram_simple_error
+from config import bootstrap, bootstrap_histogram, histogram_simple_error, SimulationInstance
 
 
 logging.basicConfig(level=logging.INFO,
@@ -105,11 +105,9 @@ def run():
     outfiles = []
 
     for N in steps:
-        name = param.basename.format(steps=N,
-                                       theta=0,
-                                       **param.parameters
-                                       )
-        outbase = "{}/{{}}_{}.dat".format(out, name)
+        name = SimulationInstance(steps=N, **param.parameters).basename
+        outname = param.basename.format(steps=N, **param.parameters)
+        outbase = "{}/{{}}_{}.dat".format(out, outname)
         data = process_data("{}/{}.dat".format(d, name),
                             outbase
                             )

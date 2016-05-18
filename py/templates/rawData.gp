@@ -7,7 +7,7 @@
 
     plot \
     {% for theta in thetas[N] %}
-        "< zcat {{ raw }}/m{{ sampling }}_t{{ typ }}_w{{ observable }}_d{{ dimension }}_N{{ N }}_n{{ iterations }}_x{{ seedMC }}_y{{ seedR }}_T{{ "%.5f" % theta }}.dat.gz" every 100 u 1:{{ observable + 1 }} w l t "{{ theta }}", \
+        "< zcat {{ raw }}/{{ makebase(basetheta, steps=N, theta=theta) }}.dat.gz" every 100 u 1:{{ observable + 1 }} w l t "{{ theta }}", \
     {% endfor %}
 {% endfor %}
 

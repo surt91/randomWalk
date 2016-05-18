@@ -9,7 +9,7 @@
     # See: http://www.phyast.pitt.edu/~zov1/gnuplot/html/statistics.html
     {% for theta in thetas[N] %}
         {% set ts = theta | string | replace("-", "_") %}
-        fname_{{ ts }} = "{{ path }}/Z_m{{ sampling }}_t{{ typ }}_w{{ observable }}_d{{ dimension }}_N{{ N }}_n{{ iterations }}_x{{ seedMC }}_y{{ seedR }}_T{{ "%.5f" % theta }}.dat"
+        fname_{{ ts }} = "{{ path }}/Z_{{ makebase(basetheta, steps=N, theta=theta) }}.dat"
         # test if the file is empty
         stat = system("wc ".fname_{{ ts }})
         if (stat ne "" &&  int(word(stat,1)) > 3) {

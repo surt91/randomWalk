@@ -10,7 +10,7 @@ set yr [10:]
     set log xy
     plot \
     {% for theta in thetas[N] %}
-        "{{ path }}/hist_m{{ sampling }}_t{{ typ }}_w{{ observable }}_d{{ dimension }}_N{{ N }}_n{{ iterations }}_x{{ seedMC }}_y{{ seedR }}_T{{ "%.5f" % theta }}.dat" u 1:3:2:4 w xyerr t "{{ theta }}", \
+        "{{ path }}/hist_{{ makebase(basetheta, steps=N, theta=theta) }}.dat" u 1:3:2:4 w xyerr t "{{ theta }}", \
     {% endfor %}
 
     {{ header(filename+N|string, xlabel, ylabel) }}
@@ -19,7 +19,7 @@ set yr [10:]
     set log y
     plot \
     {% for theta in thetas[N] %}
-        "{{ path }}/hist_m{{ sampling }}_t{{ typ }}_w{{ observable }}_d{{ dimension }}_N{{ N }}_n{{ iterations }}_x{{ seedMC }}_y{{ seedR }}_T{{ "%.5f" % theta }}.dat" u 1:3:2:4 w xyerr t "{{ theta }}", \
+        "{{ path }}/hist_{{ makebase(basetheta, steps=N, theta=theta) }}.dat" u 1:3:2:4 w xyerr t "{{ theta }}", \
     {% endfor %}
 {% endfor %}
 
