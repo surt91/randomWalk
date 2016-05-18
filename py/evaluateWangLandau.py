@@ -14,10 +14,9 @@ from config import bootstrap, bootstrap_histogram, histogram_simple_error
 logging.basicConfig(level=logging.INFO,
                 format='%(asctime)s -- %(levelname)s :: %(message)s',
                 datefmt='%d.%m.%YT%H:%M:%S')
-logging.info("started")
 
 
-def process_data(infile, outfile):
+def process_data(infile, outformat):
     with gzip.open(infile+".gz", "rt") as f:
         even = True
         centers = []
@@ -35,7 +34,23 @@ def process_data(infile, outfile):
     # sort them
     centers, data = (list(x) for x in zip(*sorted(zip(centers, data))))
 
+    outfile = outformat.format("wl_raw")
+    with open(outfile, "w") as f:
+        f.write("# S err count(S) count(S)_err\n")
+        for c, d in zip(centers, data):
+            for l in zip(c, d):
+                f.write("{} {}\n".format(*l))
+            f.write("\n\n")
+
     stichInterpol(centers, data)
+
+    outfile = outformat.format("wl_stiched")
+    with open(outfile, "w") as f:
+        f.write("# S err count(S) count(S)_err\n")
+        for c, d in zip(centers, data):
+            for l in zip(c, d):
+                f.write("{} {}\n".format(*l))
+            f.write("\n\n")
 
     # flatten and remove overlap
     #~ overlap = param.parameters["overlap"]
@@ -51,6 +66,7 @@ def process_data(infile, outfile):
     area = trapz(np.exp(data), centers)
     data -= np.log(area)
 
+    outfile = outformat.format("WL")
     with open(outfile, "w") as f:
         f.write("# S err P(S) P(S)_err\n")
         for d in zip(centers, data):
@@ -93,14 +109,15 @@ def run():
                                        theta=0,
                                        **param.parameters
                                        )
-        outname = "{}/WL_{}.dat".format(out, name)
+        outbase = "{}/{{}}_{}.dat".format(out, name)
         data = process_data("{}/{}.dat".format(d, name),
-                            outname
+                            outbase
                             )
 
     print("plot with gnuplot")
-    print('p "{}" u 1:3:2:4 w xye'.format(outname))
+    print('p "{}" u 1:2 w xye'.format(outbase.format("WL")))
 
 
 if __name__ == "__main__":
+    logging.info("started Wang Landau evaluation")
     run()

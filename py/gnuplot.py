@@ -38,6 +38,9 @@ class Gnuplot():
             self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
         elif self.kwargs["sampling"] == 2:
             self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
+            self.create("wl_scaled", "{/Symbol %s} / {/Italic T%s}" % (self.observable, "" if self.observable == "A" else "^{1/2}"), "{/Italic T%s p}" % ("" if self.observable == "A" else "^{1/2}"))
+            self.create("wl_raw", "{/Symbol %s}" % self.observable, "{/Italic counts}")
+            self.create("wl_stiched", "{/Symbol %s}" % self.observable, "{/Italic counts}")
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")

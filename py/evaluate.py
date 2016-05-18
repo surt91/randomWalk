@@ -1,4 +1,4 @@
-import parameters as para
+import parameters as param
 
 import evaluateMetropolis
 import evaluateWangLandau

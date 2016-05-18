@@ -427,6 +427,7 @@ def run(flatHistogram=True):
 
 
 if __name__ == "__main__":
+    logging.info("started Metropolis evaluation")
     # decide which histogram type to use:
     # equi spaced histograms seem to be better for Gaussian walks
     # percentile based, flat histograms, lead to similar errors for all bins
