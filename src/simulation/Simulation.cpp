@@ -13,6 +13,9 @@ Simulation::Simulation(const Cmd &o)
     sum_r = 0.;
     sum_r2 = 0.;
 
+    // save the commandline invocation to the outputfile
+    oss << "# " << o.text << "\n";
+
     if(!oss.good())
     {
         LOG(LOG_ERROR) << "Path is not writable " << o.data_path;

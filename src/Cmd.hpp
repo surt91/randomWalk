@@ -120,4 +120,6 @@ class Cmd
         bool benchmark;
         double benchmark_A;
         double benchmark_L;
+
+        std::string text;
 };

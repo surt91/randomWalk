@@ -7,6 +7,9 @@ int Logger::verbosity = 0;
  */
 Cmd::Cmd(int argc, char** argv)
 {
+    for(int i=0; i<argc; ++i)
+        text += argv[i];
+
     // TCLAP throws exceptions
     try{
         // Usage, delimiter, version
