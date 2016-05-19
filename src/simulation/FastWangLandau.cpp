@@ -29,7 +29,9 @@ void FastWangLandau::run()
 
     // run in parallel, in o.parallel threads, or all if not specified
     if(o.parallel)
+    {
         omp_set_num_threads(o.parallel);
+    }
 
     #pragma omp parallel firstprivate(H, g)
     {

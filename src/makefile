@@ -47,10 +47,10 @@ COPT = -g -Og
 #COPT = -O3 -flto -mtune=native -mtune=corei7
 #COPT += -DNLOG
 
-COPT += -fopenmp
+#COPT += -fopenmp
 COPT += -std=c++11 -m64 -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color=auto
 
-WARNLEVEL= -Wall -Wextra -Wpedantic -Werror
+WARNLEVEL= -Wall -Wextra -Wpedantic -Werror -Wno-unknown-pragmas
 #WARNLEVEL += -Wfloat-equal -Wshadow -Wextra-semi -Wdocumentation -Wdeprecated
 #WANRLEVEL += -Weverything -Wno-c++98-compat -Wno-c++98-compat-bind-to-temporary-copy -Wno-padded
 
