@@ -171,7 +171,7 @@ class SimulationInstance():
                        method, akl, sampling, parallel, nbins, overlap, theta=None, energy=None, **not_used):
 
         self.N = steps
-        self.n = iterations
+        self.n = iterations # will be set to 1 for Wang Landau
         self.t = typ
         self.T = theta
         self.x = seedMC
@@ -217,7 +217,7 @@ class SimulationInstance():
         if sampling == 1:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
         elif sampling == 2:
-            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
+            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=1, observable=self.w, sampling=self.m, dimension=self.D)
 
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)
         if self.rawConf:

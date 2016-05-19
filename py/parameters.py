@@ -1,8 +1,8 @@
 from numpy import arange
 
 basename = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations:.0f}"
-basetheta = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations:.0f}_T{theta:.5f}"
-basee = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations:.0f}_e{estart:.0f}-{eend:.0f}"
+basetheta = basename + "_T{theta:.5f}"
+basee = basename + "_e{estart:.0f}-{eend:.0f}"
 
 sizes = (32, 64)
 
