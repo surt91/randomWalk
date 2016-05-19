@@ -50,6 +50,8 @@ class Simulation():
         self.n = iterations
         self.sampling = kwargs["sampling"]
         self.parallel = kwargs["parallel"]
+        old_nbins = kwargs["nbins"]
+        kwargs["nbins"] += kwargs["overlap"]
         if self.parallel is None:
             p = 1
         else:
@@ -67,7 +69,11 @@ class Simulation():
                     self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
             if self.sampling == 2:
                 for i in range(len(energies[N])-1):
-                    self.instances.append(SimulationInstance(steps=N, energy=energies[N][i:i+p+1], iterations=iterations, **kwargs))
+                    energy = energies[N][i:i+p+1]
+                    if i > 0:
+                        # overlap to the left
+                        energy[0] -= (energy[1] - energy[0]) / old_nbins * kwargs["overlap"]
+                    self.instances.append(SimulationInstance(steps=N, energy=energy, iterations=iterations, **kwargs))
 
     def hero(self):
         logging.info("Create .sge Files for Hero")
