@@ -151,6 +151,12 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
     return t_eq;
 }
 
+/** Implementation of a Metropolis based large deviations sampling
+ *
+ * Literature used:
+ *   * 10.1103/PhysRevE.65.056102
+ *   * 10.1103/PhysRevE.91.052104
+ */
 void Metropolis::run()
 {
     UniformRNG rngMC(o.seedMC);

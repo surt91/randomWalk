@@ -56,10 +56,16 @@ void WangLandau::findStart(std::unique_ptr<Walker>& w, double lb, double ub, Uni
     } while(S(w) < lb || S(w) > ub);
 }
 
+/** Implementation of the Wang Landau algorithm.
+ *
+ * Literature used:
+ *   * 10.1103/PhysRevLett.86.2050 (original paper)
+ *   * 10.1103/PhysRevE.64.056101 (longer original paper)
+ *   * http://cdn.intechopen.com/pdfs-wm/14019.pdf (implementations hints)
+ *   * 10.1103/PhysRevE.67.067102 (what to do when encountering the boundary)
+ */
 void WangLandau::run()
 {
-    // 10.1103/PhysRevLett.86.2050 (original paper)
-    // http://cdn.intechopen.com/pdfs-wm/14019.pdf (implementations hints)
     // parameters of the algorithm
     const double lnf_min = 1e-8;
     const double flatness_criterion = 0.8;
