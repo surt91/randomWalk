@@ -72,9 +72,9 @@ def process_data(infiles, outformat):
     outfile = outformat.format("wl_stiched")
     with open(outfile, "w") as f:
         f.write("# S err count(S) count(S)_err\n")
-        for c, d in zip(centers, data):
-            for l in zip(c, d):
-                f.write("{} {}\n".format(*l))
+        for c, d, e in zip(centers, data, stderr):
+            for l in zip(c, d, e):
+                f.write("{} {} {}\n".format(*l))
             f.write("\n\n")
 
     # flatten and remove overlap
