@@ -36,7 +36,7 @@ def process_data(infiles, outformat):
                     even = True
 
     # sort them
-    centers, data = (list(x) for x in zip(*sorted(zip(centers, data))))
+    centers, data = (np.array(x) for x in zip(*sorted(zip(centers, data))))
 
     outfile = outformat.format("wl_raw")
     with open(outfile, "w") as f:
@@ -48,24 +48,24 @@ def process_data(infiles, outformat):
 
     # for identical centers, average their data and take the stderr
     processed_centers = set()
-    to_delete = set()
-    stderr = [[0 for _ in d] for d in data]
+    preserve = np.ones(len(data), dtype=np.bool)
+    stderr = np.zeros((len(data), len(data[0])))
     for i in range(len(centers)):
         corresponding_data = []
         if i in processed_centers:
-            to_delete.add(i)
+            preserve[i] = False
             continue
         processed_centers.add(i)
         for n, c in enumerate(centers[i:], start=i):
             if c[0] == centers[i][0]:
                 processed_centers.add(n)
-                corresponding_data.append([d-data[n][0] for d in data[n]])
+                corresponding_data.append(data[n]-data[n][0])
         data[i] = np.mean(corresponding_data, axis=0)
         stderr[i] = np.std(corresponding_data, axis=0)
 
-    centers = [centers[i] for i in range(len(centers)) if i not in to_delete]
-    data = [data[i] for i in range(len(data)) if i not in to_delete]
-    stderr = [stderr[i] for i in range(len(stderr)) if i not in to_delete]
+    centers = centers[preserve]
+    data = data[preserve]
+    stderr = stderr[preserve]
 
     stichInterpol(centers, data)
 
@@ -83,9 +83,9 @@ def process_data(infiles, outformat):
     #~ data = np.array([j for i in data for j in i[overlap//2:-overlap//2]])
 
     # flatten
-    centers = [j for i in centers for j in i]
-    data = np.array([j for i in data for j in i])
-    stderr = [j for i in stderr for j in i]
+    centers = centers.flatten()
+    data = data.flatten()
+    stderr = stderr.flatten()
 
     # normalize
     data -= np.max(data)
