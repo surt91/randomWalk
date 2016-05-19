@@ -211,8 +211,8 @@ class SimulationInstance():
             self.x += int(1e5*t)
             self.y += int(1e5*t)
         elif sampling == 2:
-            self.x += self.energy[0]
-            self.y += self.energy[0]
+            self.x += int(self.energy[0])
+            self.y += int(self.energy[0])
 
         if sampling == 1:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
