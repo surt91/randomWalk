@@ -102,55 +102,59 @@ void WangLandau::run()
     }
 
     #pragma omp parallel for schedule(dynamic)
-    for(int i=0; i<num_ranges; ++i)
+    for(int n=0; n<o.iterations; ++n)
     {
-        const double lb = bins[i].front();
-        const double ub = bins[i].back();
-        LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " [" << lb << ", " << ub << "] : [" << bins[i] << "]";
-
-        Histogram H(bins[i]);
-        Histogram g(bins[i]);
-
         // rngs should be local to the threads, with different seeds
         // FIXME: think about a better seed
-        int id = omp_get_thread_num();
-        UniformRNG rngMC((o.seedMC+id) * (id+1));
+        UniformRNG rngMC((o.seedMC+n) * (n+1));
+        o.seedRealization += n;
+        o.seedRealization *= n+1;
 
         std::unique_ptr<Walker> w;
         prepare(w, o);
 
-        findStart(w, lb, ub, rngMC);
-        LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " " << lb << " < " << S(w) << " < " << ub << " start!";
-
-        double lnf = 1;
-        while(lnf > lnf_min)
+        for(int i=0; i<num_ranges; ++i)
         {
-            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f " << lnf;
-            do
+            const double lb = bins[i].front();
+            const double ub = bins[i].back();
+            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " [" << lb << ", " << ub << "] : [" << bins[i] << "]";
+
+            Histogram H(bins[i]);
+            Histogram g(bins[i]);
+
+            findStart(w, lb, ub, rngMC);
+            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " " << lb << " < " << S(w) << " < " << ub << " start!";
+
+            double lnf = 1;
+            while(lnf > lnf_min)
             {
-                double oldS = S(w);
-                w->change(rngMC);
-                ++tries;
-
-                double p_acc = exp(g[oldS] - g[S(w)]);
-                if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f " << lnf;
+                do
                 {
-                    w->undoChange();
-                    ++fails;
-                }
+                    double oldS = S(w);
+                    w->change(rngMC);
+                    ++tries;
 
-                g.add(S(w), lnf);
-                H.add(S(w));
-            } while(H.min() < flatness_criterion * H.mean() || H.min() == 0);
-            // run until the histogram is flat and we have a few samples
-            H.reset();
-            lnf /= 2;
-        }
-        // save g to file
-        #pragma omp critical
-        {
-            oss << g.centers() << "\n";
-            oss << g.get_data() << std::endl;
+                    double p_acc = exp(g[oldS] - g[S(w)]);
+                    if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                    {
+                        w->undoChange();
+                        ++fails;
+                    }
+
+                    g.add(S(w), lnf);
+                    H.add(S(w));
+                } while(H.min() < flatness_criterion * H.mean() || H.min() == 0);
+                // run until the histogram is flat and we have a few samples
+                H.reset();
+                lnf /= 2;
+            }
+            // save g to file
+            #pragma omp critical
+            {
+                oss << g.centers() << "\n";
+                oss << g.get_data() << std::endl;
+            }
         }
     }
 }

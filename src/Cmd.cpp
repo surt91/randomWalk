@@ -191,9 +191,12 @@ Cmd::Cmd(int argc, char** argv)
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
 
         iterations = iterationsArg.getValue();
-        if(sampling_method == SM_WANG_LANDAU)
-            iterations = 1;
         LOG(LOG_INFO) << "Number of MC iterations    " << iterations;
+        if(sampling_method == SM_WANG_LANDAU)
+            if(iterations > 10)
+            {
+                LOG(LOG_WARNING) << "One Wang Landau simulation will take some time, are you sure you want to repeat it " << iterations << " times?";
+            }
 
         simpleSampling = simpleSamplingSwitch.getValue();
         if(simpleSampling && sampling_method == SM_METROPOLIS)

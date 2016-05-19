@@ -202,10 +202,7 @@ class SimulationInstance():
         if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
 
-        # only 1 iteration for Wang Landau
         if sampling == 2:
-            self.n = 1
-
             old_nbins = nbins
             self.nbins += overlap
             # first one should not overlap to the left

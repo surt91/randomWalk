@@ -45,6 +45,28 @@ def process_data(infiles, outformat):
                 f.write("{} {}\n".format(*l))
             f.write("\n\n")
 
+    # for identical centers, average their data and take the stderr
+    processed_centers = set()
+    to_delete = set()
+    stderr = [[0 for _ in d] for d in data]
+    for i in range(len(centers)):
+        corresponding_data = []
+        if i in processed_centers:
+            to_delete.add(i)
+            continue
+        processed_centers.add(i)
+        for n, c in enumerate(centers[i:], start=i):
+            if c[0] == centers[i][0]:
+                print(n, i)
+                processed_centers.add(n)
+                corresponding_data.append([d-data[n][0] for d in data[n]])
+        data[i] = np.mean(corresponding_data, axis=0)
+        stderr[i] = np.std(corresponding_data, axis=0)
+
+    centers = [centers[i] for i in range(len(centers)) if i not in to_delete]
+    data = [data[i] for i in range(len(data)) if i not in to_delete]
+    stderr = [stderr[i] for i in range(len(stderr)) if i not in to_delete]
+
     stichInterpol(centers, data)
 
     outfile = outformat.format("wl_stiched")
@@ -63,6 +85,7 @@ def process_data(infiles, outformat):
     # flatten
     centers = [j for i in centers for j in i]
     data = np.array([j for i in data for j in i])
+    stderr = [j for i in stderr for j in i]
 
     # normalize
     data -= np.max(data)
@@ -72,8 +95,8 @@ def process_data(infiles, outformat):
     outfile = outformat.format("WL")
     with open(outfile, "w") as f:
         f.write("# S err P(S) P(S)_err\n")
-        for d in zip(centers, data):
-            f.write("{} {}\n".format(*d))
+        for d in zip(centers, data, stderr):
+            f.write("{} {} {}\n".format(*d))
 
 
 def stichInterpol(centers, data):
@@ -121,7 +144,7 @@ def run():
                            )
 
     print("plot with gnuplot")
-    print('p "{}" u 1:2 w xye'.format(outbase.format("WL")))
+    print('p "{}" u 1:2:3 w ye'.format(outbase.format("WL")))
 
 
 if __name__ == "__main__":
