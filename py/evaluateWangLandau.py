@@ -25,6 +25,8 @@ def process_data(infiles, outformat):
             for l in f.readlines():
                 if "#" in l:
                     continue
+                if not l.split():
+                        continue
                 if even:
                     centers.append([float(i) for i in l.split()])
                     even = False
@@ -102,6 +104,7 @@ def run():
     steps = param.parameters["number_of_steps"]
     d = param.parameters["rawData"]
     out = param.parameters["directory"]
+    energies = param.parameters["energies"]
 
     outfiles = []
 
@@ -112,7 +115,7 @@ def run():
             p = 1
         else:
             p = param.parameters["parallel"]
-        names = ["{}/{}.dat".format(d, SimulationInstance(steps=N, energy=param.parameters["energies"][N][i:i+p+1], **param.parameters).basename) for i in range(len(energies[N])-1)]
+        names = ["{}/{}.dat".format(d, SimulationInstance(steps=N, energy=energies[N][i:i+p+1], first=not i, **param.parameters).basename) for i in range(len(energies[N])-1)]
         data = process_data(names,
                             outbase
                            )

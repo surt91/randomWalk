@@ -50,8 +50,6 @@ class Simulation():
         self.n = iterations
         self.sampling = kwargs["sampling"]
         self.parallel = kwargs["parallel"]
-        old_nbins = kwargs["nbins"]
-        kwargs["nbins"] += kwargs["overlap"]
         if self.parallel is None:
             p = 1
         else:
@@ -69,11 +67,7 @@ class Simulation():
                     self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
             if self.sampling == 2:
                 for i in range(len(energies[N])-1):
-                    energy = energies[N][i:i+p+1]
-                    if i > 0:
-                        # overlap to the left
-                        energy[0] -= (energy[1] - energy[0]) / old_nbins * kwargs["overlap"]
-                    self.instances.append(SimulationInstance(steps=N, energy=energy, iterations=iterations, **kwargs))
+                    self.instances.append(SimulationInstance(steps=N, energy=energies[N][i:i+p+1], iterations=iterations, first=not i, **kwargs))
 
     def hero(self):
         logging.info("Create .sge Files for Hero")
@@ -174,7 +168,7 @@ class SimulationInstance():
     def __init__(self, steps, typ, seedMC, seedR, iterations,
                        dimension, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
-                       method, akl, sampling, parallel, nbins, overlap, theta=None, energy=None, **not_used):
+                       method, akl, sampling, parallel, nbins, overlap, theta=None, energy=None, first=False, **not_used):
 
         self.N = steps
         self.n = iterations
@@ -211,6 +205,13 @@ class SimulationInstance():
         # only 1 iteration for Wang Landau
         if sampling == 2:
             self.n = 1
+
+            old_nbins = nbins
+            self.nbins += overlap
+            # first one should not overlap to the left
+            if not first:
+                # overlap to the left
+                energy[0] -= (energy[1] - energy[0]) / old_nbins * overlap
 
         # change the seeds for every job in the array
         if sampling == 1:
