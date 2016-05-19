@@ -9,6 +9,7 @@ from scipy.integrate import trapz
 
 import parameters as param
 from config import bootstrap, bootstrap_histogram, histogram_simple_error, SimulationInstance
+from commonEvaluation import getMinMaxTime
 
 
 logging.basicConfig(level=logging.INFO,
@@ -57,7 +58,6 @@ def process_data(infiles, outformat):
         processed_centers.add(i)
         for n, c in enumerate(centers[i:], start=i):
             if c[0] == centers[i][0]:
-                print(n, i)
                 processed_centers.add(n)
                 corresponding_data.append([d-data[n][0] for d in data[n]])
         data[i] = np.mean(corresponding_data, axis=0)
@@ -139,6 +139,10 @@ def run():
         else:
             p = param.parameters["parallel"]
         names = ["{}/{}.dat".format(d, SimulationInstance(steps=N, energy=energies[N][i:i+p+1], first=not i, **param.parameters).basename) for i in range(len(energies[N])-1)]
+
+        logging.info("N = {}".format(N))
+        getMinMaxTime(f for f in names)
+
         data = process_data(names,
                             outbase
                            )
