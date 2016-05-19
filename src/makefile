@@ -31,24 +31,21 @@ DEP	 = $(CPP:%.cpp=dep/%.d)
 
 QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
-CXX	= g++
-#CXX	= clang++
-#CXX	= icpc
+CXXFLAGS = -std=c++11 -fexceptions -pipe -fdiagnostics-color=auto
+#CXXFLAGS += -fopenmp
 
-#for debugging
-#COPT = -g -Og
+release: CXXFLAGS += -O3 -flto -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing
+release: all
+silent: CXXFLAGS += -DNLOG
+silent: release
+debug: CXXFLAGS += -g -Og
+debug: all CXXFLAGS += -g -Og
 
 # for clang sanitizers
-#COPT = -O1 -g -fsanitize=address -fno-omit-frame-pointer
-#COPT = -fsanitize=memory -fno-omit-frame-pointer -g -O2 -fsanitize-memory-track-origins
-#COPT = -fsanitize=undefined -O2
-
-# for production
-COPT = -O3 -flto -mtune=native -mtune=corei7
-#COPT += -DNLOG
-
-#COPT += -fopenmp
-COPT += -std=c++11 -m64 -ffast-math -fno-strict-aliasing -fexceptions -pipe -fdiagnostics-color=auto
+#CXX = clang++
+#CXXFLAGS = -O1 -g -fsanitize=address -fno-omit-frame-pointer
+#CXXFLAGS = -fsanitize=memory -fno-omit-frame-pointer -g -O2 -fsanitize-memory-track-origins
+#CXXFLAGS = -fsanitize=undefined -O2
 
 WARNLEVEL= -Wall -Wextra -Wpedantic -Werror -Wno-unknown-pragmas
 #WARNLEVEL += -Wfloat-equal -Wshadow -Wextra-semi -Wdocumentation -Wdeprecated
@@ -60,7 +57,7 @@ INCLUDES = -Itclap/include \
            -Iqhull/src \
            -Iqhull/src/libqhullcpp
 
-CXXFLAGS = $(COPT) $(INCLUDES)
+CXXFLAGS += $(INCLUDES)
 
 LIBS = -lqhullcpp -lqhullstatic_r -lm
 LFLAGS	= $(LNDIRS) $(LIBS)
