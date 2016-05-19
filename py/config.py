@@ -67,7 +67,7 @@ class Simulation():
                     self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
             if self.sampling == 2:
                 for i in range(len(energies[N])-1):
-                    self.instances.append(SimulationInstance(steps=N, energy=energies[N][i:i+p+1], iterations=iterations, first=not i, **kwargs))
+                    self.instances.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, first=not i, **kwargs))
 
     def hero(self):
         logging.info("Create .sge Files for Hero")
