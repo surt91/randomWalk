@@ -14,7 +14,7 @@ Simulation::Simulation(const Cmd &o)
     sum_r2 = 0.;
 
     // save the commandline invocation to the outputfile
-    oss << "# " << o.text << "\n";
+    oss << "# " << o.text << std::endl;
 
     if(!oss.good())
     {
