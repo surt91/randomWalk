@@ -59,7 +59,7 @@ def process_data(infiles, outformat):
         for n, c in enumerate(centers[i:], start=i):
             if c[0] == centers[i][0]:
                 processed_centers.add(n)
-                corresponding_data.append(data[n]-data[n][0])
+                corresponding_data.append(data[n]-np.mean(data[n]))
         data[i] = np.mean(corresponding_data, axis=0)
         stderr[i] = np.std(corresponding_data, axis=0)
 
