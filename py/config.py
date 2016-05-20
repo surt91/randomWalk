@@ -101,7 +101,7 @@ class Simulation():
                 except ValueError:
                     pass
                 try:
-                    time[self.kwargs["typ"]][self.kwargs["dimension"]][N]
+                    t = time[self.kwargs["typ"]][self.kwargs["dimension"]][N]
                 except:
                     if N <= 64:
                         t = 5
@@ -117,7 +117,6 @@ class Simulation():
                         t = 15000
                     else:
                         t = 50000
-
                 return t/1000 * max_t_corr
 
             if self.sampling == 2:
