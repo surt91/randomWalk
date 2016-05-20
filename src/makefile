@@ -31,8 +31,15 @@ DEP	 = $(CPP:%.cpp=dep/%.d)
 
 QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
-CXXFLAGS = -std=c++11 -fexceptions -pipe -fdiagnostics-color=auto
+CXXFLAGS = -std=c++11 -fexceptions -pipe
 #CXXFLAGS += -fopenmp
+
+# diagnostics color is introduced with gcc 4.9, test if our gcc knows it
+# http://stackoverflow.com/a/17947005/1698412
+GCC_GTEQ_490 := $(shell expr `gcc -dumpversion | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/'` \>= 40900)
+ifeq "$(GCC_GTEQ_490)" "1"
+    CXXFLAGS += -fdiagnostics-color=auto
+endif
 
 release: CXXFLAGS += -O3 -flto -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing
 release: all
