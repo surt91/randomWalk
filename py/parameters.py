@@ -56,7 +56,9 @@ parameters = {
     "energies": energies,
 
     "nbins": 100,
-    "overlap":  10,
+    "overlap": 20,
+    "lnf": 1e-8,
+    "flatness": 0.8,
 
     # where to save the temporary evaluation results
     "directory": "data",

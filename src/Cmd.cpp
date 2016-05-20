@@ -8,7 +8,10 @@ int Logger::verbosity = 0;
 Cmd::Cmd(int argc, char** argv)
 {
     for(int i=0; i<argc; ++i)
+    {
         text += argv[i];
+        text += " ";
+    }
 
     // TCLAP throws exceptions
     try{
@@ -28,6 +31,8 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme", false, 0, "double");
         TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, 0.0, "double");
         TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, 1.0, "double");
+        TCLAP::ValueArg<double> lnfArg("", "lnf", "minimum value of ln(f) for the Wang Landau algorithm (default 1e-8)", false, 1e-8, "double");
+        TCLAP::ValueArg<double> flatnessArg("", "flatness", "flatness criterion for the Wang Landau algorithm (default 0.8)", false, 0.8, "double");
         TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, ".", "string");
         TCLAP::ValueArg<std::string> dataPathArg("o", "output", "datafile for the output", false, "out.dat", "string");
         TCLAP::ValueArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output", false, "", "string");
@@ -110,6 +115,8 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(chAlgArg);
         cmd.add(wantedobservableArg);
         cmd.add(samplingMethodArg);
+        cmd.add(lnfArg);
+        cmd.add(flatnessArg);
         cmd.add(wangLandauBordersMArg);
         cmd.add(wangLandauBinsArg);
         cmd.add(wangLandauOverlapArg);
@@ -223,6 +230,8 @@ Cmd::Cmd(int argc, char** argv)
             LOG(LOG_INFO) << "Theta                      " << theta;
         }
 
+        lnf_min = lnfArg.getValue();
+        flatness_criterion = flatnessArg.getValue();
         wangLandauBorders = wangLandauBordersMArg.getValue();
         wangLandauBins = wangLandauBinsArg.getValue();
         wangLandauOverlap = wangLandauOverlapArg.getValue();
@@ -234,6 +243,8 @@ Cmd::Cmd(int argc, char** argv)
                 exit(1);
             }
             std::sort(wangLandauBorders.begin(), wangLandauBorders.end());
+            LOG(LOG_INFO) << "minimum ln(f):             " << lnf_min;
+            LOG(LOG_INFO) << "flatness criterion:        " << flatness_criterion;
             LOG(LOG_INFO) << "Borders of ranges for Wang Landau Sampling: \n                  " << wangLandauBorders;
             LOG(LOG_INFO) << "Bins each range:           " << wangLandauBins;
             LOG(LOG_INFO) << "Overlap between ranges:    " << wangLandauOverlap;

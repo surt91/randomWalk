@@ -1,7 +1,9 @@
 #include "WangLandau.hpp"
 
 WangLandau::WangLandau(const Cmd &o)
-    : Simulation(o)
+    : Simulation(o),
+      lnf_min(o.lnf_min),
+      flatness_criterion(o.flatness_criterion)
 {
 }
 
@@ -67,8 +69,6 @@ void WangLandau::findStart(std::unique_ptr<Walker>& w, double lb, double ub, Uni
 void WangLandau::run()
 {
     // parameters of the algorithm
-    const double lnf_min = 1e-8;
-    const double flatness_criterion = 0.8;
 
     const int num_ranges = o.wangLandauBorders.size() - 1;
 

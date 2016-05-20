@@ -21,4 +21,7 @@ class WangLandau : public Simulation
         void findStart(std::unique_ptr<Walker>& w, double lb, double ub, UniformRNG& rng);
         double getLowerBound();
         double getUpperBound();
+
+        double lnf_min;
+        double flatness_criterion;
 };

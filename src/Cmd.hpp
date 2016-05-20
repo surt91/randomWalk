@@ -116,6 +116,8 @@ class Cmd
 
         double mu;
         double sigma;
+        double lnf_min;
+        double flatness_criterion;
 
         bool benchmark;
         double benchmark_A;
