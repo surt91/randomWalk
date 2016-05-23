@@ -238,6 +238,7 @@ def getZthetaInterpol(list_of_ps_log, thetas):
 
 def stichFile(infile, outfile, z, dz):
     data = []
+    Dz = 0
     with open(infile, "r") as fin:
         with open(outfile, "w") as fout:
             fout.write("# S S_err P(S) P(S)_err\n")
@@ -246,7 +247,8 @@ def stichFile(infile, outfile, z, dz):
                     continue
                 nums = list(map(float, line.split()))
                 nums[2] -= z
-                nums[3] += dz
+                Dz += dz
+                nums[3] += Dz
                 data.append(nums)
                 fout.write("{} {} {} {}\n".format(*nums))
     return data

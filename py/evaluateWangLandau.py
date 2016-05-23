@@ -67,7 +67,7 @@ def process_data(infiles, outformat):
     data = data[preserve]
     stderr = stderr[preserve]
 
-    stichInterpol(centers, data)
+    stichInterpol(centers, data, stderr)
 
     outfile = outformat.format("wl_stiched")
     with open(outfile, "w") as f:
@@ -99,9 +99,9 @@ def process_data(infiles, outformat):
             f.write("{} {} {}\n".format(*d))
 
 
-def stichInterpol(centers, data):
+def stichInterpol(centers, data, stderr):
+    summed_err = 0
     for i in range(len(data)-1):
-
         try:
             spline_1 = interp1d(centers[i], data[i], kind='cubic')
         except ValueError:
@@ -119,8 +119,10 @@ def stichInterpol(centers, data):
             logging.warning("not enough overlap")
 
         z, err = bootstrap(Z)
+        summed_err += err
         for j in range(len(data[i+1])):
             data[i+1][j] -= z
+            stderr[i+1][j] += summed_err
 
 
 def run():
