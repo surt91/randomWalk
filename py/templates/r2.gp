@@ -5,8 +5,8 @@
 {{ header(filename+N|string, xlabel, ylabel) }}
 
 set fit errorvariables
-# should be a sqrt, I guess
-f(x) = a*x**0.5 + c
+# should be a linear, I guess
+f(x) = a*x + c
 fit f(x) "{{ path }}/simple.dat" u 1:4:5 yerr via a, c
 
 plot "{{ path }}/simple.dat" u 1:4:5 w yerr t "r", \

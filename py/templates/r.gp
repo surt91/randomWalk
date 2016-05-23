@@ -5,8 +5,13 @@
 {{ header(filename+N|string, xlabel, ylabel) }}
 
 set fit errorvariables
-# should be a sqrt, I guess
+# should be a sqrt, for normal walks
+# and linear for self avoiding walks
+{% if sampling == 3 %}
+f(x) = a*x + c
+{% else %}
 f(x) = a*x**0.5 + c
+{% endif %}
 fit f(x) "{{ path }}/simple.dat" u 1:2:3 yerr via a, c
 
 plot "{{ path }}/simple.dat" u 1:2:3 w yerr t "r", \
