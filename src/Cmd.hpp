@@ -119,6 +119,8 @@ class Cmd
         double lnf_min;
         double flatness_criterion;
 
+        bool onlyBounds;
+
         bool benchmark;
         double benchmark_A;
         double benchmark_L;

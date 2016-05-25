@@ -12,8 +12,8 @@ void FastWangLandau::run()
     const double lnf_min = 1e-8;
 
     // Histogram and DensityOfStates need the same binning ... probably
-    double lb = getLowerBound();
-    double ub = getUpperBound() + 1;
+    double lb = getLowerBound(o);
+    double ub = getUpperBound(o) + 1;
 
     // do not make a bin for every integer, since not every integer is possible
     const int bins = (ub-lb)/3;

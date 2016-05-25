@@ -99,6 +99,7 @@ Cmd::Cmd(int argc, char** argv)
         // -short, --long, description, default
         TCLAP::SwitchArg aklHeuristicSwitch("a", "aklHeuristic", "enables the Akl Toussaint heuristic", false);
         TCLAP::SwitchArg simpleSamplingSwitch("", "simplesampling", "use simple sampling instead of the large deviation scheme", false);
+        TCLAP::SwitchArg onlyBoundsSwitch("", "onlyBounds", "just output minimum and maximum of the wanted observable and exit", false);
         TCLAP::SwitchArg benchmarkSwitch("b", "benchmark", "perform benchmark", false);
         TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode (equal to -v 0)", false);
 
@@ -132,6 +133,7 @@ Cmd::Cmd(int argc, char** argv)
 
         cmd.add(aklHeuristicSwitch);
         cmd.add(simpleSamplingSwitch);
+        cmd.add(onlyBoundsSwitch);
         cmd.add(benchmarkSwitch);
 
         cmd.add(quietSwitch);
@@ -147,6 +149,11 @@ Cmd::Cmd(int argc, char** argv)
         {
             LOG(LOG_INFO) << "Benchmark Mode";
             return;
+        }
+        onlyBounds = onlyBoundsSwitch.getValue();
+        if(onlyBounds)
+        {
+            LOG(LOG_INFO) << "onlyBounds Mode";
         }
 
         // Get the value parsed by each arg.

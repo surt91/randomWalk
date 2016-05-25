@@ -22,12 +22,7 @@ Simulation::Simulation(const Cmd &o)
         throw std::invalid_argument("Path is not writable");
     }
 
-    if(o.wantedObservable == WO_SURFACE_AREA)
-        S = [](const std::unique_ptr<Walker> &w){ return w->L(); };
-    else if(o.wantedObservable == WO_VOLUME)
-        S = [](const std::unique_ptr<Walker> &w){ return w->A(); };
-    else
-        LOG(LOG_ERROR) << "observable " << o.wantedObservable << " is not known";
+    S = prepareS(o);
 }
 
 Simulation::~Simulation()
@@ -97,4 +92,66 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
     }
 
     w->updateHull();
+}
+
+std::function<double(std::unique_ptr<Walker>&)> Simulation::prepareS(const Cmd &o)
+{
+    std::function<double(std::unique_ptr<Walker>&)> S;
+
+    if(o.wantedObservable == WO_SURFACE_AREA)
+        S = [](const std::unique_ptr<Walker> &w){ return w->L(); };
+    else if(o.wantedObservable == WO_VOLUME)
+        S = [](const std::unique_ptr<Walker> &w){ return w->A(); };
+    else
+        LOG(LOG_ERROR) << "observable " << o.wantedObservable << " is not known";
+
+    return S;
+}
+
+double Simulation::getUpperBound(Cmd &o)
+{
+    double S_min = 0;
+
+    std::unique_ptr<Walker> w;
+    prepare(w, o);
+    auto S = prepareS(o);
+
+    // the degenerate case is -- hopefully -- the case of maximum Volume
+    if(o.wantedObservable == WO_VOLUME)
+    {
+        w->degenerateMaxVolume();
+        S_min = S(w);
+    }
+    else
+    {
+        w->degenerateMaxSurface();
+        S_min = S(w);
+    }
+
+    return S_min;
+}
+
+double Simulation::getLowerBound(Cmd &o)
+{
+    if(o.wantedObservable == WO_VOLUME)
+        return 0;
+
+    double S_min = 0;
+
+    std::unique_ptr<Walker> w;
+    prepare(w, o);
+    auto S = prepareS(o);
+
+    if(o.wantedObservable == WO_VOLUME)
+    {
+        w->degenerateMinVolume();
+        S_min = S(w);
+    }
+    else
+    {
+        w->degenerateMinSurface();
+        S_min = S(w);
+    }
+
+    return S_min;
 }

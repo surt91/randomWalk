@@ -67,13 +67,15 @@ class SpecWalker : public Walker
         ///\name degenerate cases
         virtual void degenerateMaxVolume();
         virtual void degenerateMaxSurface();
-        virtual void degenerateSpiral();
-        virtual void degenerateStraight();
+        virtual void degenerateMinVolume();
+        virtual void degenerateMinSurface();
 
     protected:
         std::vector<Step<T>> m_steps;
         std::vector<Step<T>> m_points;
         ConvexHull<T> m_convex_hull;
+
+        void goDownhill(bool maximize, wanted_observable_t observable);
 };
 
 /// do initialization, e.g. calculate the steps and the hull
@@ -323,6 +325,34 @@ double SpecWalker<T>::r2()
     return tmp * tmp;
 }
 
+template <class T>
+void SpecWalker<T>::goDownhill(bool maximize, wanted_observable_t observable)
+{
+    std::function<double()> S;
+    if(observable == WO_SURFACE_AREA)
+        S = [this](){ return this->L(); };
+    if(observable == WO_VOLUME)
+        S = [this](){ return this->A(); };
+
+    while(true)
+    {
+        double veryOldS = S();
+        // abort if there is no improvement after 1000 changes
+        for(int i=0; i<100; ++i)
+        {
+            // change one random number to another random number
+            double oldS = S();
+            change(rng);
+
+            if(maximize ^ (S() > oldS))
+                undoChange();
+        }
+        if(maximize ? S() <= veryOldS + 1e-5 : S() >= veryOldS - 1e-5)
+            break;
+        veryOldS = S();
+    }
+}
+
 /** set the random numbers such that we get an L shape
  */
 template <>
@@ -349,14 +379,12 @@ inline void SpecWalker<int>::degenerateMaxSurface()
     updateHull();
 }
 
-/** set the random numbers such that we get a spiral
+/** set the random numbers such that we get an one dimensional line
  */
 template <>
-inline void SpecWalker<int>::degenerateSpiral()
+inline void SpecWalker<int>::degenerateMinVolume()
 {
-    // TODO: find some easy construction for a spiral in arbitrary dimensions
-    // FIXME: right now, it is a straight line instead of a spiral
-    for(size_t i=0; i<random_numbers.size(); ++i)
+    for(int i=0; i<numSteps; ++i)
         random_numbers[i] = .99;
 
     updateSteps();
@@ -364,13 +392,13 @@ inline void SpecWalker<int>::degenerateSpiral()
     updateHull();
 }
 
-/** set the random numbers such that we get a straight line
+/** set the random numbers such that we always step left, right, left, right
  */
 template <>
-inline void SpecWalker<int>::degenerateStraight()
+inline void SpecWalker<int>::degenerateMinSurface()
 {
     for(size_t i=0; i<random_numbers.size(); ++i)
-        random_numbers[i] = .99;
+        random_numbers[i] = i % 2 ? .99 : .99 - 1/d;
 
     updateSteps();
     updatePoints();
@@ -383,18 +411,64 @@ template <>
 inline void SpecWalker<double>::degenerateMaxVolume()
 {
     // FIXME: this works only for d=2
+    if(d>2)
+    {
+        LOG(LOG_WARNING) << "Max Volume configuration is not really max volume";
+    }
     for(int i=0; i<numSteps; ++i)
         random_numbers[i] = .5 / (i+1);
 
     updateSteps();
     updatePoints();
     updateHull();
+
+    goDownhill(true, WO_VOLUME);
+}
+
+/** Set the random numbers such that we get an half circle shape in d-1 dimensions.
+ */
+template <>
+inline void SpecWalker<double>::degenerateMaxSurface()
+{
+    // FIXME: this works only for d<=3
+    if(d>3)
+    {
+        LOG(LOG_WARNING) << "Max Surface configuration is not really max surface";
+    }
+    if(d==3)
+        for(size_t i=0; i<random_numbers.size(); ++i)
+            random_numbers[i] = .99 / ceil((double) (d-1) * (i+1)/random_numbers.size());
+    if(d==2)
+        for(size_t i=0; i<random_numbers.size(); ++i)
+            random_numbers[i] = .99;
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+
+    goDownhill(true, WO_SURFACE_AREA);
+}
+
+/** Set the random numbers such that we get an half circle shape in d-1 dimensions.
+ */
+template <>
+inline void SpecWalker<double>::degenerateMinVolume()
+{
+    // FIXME: this works only for d=2
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i] = .5 / (i+1);
+
+    updateSteps();
+    updatePoints();
+    updateHull();
+
+    goDownhill(false, WO_VOLUME);
 }
 
 /** Set the random numbers such that we get an L shape in d-1 dimensions.
  */
 template <>
-inline void SpecWalker<double>::degenerateMaxSurface()
+inline void SpecWalker<double>::degenerateMinSurface()
 {
     for(size_t i=0; i<random_numbers.size(); ++i)
         random_numbers[i] = .99 / ceil((double) (d-1) * (i+1)/random_numbers.size());
@@ -402,32 +476,6 @@ inline void SpecWalker<double>::degenerateMaxSurface()
     updateSteps();
     updatePoints();
     updateHull();
-}
 
-/** Set the random numbers such that we get a spiral.
- */
-template <>
-inline void SpecWalker<double>::degenerateSpiral()
-{
-    // TODO: find some easy construction for a spiral in arbitrary dimensions
-    // FIXME: right now, it is a straight line instead of a spiral
-    for(size_t i=0; i<random_numbers.size(); ++i)
-        random_numbers[i] = .99;
-
-    updateSteps();
-    updatePoints();
-    updateHull();
-}
-
-/** Set the random numbers such that we get a straight line.
- */
-template <>
-inline void SpecWalker<double>::degenerateStraight()
-{
-    for(size_t i=0; i<random_numbers.size(); ++i)
-        random_numbers[i] = .99;
-
-    updateSteps();
-    updatePoints();
-    updateHull();
+    goDownhill(false, WO_SURFACE_AREA);
 }

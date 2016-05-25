@@ -7,42 +7,6 @@ WangLandau::WangLandau(const Cmd &o)
 {
 }
 
-double WangLandau::getUpperBound()
-{
-    double S_min = 0;
-
-    std::unique_ptr<Walker> w;
-    prepare(w, o);
-
-    // the degenerate case is -- hopefully -- the case of maximum Volume
-    if(o.wantedObservable == WO_VOLUME)
-    {
-        w->degenerateMaxVolume();
-        S_min = S(w);
-    }
-    else
-    {
-        w->degenerateMaxSurface();
-        S_min = S(w);
-    }
-
-    return S_min;
-}
-
-double WangLandau::getLowerBound()
-{
-    if(o.wantedObservable == WO_VOLUME)
-        return 0;
-
-    double S_min = 0;
-    if(o.type == WT_RANDOM_WALK)
-        S_min = 2;
-    else
-        S_min = 4*sqrt(o.steps);
-
-    return S_min;
-}
-
 /// Create a starrting walk with lb < S < ub by a simple downhill strategy.
 void WangLandau::findStart(std::unique_ptr<Walker>& w, double lb, double ub, UniformRNG& rng)
 {

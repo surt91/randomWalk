@@ -24,6 +24,14 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    if(o.onlyBounds)
+    {
+        LOG(LOG_WARNING) << "mind that the following min/max values are ony rough estimates by a downhill algorithm";
+        std::cout << "max: " << Simulation::getUpperBound(o) << std::endl;
+        std::cout << "min: " << Simulation::getLowerBound(o) << std::endl;
+        return 0;
+    }
+
     if(o.sampling_method == SM_METROPOLIS)
     {
         Metropolis sim(o);

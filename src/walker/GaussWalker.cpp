@@ -110,4 +110,6 @@ void GaussWalker::degenerateMaxVolume()
     updateSteps();
     updatePoints();
     updateHull();
+
+    goDownhill(true, WO_VOLUME);
 }

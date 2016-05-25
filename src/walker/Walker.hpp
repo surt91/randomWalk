@@ -60,8 +60,8 @@ class Walker
 
         virtual void degenerateMaxVolume() = 0;
         virtual void degenerateMaxSurface() = 0;
-        virtual void degenerateSpiral() = 0;
-        virtual void degenerateStraight() = 0;
+        virtual void degenerateMinVolume() = 0;
+        virtual void degenerateMinSurface() = 0;
 
         virtual int nRN() const;
 
