@@ -165,12 +165,13 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
             undo_symmetry = iMatrix3[symmetry];
             break;
         default:
-            throw std::invalid_argument("Pivot algorithm only implemented for d=2 and d=3");
+            LOG(LOG_WARNING) << "Pivot algorithm only implemented for d<=3, will only use naive changes";
     }
 
     // choose the change algorithm randomly
     // 20% pivot chance, 80% naive change
-    if(rng() > 0.8)
+    // pivot not implemented for d >= 4
+    if(d <= 3 && rng() > 0.8)
     {
         pivot(idx, symmetry);
     }
