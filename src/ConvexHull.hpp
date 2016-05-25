@@ -537,7 +537,7 @@ std::vector<std::vector<Step<T>>> ConvexHull<T>::hullFacets() const
 template <>
 inline int ConvexHull<double>::countZerosAndUpdateCmd(std::string &cmd)
 {
-    cmd = "QJ";
+    cmd = "QJ Pp";
     return 0;
 }
 
