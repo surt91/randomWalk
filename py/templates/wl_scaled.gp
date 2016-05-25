@@ -4,7 +4,8 @@
 
 {{ header(filename+N|string, xlabel, ylabel) }}
 
-nu = {{ 1 if observable == 2 else 0.5 }}*d/2
+d = {{ dimension }}
+nu = {{ 1 if observable == 2 else 0.5 }}*d/2.
 
 plot \
 {% for N in number_of_steps %}
