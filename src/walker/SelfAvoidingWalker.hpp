@@ -22,18 +22,18 @@ class SelfAvoidingWalker final : public SpecWalker<int>
 
         void updateSteps() final;
 
-        void change(UniformRNG &rng) final;
+        void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
     protected:
         Step<int> transform(Step<int> &p, const int *m) const;
-        bool pivot(const int index, const int op);
+        bool pivot(const int index, const int op, bool update=true);
 
         int undo_naive_index;
         Step<int> undo_naive_step;
         Step<int> undo_step;
         int undo_symmetry;
-        bool naiveChange(const int idx, const double rn);
+        bool naiveChange(const int idx, const double rn, bool update=true);
         void naiveChangeUndo();
 
         std::list<double> dim(int N);

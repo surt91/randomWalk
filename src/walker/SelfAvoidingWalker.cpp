@@ -147,7 +147,7 @@ void SelfAvoidingWalker::updateSteps()
 
 // TODO: this version does not equilibrate for theta > -50
 //       further kind of change? Parallel Tempering?
-void SelfAvoidingWalker::change(UniformRNG &rng)
+void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
 {
     // do a pivot change
     // choose the pivot
@@ -173,14 +173,14 @@ void SelfAvoidingWalker::change(UniformRNG &rng)
     // pivot not implemented for d >= 4
     if(d <= 3 && rng() > 0.8)
     {
-        pivot(idx, symmetry);
+        pivot(idx, symmetry, update);
     }
     else
     {
         undo_index = -1;
         int idx = rng() * nRN();
         auto val = rng();
-        naiveChange(idx, val);
+        naiveChange(idx, val, update);
     }
 }
 
@@ -203,7 +203,7 @@ Step<int> SelfAvoidingWalker::transform(Step<int> &p, const int *m) const
     return out;
 }
 
-bool SelfAvoidingWalker::pivot(const int index, const int op)
+bool SelfAvoidingWalker::pivot(const int index, const int op, bool update)
 {
     const int* matrix;
     // FIXME: implement for d > 3
@@ -264,7 +264,8 @@ bool SelfAvoidingWalker::pivot(const int index, const int op)
             m_steps[i] = transform(m_steps[i], matrix);
 
         updatePoints(index+1);
-        updateHull();
+        if(update)
+            updateHull();
     }
 
     return !failed;
@@ -282,7 +283,7 @@ void SelfAvoidingWalker::naiveChangeUndo()
     updateHull();
 }
 
-bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
+bool SelfAvoidingWalker::naiveChange(const int idx, const double rn, bool update)
 {
     undo_naive_index = idx;
     undo_naive_step = m_steps[idx];
@@ -303,7 +304,8 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn)
         return false;
     }
 
-    updateHull();
+    if(update)
+        updateHull();
 
     return true;
 }
@@ -400,3 +402,29 @@ std::list<double> SelfAvoidingWalker::dim(int N)
         return part1;
     }
 }
+
+//~ /** set the random numbers such that we get an one dimensional line
+ //~ */
+//~ template <>
+//~ inline void SelfAvoidingWalker::degenerateMinVolume()
+//~ {
+    //~ for(int i=0; i<numSteps; ++i)
+        //~ random_numbers[i] = .99;
+
+    //~ updateSteps();
+    //~ updatePoints();
+    //~ updateHull();
+//~ }
+
+//~ /** set the random numbers such that we always step left, right, left, right
+ //~ */
+//~ template <>
+//~ inline void SpecWalker<int>::degenerateMinSurface()
+//~ {
+    //~ for(size_t i=0; i<random_numbers.size(); ++i)
+        //~ random_numbers[i] = i % 2 ? .99 : .99 - 1/d;
+
+    //~ updateSteps();
+    //~ updatePoints();
+    //~ updateHull();
+//~ }

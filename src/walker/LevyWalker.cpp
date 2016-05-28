@@ -54,7 +54,7 @@ void LevyWalker::updateSteps()
         m_steps[i] = genStep(random_numbers.begin() + i*(d-1));
 }
 
-void LevyWalker::change(UniformRNG &rng)
+void LevyWalker::change(UniformRNG &rng, bool update)
 {
     // We need d random numbers per step
     // d-1 uniformly distributed to determine the d-1 angles
@@ -70,7 +70,9 @@ void LevyWalker::change(UniformRNG &rng)
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
     updatePoints(idx+1);
-    updateHull();
+
+    if(update)
+        updateHull();
 }
 
 void LevyWalker::undoChange()

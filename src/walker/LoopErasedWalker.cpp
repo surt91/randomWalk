@@ -87,7 +87,7 @@ int LoopErasedWalker::nRN() const
     return random_numbers_used;
 }
 
-void LoopErasedWalker::change(UniformRNG &rng)
+void LoopErasedWalker::change(UniformRNG &rng, bool update)
 {
     // I should do this in a far more clever way
     int idx = rng() * nRN();
@@ -102,7 +102,9 @@ void LoopErasedWalker::change(UniformRNG &rng)
 
     updateSteps();
     updatePoints();
-    updateHull();
+
+    if(update)
+        updateHull();
 }
 
 void LoopErasedWalker::undoChange()

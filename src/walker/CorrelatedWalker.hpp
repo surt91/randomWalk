@@ -22,7 +22,7 @@ class CorrelatedWalker final : public SpecWalker<double>
         void updateSteps() final;
         void updatePoints(int start=1) final;
 
-        void change(UniformRNG &rng) final;
+        void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
         void setP1(double mu) final;

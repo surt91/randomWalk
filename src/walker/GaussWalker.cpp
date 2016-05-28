@@ -29,7 +29,7 @@ void GaussWalker::updateSteps()
         m_steps[i] = genStep(random_numbers.begin() + i*d);
 }
 
-void GaussWalker::change(UniformRNG &rng)
+void GaussWalker::change(UniformRNG &rng, bool update)
 {
     // We need d random numbers per step to determine the d directions
     steps(); // steps need to be initialized
@@ -42,7 +42,9 @@ void GaussWalker::change(UniformRNG &rng)
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
     updatePoints(idx+1);
-    updateHull();
+
+    if(update)
+        updateHull();
 }
 
 void GaussWalker::undoChange()

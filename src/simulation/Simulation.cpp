@@ -128,6 +128,8 @@ double Simulation::getUpperBound(Cmd &o)
         S_min = S(w);
     }
 
+    w->svg("upper.svg");
+
     return S_min;
 }
 
@@ -152,6 +154,8 @@ double Simulation::getLowerBound(Cmd &o)
         w->degenerateMinSurface();
         S_min = S(w);
     }
+
+    w->svg("lower.svg");
 
     return S_min;
 }

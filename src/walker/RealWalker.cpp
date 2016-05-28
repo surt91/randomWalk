@@ -49,7 +49,7 @@ void RealWalker::updateSteps()
         m_steps[i] = genStep(random_numbers.begin() + i*(d-1));
 }
 
-void RealWalker::change(UniformRNG &rng)
+void RealWalker::change(UniformRNG &rng, bool update)
 {
     // We need d-1 random numbers per step to determine the d-1 angles
     int idx = rng() * numSteps;
@@ -61,7 +61,9 @@ void RealWalker::change(UniformRNG &rng)
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
     updatePoints(idx+1);
-    updateHull();
+
+    if(update)
+        updateHull();
 }
 
 void RealWalker::undoChange()

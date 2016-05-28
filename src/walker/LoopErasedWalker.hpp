@@ -22,7 +22,7 @@ class LoopErasedWalker final : public SpecWalker<int>
 
         int nRN() const final;
 
-        void change(UniformRNG &rng) final;
+        void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
     protected:

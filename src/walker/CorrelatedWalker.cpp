@@ -98,7 +98,7 @@ void CorrelatedWalker::updatePoints(int /*start*/)
     }
 }
 
-void CorrelatedWalker::change(UniformRNG &rng)
+void CorrelatedWalker::change(UniformRNG &rng, bool update)
 {
     // We need d random numbers per step to determine the d-1 angles and distance
     int idx = rng() * numSteps;
@@ -111,7 +111,9 @@ void CorrelatedWalker::change(UniformRNG &rng)
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
     updatePoints(idx+1);
-    updateHull();
+
+    if(update)
+        updateHull();
 }
 
 void CorrelatedWalker::undoChange()

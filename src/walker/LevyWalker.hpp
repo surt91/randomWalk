@@ -16,7 +16,7 @@ class LevyWalker final : public SpecWalker<double>
 
         void updateSteps() final;
 
-        void change(UniformRNG &rng) final;
+        void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
     protected:

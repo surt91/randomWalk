@@ -51,7 +51,7 @@ class Walker
          * #hullDirty to true, call updateSteps(), updatePoints() or
          * updateHull() or doing it manually in the implementation.
          */
-        virtual void change(UniformRNG &rng) = 0;
+        virtual void change(UniformRNG &rng, bool update=true) = 0;
         virtual void undoChange() = 0;
 
         virtual void updateSteps() = 0;

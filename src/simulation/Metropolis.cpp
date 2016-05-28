@@ -195,7 +195,7 @@ void Metropolis::run()
             {
                 // change one random number to another random number
                 double oldS = S(w);
-                w->change(rngMC);
+                w->change(rngMC, !o.simpleSampling);
                 ++tries;
 
                 if(!o.simpleSampling)
@@ -209,6 +209,9 @@ void Metropolis::run()
                     }
                 }
             }
+            if(o.simpleSampling)
+                w->updateHull();
+
             if(i >= 2*o.t_eq)
             {
                 if(!o.conf_path.empty())

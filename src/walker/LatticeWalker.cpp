@@ -15,7 +15,7 @@ void LatticeWalker::updateSteps()
         m_steps.emplace_back(d, random_numbers[i]);
 }
 
-void LatticeWalker::change(UniformRNG &rng)
+void LatticeWalker::change(UniformRNG &rng, bool update)
 {
     int idx = rng() * nRN();
     undo_index = idx;
@@ -29,7 +29,9 @@ void LatticeWalker::change(UniformRNG &rng)
 
     m_steps[idx] = newStep;
     updatePoints(idx+1);
-    updateHull();
+
+    if(update)
+        updateHull();
 }
 
 void LatticeWalker::undoChange()
