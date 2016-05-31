@@ -84,6 +84,7 @@ def process_data(infiles, outformat):
 
     # flatten
     centers = centers.flatten()
+    centers_err = [0 for i in range(len(centers))]
     data = data.flatten()
     stderr = stderr.flatten()
 
@@ -94,9 +95,9 @@ def process_data(infiles, outformat):
 
     outfile = outformat.format("WL")
     with open(outfile, "w") as f:
-        f.write("# S err P(S) P(S)_err\n")
-        for d in zip(centers, data, stderr):
-            f.write("{} {} {}\n".format(*d))
+        f.write("# S ln(P(S)) ln(P(S)_err)\n")
+        for d in zip(centers, centers_err, data, stderr):
+            f.write("{} {} {} {}\n".format(*d))
 
 
 def stichInterpol(centers, data, stderr):
