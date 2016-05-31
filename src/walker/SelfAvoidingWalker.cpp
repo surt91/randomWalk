@@ -165,6 +165,7 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
             undo_symmetry = iMatrix3[symmetry];
             break;
         default:
+            symmetry = -1;
             LOG(LOG_WARNING) << "Pivot algorithm only implemented for d<=3, will only use naive changes";
     }
 

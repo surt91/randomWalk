@@ -27,7 +27,10 @@ plot \
 
 f(x) = a*x**b
 fit f(x) "phi_inf.dat" u 1:2:3 yerr via a, b
-p "phi_inf.dat", \
-  f(x) t sprintf("ax^{/Symbol k}, {/Symbol k} = %.2f(%.0f), {/Symbol c} = %.1f", b, b_err*1e2, FIT_STDFIT*FIT_STDFIT)
+
+set log xy
+
+p "phi_inf.dat" u 1:2:3 w ye, \
+  f(x) t sprintf("{/Symbol F} = as^{/Symbol k}, {/Symbol k} = %.3f(%.0f), {/Symbol c} = %.1f", b, b_err*1e3/FIT_STDFIT, FIT_STDFIT*FIT_STDFIT)
 
 {% endblock content %}
