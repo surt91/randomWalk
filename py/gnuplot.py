@@ -7,9 +7,12 @@ from multiprocessing import Pool
 
 import jinja2
 
+from data import nu
+
 
 def makebase(name, **kwargs):
     return name.format(**kwargs)
+
 
 class Gnuplot():
     def __init__(self, **kwargs):
@@ -30,21 +33,25 @@ class Gnuplot():
         os.makedirs(self.d, exist_ok=True)
 
     def every(self):
+        fmt = "%f/d" if self.kwargs["observable"] == 2 else "%f/(d-1)"
+        exponent = fmt % nu[self.kwargs["typ"]][self.kwargs["dimension"]]
         if self.kwargs["sampling"] == 1:
             self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
             self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
             self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
             self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
-            self.create("scaled", "{/Symbol %s} / {/Italic T%s}" % (self.observable, "" if self.observable == "A" else "^{1/2}"), "{/Italic T%s p}" % ("" if self.observable == "A" else "^{1/2}"))
+            self.create("scaled", "{/Symbol %s} / {/Italic T^{%s}}" % exponent, "{/Italic T^{%s} p}" % exponent)
             self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
             self.create("r", "{/Italic r}", "{/Italic N}")
             self.create("r2", "{/Italic r^2}", "{/Italic N}")
             self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
         elif self.kwargs["sampling"] == 2:
             self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
-            self.create("wl_scaled", "{/Symbol %s} / {/Italic T%s}" % (self.observable, "" if self.observable == "A" else "^{1/2}"), "{/Italic T%s p}" % ("" if self.observable == "A" else "^{1/2}"))
+            self.create("wl_scaled", "{/Symbol %s} / {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
             self.create("wl_raw", "{/Symbol %s}" % self.observable, "{/Italic counts}")
             self.create("wl_stiched", "{/Symbol %s}" % self.observable, "{/Italic counts}")
+            self.create("wl_rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
+            self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
@@ -56,6 +63,7 @@ class Gnuplot():
                                     raw=self.rawDataPath,
                                     filename=name,
                                     param=self.kwargs,
+                                    nu=nu,
                                     **self.kwargs,
                                     **kwargs))
 
