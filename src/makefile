@@ -48,6 +48,9 @@ silent: release
 debug: CXXFLAGS += -g -Og
 debug: all CXXFLAGS += -g -Og
 
+VERSION = $(shell git rev-parse HEAD)
+CXXFLAGS += -DVERSION=\"$(VERSION)\"
+
 # for clang sanitizers
 #CXX = clang++
 #CXXFLAGS = -O1 -g -fsanitize=address -fno-omit-frame-pointer

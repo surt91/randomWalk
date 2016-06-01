@@ -144,6 +144,7 @@ Cmd::Cmd(int argc, char** argv)
 
 
         Logger::verbosity = 4;
+        LOG(LOG_INFO) << "Version: " << VERSION;
         benchmark = benchmarkSwitch.getValue();
         if(benchmark)
         {
