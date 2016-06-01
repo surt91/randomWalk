@@ -6,16 +6,38 @@ Insights, collected on the way
     + too many temperatures do not harm
     + one easily (automated by a script) sees if there are not enough
     + it is easy to calculate more
+    - does not equilibrate for negative temperatures near zero for walks
+      without bounds, eg. gaussian, especially in high dimensions
 
 * Wang Landau Sampling
     + yields very nice results
     + no need for post processing
     + needs not parameters like temperatures
-    - take virtually (and probably also literally) forever,
-      especially for the self avoiding types
+    + works well for Gaussian Walks and Levy Flights where
+      Metropolis does not equilibrate
+    - takes virtually (and probably also literally) forever,
+      especially for the self avoiding types and small values of
+      the observable
+    + can be mitigated by calculation of smaller parts without the
+      extremely degenerate cases at 0 and maximum (for lattice Walks)
+    - difficult to find the first and last bin
+      they are good, if the simulation terminates
+      -> maybe extract from previous Metropolis simulations?
+    o flatness criterion should be >= 0.8, otherwise systematic errors
+    o f_final not so important, mainly statistical error
 
 * Gaussian random walks
     - do not equilibrate for small theta
 
+* Levy Walks
+    - do not work with Metropolis sampling
+    - do not work with Wang Landau sampling and smaller energy ranges
+
 * Scaling
     o works better for real valued walks than lattice walks (maybe better for N -> infty)
+    o scaling for volume seems to be A/N**(d*\nu)
+    o scaling for surface seems to be L/N**((d-1)*\nu)
+    o scaling for a d-dimensional observable: S/N**(d*\nu)
+    + this ist the expected scaling (see first site of 10.1103/PhysRevLett.103.140602)
+    - extreme corrections to scaling for small N at the peak -> in the tail parallel but not collapsed
+    o scaling exponent \kappa seems to be \kappa = 1/(d*\nu)
