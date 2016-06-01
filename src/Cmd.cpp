@@ -145,6 +145,7 @@ Cmd::Cmd(int argc, char** argv)
 
         Logger::verbosity = 4;
         LOG(LOG_INFO) << "Version: " << VERSION;
+        LOG(LOG_INFO) << "Compiled: " << __DATE__ << " " << __TIME__;
         benchmark = benchmarkSwitch.getValue();
         if(benchmark)
         {
