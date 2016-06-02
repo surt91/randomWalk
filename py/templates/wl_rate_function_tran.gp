@@ -25,6 +25,7 @@ plot \
 
 {{ header(filename+"_fit"|string, "s", "\\Phi") }}
 
+b = 2./{{ dimension }}
 f(x) = a*x**b
 fit f(x) "phi_inf.dat" u 1:2:3 yerr via a, b
 
