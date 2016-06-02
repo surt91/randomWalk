@@ -144,8 +144,6 @@ Cmd::Cmd(int argc, char** argv)
 
 
         Logger::verbosity = 4;
-        LOG(LOG_INFO) << "Version: " << VERSION;
-        LOG(LOG_INFO) << "Compiled: " << __DATE__ << " " << __TIME__;
         benchmark = benchmarkSwitch.getValue();
         if(benchmark)
         {
@@ -164,6 +162,9 @@ Cmd::Cmd(int argc, char** argv)
         else
             Logger::verbosity = verboseArg.getValue();
         LOG(LOG_INFO) << "Verbosity                  " << Logger::verbosity;
+
+        LOG(LOG_INFO) << "Version: " << VERSION;
+        LOG(LOG_INFO) << "Compiled: " << __DATE__ << " " << __TIME__;
 
         type = (walk_type_t) typeArg.getValue();
         LOG(LOG_INFO) << "Type                       " << TYPE_LABEL[type];
