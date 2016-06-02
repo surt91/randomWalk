@@ -67,6 +67,7 @@ parameters = {
 
     "nbins": 100,
     "overlap": 20,
+    "overlap_direction": "right",
     "lnf": 1e-8,
     "flatness": 0.8,
 

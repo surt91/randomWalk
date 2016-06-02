@@ -66,8 +66,9 @@ class Simulation():
                 for T in thetas[N]:
                     self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
             if self.sampling == 2:
-                for i in range(len(energies[N])-1):
-                    self.instances.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, first=not i, **kwargs))
+                num = len(energies[N])-1
+                for i in range(num):
+                    self.instances.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, first=not i, last=(i==num-1), **kwargs))
 
     def hero(self):
         logging.info("Create .sge Files for Hero")
@@ -168,7 +169,9 @@ class SimulationInstance():
                        dimension, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
                        method, akl, sampling, parallel, nbins, overlap,
-                       lnf, flatness,theta=None, energy=None, first=False, **not_used):
+                       lnf, flatness, overlap_direction="left",
+                       theta=None, energy=None,
+                       first=False,last=False, **not_used):
 
         self.N = steps
         self.n = iterations
@@ -192,6 +195,7 @@ class SimulationInstance():
         self.overlap = overlap
         self.lnf = lnf
         self.flatness = flatness
+        self.overlap_direction = overlap_direction
 
         self.loadFile = None
 
@@ -207,10 +211,16 @@ class SimulationInstance():
         if sampling == 2:
             old_nbins = nbins
             self.nbins += overlap
-            # first one should not overlap to the left
-            if not first:
-                # overlap to the left
-                energy[0] -= (energy[1] - energy[0]) / old_nbins * overlap
+            if self.overlap_direction == "right":
+                # last one should not overlap to the right
+                if not last:
+                    # overlap to the right
+                    energy[1] += (energy[1] - energy[0]) / old_nbins * overlap
+            else:
+                # first one should not overlap to the left
+                if not first:
+                    # overlap to the right
+                    energy[0] -= (energy[1] - energy[0]) / old_nbins * overlap
 
         # change the seeds for every job in the array
         if sampling == 1:
