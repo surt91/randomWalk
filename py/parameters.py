@@ -28,9 +28,8 @@ energies = {    32: np.linspace(5, 600, 5),
            }
 
 # subdivide the beginning, to ease the peak
-energies[512] = np.insert(energies[512], 1, np.linspace(energies[512][0], energies[1024][1], 10))
-energies[1024] = np.insert(energies[1024], 1, np.linspace(energies[1024][0], energies[1024][1], 10))
-energies[2048] = np.insert(energies[2048], 1, np.linspace(energies[2048][0], energies[2048][1], 10))
+energies[1024] = np.insert(energies[1024], 1, np.linspace(energies[1024][0]+200, energies[1024][1], 10, endpoint=False))
+energies[2048] = np.insert(energies[2048], 1, np.linspace(energies[2048][0]+200, energies[2048][1], 10, endpoint=False))
 
 parameters = {
     # what type
