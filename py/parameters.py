@@ -18,9 +18,19 @@ t_eq = {
 t_corr = {
          }
 
-energies = {    32: [20, 100, 200, 300, 400, 600, 800],
-                64: [100, 500, 1000, 2000, 3000, 5000, 7000, 10000, 15000, 20000],
+energies = {    32: np.linspace(5, 600, 5),
+                64: np.linspace(20, 6000, 12),
+               128: np.linspace(20, 12000, 20),
+               256: np.linspace(20, 25000, 20),
+               512: np.linspace(20, 50000, 30),
+              1024: np.linspace(20, 100000, 40),
+              2048: np.linspace(20, 200000, 40),
            }
+
+# subdivide the beginning, to ease the peak
+energies[512] = np.insert(energies[512], 1, np.linspace(energies[512][0], energies[1024][1], 10))
+energies[1024] = np.insert(energies[1024], 1, np.linspace(energies[1024][0], energies[1024][1], 10))
+energies[2048] = np.insert(energies[2048], 1, np.linspace(energies[2048][0], energies[2048][1], 10))
 
 parameters = {
     # what type
