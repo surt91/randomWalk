@@ -248,7 +248,7 @@ def stichFile(infile, outfile, z, dz):
                 nums = list(map(float, line.split()))
                 nums[2] -= z
                 Dz += dz
-                nums[3] += Dz
+                nums[3] = Dz
                 data.append(nums)
                 fout.write("{} {} {} {}\n".format(*nums))
     return data

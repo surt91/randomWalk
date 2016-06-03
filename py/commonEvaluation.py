@@ -60,7 +60,7 @@ def cut_trans(s, pre="tran"):
         for x in s:
             # only take the 10 values next to s
             idx = np.argmin(np.abs(S[0]-x))
-            tmp = S[:,idx-5:idx+5]
+            tmp = S[:,max(0, idx-5):idx+5]
             # spline interpolate p(s) between the measured s_i
             spline = interp1d(tmp[0], tmp[2], kind='cubic')
             try:
