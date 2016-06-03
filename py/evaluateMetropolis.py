@@ -242,13 +242,13 @@ def stichFile(infile, outfile, z, dz):
     with open(infile, "r") as fin:
         with open(outfile, "w") as fout:
             fout.write("# S S_err P(S) P(S)_err\n")
+            Dz += dz
             for line in fin.readlines():
                 if line[0] == "#":
                     continue
                 nums = list(map(float, line.split()))
                 nums[2] -= z
-                Dz += dz
-                nums[3] = Dz
+                nums[3] += Dz
                 data.append(nums)
                 fout.write("{} {} {} {}\n".format(*nums))
     return data
