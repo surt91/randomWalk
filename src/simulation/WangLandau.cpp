@@ -56,7 +56,7 @@ void WangLandau::run()
     oss << "# Two lines belong together.\n";
     oss << "# First lines are the centers of the bins.\n";
     oss << "# Second lines are unnormalized, log densities of the bin.\n";
-    oss << "# One pair per energy range of the wang landau algorithm.\n";
+    oss << "# Every pair is an independent Wang landau sampling (usable for error estimation).\n";
     oss << "# ranges: " << o.wangLandauBorders << "\n";
 
     // run in parallel, in o.parallel threads, or all if not specified
