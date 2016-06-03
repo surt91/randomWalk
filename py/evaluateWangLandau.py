@@ -141,7 +141,8 @@ def run():
             p = 1
         else:
             p = param.parameters["parallel"]
-        names = ["{}/{}.dat".format(d, SimulationInstance(steps=N, energy=energies[N][i:i+p+1], first=not i, **param.parameters).basename) for i in range(len(energies[N])-1)]
+        num = len(energies[N])-1
+        names = ["{}/{}.dat".format(d, SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), first=not i, last=(i==num-1), **param.parameters).basename) for i in range(num)]
 
         logging.info("N = {}".format(N))
         getMinMaxTime(f for f in names)

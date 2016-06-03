@@ -171,7 +171,7 @@ class SimulationInstance():
                        method, akl, sampling, parallel, nbins, overlap,
                        lnf, flatness, overlap_direction="left",
                        theta=None, energy=None,
-                       first=False,last=False, **not_used):
+                       first=False, last=False, **not_used):
 
         self.N = steps
         self.n = iterations
