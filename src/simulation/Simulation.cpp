@@ -16,7 +16,7 @@ Simulation::Simulation(const Cmd &o)
     // save the commandline invocation to the outputfile
     oss << "# " << o.text << "\n";
     oss << "# Version: " << VERSION << "\n";
-    oss << "Compiled: " << __DATE__ << " " << __TIME__ << std::endl;
+    oss << "# Compiled: " << __DATE__ << " " << __TIME__ << std::endl;
 
     if(!oss.good())
     {
