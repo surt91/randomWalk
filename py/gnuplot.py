@@ -80,6 +80,7 @@ class Gnuplot():
             if ".gp" in i:
                 plots.append(i)
         cmds = [["gnuplot", i] for i in plots]
+        print("gnuplot")
         p.map(silentCall, cmds, 1)
 
         plots = []
@@ -87,6 +88,7 @@ class Gnuplot():
             if ".eps" in i:
                 plots.append(i)
         cmds = [["inkscape", "-z", "-b", '"#fff"', "-e", i.replace(".eps", ".png").strip(), "-h", "1080", i] for i in plots]
+        print("inkscape")
         p.map(silentCall, cmds, 1)
 
         os.chdir("..")
@@ -102,7 +104,6 @@ def main():
     g = Gnuplot(**para.parameters)
     print("generate Gnuplot files from Templates")
     g.every()
-    print("gnuplot and inkscape")
     g.plotall()
 
 
