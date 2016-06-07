@@ -5,7 +5,7 @@
 {{ header(filename+N|string, xlabel, ylabel) }}
 
 d = {{ dimension }}
-nu = {{ "d" if observable == 2 else "(d-1)" }}*{{ nu[typ][dimension] }}.
+nu = {{ "d" if observable == 2 else "(d-1)" }}.0*{{ nu[typ][dimension] }}
 
 plot \
 {% for N in number_of_steps %}

@@ -5,16 +5,12 @@
 {{ header(filename+N|string, xlabel, ylabel) }}
 
 set fit errorvariables
-# should be a sqrt, for normal walks
-# and linear for self avoiding walks
-{% if sampling == 3 %}
-f(x) = a*x + c
-{% else %}
-f(x) = a*x**0.5 + c
-{% endif %}
-fit f(x) "{{ path }}/simple.dat" u 1:2:3 yerr via a, c
+nu = {{ nu[typ][dimension] }}
+f(x) = a*x**b
+fit f(x) "{{ path }}/simple.dat" u 1:2:3 yerr via a, b
 
 plot "{{ path }}/simple.dat" u 1:2:3 w yerr t "r", \
-     f(x) t sprintf("fit: r = %.2f*sqrt(N)+%.2f, chi^2 = %.1f", a, c, FIT_STDFIT*FIT_STDFIT)
+     f(x) t sprintf("exponent: %.2f(%.0f), expected: %.2f, chi^2 = %.1f", b, b_err, nu, FIT_STDFIT**2)
+
 
 {% endblock content %}
