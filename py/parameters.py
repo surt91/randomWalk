@@ -102,5 +102,7 @@ parameters = {
     "basee": basee,
 
     # parameter for evaluation of the rate function
-    "S": [0.02, 0.04, 0.06, 0.08, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    "S":     [0.02, 0.04, 0.06, 0.08, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    # N to begin the fit (one entry per value of S)
+    "N_min": [   0,    0,    0,    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],
 }

@@ -11,7 +11,7 @@ set log y
 
 {% for n, s in enumerate(S) %}
     f{{ n }}(x) = phi_inf{{ n }} - xi{{ n }}*x**(-gamma{{ n }})
-    fit f{{ n }}(x) "{{ path }}/tran_{{ makebase(noNname+"_S{s}", s=s) }}.dat" u 1:2:3 yerr via phi_inf{{ n }}, xi{{ n }}, gamma{{ n }}
+    fit [{{ N_min[n] }}:] f{{ n }}(x) "{{ path }}/tran_{{ makebase(noNname+"_S{s}", s=s) }}.dat" u 1:2:3 yerr via phi_inf{{ n }}, xi{{ n }}, gamma{{ n }}
     chi{{ n }} = FIT_STDFIT
     print "{{ s }} ", phi_inf{{ n }}, phi_inf{{ n }}_err, chi{{ n }}**2
 {% endfor %}
