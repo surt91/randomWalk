@@ -15,12 +15,12 @@ if __name__ == "__main__":
         elif "--log" in sys.argv:
             ht = 2
             logging.info("Using logarithmic histogram")
-        elif "--flat":
+        elif "--flat" in sys.argv:
             ht = 3
             logging.info("Using percentile-based histogram")
         else:
-            logging.info("Default: Using equi-spaced histogram")
-            ht = 1
+            logging.info("Default: Using log-spaced histogram")
+            ht = 2
         evaluateMetropolis.run(ht)
     elif param.parameters["sampling"] == 2:
         evaluateWangLandau.run()

@@ -41,3 +41,8 @@ Insights, collected on the way
     + this ist the expected scaling (see first site of 10.1103/PhysRevLett.103.140602)
     - extreme corrections to scaling for small N at the peak -> in the tail parallel but not collapsed
     o scaling exponent \kappa seems to be \kappa = 1/(d*\nu)
+
+* Histogram Types for Metropolis
+    - linear scale is very bad for "left side"
+    - percentile based bins show weird artifacts (steps, ..)
+    + log scale is well suited for rate function
