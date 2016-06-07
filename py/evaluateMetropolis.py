@@ -284,7 +284,12 @@ def eval_simplesampling(name, outdir, N=0):
             f.write(s)
 
 
-def run(flatHistogram=True):
+def run(histogram_type=1):
+    """
+    @param histogram_type can be: 1 for equispaced (i.e. linear)
+                                  2 for logarithmic
+                                  3 for percentile based (i.e. flat)
+    """
     thetas = param.parameters["thetas"]
     steps = param.parameters["number_of_steps"]
     d = param.parameters["rawData"]
@@ -344,12 +349,15 @@ def run(flatHistogram=True):
         # since sometimes they are discrete, which can result in artifacts
         num_bins = min(num_bins, (maximum - minimum))
 
-        bins = np.linspace(minimum, maximum, num=num_bins)
-
-        # get bins, such that every bin contains roughly the same amount
-        # of data points (total)
-        if flatHistogram:
+        # get bins, according to the chosen type
+        if histogram_type == 1:
+            bins = np.linspace(minimum, maximum, num=num_bins)
+        elif histogram_type == 2:
+            bins = np.logspace(np.log10(minimum), np.log10(maximum), num=num_bins)
+        elif histogram_type == 3:
             bins = getPercentileBasedBins(dataDict, num_bins)
+        else:
+            raise
 
         for T in theta_for_N:
             data = getDistribution(dataDict[T],
@@ -410,11 +418,16 @@ if __name__ == "__main__":
     # decide which histogram type to use:
     # equi spaced histograms seem to be better for Gaussian walks
     # percentile based, flat histograms, lead to similar errors for all bins
-    if "--noFlat" in sys.argv:
-        flatHistogram = False
+    if "--lin" in sys.argv:
+        ht = 1
         logging.info("Using equi-spaced histogram")
-    else:
+    elif "--log" in sys.argv:
+        ht = 2
+        logging.info("Using logarithmic histogram")
+    elif "--flat":
+        ht = 3
         logging.info("Using percentile-based histogram")
-        flatHistogram = True
+    else:
+        raise
 
-    run(flatHistogram)
+    run(ht)
