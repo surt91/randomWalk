@@ -18,6 +18,10 @@ Simulation::Simulation(const Cmd &o)
     oss << "# Version: " << VERSION << "\n";
     oss << "# Compiled: " << __DATE__ << " " << __TIME__ << std::endl;
 
+    time_t _tm = time(NULL);
+    struct tm *curtime = localtime(&_tm);
+    oss << "# Started: " << asctime(curtime);
+
     if(!oss.good())
     {
         LOG(LOG_ERROR) << "Path is not writable " << o.data_path;
@@ -45,8 +49,11 @@ Simulation::~Simulation()
     oss << "# proposed changes: " << tries << "\n";
     oss << "# rejected changes: " << fails << " (" << (100.*fails / tries) << "%)" << "\n";
     // time will be overestimated because of the equilibration
+    time_t _tm = time(NULL);
+    struct tm *curtime = localtime(&_tm);
+    oss << "# Ended: " << asctime(curtime) << std::endl;
     oss << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations) << "\n";
-    oss << "# max vmem: " << vmPeak() << std::endl;
+    oss << "# max vmem: " << vmPeak() << "\n";
     oss.close();
 
     std::string cmd("gzip -f ");
