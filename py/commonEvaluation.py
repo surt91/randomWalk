@@ -10,11 +10,22 @@ import parameters as param
 def getMinMaxTime(filenames):
     times = []
     mems = []
+    versions = []
     for filename in filenames:
         with gzip.open(filename+".gz", "rt") as f:
             for i in f.readlines():
                 if "# Does not equilibrate" in i:
                     break
+
+                if "# Version" in i:
+                    s = i.split(":")[-1].strip()
+                    versions.append([s])
+                if "# Compiled" in i:
+                    s = i.split(":")[1:]
+                    versions[-1].append("".join(s).strip())
+                if "# Started" in i:
+                    s = i.split(":")[1:].strip()
+                    # ?
                 if "# time in seconds" in i or "# time/sweep in seconds" in i:
                     s = i.split(":")[-1].strip().strip("s")
                     times.append(float(s))
@@ -29,6 +40,10 @@ def getMinMaxTime(filenames):
         logging.info("memory between {:.0f}kB - {:.0f}kB".format(min(mems), max(mems)))
     except ValueError:
         logging.info("No memory measured")
+    try:
+        logging.info("used versions: {}".format(", ".join(set(str(i) for i in versions))))
+    except ValueError:
+        logging.info("No version information")
 
 
 def cut_trans(s, pre="tran"):
