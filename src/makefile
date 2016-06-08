@@ -87,7 +87,7 @@ obj dep:
 
 # compile the parts containing the version new, after changes to git
 # compare http://stackoverflow.com/a/6526504/1698412
-simulation/Simulation.o Cmd.o: .git/HEAD .git/index
+obj/simulation/Simulation.o obj/Cmd.o: ../.git/HEAD ../.git/index
 
 # perfect dependencies, see https://www.gnu.org/software/make/manual/make.pdf
 dep/%.d: %.cpp | dep
