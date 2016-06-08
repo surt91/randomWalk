@@ -13,6 +13,9 @@ Simulation::Simulation(const Cmd &o)
     sum_r = 0.;
     sum_r2 = 0.;
 
+    // set output to 12 significant digits.
+    // storage is cheap and it can not worsen the results
+    oss.precision(12);
     // save the commandline invocation to the outputfile
     oss << "# " << o.text << "\n";
     oss << "# Version: " << VERSION << "\n";

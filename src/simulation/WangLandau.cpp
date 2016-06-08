@@ -52,7 +52,6 @@ void WangLandau::run()
         bins[i].emplace_back(ub);
     }
 
-    oss.precision(12);
     oss << "# Two lines belong together.\n";
     oss << "# First lines are the centers of the bins.\n";
     oss << "# Second lines are unnormalized, log densities of the bin.\n";
