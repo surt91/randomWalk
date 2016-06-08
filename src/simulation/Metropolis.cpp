@@ -183,9 +183,11 @@ void Metropolis::run()
         // if it is still -1, the equilibrations was aborted
         if(o.t_eq == -1)
         {
-            LOG(LOG_WARNING) << "Not equilibrated after " << o.t_eqMax << " sweeps. Aborting...";
-            oss << "# Does not equilibrate" << std::endl;
-            return;
+            LOG(LOG_WARNING) << "Not equilibrated after " << o.t_eqMax << " sweeps.";
+            //~ oss << "# Does not equilibrate" << std::endl;
+            //~ return;
+            oss << "# Did not equilibrate after" << o.t_eqMax << " sweeps. Start measurements now." << std::endl;
+            o.t_eq = o.t_eqMax;
         }
 
         for(int i=o.t_eq; i<o.iterations+2*o.t_eq; ++i)
