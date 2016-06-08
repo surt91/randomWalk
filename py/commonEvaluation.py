@@ -22,9 +22,10 @@ def getMinMaxTime(filenames):
                     versions.append([s])
                 if "# Compiled" in i:
                     s = i.split(":")[1:]
-                    versions[-1].append("".join(s).strip())
+                    versions[-1].append(":".join(s).strip())
                 if "# Started" in i:
-                    s = i.split(":")[1:].strip()
+                    s = i.split(":")[1:]
+                    s = ":".join(s).strip()
                     # ?
                 if "# time in seconds" in i or "# time/sweep in seconds" in i:
                     s = i.split(":")[-1].strip().strip("s")
