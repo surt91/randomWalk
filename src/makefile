@@ -48,7 +48,7 @@ silent: release
 debug: CXXFLAGS += -g -Og
 debug: all CXXFLAGS += -g -Og
 
-VERSION := $(shell git rev-parse HEAD)
+VERSION := $(shell git describe --tags --always)
 CXXFLAGS += -DVERSION=\"$(VERSION)\"
 
 # for clang sanitizers
