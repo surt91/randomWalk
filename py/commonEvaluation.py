@@ -97,3 +97,31 @@ def cut_trans(s, pre="tran"):
             f.write("# N p(s) err\n")
             for N in param.parameters["number_of_steps"]:
                 f.write("{} {} {}\n".format(N, P[N][x], P_err[N][x]))
+
+
+def get_max_dist():
+    """Get Maxima of the distributions.
+    Used for experimental extraction of scaling exponents and corrections
+    to scaling.
+    """
+    #~ maxX, maxY, xErr, yErr
+    for N in param.parameters["number_of_steps"]:
+        name = param.basename.format(steps=N, **param.parameters)
+        if param.parameters["sampling"] == 1:
+            prefix = "whole"
+        elif param.parameters["sampling"] == 2:
+            prefix = "WL"
+        else:
+            raise
+
+        whole_distribution_file = "{}/{}_{}.dat".format(param.parameters["directory"], prefix, name)
+        a = np.loadtxt(whole_distribution_file)
+        a = a.transpose()
+
+        idx = np.argmax(a[2])
+        maxX = a[0][idx]
+        maxY = a[2][idx]
+        xErr = a[1][idx]
+        yErr = a[3][idx]
+
+        print(N, maxX, xErr, maxY, yErr)

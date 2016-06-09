@@ -26,3 +26,4 @@ if __name__ == "__main__":
         evaluateWangLandau.run()
 
     commonEvaluation.cut_trans(param.parameters["S"])
+    commonEvaluation.get_max_dist()
