@@ -43,8 +43,8 @@ def getAutocorrTime(data, T="?"):
 
 def testIfAborted(filename):
     with gzip.open(filename+".gz") as f:
-        # it will be noted in the first 5 lines, if we aborted
-        for _ in range(5):
+        # it will be noted in the first 15 lines, if we aborted
+        for _ in range(15):
             if b"# Does not equilibrate" in f.readline():
                 return True
     return False
@@ -59,7 +59,6 @@ def getDataFromFile(filename, col, T="?"):
         except FileNotFoundError:
             logging.error("cannot find " + filename)
             return
-
     data = a.transpose()[col]
     t_corr = getAutocorrTime(data, T=T)
     # do only keep statistically independent samples to not underestimate the error
