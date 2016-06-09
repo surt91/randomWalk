@@ -8,6 +8,14 @@ import parameters as param
 
 
 def getMinMaxTime(filenames):
+    """Reads files given in first argument and collects metadata from
+    them.
+
+    Time needed per sweep
+    vMemory needed
+    git revison
+    Date of compilation
+    """
     times = []
     mems = []
     versions = []

@@ -18,6 +18,9 @@ logging.basicConfig(level=logging.INFO,
 
 
 def process_data(infiles, outformat):
+    """Reads in the data, calculates the distribution from it, normalizes
+    it, and writes it back to files.
+    """
     centers = []
     data = []
     for infile in infiles:
@@ -101,6 +104,15 @@ def process_data(infiles, outformat):
 
 
 def stichInterpol(centers, data, stderr):
+    """Calculate the 'Z' values needed to stitch parts of the distribution
+    together. This is calculated from the overlap of two neighboring
+    ranges. Warns if there is not enough overlap.
+
+    Uses spline interpolation to measure 'Z'.
+
+    Applies the 'Z' values to the data to generate a continuous
+    distribution from the single parts.
+    """
     summed_err = 0
     for i in range(len(data)-1):
         try:
@@ -127,6 +139,9 @@ def stichInterpol(centers, data, stderr):
 
 
 def run():
+    """Reads rawData files from a finished simulation, specified
+    by 'parameters.py' in the same folder and evaluates it.
+    """
     steps = param.parameters["number_of_steps"]
     d = param.parameters["rawData"]
     out = param.parameters["directory"]

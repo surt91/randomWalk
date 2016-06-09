@@ -24,6 +24,13 @@ proposedTheta = []
 
 
 def getAutocorrTime(data, T="?"):
+    """Calculates the autocorrelation time of a time series.
+    Takes only the first 5000 datapoints to speed it up.
+
+    :param:data: timeseries
+
+    returns autocorrelation time
+    """
     # just take the first 5000, should be sufficient
     data = data[:5000]
     autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
@@ -42,6 +49,9 @@ def getAutocorrTime(data, T="?"):
 
 
 def testIfAborted(filename):
+    """Tests if the simulation was aborted.
+    This is the case if it did not equilibrate.
+    """
     with gzip.open(filename+".gz") as f:
         # it will be noted in the first 15 lines, if we aborted
         for _ in range(15):
@@ -51,6 +61,9 @@ def testIfAborted(filename):
 
 
 def getDataFromFile(filename, col, T="?"):
+    """Read timeseries data from a file, and return a subset of that
+    data purged from correlation.
+    """
     try:
         a = np.loadtxt(filename+".gz")
     except FileNotFoundError:
@@ -66,6 +79,8 @@ def getDataFromFile(filename, col, T="?"):
 
 
 def getStatistics(dataDict):
+    """Collects fundamental statistics from a timeseries.
+    """
     logging.info("collecting statistics")
     count = 0
     minimum = 10**10
@@ -79,6 +94,9 @@ def getStatistics(dataDict):
 
 
 def getPercentileBasedBins(dataDict, numBins=100):
+    """Generate histogram bins based on 'percentiles'.
+    This leads to a flat histogram.
+    """
     logging.info("determining nice bins for flat histogram")
     rawData = np.concatenate(list(dataDict.values()))
 
@@ -99,6 +117,10 @@ def getPercentileBasedBins(dataDict, numBins=100):
 
 
 def averageOverSameX(whole_distribution):
+    """Collects datapoints inside the same bins of different temperatures
+    and averages over them. (must happen after stitching the distribution
+    together)
+    """
     xDict = {}
     for x, x_err, y, y_err in whole_distribution:
         if x not in xDict:
@@ -170,6 +192,12 @@ def getDistribution(data, outfile, histfile, col, theta, steps, inBins=50):
 
 
 def getZtheta(list_of_ps_log, thetas, outNames):
+    """Calculate the 'Z' values needed to stitch parts of the distribution
+    together. This is calculated from the overlap of two neighboring
+    temperatures. Warns if there is not enough overlap.
+
+    This version assumes that both temperatures use the same bins. (compare getZthetaInterpol())
+    """
     # list_of_ps_log is a list in the form [[s1, s1_err, ps_log1, ps_log1_err], [s2, s2_err, ps_log2, ps_log2_err], ..]
     Ztheta_mean = [(0, 0)]
     for i in range(len(list_of_ps_log)-1):
@@ -203,6 +231,13 @@ def getZtheta(list_of_ps_log, thetas, outNames):
 
 
 def getZthetaInterpol(list_of_ps_log, thetas):
+    """Calculate the 'Z' values needed to stitch parts of the distribution
+    together. This is calculated from the overlap of two neighboring
+    temperatures. Warns if there is not enough overlap.
+
+    This version uses spline interpolation to measure 'Z' if the bins
+    of the two temperatures are not the same. (compare getZtheta())
+    """
     # list_of_ps_log is a list in the form [[s1, s1_err, ps_log1, ps_log1_err], [s2, s2_err, ps_log2, ps_log2_err], ..]
     Ztheta_mean = [(0, 0)]
     for i in range(len(list_of_ps_log)-1):
@@ -236,6 +271,9 @@ def getZthetaInterpol(list_of_ps_log, thetas):
 
 
 def stichFile(infile, outfile, z, dz):
+    """Applies the 'Z' values to the data to generate a continuous
+    distribution from the single parts.
+    """
     data = []
     Dz = 0
     with open(infile, "r") as fin:
@@ -254,6 +292,9 @@ def stichFile(infile, outfile, z, dz):
 
 
 def eval_simplesampling(name, outdir, N=0):
+    """Evaluates some fundamental observables from simple sampling
+    (i.e. theta = inf)
+    """
     if name is None:
         with open("{}/simple.dat".format(outdir), "w") as f:
             f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... \n")
@@ -284,7 +325,11 @@ def eval_simplesampling(name, outdir, N=0):
 
 
 def run(histogram_type=1):
-    """
+    """Reads rawData files from a finished simulation, specified
+    by 'parameters.py' in the same folder and evaluates it.
+
+    Does mainly generate a distribution.
+
     @param histogram_type can be: 1 for equispaced (i.e. linear)
                                   2 for logarithmic
                                   3 for percentile based (i.e. flat)
