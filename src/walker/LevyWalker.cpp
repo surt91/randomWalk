@@ -72,7 +72,10 @@ void LevyWalker::change(UniformRNG &rng, bool update)
     updatePoints(idx+1);
 
     if(update)
+    {
+        m_old_convex_hull = m_convex_hull;
         updateHull();
+    }
 }
 
 void LevyWalker::undoChange()
@@ -83,5 +86,5 @@ void LevyWalker::undoChange()
 
     m_steps[undo_index] = genStep(undo_values.begin());
     updatePoints(undo_index+1);
-    updateHull();
+    m_convex_hull = m_old_convex_hull;
 }

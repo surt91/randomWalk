@@ -44,7 +44,10 @@ void GaussWalker::change(UniformRNG &rng, bool update)
     updatePoints(idx+1);
 
     if(update)
+    {
+        m_old_convex_hull = m_convex_hull;
         updateHull();
+    }
 }
 
 void GaussWalker::undoChange()
@@ -55,7 +58,7 @@ void GaussWalker::undoChange()
 
     m_steps[undo_index] = genStep(undo_values.begin());
     updatePoints(undo_index+1);
-    updateHull();
+    m_convex_hull = m_old_convex_hull;
 }
 
 /** Change only one component of the gauss steps.

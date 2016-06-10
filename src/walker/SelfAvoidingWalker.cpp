@@ -266,7 +266,9 @@ bool SelfAvoidingWalker::pivot(const int index, const int op, bool update)
 
         updatePoints(index+1);
         if(update)
+        {
             updateHull();
+        }
     }
 
     return !failed;
@@ -281,7 +283,7 @@ void SelfAvoidingWalker::naiveChangeUndo()
     m_steps[undo_naive_index] = undo_naive_step;
 
     updatePoints(undo_naive_index+1);
-    updateHull();
+    m_convex_hull = m_old_convex_hull;
 }
 
 bool SelfAvoidingWalker::naiveChange(const int idx, const double rn, bool update)
@@ -306,7 +308,10 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn, bool update
     }
 
     if(update)
+    {
+        m_old_convex_hull = m_convex_hull;
         updateHull();
+    }
 
     return true;
 }

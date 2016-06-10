@@ -104,7 +104,10 @@ void LoopErasedWalker::change(UniformRNG &rng, bool update)
     updatePoints();
 
     if(update)
+    {
+        m_old_convex_hull = m_convex_hull;
         updateHull();
+    }
 }
 
 void LoopErasedWalker::undoChange()
@@ -118,5 +121,5 @@ void LoopErasedWalker::undoChange()
 
     updateSteps();
     updatePoints();
-    updateHull();
+    m_convex_hull = m_old_convex_hull;
 }

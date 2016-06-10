@@ -69,7 +69,7 @@ class ConvexHull
         void runQhull();
         void preprocessAklToussaintQHull();
 
-        std::unique_ptr<orgQhull::Qhull> qhull;
+        std::shared_ptr<orgQhull::Qhull> qhull;
         std::vector<double> coords;
         void updateHullPoints() const;
         int countZerosAndUpdateCmd(std::string &cmd);
@@ -407,7 +407,7 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
 
         // replace by something less overkill
         // a custom gift wrapping implementation?
-        auto q = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, coords.size()/d, coords.data(), cmd.c_str()));
+        auto q = std::make_shared<orgQhull::Qhull>("", d, (int) coords.size()/d, coords.data(), cmd.c_str());
 
         for(int i=0; i<n; ++i)
             if(!pointInFacets(q->facetList(), p[i]))
@@ -610,7 +610,7 @@ void ConvexHull<T>::runQhull()
     try
     {
         // comment, dimension, count, coordinates[], command
-        qhull = std::unique_ptr<orgQhull::Qhull>(new orgQhull::Qhull("", d, n, coords.data(), cmd.c_str()));
+        qhull = std::make_shared<orgQhull::Qhull>("", d, n, coords.data(), cmd.c_str());
         if(num_zeros == 1)
         {
             m_L = qhull->volume();

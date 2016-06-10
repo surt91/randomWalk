@@ -74,6 +74,7 @@ class SpecWalker : public Walker
         std::vector<Step<T>> m_steps;
         std::vector<Step<T>> m_points;
         ConvexHull<T> m_convex_hull;
+        ConvexHull<T> m_old_convex_hull;
 
         void goDownhill(bool maximize, wanted_observable_t observable);
 };
