@@ -4,6 +4,7 @@ LatticeWalker::LatticeWalker(int d, int numSteps, UniformRNG &rng, hull_algorith
     : SpecWalker<int>(d, numSteps, rng, hull_algo)
 {
     random_numbers = rng.vector(numSteps);
+    newStep = Step<int>(d);
     init();
 }
 
@@ -22,12 +23,12 @@ void LatticeWalker::change(UniformRNG &rng, bool update)
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();
 
-    Step<int> newStep(d, random_numbers[idx]);
+    newStep.fillFromRN(random_numbers[idx]);
     // test if something changes
     if(newStep == m_steps[idx])
         return;
 
-    m_steps[idx] = newStep;
+    m_steps[idx].swap(newStep);
     updatePoints(idx+1);
 
     if(update)
@@ -37,12 +38,12 @@ void LatticeWalker::change(UniformRNG &rng, bool update)
 void LatticeWalker::undoChange()
 {
     random_numbers[undo_index] = undo_value;
-    Step<int> newStep(d, undo_value);
+    newStep.fillFromRN(undo_value);
     // test if something changes
     if(newStep == m_steps[undo_index])
         return;
 
-    m_steps[undo_index] = newStep;
+    m_steps[undo_index].swap(newStep);
     updatePoints(undo_index+1);
     updateHull();
 }

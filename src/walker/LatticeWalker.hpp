@@ -17,4 +17,7 @@ class LatticeWalker final : public SpecWalker<int>
 
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
+
+    private:
+        Step<int> newStep;
 };
