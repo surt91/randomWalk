@@ -24,6 +24,7 @@ void LoopErasedWalker::updateSteps()
 
     // p will keep track where the head is
     Step<int> p(d);
+    Step<int> s(d);
     occupied_tiles.emplace(p, 0);
 
     int i=0;
@@ -38,7 +39,7 @@ void LoopErasedWalker::updateSteps()
 
             std::generate(random_numbers.begin() + i, random_numbers.end(), rng);
         }
-        Step<int> s(d, random_numbers[i]);
+        s.fillFromRN(random_numbers[i]);
         p += s;
 
         // if already occupied, erase loop
@@ -50,13 +51,12 @@ void LoopErasedWalker::updateSteps()
             if(tmp == 0)
             {
                 occupied_tiles.clear();
-                p = Step<int>(d);
+                p.setZero();
                 occupied_tiles.emplace(p, 0);
                 index = -1;
             }
             else
             {
-                //~ std::cout << "tmp " << tmp << std::endl;
                 for(int j=tmp+1; j<index; ++j)
                 {
                     // loop -> p is the same

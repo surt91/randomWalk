@@ -48,6 +48,8 @@ class Step
               m_coordinates(coord)
         {};
 
+        void fillFromRN(double rn, bool clean=false);
+
         // properties
         double length() const;
         double angle(int i=0, int j=1) const;
@@ -106,22 +108,33 @@ class Step
         friend struct std::hash<Step<T>>;
 };
 
+/// Fills the Step according to rn. Assumes Step is 0 if clean is true
+template <>
+inline void Step<int>::fillFromRN(double rn, bool clean)
+{
+    if(!clean)
+        setZero();
+    for(int i=0; i<m_d; ++i)
+        if(rn * m_d < i+1) // direction i
+        {
+            if(rn * m_d - i < 0.5)
+                m_coordinates[i] = 1;
+            else
+                m_coordinates[i] = -1;
+
+            // this break is important, otherwise all dimensions
+            // after the wanted one will be filled by -1
+            break;
+        }
+}
+
 /// Specialization for int steps.
 template <>
 inline Step<int>::Step(int d, double rn)
       : m_d(d),
         m_coordinates(d, 0)
 {
-    for(int i=0; i<d; ++i)
-        if(rn * d < i+1) // direction i
-        {
-            if(rn * d - i < 0.5)
-                m_coordinates[i] = 1;
-            else
-                m_coordinates[i] = -1;
-
-            break;
-        }
+    fillFromRN(rn, true);
 }
 
 /// Euclidean distance to zero.
