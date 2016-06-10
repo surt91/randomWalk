@@ -46,7 +46,7 @@ release: all
 silent: CXXFLAGS += -DNLOG
 silent: release
 debug: CXXFLAGS += -g -Og
-debug: all CXXFLAGS += -g -Og
+debug: all
 
 VERSION := $(shell git describe --tags --always)
 CXXFLAGS += -DVERSION=\"$(VERSION)\"
