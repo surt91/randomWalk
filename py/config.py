@@ -170,7 +170,7 @@ class SimulationInstance():
                        rawData, rawConf, observable,
                        method, akl, sampling, parallel, nbins, overlap,
                        lnf, flatness, overlap_direction="left",
-                       theta=None, energy=None,
+                       t_eq_max=None, theta=None, energy=None,
                        first=False, last=False, **not_used):
 
         self.N = steps
@@ -189,6 +189,7 @@ class SimulationInstance():
         self.m = sampling
         self.parallel = parallel
         self.t_eq = t_eq
+        self.t_eq_max = t_eq_max
         self.t_corr = t_corr
         self.energy = energy
         self.nbins = nbins
@@ -276,6 +277,8 @@ class SimulationInstance():
             opts.append("--t_eq {0:.0f}".format(self.t_eq[self.N][self.T]))
         except KeyError:
             pass
+        if self.t_eq_max:
+            opts.append("--t_eq_max {0:.0f}".format(self.t_eq_max))
 
         if self.akl:
             opts.append("-a")

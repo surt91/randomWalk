@@ -57,6 +57,7 @@ parameters = {
 
     # dict[N][theta] of equilibration times
     "t_eq": t_eq,
+    "t_eq_max": 1e4,
 
     # dict[N][theta] of estimated autocorrelation times
     # will be used to take by factor t_corr more samples
