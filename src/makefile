@@ -2,6 +2,14 @@ TARGET	= randomWalk
 
 DOC 	= manual.pdf
 
+# max dimension
+# 0 for arbitrary (needs heap allocations, may be slower)
+# do a "make clean" after changing this
+D_MAX = 4
+
+CXXFLAGS = -std=c++11 -fexceptions -pipe
+#CXXFLAGS += -fopenmp
+
 CPP	 := main.cpp \
         Cmd.cpp \
         RNG.cpp \
@@ -31,9 +39,6 @@ DEP	 = $(CPP:%.cpp=dep/%.d)
 
 QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
 
-CXXFLAGS = -std=c++11 -fexceptions -pipe
-#CXXFLAGS += -fopenmp
-
 # diagnostics color is introduced with gcc 4.9, test if our gcc knows it
 # http://stackoverflow.com/a/17947005/1698412
 GCC_GTEQ_490 := $(shell expr `gcc -dumpversion | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\.\([0-9]\)/0\1/g' -e 's/^[0-9]\{3,4\}$$/&00/'` \>= 40900)
@@ -50,6 +55,7 @@ debug: all
 
 VERSION := $(shell git describe --tags --always)
 CXXFLAGS += -DVERSION=\"$(VERSION)\"
+CXXFLAGS += -DD_MAX=$(D_MAX)
 
 # for clang sanitizers
 #CXX = clang++

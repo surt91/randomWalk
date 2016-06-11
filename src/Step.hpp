@@ -27,28 +27,24 @@ class Step
 {
     protected:
         int m_d;
-        std::vector<T> m_coordinates;
+        #if D_MAX == 0
+            std::vector<T> m_coordinates;
+        #else
+            std::array<T, D_MAX> m_coordinates;
+        #endif
 
     public:
         /// Default constructor, init an d=0 empty step
         Step(){};
 
         /// Construct a d dimensional random Step from a random number.
-        Step(int /*d*/, double /*rn*/){throw std::invalid_argument("Step(int d, double rn) only implemented for Step<int>");};
-
+        Step(int /*d*/, double /*rn*/){ throw std::invalid_argument("Step(int d, double rn) only implemented for Step<int>"); };
         /// Construct a d dimensional zero Step.
-        explicit Step(int d)
-            : m_d(d),
-              m_coordinates(d, 0)
-        {};
-
+        explicit Step(int d);
         /// Construct a Step from a coordinate vector.
-        explicit Step(const std::vector<T> &coord)
-            : m_d(coord.size()),
-              m_coordinates(coord)
-        {};
+        explicit Step(const std::vector<T> &coord);
 
-        void fillFromRN(double rn, bool clean=false);
+        void fillFromRN(double rn, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
 
         // properties
         double length() const;
@@ -102,7 +98,7 @@ class Step
         T y() const { return m_coordinates[1]; }; // specialisation for 2d
         T z() const { return m_coordinates[2]; }; // specialisation for 3d
 
-        const std::vector<T>& coordinates() const { return m_coordinates; };
+        T max_coordinate() const { return std::max(m_coordinates.begin(), m_coordinates.end()); };
 
     private:
         friend struct std::hash<Step<T>>;
@@ -128,13 +124,54 @@ inline void Step<int>::fillFromRN(double rn, bool clean)
         }
 }
 
+#if D_MAX == 0
+/// Construct a d dimensional zero Step.
+template <class T>
+Step<T>::Step(int d)
+    : m_d(d),
+      m_coordinates(d, 0)
+{
+}
+#else
+/// Construct a d dimensional zero Step.
+template <class T>
+Step<T>::Step(int d)
+    : m_d(d)
+{
+    for(int i=0; i<m_d; ++i)
+        m_coordinates[i] = 0;
+}
+#endif
+
+#if D_MAX == 0
+/// Construct a Step from a coordinate vector.
+template <class T>
+Step<T>::Step(const std::vector<T> &coord)
+    : m_d(coord.size()),
+      m_coordinates(coord)
+{
+
+}
+#else
+/// Construct a Step from a coordinate vector.
+template <class T>
+Step<T>::Step(const std::vector<T> &coord)
+    : m_d(coord.size())
+{
+    for(int i=0; i<m_d; ++i)
+        m_coordinates[i] = coord[i];
+}
+#endif
+
 /// Specialization for int steps.
 template <>
 inline Step<int>::Step(int d, double rn)
-      : m_d(d),
-        m_coordinates(d, 0)
+      : m_d(d)
+#if D_MAX == 0
+        , m_coordinates(d, 0)
+#endif
 {
-    fillFromRN(rn, true);
+    fillFromRN(rn);
 }
 
 /// Euclidean distance to zero.
@@ -142,8 +179,8 @@ template <class T>
 double Step<T>::length() const
 {
     double s=0;
-    for(const auto i : m_coordinates)
-        s += i*i;
+    for(int i=0; i<m_d; ++i)
+        s += m_coordinates[i]*m_coordinates[i];
 
     return std::sqrt(s);
 }
@@ -213,7 +250,7 @@ Step<T> Step<T>::operator-() const
 template <class T>
 Step<T> Step<T>::operator/(const double d) const
 {
-    std::vector<T> new_coord = coordinates();
+    std::vector<T> new_coord = m_coordinates;
     for(int i=0; i<m_d; ++i)
         new_coord[i] /= d;
 
@@ -297,15 +334,15 @@ double dot(const Step<T> &a, const Step<T> &b)
 template <class T>
 void Step<T>::setZero()
 {
-    std::fill(m_coordinates.begin(), m_coordinates.end(), 0);
+    std::fill(begin(m_coordinates), begin(m_coordinates)+m_d, 0);
 }
 
 template <class T>
 std::ostream& operator<<(std::ostream& os, const Step<T> &obj)
 {
     os << "(";
-    for(auto i : obj.m_coordinates)
-        os << i << ", ";
+    for(int i=0; i<obj.m_d; ++i)
+        os << obj.m_coordinates[i] << ", ";
     os << ") ";
     return os;
 }
@@ -355,8 +392,8 @@ namespace std {
             size_t operator()(const Step<int> &s) const
             {
                 std::size_t seed = 0;
-                for(auto &i : s.m_coordinates)
-                    seed ^= i + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+                for(int i=0; i<s.m_d; ++i)
+                    seed ^= s.m_coordinates[i] + 0x9e3779b9 + (seed << 6) + (seed >> 2);
                 return seed;
             }
     };
@@ -368,8 +405,8 @@ namespace std {
             size_t operator()(const Step<double> &s) const
             {
                 std::size_t seed = 0;
-                for(auto &i : s.m_coordinates)
-                    seed ^= std::hash<double>()(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+                for(int i=0; i<s.m_d; ++i)
+                    seed ^= std::hash<double>()(s.m_coordinates[i]) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
                 return seed;
             }
     };

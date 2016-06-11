@@ -185,6 +185,11 @@ Cmd::Cmd(int argc, char** argv)
 
         d = dimArg.getValue();
         LOG(LOG_INFO) << "Dimension                  " << d;
+        if(D_MAX && d > D_MAX)
+        {
+            LOG(LOG_ERROR) << "Dimension is larger than D_MAX = " << D_MAX << "\nCompile again with a bigger D_MAX (or D_MAX=0 for arbitrary dimensions)";
+            exit(1);
+        }
 
         bool aklHeuristic = aklHeuristicSwitch.getValue();
         int tmp = chAlgArg.getValue();
