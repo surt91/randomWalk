@@ -27,4 +27,6 @@ class LoopErasedWalker final : public SpecWalker<int>
 
     protected:
         mutable int random_numbers_used;
+        Step<int> newStep;
+        Step<int> undoStep;
 };

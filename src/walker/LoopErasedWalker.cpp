@@ -3,6 +3,8 @@
 LoopErasedWalker::LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
     : SpecWalker<int>(d, numSteps, rng, hull_algo)
 {
+    newStep = Step<int>(d);
+    undoStep = Step<int>(d);
     random_numbers = rng.vector(numSteps);
     init();
 }
@@ -95,9 +97,10 @@ void LoopErasedWalker::change(UniformRNG &rng, bool update)
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();
 
-    Step<int> newStep(d, random_numbers[idx]);
+    newStep.fillFromRN(random_numbers[idx]);
     // test if something changes
-    if(newStep == Step<int>(d, undo_value))
+    undoStep.fillFromRN(undo_value);
+    if(newStep == undoStep)
         return;
 
     updateSteps();
@@ -112,11 +115,9 @@ void LoopErasedWalker::change(UniformRNG &rng, bool update)
 
 void LoopErasedWalker::undoChange()
 {
-    double rejected = random_numbers[undo_index];
     random_numbers[undo_index] = undo_value;
-    Step<int> newStep(d, undo_value);
-    // test if something changes
-    if(newStep == Step<int>(d, rejected))
+    // test if something changed
+    if(newStep == undoStep)
         return;
 
     updateSteps();
