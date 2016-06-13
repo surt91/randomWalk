@@ -21,7 +21,7 @@
 // prevents construction of the Logger object and evaluation of << operators
 #define LOG(level) \
     if(level > Logger::verbosity) {} \
-    else Logger(level)
+    else Logger(level, __FILE__, __LINE__)
 #endif
 
 // http://stackoverflow.com/questions/1255576/what-is-good-practice-for-generating-verbose-output
@@ -66,9 +66,11 @@ static const std::vector<std::string> CLABEL = {
  */
 class Logger {
     public:
-        Logger(log_level_t level)
+        Logger(log_level_t level, std::string file="", int line=0)
             : level(level),
-              ss()
+              ss(),
+              file(file),
+              line(line)
         {
             ss.precision(12);
         }
@@ -79,10 +81,15 @@ class Logger {
             {
                 #ifdef __unix__
                 if(isatty(fileno(stdout))) // Terminal, use colors
-                    std::cout << CLABEL[level] << ss.str() << std::endl;
+                    std::cout << CLABEL[level];
                 else
                 #endif
-                    std::cout << LABEL[level] << ss.str() << std::endl;
+                    std::cout << LABEL[level];
+
+                if(level <= LOG_WARNING)
+                    ss << " (" << file << ":" << line << ") ";
+
+                std::cout << ss.str() << std::endl;
             }
         }
 
@@ -95,6 +102,9 @@ class Logger {
     protected:
         log_level_t level;
         std::stringstream ss;
+
+        std::string file;
+        int line;
 };
 
 template<class T>
