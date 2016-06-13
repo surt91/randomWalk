@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstdio>
+#include <unistd.h>
+
 #include <sstream>
 #include <iostream>
 #include <iomanip>
@@ -36,6 +39,18 @@ enum log_level_t {
 static const std::vector<std::string> LABEL = {
     "",
     "",
+    "Error:   ",
+    "Warning: ",
+    "Info:    ",
+    "Timing:  ",
+    "Debug:   ",
+    "Debug2:  ",
+    "Debug3:  "
+};
+
+static const std::vector<std::string> CLABEL = {
+    "",
+    "",
     "\x1B[31mError:   \033[0m",
     "\x1B[33mWarning: \033[0m",
     "\x1B[34mInfo:    \033[0m",
@@ -59,7 +74,12 @@ class Logger {
         ~Logger()
         {
             if(level <= verbosity)
-                std::cout << LABEL[level] << ss.str() << std::endl;
+            {
+                if(isatty(fileno(stdout))) // Terminal, use colors
+                    std::cout << CLABEL[level] << ss.str() << std::endl;
+                else
+                    std::cout << LABEL[level] << ss.str() << std::endl;
+            }
         }
 
         static int verbosity;
