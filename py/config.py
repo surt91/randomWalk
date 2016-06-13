@@ -274,7 +274,7 @@ class SimulationInstance():
                 "-d {:d}".format(self.D),
                 "-t {}".format(self.t),
                 "-w {}".format(self.w),
-                "-q",
+                "-v 3",
                 "-o {}".format(self.filename),
                 "-m {}".format(self.m),
                ]
