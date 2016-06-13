@@ -10,8 +10,9 @@
 #include <cstdio>
 #include <memory>
 
-// TODO: ifdef for unix?
+#ifdef __unix__
 #include <unistd.h> //for getpid
+#endif
 
 template <typename T>
 T mean(std::vector<T> a)

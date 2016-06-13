@@ -1,7 +1,9 @@
 #pragma once
 
+#ifdef __unix__
 #include <cstdio>
 #include <unistd.h>
+#endif
 
 #include <sstream>
 #include <iostream>
@@ -75,9 +77,11 @@ class Logger {
         {
             if(level <= verbosity)
             {
+                #ifdef __unix__
                 if(isatty(fileno(stdout))) // Terminal, use colors
                     std::cout << CLABEL[level] << ss.str() << std::endl;
                 else
+                #endif
                     std::cout << LABEL[level] << ss.str() << std::endl;
             }
         }

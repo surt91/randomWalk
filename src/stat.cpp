@@ -46,6 +46,7 @@ std::string time_diff(clock_t start, clock_t end, int op)
     return std::to_string((double)(end - start) / CLOCKS_PER_SEC / (double) op) + "s";
 }
 
+#ifdef __unix__
 /** Executes the command and returns its standard out.
  *
  * taken from http://stackoverflow.com/a/478960/1698412
@@ -66,6 +67,7 @@ std::string exec(const char* cmd)
     }
     return result;
 }
+#endif
 
 /** Yields the maximum vmem needed until the call to this function
  *
@@ -76,8 +78,12 @@ std::string exec(const char* cmd)
  */
 std::string vmPeak()
 {
+    #ifdef __unix__
     std::string pid = std::to_string(getpid());
     std::string cmd("grep VmPeak /proc/"+pid+"/status");
     // or do I need "VmHWM" (high water mark)?
     return exec(cmd.c_str());
+    #else
+    return "Not implemented for this platform";
+    #endif
 }
