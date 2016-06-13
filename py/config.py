@@ -240,8 +240,9 @@ class SimulationInstance():
             self.y += int(self.energy[0])
 
         # do the modulo with a big prime, to avoid overflows and repitions
-        self.x %= 1700000333
-        self.y %= 1700000339
+        # modulo not well defined for negative values -> abs
+        self.x = abs(self.x) % 1700000333
+        self.y = abs(self.y) %  1700000339
 
         if sampling == 1:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
