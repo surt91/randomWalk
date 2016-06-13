@@ -165,13 +165,13 @@ void benchmark()
                 expected_mean_r2 = 7875699.19;
                 break;
             case WT_CORRELATED_RANDOM_WALK:
-                o.steps = 130;
+                o.steps = 80;
                 o.type = WT_CORRELATED_RANDOM_WALK;
                 o.iterations = 1000;
-                expected_mean_L = 40.8028679341;
-                expected_mean_A = 86.4985600763;
-                expected_mean_r = 11.398686363;
-                expected_mean_r2 = 147.159380854;
+                expected_mean_L = 31.1292517867;
+                expected_mean_A = 49.253667193;
+                expected_mean_r = 9.17497080667;
+                expected_mean_r2 = 96.0109448785;
                 break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
