@@ -13,10 +13,12 @@ Cmd::Cmd(int argc, char** argv)
         text += " ";
     }
 
+    std::string version = VERSION " (Compiled: " __DATE__ " " __TIME__ ")";
+
     // TCLAP throws exceptions
     try{
         // Usage, delimiter, version
-        TCLAP::CmdLine cmd("Calculates random walks", ' ', "0.1");
+        TCLAP::CmdLine cmd("Calculates random walks", ' ', version);
 
         // value argument
         // -short, --long, description, required, default, type
