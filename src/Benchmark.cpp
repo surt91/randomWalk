@@ -95,7 +95,7 @@ void benchmark()
     o.simpleSampling = true;
 
     clock_t start = clock();
-    LOG(LOG_INFO) << "Starting Simulations";
+    LOG(LOG_INFO) << "Starting 2D Simple Sampling Simulations";
 
     o.data_path = "bench.tmp";
 
@@ -181,8 +181,98 @@ void benchmark()
                           expected_mean_r2);
     }
 
-    clock_t mid = clock();
-    LOG(LOG_TIMING) << "Total : " << time_diff(start, mid);
+    clock_t mid1 = clock();
+    LOG(LOG_TIMING) << "Total : " << time_diff(start, mid1);
+    LOG(LOG_TIMING) << "Mem: " << vmPeak();
+
+    LOG(LOG_INFO) << "Starting 3D Importance Sampling Simulations";
+    o.t_eq = 0;
+    o.simpleSampling = false;
+    o.theta = -20;
+    o.d = 3;
+    o.chAlg = CH_QHULL;
+    for(int i=1; i<=7; ++i)
+    {
+        double expected_mean_L = 0;
+        double expected_mean_A = 0;
+        double expected_mean_r = 0;
+        double expected_mean_r2 = 0;
+
+        switch(i)
+        {
+            case WT_RANDOM_WALK:
+                o.steps = 150;
+                o.type = WT_RANDOM_WALK;
+                o.iterations = 100;
+                expected_mean_L = 4869.41598187;
+                expected_mean_A = 19565.55;
+                expected_mean_r = 69.9165860861;
+                expected_mean_r2 = 4928.82;
+                break;
+            case WT_LOOP_ERASED_RANDOM_WALK:
+                o.steps = 30;
+                o.type = WT_LOOP_ERASED_RANDOM_WALK;
+                o.iterations = 600;
+                expected_mean_L = 86.845799771;
+                expected_mean_A = 46.9755555556;
+                expected_mean_r = 8.17129392508;
+                expected_mean_r2 = 73.34;
+                break;
+            case WT_SELF_AVOIDING_RANDOM_WALK:
+                o.steps = 120;
+                o.type = WT_SELF_AVOIDING_RANDOM_WALK;
+                o.iterations = 100;
+                expected_mean_L = 3050.3158479;
+                expected_mean_A = 9609.615;
+                expected_mean_r = 55.0264487858;
+                expected_mean_r2 = 3053.58;
+                break;
+            case WT_REAL_RANDOM_WALK:
+                o.steps = 100;
+                o.type = WT_REAL_RANDOM_WALK;
+                o.iterations = 100;
+                expected_mean_L = 2264.79537161;
+                expected_mean_A = 6891.25326374;
+                expected_mean_r = 50.2614559199;
+                expected_mean_r2 = 2578.81224846;
+                break;
+            case WT_GAUSSIAN_RANDOM_WALK:
+                o.steps = 100;
+                o.type = WT_GAUSSIAN_RANDOM_WALK;
+                o.iterations = 100;
+                expected_mean_L = 15396.0001625;
+                expected_mean_A = 124060.451034;
+                expected_mean_r = 123.258862156;
+                expected_mean_r2 = 15607.6366561;
+                break;
+            case WT_LEVY_FLIGHT:
+                o.steps = 130;
+                o.type = WT_LEVY_FLIGHT;
+                o.iterations = 100;
+                expected_mean_L = 73197525.4829;
+                expected_mean_A = 2817982513.32;
+                expected_mean_r = 768.920252627;
+                expected_mean_r2 = 5540570.55171;
+                break;
+            case WT_CORRELATED_RANDOM_WALK:
+                o.steps = 90;
+                o.type = WT_CORRELATED_RANDOM_WALK;
+                o.iterations = 100;
+                expected_mean_L = 744.279070151;
+                expected_mean_A = 1323.8847083;
+                expected_mean_r = 25.8766506636;
+                expected_mean_r2 = 710.389952596;
+                break;
+        }
+        LOG(LOG_INFO) << TYPE_LABEL[i];
+        run_simulation(o, expected_mean_A,
+                          expected_mean_L,
+                          expected_mean_r,
+                          expected_mean_r2);
+    }
+
+    clock_t mid2 = clock();
+    LOG(LOG_TIMING) << "Total : " << time_diff(mid1, mid2);
     LOG(LOG_TIMING) << "Mem: " << vmPeak();
 
     LOG(LOG_INFO) << "Starting Hull Comparison";
@@ -313,7 +403,7 @@ void benchmark()
         }
     }
 
-    LOG(LOG_TIMING) << "Total : " << time_diff(mid, clock());
+    LOG(LOG_TIMING) << "Total : " << time_diff(mid2, clock());
     LOG(LOG_TIMING) << "Mem: " << vmPeak();
 
     LOG(LOG_TIMING) << "Grand Total : " << time_diff(start, clock());
