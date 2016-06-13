@@ -24,13 +24,14 @@ repo = git.Repo(repo_path)
 try:
     cloned_repo = repo.clone(cloned_path)
 except git.exc.GitCommandError:
-    # git pull
     pass
 
 pwd = os.getcwd()
 os.chdir(cloned_path)
+os.system("git checkout master")
 os.system("git submodule init")
 os.system("git submodule update")
+os.system("git pull origin master")
 os.chdir("src")
 
 dates = []
@@ -60,7 +61,7 @@ for n, c in enumerate(repo.iter_commits('master', max_count=N)):
     shas.append(sha)
 
     with open(os.path.join(pwd, "gitBenchmark.dat"), "a") as f:
-        f.write("{} {} {} {}\n".format(c.committed_date, sha, duration, c.message))
+        f.write("{} {} {} {}\n".format(c.committed_date, sha, duration, c.message.split("\n")[0]))
 
 for i, j, k in zip(dates, shas, times):
     print("{} {} {}".format(i, j, k))
