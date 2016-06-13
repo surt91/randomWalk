@@ -70,7 +70,10 @@ class Simulation():
                 for i in range(num):
                     self.instances.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, first=not i, last=(i==num-1), **kwargs))
 
-    def hero(self):
+    def ihero(self):
+        return self.hero(True)
+
+    def hero(self, incremental=False):
         logging.info("Create .sge Files for Hero")
         if not os.path.exists("HERO"):
             os.makedirs("HERO")
@@ -147,7 +150,8 @@ class Simulation():
             with open(os.path.join("HERO", name+".lst"), "w") as f:
                 for i in self.instances:
                     if i.N == N:
-                        f.write(" ".join(i.get_cmd()) + "\n")
+                        if not incremental or not os.path.exists(i.filename+".gz"):
+                            f.write(" ".join(i.get_cmd()) + "\n")
                         ctr += 1
             with open(os.path.join("HERO", name+".sge"), "w") as f:
                 f.write(template.render(name=name,

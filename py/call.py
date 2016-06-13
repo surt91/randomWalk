@@ -32,6 +32,8 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         if "hero" in sys.argv:
             run.hero()
+        elif "ihero" in sys.argv:
+            run.ihero()
         elif "plot" in sys.argv:
             print("only plot")
             gnuplot.main()
