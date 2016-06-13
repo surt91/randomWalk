@@ -31,6 +31,7 @@ os.chdir(cloned_path)
 os.system("git checkout master")
 os.system("git submodule init")
 os.system("git submodule update")
+os.system("make clean")
 os.system("git pull origin master")
 os.chdir("src")
 
@@ -52,6 +53,7 @@ for n, c in enumerate(repo.iter_commits('master', max_count=N)):
     start = time.time()
     e = os.system(cmd)
     duration = time.time() - start
+    os.system("make clean")
     # program exits with errorcode -> do not use the measured time
     if e != 0:
         duration = float("nan")
@@ -61,9 +63,13 @@ for n, c in enumerate(repo.iter_commits('master', max_count=N)):
     shas.append(sha)
 
     with open(os.path.join(pwd, "gitBenchmark.dat"), "a") as f:
-        f.write("{} {} {} {}\n".format(c.committed_date, sha, duration, c.message.split("\n")[0]))
+        f.write('{} {} {} "{}"\n'.format(c.committed_date, sha, duration, c.message.split("\n")[0]))
 
 for i, j, k in zip(dates, shas, times):
     print("{} {} {}".format(i, j, k))
 
-print("plot in gnuplot with: p 'gitBench.dat' u 1:3 w l")
+print("plot in gnuplot with: \n"
+      "set timefmt '%s'\n"
+      "set format x '%m/%d/%Y %H:%M:%S'\n"
+      "set xdata time\n"
+      "p 'gitBench.dat' u 1:3 w l t '{}', '' u 1:3:4 with labels rotate left offset 0,char 1".format(cmd))
