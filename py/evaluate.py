@@ -21,7 +21,10 @@ if __name__ == "__main__":
         else:
             logging.info("Default: Using log-spaced histogram")
             ht = 2
-        evaluateMetropolis.run(ht)
+        if not "--fast" in sys.argv:
+            evaluateMetropolis.run(ht)
+        else:
+            logging.info("Fastmode: do not create new histograms from rawData")
     elif param.parameters["sampling"] == 2:
         evaluateWangLandau.run()
 
