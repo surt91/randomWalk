@@ -113,6 +113,8 @@ def get_max_dist():
     to scaling.
     """
     #~ maxX, maxY, xErr, yErr
+    with open("{}/{}.dat".format(param.parameters["directory"], "max"), "w") as f:
+        f.write("# N maxX err maxY err\n")
     for N in param.parameters["number_of_steps"]:
         name = param.basename.format(steps=N, **param.parameters)
         if param.parameters["sampling"] == 1:
@@ -132,4 +134,5 @@ def get_max_dist():
         xErr = a[1][idx]
         yErr = a[3][idx]
 
-        print(N, maxX, xErr, maxY, yErr)
+        with open("{}/{}.dat".format(param.parameters["directory"], "max"), "a") as f:
+            f.write("{} {} {} {} {}\n".format(N, maxX, xErr, maxY, yErr))

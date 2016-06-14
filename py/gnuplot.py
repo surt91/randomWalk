@@ -41,20 +41,21 @@ class Gnuplot():
             self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
             self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
             self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
-            self.create("scaled", "{/Symbol %s} / {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
+            self.create("scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
             self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
             self.create("r", "{/Italic N}", "{/Italic r}")
             self.create("r2", "{/Italic r^2}", "{/Italic N}")
             self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
             self.create("rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
-            self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
         elif self.kwargs["sampling"] == 2 or self.kwargs["sampling"] == 3:
             self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
-            self.create("wl_scaled", "{/Symbol %s} / {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
+            self.create("wl_scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
             self.create("wl_raw", "{/Symbol %s}" % self.observable, "{/Italic counts}")
             self.create("wl_stiched", "{/Symbol %s}" % self.observable, "{/Italic counts}")
             self.create("wl_rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
-            self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
+
+        self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
+        self.create("max", "N", "max pos")
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
