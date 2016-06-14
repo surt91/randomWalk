@@ -7,6 +7,7 @@
 #include "walker/Walker.hpp"
 #include "simulation/Metropolis.hpp"
 #include "simulation/WangLandau.hpp"
+#include "simulation/FastWangLandau.hpp"
 #include "Benchmark.hpp"
 
 /** \mainpage randomWalk
@@ -40,6 +41,11 @@ int main(int argc, char** argv)
     else if(o.sampling_method == SM_WANG_LANDAU)
     {
         WangLandau sim(o);
+        sim.run();
+    }
+    else if(o.sampling_method == SM_FAST_WANG_LANDAU)
+    {
+        FastWangLandau sim(o);
         sim.run();
     }
     else

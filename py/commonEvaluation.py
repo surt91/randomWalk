@@ -64,7 +64,7 @@ def cut_trans(s, pre="tran"):
         outname = param.basename.format(steps=N, **param.parameters)
         if param.parameters["sampling"] == 1:
             prefix = "whole"
-        elif param.parameters["sampling"] == 2:
+        elif param.parameters["sampling"] == 2 or param.parameters["sampling"] == 3:
             prefix = "WL"
         else:
             raise
@@ -117,7 +117,7 @@ def get_max_dist():
         name = param.basename.format(steps=N, **param.parameters)
         if param.parameters["sampling"] == 1:
             prefix = "whole"
-        elif param.parameters["sampling"] == 2:
+        elif param.parameters["sampling"] == 2 or param.parameters["sampling"] == 3:
             prefix = "WL"
         else:
             raise

@@ -8,7 +8,8 @@ import evaluateWangLandau
 import commonEvaluation
 
 if __name__ == "__main__":
-    if param.parameters["sampling"] == 1:
+    sampling = param.parameters["sampling"]
+    if sampling == 1:
         if "--lin" in sys.argv:
             ht = 1
             logging.info("Using equi-spaced histogram")
@@ -25,7 +26,7 @@ if __name__ == "__main__":
             evaluateMetropolis.run(ht)
         else:
             logging.info("Fastmode: do not create new histograms from rawData")
-    elif param.parameters["sampling"] == 2:
+    elif sampling == 2 or sampling == 3:
         evaluateWangLandau.run()
 
     commonEvaluation.cut_trans(param.parameters["S"])

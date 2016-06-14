@@ -79,11 +79,12 @@ Cmd::Cmd(int argc, char** argv)
                                                                           "\tvolume       (A)    : 2",
                                                  false, 1, &allowedWO);
 
-        std::vector<int> sm({1, 2});
+        std::vector<int> sm({1, 2, 3});
         TCLAP::ValuesConstraint<int> allowedSM(sm);
         TCLAP::ValueArg<int> samplingMethodArg("m", "samplingMethod", "Sampling Method to use:\n"
                                                                       "\tMetropolis          : 1 (default)\n"
-                                                                      "\tWang Landau         : 2",
+                                                                      "\tWang Landau         : 2\n"
+                                                                      "\tFast Wang Landau    : 3",
                                                  false, 1, &allowedSM);
 
         TCLAP::MultiArg<double> wangLandauBordersMArg("e", "energyBorder", "specifies inside which energy ranges, i.e., "
@@ -216,7 +217,7 @@ Cmd::Cmd(int argc, char** argv)
 
         iterations = iterationsArg.getValue();
         LOG(LOG_INFO) << "Number of MC iterations    " << iterations;
-        if(sampling_method == SM_WANG_LANDAU)
+        if(sampling_method == SM_WANG_LANDAU || sampling_method == SM_FAST_WANG_LANDAU)
             if(iterations > 10)
             {
                 LOG(LOG_WARNING) << "One Wang Landau simulation will take some time, are you sure you want to repeat it " << iterations << " times?";
@@ -252,7 +253,7 @@ Cmd::Cmd(int argc, char** argv)
         wangLandauBorders = wangLandauBordersMArg.getValue();
         wangLandauBins = wangLandauBinsArg.getValue();
         wangLandauOverlap = wangLandauOverlapArg.getValue();
-        if(sampling_method == SM_WANG_LANDAU)
+        if(sampling_method == SM_WANG_LANDAU || sampling_method == SM_FAST_WANG_LANDAU)
         {
             if(wangLandauBorders.size() < 2)
             {
@@ -261,14 +262,17 @@ Cmd::Cmd(int argc, char** argv)
             }
             std::sort(wangLandauBorders.begin(), wangLandauBorders.end());
             LOG(LOG_INFO) << "minimum ln(f):             " << lnf_min;
-            LOG(LOG_INFO) << "flatness criterion:        " << flatness_criterion;
+            if(sampling_method == SM_WANG_LANDAU)
+            {
+                LOG(LOG_INFO) << "flatness criterion:        " << flatness_criterion;
+            }
             LOG(LOG_INFO) << "Borders of ranges for Wang Landau Sampling: \n                  " << wangLandauBorders;
             LOG(LOG_INFO) << "Bins each range:           " << wangLandauBins;
             LOG(LOG_INFO) << "Overlap between ranges:    " << wangLandauOverlap;
         }
 
         parallel = parallelArg.getValue();
-        if(sampling_method == SM_WANG_LANDAU)
+        if(sampling_method == SM_WANG_LANDAU || sampling_method == SM_FAST_WANG_LANDAU)
         {
             LOG(LOG_INFO) << "CPUs to use                " << (parallel ? std::to_string(parallel) : "all");
         }

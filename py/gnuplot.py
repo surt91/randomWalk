@@ -48,7 +48,7 @@ class Gnuplot():
             self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
             self.create("rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
             self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
-        elif self.kwargs["sampling"] == 2:
+        elif self.kwargs["sampling"] == 2 or self.kwargs["sampling"] == 3:
             self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
             self.create("wl_scaled", "{/Symbol %s} / {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
             self.create("wl_raw", "{/Symbol %s}" % self.observable, "{/Italic counts}")

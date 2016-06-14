@@ -68,13 +68,15 @@ const std::vector<std::string> WANTED_OBSERVABLE_LABEL = {
 
 enum sampling_method_t {
     SM_METROPOLIS = 1,    ///< Metropolis sampling with a artificial temp
-    SM_WANG_LANDAU        ///< Direct Wang Landau Sampling of the distribution
+    SM_WANG_LANDAU,       ///< Direct Wang Landau Sampling of the distribution
+    SM_FAST_WANG_LANDAU   ///< Direct Fast 1/t Wang Landau Sampling of the distribution
 };
 
 const std::vector<std::string> SAMPLING_METHOD_LABEL = {
     "nan",
     "Metropolis",
-    "Wang Landau"
+    "Wang Landau",
+    "Fast 1/t Wang Landau",
 };
 
 /** Command line parser.

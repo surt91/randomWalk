@@ -56,7 +56,7 @@ class Simulation():
             p = self.parallel
         energies = kwargs["energies"]
         self.kwargs = kwargs
-        if self.parallel and sampling != 2:
+        if self.parallel and (sampling != 2 and sampling != 3):
             print("sampling method", sampling, "does not use parallelism, set parallel to None")
             raise
 
@@ -65,7 +65,7 @@ class Simulation():
             if self.sampling == 1:
                 for T in thetas[N]:
                     self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
-            if self.sampling == 2:
+            if self.sampling == 2 or self.sampling == 3:
                 num = len(energies[N])-1
                 for i in range(num):
                     self.instances.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, first=not i, last=(i==num-1), **kwargs))
@@ -123,7 +123,7 @@ class Simulation():
                         t = 50000
                 return t/1000 * max_t_corr
 
-            if self.sampling == 2:
+            if self.sampling == 2 or self.sampling == 3:
                 # no data yet
                 if N <= 30:
                     t = 10
@@ -213,7 +213,7 @@ class SimulationInstance():
         if self.rawConf and not os.path.exists(self.rawConf):
             os.makedirs(self.rawConf)
 
-        if sampling == 2:
+        if sampling == 2 or sampling == 3:
             old_nbins = nbins
             self.nbins += overlap
             if self.overlap_direction == "right":
@@ -235,7 +235,7 @@ class SimulationInstance():
                 t = self.T
             self.x += int(1e5*t)
             self.y += int(1e5*t)
-        elif sampling == 2:
+        elif sampling == 2 or sampling == 3:
             self.x += int(self.energy[0])
             self.y += int(self.energy[0])
 
@@ -246,7 +246,7 @@ class SimulationInstance():
 
         if sampling == 1:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
-        elif sampling == 2:
+        elif sampling == 2 or sampling == 3:
             self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
 
         self.filename = "{}/{}.dat".format(self.rawData, self.basename)

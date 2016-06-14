@@ -91,7 +91,10 @@ parameters = {
     # only available in d=2, yet
     "akl": False,
     # which smapling methd
-    "sampling": 1,  # 1: metropolis, 2: wang landau
+    # 1: Metropolis
+    # 2: Wang Landau
+    # 3: Fast 1/t Wang Landau
+    "sampling": 2,
 
     # how many cpus (only for wang landau), None means all
     # for HERO: 1 - 12
