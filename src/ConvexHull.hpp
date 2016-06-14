@@ -568,6 +568,9 @@ inline int ConvexHull<int>::countZerosAndUpdateCmd(std::string &cmd)
         cmd = "Qb"+std::to_string(zero_axis)+":0B"+std::to_string(zero_axis)+":0";
     }
 
+    if(Logger::verbosity <= LOG_INFO)
+        cmd += " Pp";
+
     return num_zeros;
 }
 
