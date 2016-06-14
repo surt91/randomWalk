@@ -152,7 +152,7 @@ class Simulation():
                     if i.N == N:
                         if not incremental or not os.path.exists(i.filename+".gz"):
                             f.write(" ".join(i.get_cmd()) + "\n")
-                        ctr += 1
+                            ctr += 1
             with open(os.path.join("HERO", name+".sge"), "w") as f:
                 f.write(template.render(name=name,
                                         count=ctr,
