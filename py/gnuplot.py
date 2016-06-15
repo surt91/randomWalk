@@ -34,7 +34,7 @@ class Gnuplot():
         os.makedirs(self.d, exist_ok=True)
 
     def every(self):
-        fmt = "%f/d" if self.kwargs["observable"] == 2 else "%f/(d-1)"
+        fmt = "%f*d" if self.kwargs["observable"] == 2 else "%f*(d-1)"
         exponent = fmt % nu[self.kwargs["typ"]][self.kwargs["dimension"]]
         if self.kwargs["sampling"] == 1:
             self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
