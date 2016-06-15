@@ -99,6 +99,7 @@ class Cmd
         std::string pov_path;
         std::string gp_path;
         int steps;
+        int numWalker;
         int seedRealization;
         int seedMC;
         walk_type_t type;

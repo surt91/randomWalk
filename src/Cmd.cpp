@@ -23,6 +23,7 @@ Cmd::Cmd(int argc, char** argv)
         // value argument
         // -short, --long, description, required, default, type
         TCLAP::ValueArg<int> numArg("N", "steps", "how many steps", false, 100, "integer");
+        TCLAP::ValueArg<int> numWalkerArg("M", "walker", "how many walker", false, 1, "integer");
         TCLAP::ValueArg<int> iterationsArg("n", "iterations", "how many MC tries", false, 100, "integer");
         TCLAP::ValueArg<int> t_eqArg("", "t_eq", "equilibration time to use", false, -1, "integer");
         TCLAP::ValueArg<int> t_eqMaxArg("", "t_eq_max", "maximum number equilibration time, abort simulation if not equilibrated ", false, 1e5, "integer");
@@ -108,6 +109,7 @@ Cmd::Cmd(int argc, char** argv)
 
         // Add to the parser
         cmd.add(numArg);
+        cmd.add(numWalkerArg);
         cmd.add(iterationsArg);
         cmd.add(t_eqArg);
         cmd.add(t_eqMaxArg);
@@ -185,6 +187,9 @@ Cmd::Cmd(int argc, char** argv)
 
         steps = numArg.getValue();
         LOG(LOG_INFO) << "Number of steps            " << steps;
+
+        numWalker = numWalkerArg.getValue();
+        LOG(LOG_INFO) << "Number of walker           " << numWalker;
 
         d = dimArg.getValue();
         LOG(LOG_INFO) << "Dimension                  " << d;

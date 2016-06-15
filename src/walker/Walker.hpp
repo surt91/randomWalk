@@ -27,8 +27,8 @@ class Walker
         Walker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
         virtual ~Walker() {}
 
-        const int numSteps; ///< Number of steps the Walk should have
-        const int d;        ///< Dimension in which the Walker walks
+        const int numSteps;  ///< Number of steps the Walk should have
+        const int d;         ///< Dimension in which the Walker walks
 
         virtual void setHullAlgo(hull_algorithm_t a) = 0;
 
@@ -39,7 +39,7 @@ class Walker
         virtual double A() const = 0;   ///< Returns the Volume of the convex hull
         virtual double L() const = 0;   ///< Returns the surface area of the convex hull
         virtual std::vector<double> maxExtent() = 0; ///< Returns a vector with d entries of the maximum extension in the corresponding dimension
-        virtual double maxDiameter() = 0;           ///< Returns the maximum distance between all pairs
+        virtual double maxDiameter() = 0;            ///< Returns the maximum distance between all pairs
         virtual double r() = 0;  ///< Distance between start and end point
         virtual double r2() = 0; ///< Squared distance between start and end point
 

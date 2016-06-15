@@ -89,6 +89,7 @@ void benchmark()
     o.seedRealization = 13;
     o.seedMC = 42;
     o.wantedObservable = WO_VOLUME;
+    o.numWalker = 1;
 
     o.t_eq = -1;
     o.t_eqMax = 1000;

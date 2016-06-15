@@ -40,12 +40,15 @@ class SpecWalker : public Walker
         const ConvexHull<T>& convexHull() const;
         void setHullAlgo(hull_algorithm_t a);
 
+        /// function to make the type of T accessable outside (e.g. per decltype)
+        static T T_type() { return T(); };
+
         ///\name observables
         double A() const final { return convexHull().A(); };
         double L() const final { return convexHull().L(); };
         std::vector<double> maxExtent() final;
-        double maxDiameter() final ;
-        double r() final ;
+        double maxDiameter() final;
+        double r() final;
         double r2() final;
 
         ///\name get state

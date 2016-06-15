@@ -17,6 +17,7 @@
 #include "../Logging.hpp"
 #include "../stat.hpp"
 #include "../walker/Walker.hpp"
+#include "../walker/MultipleWalker.hpp"
 #include "../walker/LatticeWalker.hpp"
 #include "../walker/LoopErasedWalker.hpp"
 #include "../walker/SelfAvoidingWalker.hpp"
