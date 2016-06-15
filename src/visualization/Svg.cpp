@@ -20,11 +20,11 @@ SVG::SVG(const std::string &filename, const double scale)
  * \param y       y-coordinate of the center of the circle
  * \param filled  fill the circle if 1, don't if 0
 */
-void SVG::circle(const double x, const double y, const int filled)
+void SVG::circle(const double x, const double y, const int filled, const std::string color)
 {
     buffer << "<circle cx='" << x << "' cy='" << y << "' r='" << radius*scale << "' stroke='black' stroke-width='0'";
     if(filled == 1)
-        buffer << " fill='black'";
+        buffer << " fill='" + color + "'";
     else if(filled == -1)
         buffer << " fill='white'";
     else

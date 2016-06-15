@@ -16,7 +16,7 @@ class SVG
     public:
         SVG(const std::string &filename, const double scale=1.0);
 
-        void circle(const double x, const double y, const int filled);
+        void circle(const double x, const double y, const int filled=1, const std::string color=std::string("black"));
         void line(const double x1, const double x2, const double y1, const double y2, const std::string color=std::string("black"));
         void polyline(const std::vector<std::vector<double>> points, const bool closed=false, const std::string color=std::string("black"));
 

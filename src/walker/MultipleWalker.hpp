@@ -12,6 +12,19 @@
 #include "../ConvexHull.hpp"
 #include "Walker.hpp"
 
+static const std::vector<std::string> COLOR = {
+    "green",
+    "blue",
+    "yellow",
+    "orange",
+    "indigo",
+    "cyan",
+    "brown",
+    "crimson",
+    "darkmagenta",
+    "deepskyblue"
+};
+
 /** Class Template MultipleWalker.
  *
  * Implements a generic way to represent multiple Walkers of the
@@ -225,7 +238,57 @@ std::string MultipleWalker<T>::print() const
 }
 
 template <class T>
-void MultipleWalker<T>::svg(const std::string /*filename*/, const bool /*with_hull*/) const { LOG(LOG_WARNING) << "not yet implemented"; }
+void MultipleWalker<T>::svg(const std::string filename, const bool with_hull) const
+{
+    LOG(LOG_WARNING) << "not yet implemented";
+    SVG pic(filename);
+    int min_x=0, max_x=0, min_y=0, max_y=0;
+    int idx = 0;
+    for(auto w : m_walker)
+    {
+        ++idx;
+        std::vector<std::vector<double>> points;
+        const auto p = w.points();
+
+        for(auto i : p)
+        {
+            auto x1 = i[0], y1 = i[1];
+            std::vector<double> point {(double) x1, (double) y1};
+
+            pic.circle(x1, y1, true, COLOR[idx%COLOR.size()]);
+
+            points.push_back(point);
+
+            if(x1 < min_x)
+                min_x = x1;
+            if(x1 > max_x)
+                max_x = x1;
+            if(y1 < min_y)
+                min_y = y1;
+            if(y1 > max_y)
+                max_y = y1;
+        }
+        pic.polyline(points, false, COLOR[idx%COLOR.size()]);
+    }
+
+    if(d > 2)
+        pic.text(min_x, max_y-20, "projected from d=" + std::to_string(d), "red");
+
+    if(with_hull)
+    {
+        std::vector<std::vector<double>> points;
+        const auto h = m_convex_hull.hullPoints();
+        for(auto &i : h)
+        {
+            std::vector<double> point {(double) i[0], (double) i[1]};
+            points.push_back(point);
+        }
+        pic.polyline(points, true, std::string("red"));
+    }
+    pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
+    pic.save();
+}
+
 template <class T>
 void MultipleWalker<T>::pov(const std::string /*filename*/, const bool /*with_hull*/) const { LOG(LOG_WARNING) << "not yet implemented"; }
 template <class T>
