@@ -237,10 +237,11 @@ std::string MultipleWalker<T>::print() const
     return ss.str();
 }
 
+// FIXME: this is almost exactly the same code as in SpecWalker
+// can probably be reduced
 template <class T>
 void MultipleWalker<T>::svg(const std::string filename, const bool with_hull) const
 {
-    LOG(LOG_WARNING) << "not yet implemented";
     SVG pic(filename);
     int min_x=0, max_x=0, min_y=0, max_y=0;
     int idx = 0;
@@ -289,7 +290,81 @@ void MultipleWalker<T>::svg(const std::string filename, const bool with_hull) co
     pic.save();
 }
 
+// FIXME: this is almost exactly the same code as in SpecWalker
+// can probably be reduced
 template <class T>
 void MultipleWalker<T>::pov(const std::string /*filename*/, const bool /*with_hull*/) const { LOG(LOG_WARNING) << "not yet implemented"; }
 template <class T>
-void MultipleWalker<T>::gp(const std::string /*filename*/, const bool /*with_hull*/) const { LOG(LOG_WARNING) << "not yet implemented"; }
+void MultipleWalker<T>::gp(const std::string filename, const bool with_hull) const
+{
+    if(d==2)
+    {
+        Gnuplot2D pic(filename);
+
+        int idx = 0;
+        for(auto w : m_walker)
+        {
+            ++idx;
+            const auto p = w.points();
+            std::vector<std::vector<double>> points;
+            for(auto i : p)
+            {
+                auto x = i[0], y = i[1];
+                std::vector<double> point {(double) x, (double) y};
+
+                points.push_back(point);
+            }
+            pic.polyline(points, false);
+        }
+
+        if(with_hull)
+        {
+            std::vector<std::vector<double>> points;
+            const auto h = m_convex_hull.hullPoints();
+            for(auto &i : h)
+            {
+                std::vector<double> point {(double) i[0], (double) i[1]};
+                points.push_back(point);
+            }
+            pic.polyline(points, true);
+        }
+
+        pic.save();
+    }
+    else if(d==3)
+    {
+        Gnuplot3D pic(filename);
+        int idx = 0;
+        for(auto w : m_walker)
+        {
+            ++idx;
+            auto p = w.points();
+            std::vector<std::vector<double>> points;
+            for(auto i : p)
+            {
+                auto x = i[0], y = i[1], z = i[2];
+                std::vector<double> point {(double) x, (double) y, (double) z};
+
+                points.push_back(point);
+            }
+            pic.polyline(points);
+        }
+
+        if(with_hull)
+        {
+            for(auto &i : m_convex_hull.hullFacets())
+            {
+                std::vector<double> p1 {(double) i[0][0], (double) i[0][1], (double) i[0][2]};
+                std::vector<double> p2 {(double) i[1][0], (double) i[1][1], (double) i[1][2]};
+                std::vector<double> p3 {(double) i[2][0], (double) i[2][1], (double) i[2][2]};
+                pic.facet(p1, p2, p3);
+            }
+        }
+
+        pic.save();
+    }
+    else
+    {
+        LOG(LOG_WARNING) << "Gnuplot output only implemented for d = 2 and d = 3";
+    }
+}

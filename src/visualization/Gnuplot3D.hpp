@@ -31,6 +31,8 @@ class Gnuplot3D
         std::string filename_hull;
         std::stringstream buffer;
         std::stringstream buffer_animate;
-        std::stringstream buffer_points;
         std::stringstream buffer_hull;
+        std::vector<std::string> points_list;
+
+        int numLines;
 };
