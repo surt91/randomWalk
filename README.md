@@ -16,7 +16,7 @@ Doxygen documentation is at https://hendrik.schawe.me/randomWalk
 Dependencies
 ------------
 
-* C++11 compatible compiler (e.g. gcc >=4.7)
+* C++11 compatible compiler (e.g. gcc >=4.8.1)
 * python3
     * numpy
     * scipy
