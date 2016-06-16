@@ -349,7 +349,6 @@ def run(histogram_type=1):
     for N in steps:
         logging.info("N = {}".format(N))
 
-        list_of_ps_log = []
         try:
             theta_for_N = thetas[N]
         except KeyError:
@@ -388,10 +387,12 @@ def run(histogram_type=1):
         # guess a good number of bins with rice rule
         num_bins = ceil(2*num_samples**(1/3))
         # in fact, I need more bins, guess them with the sqrt choice
-        num_bins = ceil(num_samples**(1/2))
+        #~ num_bins = ceil(num_samples**(1/2))
         # but ensure that we only get max 1 bin per 2 x-axis values
         # since sometimes they are discrete, which can result in artifacts
         num_bins = min(num_bins, (maximum - minimum))
+
+        logging.info("using {} bins".format(num_bins))
 
         # get bins, according to the chosen type
         if histogram_type == 1:
@@ -403,17 +404,20 @@ def run(histogram_type=1):
         else:
             raise
 
+        with Pool() as p:
+            list_of_ps_log = p.starmap(getDistribution,
+                                        [   (dataDict[T],
+                                            "{}/dist_{}.dat".format(out, nameDict[T]),
+                                            "{}/hist_{}.dat".format(out, nameDict[T]),
+                                            param.parameters["observable"],
+                                            T,
+                                            N,
+                                            bins)
+                                        for T in theta_for_N
+                                        ]
+                                      )
+
         for T in theta_for_N:
-            data = getDistribution(dataDict[T],
-                                   "{}/dist_{}.dat".format(out, nameDict[T]),
-                                   "{}/hist_{}.dat".format(out, nameDict[T]),
-                                   col=param.parameters["observable"],
-                                   theta=T,
-                                   steps=N,
-                                   inBins=bins
-                                  )
-            # only append, if we got some good data from the file
-            list_of_ps_log.append(data)
             outfiles.append('"{}/stiched_{}.dat"'.format(out, nameDict[T]))
 
         z = getZtheta(list_of_ps_log, theta_for_N, ["{}/Z_{}.dat".format(out, nameDict[T]) for T in theta_for_N])
@@ -424,12 +428,15 @@ def run(histogram_type=1):
             zc.append(zc[-1] + i[0])
             zce.append(zce[-1] + i[1])
 
+        with Pool() as p:
+            data = p.starmap(stichFile,
+                               [("{}/dist_{}.dat".format(out, nameDict[T]),
+                                 "{}/stiched_{}.dat".format(out, nameDict[T]),
+                                 zc[n],
+                                 zce[n]) for n, T in enumerate(theta_for_N)])
         whole_distribution = []
-        for n, T in enumerate(theta_for_N):
-            data = stichFile("{}/dist_{}.dat".format(out, nameDict[T]),
-                             "{}/stiched_{}.dat".format(out, nameDict[T]),
-                             zc[n], zce[n])
-            whole_distribution += data
+        for dat in data:
+            whole_distribution += dat
 
         whole_distribution_file = param.basename.format(steps=N, **param.parameters)
         whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
