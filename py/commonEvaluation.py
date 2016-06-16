@@ -1,11 +1,37 @@
 import gzip
 import logging
+from multiprocessing import Pool
 
 import numpy as np
 from scipy.interpolate import interp1d
 
 import parameters as param
 
+
+def getMinMaxTimeHelper(filename):
+    with gzip.open(filename+".gz", "rt") as f:
+        for i in f.readlines():
+            if "# Does not equilibrate" in i:
+                break
+
+            if "# Version" in i:
+                s = i.split(":")[-1].strip()
+                version = [s]
+            if "# Compiled" in i:
+                s = i.split(":")[1:]
+                version.append(":".join(s).strip())
+            if "# Started" in i:
+                s = i.split(":")[1:]
+                s = ":".join(s).strip()
+                # ?
+            if "# time in seconds" in i or "# time/sweep in seconds" in i:
+                s = i.split(":")[-1].strip().strip("s")
+                time = float(s)
+            if "# max vmem: VmPeak" in i:
+                s = i.split(":")[-1].strip().strip(" kB")
+                mem = float(s)
+
+    return time, mem, version
 
 def getMinMaxTime(filenames):
     """Reads files given in first argument and collects metadata from
@@ -16,31 +42,9 @@ def getMinMaxTime(filenames):
     git revison
     Date of compilation
     """
-    times = []
-    mems = []
-    versions = []
-    for filename in filenames:
-        with gzip.open(filename+".gz", "rt") as f:
-            for i in f.readlines():
-                if "# Does not equilibrate" in i:
-                    break
+    with Pool() as p:
+        times, mems, versions = zip(*p.map(getMinMaxTimeHelper, [f for f in filenames]))
 
-                if "# Version" in i:
-                    s = i.split(":")[-1].strip()
-                    versions.append([s])
-                if "# Compiled" in i:
-                    s = i.split(":")[1:]
-                    versions[-1].append(":".join(s).strip())
-                if "# Started" in i:
-                    s = i.split(":")[1:]
-                    s = ":".join(s).strip()
-                    # ?
-                if "# time in seconds" in i or "# time/sweep in seconds" in i:
-                    s = i.split(":")[-1].strip().strip("s")
-                    times.append(float(s))
-                if "# max vmem: VmPeak" in i:
-                    s = i.split(":")[-1].strip().strip(" kB")
-                    mems.append(float(s))
     try:
         logging.info("time/sweep between {:.2f}s - {:.2f}s".format(min(times), max(times)+0.0051))
     except ValueError:
