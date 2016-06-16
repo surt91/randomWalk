@@ -13,6 +13,7 @@ import parameters as para
 from timing import time
 
 def run_instance(i):
+    i.quiet = True
     i()
 
 def bootstrap(xRaw, n_resample=100, f=np.mean):
@@ -201,6 +202,7 @@ class SimulationInstance():
         self.lnf = lnf
         self.flatness = flatness
         self.overlap_direction = overlap_direction
+        self.quiet = False
 
         self.loadFile = None
 
@@ -274,10 +276,12 @@ class SimulationInstance():
                 "-d {:d}".format(self.D),
                 "-t {}".format(self.t),
                 "-w {}".format(self.w),
-                "-v 3",
                 "-o {}".format(self.filename),
                 "-m {}".format(self.m),
                ]
+
+        if self.quiet:
+            opts.append("-q")
 
         if self.rawConf:
             opts.append("-O {0}".format(self.confname))
