@@ -129,6 +129,154 @@ static const int iMatrix3[] =
     9
 };
 
+/// transformation matrices for pivoting d=4
+static const int tMatrix4[][16] =
+{
+    // mirror at xyz-volume
+        { 1,  0,  0,  0,
+          0,  1,  0,  0,
+          0,  0,  1,  0,
+          0,  0,  0, -1},
+    // mirror at xyw-volume
+        { 1,  0,  0,  0,
+          0,  1,  0,  0,
+          0,  0, -1,  0,
+          0,  0,  0,  1},
+    // mirror at xzw-volume
+        { 1,  0,  0,  0,
+          0, -1,  0,  0,
+          0,  0,  1,  0,
+          0,  0,  0,  1},
+    // mirror at yzw-volume
+        {-1,  0,  0,  0,
+          0,  1,  0,  0,
+          0,  0,  1,  0,
+          0,  0,  0,  1},
+    // rotate by pi/2 around xy-plane
+        { 1,  0,  0,  0,
+          0,  1,  0,  0,
+          0,  0,  0,  1,
+          0,  0, -1,  0},
+    // rotate by pi around xy-plane
+        { 1,  0,  0,  0,
+          0,  1,  0,  0,
+          0,  0, -1,  0,
+          0,  0,  0, -1},
+    // rotate by -pi/2 around xy-plane
+        { 1,  0,  0,  0,
+          0,  1,  0,  0,
+          0,  0,  0, -1,
+          0,  0,  1,  0},
+    // rotate by pi/2 around xz-plane
+        { 1,  0,  0,  0,
+          0,  0,  0,  1,
+          0,  0,  1,  0,
+          0, -1,  0,  0},
+    // rotate by pi around xz-plane
+        { 1,  0,  0,  0,
+          0, -1,  0,  0,
+          0,  0,  1,  0,
+          0,  0,  0, -1},
+    // rotate by -pi/2 around xz-plane
+        { 1,  0,  0,  0,
+          0,  0,  0, -1,
+          0,  0,  1,  0,
+          0,  1,  0,  0},
+    // rotate by pi/2 around xw-plane
+        { 1,  0,  0,  0,
+          0,  0,  1,  0,
+          0, -1,  0,  0,
+          0,  0,  0,  1},
+    // rotate by pi around xw-plane
+        { 1,  0,  0,  0,
+          0, -1,  0,  0,
+          0,  0, -1,  0,
+          0,  0,  0,  1},
+    // rotate by -pi/2 around xw-plane
+        { 1,  0,  0,  0,
+          0,  0, -1,  0,
+          0,  1,  0,  0,
+          0,  0,  0,  1},
+    // rotate by pi/2 around yz-plane
+        { 0,  0,  0,  1,
+          0,  1,  0,  0,
+          0,  0,  1,  0,
+         -1,  0,  0,  0},
+    // rotate by pi around yz-plane
+        {-1,  0,  0,  0,
+          0,  1,  0,  0,
+          0,  0,  1,  0,
+          0,  0,  0, -1},
+    // rotate by -pi/2 around yz-plane
+        { 0,  0,  0, -1,
+          0,  1,  0,  0,
+          0,  0,  1,  0,
+          1,  0,  0,  0},
+    // rotate by pi/2 around yw-plane
+        { 0,  0,  1,  0,
+          0,  1,  0,  0,
+         -1,  0,  0,  0,
+          0,  0,  0,  1},
+    // rotate by pi around yw-plane
+        {-1,  0,  0,  0,
+          0,  1,  0,  0,
+          0,  0, -1,  0,
+          0,  0,  0,  1},
+    // rotate by -pi/2 around yw-plane
+        { 0,  0, -1,  0,
+          0,  1,  0,  0,
+          1,  0,  0,  0,
+          0,  0,  0,  1},
+    // rotate by pi/2 around zw-plane
+        { 0,  1,  0,  0,
+         -1,  0,  0,  0,
+          0,  0,  1,  0,
+          0,  0,  0,  1},
+    // rotate by pi around zw-plane
+        {-1,  0,  0,  0,
+          0, -1,  0,  0,
+          0,  0,  1,  0,
+          0,  0,  0,  1},
+    // rotate by -pi/2 around zw-plane
+        { 0, -1,  0,  0,
+          1,  0,  0,  0,
+          0,  0,  1,  0,
+          0,  0,  0,  1},
+};
+/// inverse transformations
+static const int iMatrix4[] =
+{
+    // mirrors
+    0,
+    1,
+    2,
+    3,
+    // rotate xy
+    6,
+    5,
+    4,
+    //rotate xz
+    9,
+    8,
+    7,
+    //rotate xw
+    12,
+    11,
+    10,
+    //rotate yz
+    15,
+    14,
+    13,
+    //rotate yw
+    18,
+    17,
+    16,
+    //rotate zw
+    21,
+    20,
+    19
+};
+
 SelfAvoidingWalker::SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
     : SpecWalker<int>(d, numSteps, rng, hull_algo)
 {
@@ -163,6 +311,10 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
         case 3:
             symmetry = rng() * 12; // integer between 0 and 11
             undo_symmetry = iMatrix3[symmetry];
+            break;
+        case 4:
+            symmetry = rng() * 22; // integer between 0 and 21
+            undo_symmetry = iMatrix4[symmetry];
             break;
         default:
             symmetry = -1;
@@ -207,9 +359,7 @@ Step<int> SelfAvoidingWalker::transform(Step<int> &p, const int *m) const
 bool SelfAvoidingWalker::pivot(const int index, const int op, bool update)
 {
     const int* matrix;
-    // FIXME: implement for d > 3
-    if(d > 3)
-        throw std::invalid_argument("Pivot algorithm only implemented for d<=3");
+    // FIXME: implement for d > 4
 
     // choose the symmetry operation
     switch(d)
@@ -220,8 +370,11 @@ bool SelfAvoidingWalker::pivot(const int index, const int op, bool update)
         case 3:
             matrix = tMatrix3[op];
             break;
+        case 4:
+            matrix = tMatrix4[op];
+            break;
         default:
-            throw std::invalid_argument("Pivot algorithm only implemented for d<=3");
+            throw std::invalid_argument("Pivot algorithm only implemented for d<=4");
     }
 
     // FIXME: pivot the shorter end
