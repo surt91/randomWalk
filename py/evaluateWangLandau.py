@@ -92,8 +92,10 @@ def process_data(infiles, outformat):
     stderr = stderr.flatten()
 
     # normalize
-    data -= np.max(data)
-    area = trapz(np.exp(data), centers)
+    mdata = np.ma.masked_array(data, np.isnan(data))
+    data -= np.max(mdata)
+    mdata -= np.max(mdata)
+    area = trapz(np.exp(mdata), centers)
     data -= np.log(area)
 
     outfile = outformat.format("WL")
