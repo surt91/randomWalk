@@ -129,7 +129,7 @@ def stichInterpol(centers, data, stderr):
 
         # not enough overlap
         if len(Z) < 3:
-            logging.warning("not enough overlap")
+            logging.warning("not enough overlap ({}: {} -- {})".format(len(Z), max(centers[i]), min(centers[i+1])))
 
         z, err = bootstrap(Z)
         summed_err += err
