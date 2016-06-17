@@ -9,6 +9,7 @@ import parameters as param
 
 
 def getMinMaxTimeHelper(filename):
+    time, mem, version = 0, 0, ""
     with gzip.open(filename+".gz", "rt") as f:
         for i in f.readlines():
             if "# Does not equilibrate" in i:
