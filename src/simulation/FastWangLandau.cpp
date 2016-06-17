@@ -69,48 +69,44 @@ void FastWangLandau::run()
 
             int t = 0;
             double status = 1.;
-            bool secondPhase = false;
 
             findStart(w, lb, ub, rngMC);
             LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " " << lb << " < " << S(w) << " < " << ub << " start!";
 
+            // start first phase
             double lnf = 1;
+            while(t < 10 && lnf > 1./t)
+            {
+                LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f = " << lnf << ", t = " << t;
+                do
+                {
+                    for(int i=0; i < initial_num_iterations; ++i)
+                    {
+                        double oldS = S(w);
+                        w->change(rngMC);
+                        ++t;
 
+                        double p_acc = exp(g[oldS] - g[S(w)]);
+                        if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                        {
+                            w->undoChange();
+                            ++fails;
+                        }
+
+                        g.add(S(w), lnf);
+                        H.add(S(w));
+                    }
+                } while(H.min() == 0);
+                // run until we have one entry in each bin
+                H.reset();
+                lnf /= 2;
+            }
+
+            //start second phase
+            status = 1./t;
+            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : begin phase 2 at t=" << t;
             while(lnf > lnf_min)
             {
-                if(!secondPhase)
-                {
-                    LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f = " << lnf << ", t = " << t;
-                    do
-                    {
-                        for(int i=0; i < initial_num_iterations; ++i)
-                        {
-                            double oldS = S(w);
-                            w->change(rngMC);
-                            ++t;
-
-                            double p_acc = exp(g[oldS] - g[S(w)]);
-                            if(S(w) < lb || S(w) > ub || p_acc < rngMC())
-                            {
-                                w->undoChange();
-                                ++fails;
-                            }
-
-                            g.add(S(w), lnf);
-                            H.add(S(w));
-                        }
-                    } while(H.min() == 0);
-                    // run until the histogram is flat and we have a few samples
-                    H.reset();
-                    lnf /= 2;
-                    if(lnf <= 1./t)
-                    {
-                        secondPhase = true;
-                        status = 1./t;
-                        LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : begin phase 2 at t=" << t;
-                    }
-                }
-                else // second stage begins
                 {
                     lnf = 1./t;
 
