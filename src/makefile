@@ -46,15 +46,19 @@ ifeq "$(GCC_GTEQ_490)" "1"
     CXXFLAGS += -fdiagnostics-color=auto
 endif
 
+VERSION := $(shell git describe --tags --always)
+
 release: CXXFLAGS += -O3 -flto -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing
+release: VERSION += release
 release: all
 silent: CXXFLAGS += -DNLOG
+silent: VERSION += silent
 silent: release
 debug: CXXFLAGS += -g -Og
+debug: VERSION += debug
 debug: all
 
-VERSION := $(shell git describe --tags --always)
-CXXFLAGS += -DVERSION=\"$(VERSION)\"
+CXXFLAGS += -DVERSION="\"$(VERSION)\""
 CXXFLAGS += -DD_MAX=$(D_MAX)
 
 # for clang sanitizers
