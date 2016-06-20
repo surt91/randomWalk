@@ -19,18 +19,28 @@ t_eq = {
 t_corr = {
          }
 
-energies = {    32: np.linspace(5, 600, 5),
-                64: np.linspace(20, 6000, 12),
-               128: np.linspace(20, 12000, 20),
-               256: np.linspace(20, 25000, 20),
-               512: np.linspace(20, 50000, 30),
-              1024: np.linspace(20, 100000, 40),
-              2048: np.linspace(20, 200000, 40),
+# target for rate function: Phi_target -> max_energy = Phi_target*N**d
+energies = {     32: np.linspace(   10,     10000,  6),
+                 64: np.linspace(   20,     80000, 12),
+                128: np.linspace(  800,   1000000, 24),
+                256: np.linspace( 5000,  12000000, 48),
+                384: np.linspace( 9000,  62000000, 48),
+                512: list(np.linspace(   12000,    100000, 10, endpoint=False))
+                   + list(np.linspace(  100000,    160000, 10, endpoint=False))
+                   + list(np.linspace(  160000,   1600000, 10, endpoint=False))
+                   + list(np.linspace( 1600000,  16000000, 10, endpoint=False))
+                   + list(np.linspace(16000000, 132000000, 40)),
+               1024: list(np.linspace(   24000,    400000, 10, endpoint=False))
+                   + list(np.linspace(  400000,    600000, 10, endpoint=False))
+                   + list(np.linspace(  600000,   6000000, 10, endpoint=False))
+                   + list(np.linspace( 6000000,  60000000, 10, endpoint=False))
+                   + list(np.linspace(60000000, 932000000, 40)),
+               2048: list(np.linspace(    48000,    1800000, 10, endpoint=False))
+                   + list(np.linspace(  1800000,    2800000, 10, endpoint=False))
+                   + list(np.linspace(  2800000,   28000000, 10, endpoint=False))
+                   + list(np.linspace( 28000000,  280000000, 10, endpoint=False))
+                   + list(np.linspace(280000000, 5932000000, 40)),
            }
-
-# subdivide the beginning, to ease the peak
-energies[1024] = np.insert(energies[1024], 1, np.linspace(energies[1024][0]+200, energies[1024][1], 10, endpoint=False))
-energies[2048] = np.insert(energies[2048], 1, np.linspace(energies[2048][0]+200, energies[2048][1], 10, endpoint=False))
 
 parameters = {
     # what type
@@ -88,7 +98,9 @@ parameters = {
     # algorithm for the convex hull
     # qhull seems to be fastest, at least for big number of steps
     # for small number of steps, andrews is faster
-    "method": 2,  # 1: qhull, 2: andrews, 4: jarvis
+    # 1: qhull,
+    # 2: andrews (only 2D)
+    "method": 2,
 
     # akl heuristic
     # only available in d=2, yet
