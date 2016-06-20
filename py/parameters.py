@@ -52,6 +52,8 @@ parameters = {
 
     # list of lengths of the walks
     "number_of_steps": sizes,
+    # number of MC tries per sweep
+    "sweep": sweep,
 
     # dict[N] of different thetas
     "thetas": thetas,
