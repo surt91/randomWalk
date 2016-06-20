@@ -105,6 +105,7 @@ class Cmd
         walk_type_t type;
         int d;
         int iterations;
+        int sweep;
         int t_eq;
         int t_eqMax;
         int parallel;

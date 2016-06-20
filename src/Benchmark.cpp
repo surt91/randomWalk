@@ -102,6 +102,7 @@ void benchmark()
 
     o.d = 2;
     o.chAlg = CH_ANDREWS_AKL;
+    o.iterations = 1000;
     for(int i=1; i<=7; ++i)
     {
         double expected_mean_L = 0;
@@ -113,8 +114,8 @@ void benchmark()
         {
             case WT_RANDOM_WALK:
                 o.steps = 150;
+                o.sweep = o.steps;
                 o.type = WT_RANDOM_WALK;
-                o.iterations = 1000;
                 expected_mean_L = 48.38;
                 expected_mean_A = 120.22;
                 expected_mean_r = 12.80;
@@ -122,8 +123,8 @@ void benchmark()
                 break;
             case WT_LOOP_ERASED_RANDOM_WALK:
                 o.steps = 30;
+                o.sweep = o.steps;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
-                o.iterations = 1000;
                 expected_mean_L = 35.36;
                 expected_mean_A = 56.32;
                 expected_mean_r = 12.50;
@@ -131,8 +132,8 @@ void benchmark()
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 100;
+                o.sweep = o.steps;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
-                o.iterations = 1000;
                 expected_mean_L = 84.8574757548;
                 expected_mean_A = 344.535;
                 expected_mean_r = 28.6759;
@@ -140,8 +141,8 @@ void benchmark()
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 130;
+                o.sweep = o.steps;
                 o.type = WT_REAL_RANDOM_WALK;
-                o.iterations = 1000;
                 expected_mean_L = 43.10;
                 expected_mean_A = 100.23;
                 expected_mean_r = 11.58;
@@ -149,8 +150,8 @@ void benchmark()
                 break;
             case WT_GAUSSIAN_RANDOM_WALK:
                 o.steps = 130;
+                o.sweep = o.steps;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
-                o.iterations = 1000;
                 expected_mean_L = 59.1868262964;
                 expected_mean_A = 189.601620782;
                 expected_mean_r = 15.8136986085;
@@ -158,8 +159,8 @@ void benchmark()
                 break;
             case WT_LEVY_FLIGHT:
                 o.steps = 130;
+                o.sweep = o.steps;
                 o.type = WT_LEVY_FLIGHT;
-                o.iterations = 1000;
                 expected_mean_L = 1721.50;
                 expected_mean_A = 96667.18;
                 expected_mean_r = 759.03;
@@ -167,8 +168,8 @@ void benchmark()
                 break;
             case WT_CORRELATED_RANDOM_WALK:
                 o.steps = 80;
+                o.sweep = o.steps;
                 o.type = WT_CORRELATED_RANDOM_WALK;
-                o.iterations = 1000;
                 expected_mean_L = 31.1292517867;
                 expected_mean_A = 49.253667193;
                 expected_mean_r = 9.17497080667;
@@ -203,6 +204,7 @@ void benchmark()
         {
             case WT_RANDOM_WALK:
                 o.steps = 150;
+                o.sweep = o.steps;
                 o.type = WT_RANDOM_WALK;
                 o.iterations = 100;
                 expected_mean_L = 4869.41598187;
@@ -212,6 +214,7 @@ void benchmark()
                 break;
             case WT_LOOP_ERASED_RANDOM_WALK:
                 o.steps = 30;
+                o.sweep = o.steps;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
                 o.iterations = 600;
                 expected_mean_L = 86.845799771;
@@ -221,6 +224,7 @@ void benchmark()
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 120;
+                o.sweep = o.steps;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
                 o.iterations = 100;
                 expected_mean_L = 3050.3158479;
@@ -230,6 +234,7 @@ void benchmark()
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 100;
+                o.sweep = o.steps;
                 o.type = WT_REAL_RANDOM_WALK;
                 o.iterations = 100;
                 expected_mean_L = 2264.79537161;
@@ -239,6 +244,7 @@ void benchmark()
                 break;
             case WT_GAUSSIAN_RANDOM_WALK:
                 o.steps = 100;
+                o.sweep = o.steps;
                 o.type = WT_GAUSSIAN_RANDOM_WALK;
                 o.iterations = 100;
                 expected_mean_L = 15396.0001625;
@@ -248,6 +254,7 @@ void benchmark()
                 break;
             case WT_LEVY_FLIGHT:
                 o.steps = 130;
+                o.sweep = o.steps;
                 o.type = WT_LEVY_FLIGHT;
                 o.iterations = 100;
                 expected_mean_L = 73197525.4829;
@@ -257,8 +264,8 @@ void benchmark()
                 break;
             case WT_CORRELATED_RANDOM_WALK:
                 o.steps = 90;
+                o.sweep = o.steps;
                 o.type = WT_CORRELATED_RANDOM_WALK;
-                o.iterations = 100;
                 expected_mean_L = 744.279070151;
                 expected_mean_A = 1323.8847083;
                 expected_mean_r = 25.8766506636;

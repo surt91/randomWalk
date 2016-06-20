@@ -24,7 +24,8 @@ Cmd::Cmd(int argc, char** argv)
         // -short, --long, description, required, default, type
         TCLAP::ValueArg<int> numArg("N", "steps", "how many steps", false, 100, "integer");
         TCLAP::ValueArg<int> numWalkerArg("M", "walker", "how many walker", false, 1, "integer");
-        TCLAP::ValueArg<int> iterationsArg("n", "iterations", "how many MC tries", false, 100, "integer");
+        TCLAP::ValueArg<int> sweepArg("k", "sweep", "how many MC tries per sweep (default: number of steps)", false, -1, "integer");
+        TCLAP::ValueArg<int> iterationsArg("n", "iterations", "how many MC sweeps", false, 100, "integer");
         TCLAP::ValueArg<int> t_eqArg("", "t_eq", "equilibration time to use", false, -1, "integer");
         TCLAP::ValueArg<int> t_eqMaxArg("", "t_eq_max", "maximum number equilibration time, abort simulation if not equilibrated ", false, 1e5, "integer");
         TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, 0, "integer");
@@ -111,6 +112,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(numArg);
         cmd.add(numWalkerArg);
         cmd.add(iterationsArg);
+        cmd.add(sweepArg);
         cmd.add(t_eqArg);
         cmd.add(t_eqMaxArg);
         cmd.add(seedRArg);
@@ -220,8 +222,16 @@ Cmd::Cmd(int argc, char** argv)
         sampling_method = (sampling_method_t) samplingMethodArg.getValue();
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
 
+        sweep = sweepArg.getValue();
+        if(sampling_method == SM_METROPOLIS)
+        {
+            if(sweep == -1)
+                sweep = steps;
+            LOG(LOG_INFO) << "Number of MC per sweep     " << sweep;
+        }
+
         iterations = iterationsArg.getValue();
-        LOG(LOG_INFO) << "Number of MC iterations    " << iterations;
+        LOG(LOG_INFO) << "Number of MC sweeps        " << iterations;
         if(sampling_method == SM_WANG_LANDAU || sampling_method == SM_FAST_WANG_LANDAU)
             if(iterations > 10)
             {

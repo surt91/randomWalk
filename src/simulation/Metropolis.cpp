@@ -192,8 +192,8 @@ void Metropolis::run()
 
         for(int i=o.t_eq; i<o.iterations+2*o.t_eq; ++i)
         {
-            // one sweep, i.e., one change try for each site
-            for(int j=0; j<o.steps; ++j)
+            // one sweep, i.e., o.sweep many change tries (default o.steps)
+            for(int j=0; j<o.sweep; ++j)
             {
                 // change one random number to another random number
                 double oldS = S(w);

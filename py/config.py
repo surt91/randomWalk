@@ -176,7 +176,7 @@ class SimulationInstance():
                        method, akl, sampling, parallel, nbins, overlap,
                        lnf, flatness, overlap_direction="left",
                        t_eq_max=None, theta=None, energy=None,
-                       first=False, last=False, **not_used):
+                       first=False, last=False, sweep=None, **not_used):
 
         self.N = steps
         self.n = iterations
@@ -202,6 +202,7 @@ class SimulationInstance():
         self.lnf = lnf
         self.flatness = flatness
         self.overlap_direction = overlap_direction
+        self.sweep = sweep
         self.quiet = False
 
         self.loadFile = None
@@ -301,6 +302,9 @@ class SimulationInstance():
                 opts.append("-T {0:.5f}".format(self.T))
             else:
                 opts.append("--simplesampling")
+
+            if self.sweep:
+                opts.append("-k {}".format(self.sweep))
         else:
             for e in self.energy:
                 opts.append("-e {}".format(e))

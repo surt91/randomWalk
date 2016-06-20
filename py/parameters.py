@@ -6,6 +6,7 @@ basetheta = basename + "_T{theta:.5f}"
 basee = basename + "_e{estart:.0f}-{eend:.0f}"
 
 sizes = (32, 64)
+sweep = [n**0.5 for n in sizes]
 
 # thetas for the system sizes, missing sizes will get the 0 entry
 thetas = { 32: (1, 10, float("inf"), -10, -5, -4, -3, -2, -1),
