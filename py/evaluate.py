@@ -24,7 +24,7 @@ if __name__ == "__main__":
                 logging.info("Default: Using log-spaced histogram")
                 ht = 2
 
-            evaluateMetropolis(ht).run()
+            evaluateMetropolis.run(ht)
 
         elif sampling == 2 or sampling == 3:
             evaluateWangLandau.run()
