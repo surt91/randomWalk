@@ -142,11 +142,9 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(aklHeuristicSwitch);
         cmd.add(simpleSamplingSwitch);
 
-        std::vector<TCLAP::Arg*> exSwitch { &onlyBoundsSwitch,
-                                            &onlyCentersSwitch,
-                                            &benchmarkSwitch
-                                          };
-        cmd.xorAdd(exSwitch);
+        cmd.add(onlyBoundsSwitch);
+        cmd.add(onlyCentersSwitch);
+        cmd.add(benchmarkSwitch);
 
         cmd.add(quietSwitch);
         cmd.add(verboseArg);
@@ -172,12 +170,18 @@ Cmd::Cmd(int argc, char** argv)
         {
             LOG(LOG_INFO) << "onlyCenters Mode";
         }
+        if(onlyBounds && onlyCenters)
+        {
+            LOG(LOG_ERROR) << "--onlyBounds and --onlyCenters are mutually exclusive";
+            exit(1);
+        }
 
         // Get the value parsed by each arg.
         if(quietSwitch.getValue())
             Logger::verbosity = 0;
         else
             Logger::verbosity = verboseArg.getValue();
+        LOG(LOG_INFO) << text;
         LOG(LOG_INFO) << "Verbosity                  " << Logger::verbosity;
 
         LOG(LOG_INFO) << "Version: " << VERSION;

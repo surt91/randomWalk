@@ -143,7 +143,10 @@ double ConvexHull<T>::A() const
     if(m_A < 0)
     {
         if(d != 2)
+        {
+            LOG(LOG_ERROR) << "volume calculation only implemented for d=2";
             throw std::invalid_argument("volume calculation only implemented for d=2");
+        }
         // calculate Area in 2d -- since the algorithm only works for d=2
         double a = 0;
         for(size_t i=0; i<hullPoints_.size()-1; ++i)
@@ -163,7 +166,10 @@ double ConvexHull<T>::L() const
     if(m_L < 0)
     {
         if(d != 2)
+        {
+            LOG(LOG_ERROR) << "surface area calculation only implemented for d=2";
             throw std::invalid_argument("surface area calculation only implemented for d=2");
+        }
         // calculate circumference in 2d -- since the algorithm only works for d=2
         double l = 0;
         for(size_t i=0; i<hullPoints_.size()-1; ++i)
@@ -270,7 +276,10 @@ template <class T>
 void ConvexHull<T>::preprocessAklToussaintQHull()
 {
     if(d != 2 && d != 3)
+    {
+        LOG(LOG_ERROR) << "Akl heuristic only implemented for d=2 and d=3";
         throw std::invalid_argument("Akl heuristic only implemented for d=2 and d=3");
+    }
 
     // could be generalized longterm:
     // - higher dimensions
@@ -452,9 +461,15 @@ template <class T>
 std::vector<std::vector<Step<T>>> ConvexHull<T>::hullFacets() const
 {
     if(d < 3)
+    {
+        LOG(LOG_ERROR) << "facets only implemented for d >= 3";
         throw std::invalid_argument("facets only implemented for d >= 3");
+    }
     if(d > 3)
+    {
+        LOG(LOG_ERROR) << "facets not well thought through for d>=4";
         throw std::invalid_argument("facets not well thought through for d>=4");
+    }
 
     orgQhull::QhullFacetList fl = qhull->facetList();
     std::vector<std::vector<Step<T>>> facets;
