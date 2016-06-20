@@ -612,6 +612,12 @@ void ConvexHull<T>::runQhull()
 
     try
     {
+        // limitation of Qhull (QH6271), just supress it,
+        // should not do any harm occurs seldom for d >= 4, see also:
+        // http://www.qhull.org/html/qh-impre.htm#limit
+        if(d >= 4)
+            cmd += " Q12";
+
         // comment, dimension, count, coordinates[], command
         qhull = std::make_shared<orgQhull::Qhull>("", d, n, coords.data(), cmd.c_str());
         if(num_zeros == 1)
