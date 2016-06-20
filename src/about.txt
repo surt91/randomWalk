@@ -1,0 +1,2 @@
+This program gathers statistics over a collection of random walks and
+especially their convex hulls. The commandline interface offers following options.

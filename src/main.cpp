@@ -10,7 +10,7 @@
 #include "simulation/FastWangLandau.hpp"
 #include "Benchmark.hpp"
 
-/** \mainpage randomWalk
+/** randomWalk
  *
  * Program to gather the distrbution of different kinds of random walks
  * by different sampling techniques.

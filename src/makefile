@@ -119,11 +119,21 @@ $(TARGET): $(OBJ) $(QHULL)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
 doc: $(DOC)
-$(DOC): doc.conf *.cpp *.hpp
+$(DOC): doc.conf *.cpp *.hpp cli.dox
 	doxygen doc.conf
 	$(MAKE) -C doc/latex clean
 	$(MAKE) -C doc/latex
 	cp doc/latex/refman.pdf $@
+
+cli.dox: $(TARGET) about.txt
+	@echo documentation for cli
+	@echo '/**' > cli.dox
+	@echo '\mainpage randomWalk' >> cli.dox
+	@cat about.txt >> cli.dox
+	@echo '```' >> cli.dox
+	@./randomWalk -h >> cli.dox
+	@echo '```' >> cli.dox
+	@echo '*/' >> cli.dox
 
 proper:
 	rm -rf $(OBJ)

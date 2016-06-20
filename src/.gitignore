@@ -13,4 +13,5 @@ randomWalk
 *.log
 
 doc/
+cli.dox
 manual.pdf
