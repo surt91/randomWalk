@@ -50,6 +50,8 @@ class SpecWalker : public Walker
         double maxDiameter() final;
         double r() final;
         double r2() final;
+        double rx() final;
+        double ry() final;
 
         ///\name get state
         const std::vector<Step<T>>& steps() const { return m_steps; };
@@ -320,6 +322,18 @@ template <class T>
 double SpecWalker<T>::r()
 {
     return (points().front() - points().back()).length();
+}
+
+template <class T>
+double SpecWalker<T>::rx()
+{
+    return (points().front() - points().back()).x();
+}
+
+template <class T>
+double SpecWalker<T>::ry()
+{
+    return (points().front() - points().back()).y();
 }
 
 template <class T>

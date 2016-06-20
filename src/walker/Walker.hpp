@@ -42,6 +42,8 @@ class Walker
         virtual double maxDiameter() = 0;            ///< Returns the maximum distance between all pairs
         virtual double r() = 0;  ///< Distance between start and end point
         virtual double r2() = 0; ///< Squared distance between start and end point
+        virtual double rx() = 0; ///< x coordinate of endpoint
+        virtual double ry() = 0; ///< y coordinate of endpoint
 
         /** Change the Walker by a small amount, appropiate for the type.
          *

@@ -62,6 +62,8 @@ class MultipleWalker : public Walker
         std::vector<double> maxExtent() final;
         double maxDiameter() final;
         double r() final;
+        double rx() final;
+        double ry() final;
         double r2() final;
 
         virtual void change(UniformRNG &rng, bool update=true);
@@ -206,6 +208,10 @@ template <class T>
 double MultipleWalker<T>::maxDiameter() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 double MultipleWalker<T>::r() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+template <class T>
+double MultipleWalker<T>::rx() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+template <class T>
+double MultipleWalker<T>::ry() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 double MultipleWalker<T>::r2() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 
