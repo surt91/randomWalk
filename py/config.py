@@ -1,10 +1,12 @@
 import os
 from math import sqrt
+import subprocess
 from subprocess import call
 from multiprocessing import Pool
 import warnings
 import math
 import logging
+import operator
 
 import numpy as np
 import jinja2
@@ -68,8 +70,22 @@ class Simulation():
                     self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
             if self.sampling == 2 or self.sampling == 3:
                 num = len(energies[N])-1
+                instances_for_N = []
                 for i in range(num):
-                    self.instances.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, first=not i, last=(i==num-1), **kwargs))
+                    instances_for_N.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, first=not i, last=(i==num-1), **kwargs))
+                self.instances += instances_for_N
+
+                logging.info("checking overlap for N = {}".format(N))
+                # call the executable to ask for the centers in parallel
+                with Pool() as pool:
+                    get_centers_tmp = operator.methodcaller('get_WL_centers')
+                    centers = pool.map(get_centers_tmp, instances_for_N)
+                # test if there is enough overlap
+                for i in range(len(centers)-1):
+                    Z = sum(1 for x in centers[i+1] if min(centers[i]) < x < max(centers[i]))
+                    # not enough overlap
+                    if Z < 3:
+                        logging.warning("not enough overlap ({}: {} -- {})".format(Z, max(centers[i]), min(centers[i+1])))
 
     def ihero(self):
         return self.hero(True)
@@ -261,6 +277,22 @@ class SimulationInstance():
 
     def __repr__(self):
         return "RW:N={}.t={}.T={}".format(self.N, self.t, self.T)
+
+    def get_WL_centers(self):
+        if self.m == 2 or self.m == 3:
+            cmd = self.get_cmd()
+            cmd += ["--onlyCenters"]
+            out = subprocess.run(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+            # one line per range
+            outlines = [l for l in out.stdout.split("\n") if not l.startswith("#") and not l.startswith("Info") and l]
+            #~ centers = [list(map(float, i.split())) for i in outlines]
+            #~ print(out.stdout)
+            #~ print(outlines[0].split())
+            centers = list(map(float, outlines[0].split()))
+        else:
+            raise
+
+        return centers
 
     def get_cmd(self):
         try:

@@ -17,8 +17,10 @@ class WangLandau : public Simulation
         WangLandau(const Cmd &o);
         virtual void run();
 
+        static std::vector<std::vector<double>> generateBins(const Cmd &o);
+        static void printCenters(const Cmd &o);
+
     protected:
-        virtual void init();
         void findStart(std::unique_ptr<Walker>& w, double lb, double ub, UniformRNG& rng);
 
         double lnf_min;

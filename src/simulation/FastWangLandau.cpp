@@ -16,8 +16,6 @@ void FastWangLandau::run()
     // parameters
     const int initial_num_iterations = 1000;
 
-    init();
-
     // run in parallel, in o.parallel threads, or all if not specified
     if(o.parallel)
     {

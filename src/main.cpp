@@ -33,6 +33,12 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    if(o.onlyCenters)
+    {
+        WangLandau::printCenters(o);
+        return 0;
+    }
+
     if(o.sampling_method == SM_METROPOLIS)
     {
         Metropolis sim(o);

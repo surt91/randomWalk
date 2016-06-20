@@ -124,6 +124,7 @@ class Cmd
         double flatness_criterion;
 
         bool onlyBounds;
+        bool onlyCenters;
 
         bool benchmark;
         double benchmark_A;

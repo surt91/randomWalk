@@ -105,6 +105,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::SwitchArg aklHeuristicSwitch("a", "aklHeuristic", "enables the Akl Toussaint heuristic", false);
         TCLAP::SwitchArg simpleSamplingSwitch("", "simplesampling", "use simple sampling instead of the large deviation scheme", false);
         TCLAP::SwitchArg onlyBoundsSwitch("", "onlyBounds", "just output minimum and maximum of the wanted observable and exit", false);
+        TCLAP::SwitchArg onlyCentersSwitch("", "onlyCenters", "just output the centers of the WL bins and exit", false);
         TCLAP::SwitchArg benchmarkSwitch("b", "benchmark", "perform benchmark", false);
         TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode (equal to -v 0)", false);
 
@@ -140,8 +141,12 @@ Cmd::Cmd(int argc, char** argv)
 
         cmd.add(aklHeuristicSwitch);
         cmd.add(simpleSamplingSwitch);
-        cmd.add(onlyBoundsSwitch);
-        cmd.add(benchmarkSwitch);
+
+        std::vector<TCLAP::Arg*> exSwitch { &onlyBoundsSwitch,
+                                            &onlyCentersSwitch,
+                                            &benchmarkSwitch
+                                          };
+        cmd.xorAdd(exSwitch);
 
         cmd.add(quietSwitch);
         cmd.add(verboseArg);
@@ -161,6 +166,11 @@ Cmd::Cmd(int argc, char** argv)
         if(onlyBounds)
         {
             LOG(LOG_INFO) << "onlyBounds Mode";
+        }
+        onlyCenters = onlyCentersSwitch.getValue();
+        if(onlyCenters)
+        {
+            LOG(LOG_INFO) << "onlyCenters Mode";
         }
 
         // Get the value parsed by each arg.
@@ -281,7 +291,7 @@ Cmd::Cmd(int argc, char** argv)
             {
                 LOG(LOG_INFO) << "flatness criterion:        " << flatness_criterion;
             }
-            LOG(LOG_INFO) << "Borders of ranges for Wang Landau Sampling: \n                  " << wangLandauBorders;
+            LOG(LOG_INFO) << "Borders of ranges for Wang Landau Sampling: \n#                 " << wangLandauBorders;
             LOG(LOG_INFO) << "Bins each range:           " << wangLandauBins;
             LOG(LOG_INFO) << "Overlap between ranges:    " << wangLandauOverlap;
         }
