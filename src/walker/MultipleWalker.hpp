@@ -12,6 +12,7 @@
 #include "../ConvexHull.hpp"
 #include "Walker.hpp"
 
+/// Colors used by the SVG backend for different walks
 static const std::vector<std::string> COLOR = {
     "green",
     "blue",
@@ -56,12 +57,12 @@ class MultipleWalker : public Walker
         virtual void setP2(double p2);
 
         // convenience functions
-        virtual double A() const;
-        virtual double L() const;
-        virtual std::vector<double> maxExtent();
-        virtual double maxDiameter();
-        virtual double r();
-        virtual double r2();
+        double A() const final;
+        double L() const final;
+        std::vector<double> maxExtent() final;
+        double maxDiameter() final;
+        double r() final;
+        double r2() final;
 
         virtual void change(UniformRNG &rng, bool update=true);
         virtual void undoChange();
