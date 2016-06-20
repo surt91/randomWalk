@@ -16,29 +16,7 @@ void FastWangLandau::run()
     // parameters
     const int initial_num_iterations = 1000;
 
-    const int num_ranges = o.wangLandauBorders.size() - 1;
-
-    std::vector<std::vector<double>> bins(num_ranges);
-    for(int i=0; i<num_ranges; ++i)
-    {
-        const double lb = o.wangLandauBorders[i];
-        const double ub = o.wangLandauBorders[i+1];
-        const double binwidth = (ub - lb) / o.wangLandauBins;
-
-        bins[i].reserve(o.wangLandauBins + 1 + o.wangLandauOverlap);
-
-        // overlap to the left, but not for the leftmost
-        int start = i>0 ? -o.wangLandauOverlap : 0;
-        for(int j=start; j<o.wangLandauBins; ++j)
-            bins[i].emplace_back(lb + j*binwidth);
-        bins[i].emplace_back(ub);
-    }
-
-    oss << "# Two lines belong together.\n";
-    oss << "# First lines are the centers of the bins.\n";
-    oss << "# Second lines are unnormalized, log densities of the bin.\n";
-    oss << "# Every pair is an independent Wang landau sampling (usable for error estimation).\n";
-    oss << "# ranges: " << o.wangLandauBorders << "\n";
+    init();
 
     // run in parallel, in o.parallel threads, or all if not specified
     if(o.parallel)

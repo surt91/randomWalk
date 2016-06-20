@@ -22,21 +22,11 @@ void WangLandau::findStart(std::unique_ptr<Walker>& w, double lb, double ub, Uni
     } while(S(w) < lb || S(w) > ub);
 }
 
-/** Implementation of the Wang Landau algorithm.
- *
- * Literature used:
- *   * 10.1103/PhysRevLett.86.2050 (original paper)
- *   * 10.1103/PhysRevE.64.056101 (longer original paper)
- *   * http://cdn.intechopen.com/pdfs-wm/14019.pdf (implementations hints)
- *   * 10.1103/PhysRevE.67.067102 (what to do when encountering the boundary)
- */
-void WangLandau::run()
+void WangLandau::init()
 {
-    // parameters of the algorithm
+    num_ranges = o.wangLandauBorders.size() - 1;
 
-    const int num_ranges = o.wangLandauBorders.size() - 1;
-
-    std::vector<std::vector<double>> bins(num_ranges);
+    bins = std::vector<std::vector<double>>(num_ranges);
     for(int i=0; i<num_ranges; ++i)
     {
         const double lb = o.wangLandauBorders[i];
@@ -52,11 +42,25 @@ void WangLandau::run()
         bins[i].emplace_back(ub);
     }
 
+    // write header to outfile
     oss << "# Two lines belong together.\n";
     oss << "# First lines are the centers of the bins.\n";
     oss << "# Second lines are unnormalized, log densities of the bin.\n";
     oss << "# Every pair is an independent Wang landau sampling (usable for error estimation).\n";
     oss << "# ranges: " << o.wangLandauBorders << "\n";
+}
+
+/** Implementation of the Wang Landau algorithm.
+ *
+ * Literature used:
+ *   * 10.1103/PhysRevLett.86.2050 (original paper)
+ *   * 10.1103/PhysRevE.64.056101 (longer original paper)
+ *   * http://cdn.intechopen.com/pdfs-wm/14019.pdf (implementations hints)
+ *   * 10.1103/PhysRevE.67.067102 (what to do when encountering the boundary)
+ */
+void WangLandau::run()
+{
+    init();
 
     // run in parallel, in o.parallel threads, or all if not specified
     if(o.parallel)
@@ -64,6 +68,7 @@ void WangLandau::run()
         omp_set_num_threads(o.parallel);
     }
 
+    // dynamic because every iteration can take wildly different durations
     #pragma omp parallel for schedule(dynamic)
     for(int n=0; n<o.iterations; ++n)
     {

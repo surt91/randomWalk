@@ -18,8 +18,12 @@ class WangLandau : public Simulation
         virtual void run();
 
     protected:
+        virtual void init();
         void findStart(std::unique_ptr<Walker>& w, double lb, double ub, UniformRNG& rng);
 
         double lnf_min;
         double flatness_criterion;
+
+        int num_ranges;
+        std::vector<std::vector<double>> bins;
 };
