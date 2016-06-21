@@ -5,8 +5,8 @@ noNname = "m{sampling}_t{typ}_w{observable}_d{dimension}_n{iterations:.0f}"
 basetheta = basename + "_T{theta:.5f}"
 basee = basename + "_e{estart:.0f}-{eend:.0f}"
 
-sizes = (32, 64)
-sweep = [n**0.5 for n in sizes]
+sizes = (32, 64, 128, 256, 512, 1024, 2048)
+sweep = {n: n**0.5 for n in sizes}
 
 # thetas for the system sizes, missing sizes will get the 0 entry
 thetas = { 32: (1, 10, float("inf"), -10, -5, -4, -3, -2, -1),

@@ -335,8 +335,8 @@ class SimulationInstance():
             else:
                 opts.append("--simplesampling")
 
-            if self.sweep:
-                opts.append("-k {}".format(self.sweep))
+            if self.sweep[self.N]:
+                opts.append("-k {:.0f}".format(self.sweep[self.N]))
         else:
             for e in self.energy:
                 opts.append("-e {}".format(e))
