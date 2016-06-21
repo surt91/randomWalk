@@ -83,31 +83,26 @@ void FastWangLandau::run()
             LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : begin phase 2 at t=" << t;
             while(lnf > lnf_min)
             {
+                lnf = 1./t;
+
+                if(Logger::verbosity >= LOG_DEBUG && lnf < status)
                 {
-                    lnf = 1./t;
-
-                    if(Logger::verbosity >= LOG_DEBUG)
-                    {
-                        if(lnf < status)
-                        {
-                            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f = " << lnf << ", t = " << t;
-                            status /= 2;
-                        }
-                    }
-
-                    double oldS = S(w);
-                    w->change(rngMC);
-                    ++t;
-
-                    double p_acc = exp(g[oldS] - g[S(w)]);
-                    if(S(w) < lb || S(w) > ub || p_acc < rngMC())
-                    {
-                        w->undoChange();
-                        ++fails;
-                    }
-
-                    g.add(S(w), lnf);
+                    LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f = " << lnf << ", t = " << t;
+                    status /= 2;
                 }
+
+                double oldS = S(w);
+                w->change(rngMC);
+                ++t;
+
+                double p_acc = exp(g[oldS] - g[S(w)]);
+                if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                {
+                    w->undoChange();
+                    ++fails;
+                }
+
+                g.add(S(w), lnf);
             }
 
             // save g to file
