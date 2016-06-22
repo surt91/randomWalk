@@ -51,7 +51,7 @@ void FastWangLandau::run()
 
             // start first phase
             double lnf = 1;
-            while(t < 10 && lnf > 1./t)
+            while(t < 10 || lnf > 1./t)
             {
                 LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f = " << lnf << ", t = " << t;
                 do
