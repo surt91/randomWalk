@@ -192,9 +192,11 @@ class SimulationInstance():
                        method, akl, sampling, parallel, nbins, overlap,
                        lnf, flatness, overlap_direction="left",
                        t_eq_max=None, theta=None, energy=None,
-                       first=False, last=False, sweep=None, **not_used):
+                       first=False, last=False, sweep=None,
+                       number_of_walkers=None, **not_used):
 
         self.N = steps
+        self.number_of_walkers = number_of_walkers
         self.n = iterations
         self.t = typ
         self.T = theta
@@ -312,6 +314,9 @@ class SimulationInstance():
                 "-o {}".format(self.filename),
                 "-m {}".format(self.m),
                ]
+
+        if self.number_of_walkers:
+            opts.append("-M {}".format(self.number_of_walkers))
 
         if self.quiet:
             opts.append("-q")
