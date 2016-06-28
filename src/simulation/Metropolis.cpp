@@ -29,7 +29,9 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
     UniformRNG rngMC((o.seedMC+1)*0x243F6A8885A3);
 
-    std::ofstream oss("equilibration.dat", std::ofstream::out);
+    std::string eq_file = o.data_path + ".eq";
+
+    std::ofstream oss(eq_file, std::ofstream::out);
 
     std::unique_ptr<Walker> w2;
     prepare(w2, o);
@@ -87,13 +89,12 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
             }
         }
 
-        if(Logger::verbosity >= LOG_INFO)
-            oss << t_eq << " " << w1->L() << " " << w1->A()
-                        << " " << w2->L() << " " << w2->A()
-                        //~ << " " << w3->L() << " " << w3->A()
-                        //~ << " " << w4->L() << " " << w4->A()
-                        //~ << " " << w5->L() << " " << w5->A()
-                        << std::endl;
+        oss << t_eq << " " << w1->L() << " " << w1->A()
+                    << " " << w2->L() << " " << w2->A()
+                    //~ << " " << w3->L() << " " << w3->A()
+                    //~ << " " << w4->L() << " " << w4->A()
+                    //~ << " " << w5->L() << " " << w5->A()
+                    << std::endl;
 
         rmean1.add(S(w1));
         rmean2.add(S(w2));
@@ -131,6 +132,10 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
         ++t_eq;
     }
+
+    // zip the equilibration file
+    std::string cmd("gzip -f ");
+    system((cmd+eq_file).c_str());
 
     if(!muted)
     {
