@@ -52,8 +52,8 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
     // FIXME: this is redundant code, needs to be cleaned up
     while(true)
     {
-        // one sweep, i.e., one change try for each site
-        for(int j=0; j<o.steps; ++j)
+        // one sweep, i.e., as much as specified
+        for(int j=0; j<o.sweep; ++j)
         {
             // change one random number to another random number
             // save the random number before the change
