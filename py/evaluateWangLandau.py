@@ -30,7 +30,7 @@ def process_data(infiles, outformat):
                 if "#" in l:
                     continue
                 if not l.split():
-                        continue
+                    continue
                 if even:
                     centers.append([float(i) for i in l.split()])
                     even = False
