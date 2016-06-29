@@ -145,6 +145,7 @@ proper:
 clean: proper
 	rm -rf dep
 	rm -rf $(TARGET)
+	rm -rf doc
 
 cleanall: clean
 	$(MAKE) -C qhull cleanall
