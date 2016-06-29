@@ -8,6 +8,7 @@ from multiprocessing import Pool
 import jinja2
 
 from data import nu
+from commonEvaluation import getMaximumSForGnuplot
 
 
 def makebase(name, **kwargs):
@@ -24,6 +25,7 @@ class Gnuplot():
         self.env.globals.update(zip=zip)
         self.env.globals.update(enumerate=enumerate)
         self.env.globals.update(makebase=lambda *x, **y: makebase(*x, **y, **self.kwargs))
+        self.env.globals.update(getMaximumSForGnuplot=getMaximumSForGnuplot)
 
         self.d = "plots"
         self.dataPath = "../data"

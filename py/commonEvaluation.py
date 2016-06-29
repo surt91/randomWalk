@@ -60,6 +60,44 @@ def getMinMaxTime(filenames):
         logging.info("No version information")
 
 
+def factorial(d):
+    if d == 0:
+        return 1
+    return d * factorial(d-1)
+
+
+def getMaximumS(N, d, observable, typ):
+    if observable == 1:
+        d -= 1
+    # if this is a lattice walk, calculate the actual maximum
+    if typ in (1, 2, 3):
+        # special case circumference in d=2
+        if d == 1:
+            S_max = 2*N
+        else:
+            S_max = (N/d)**d / factorial(d)
+    # otherwise give something propotional
+    else:
+        S_max = N**d
+    return S_max
+
+
+def getMaximumSForGnuplot(d, observable, typ):
+    if observable == 1:
+        d -= 1
+    # if this is a lattice walk, calculate the actual maximum
+    if typ in (1, 2, 3):
+        # special case circumference in d=2
+        if d == 1:
+            S_max = "2*x"
+        else:
+            S_max = "(x/d)**d / {}.".format(factorial(d))
+    # otherwise give something propotional
+    else:
+        S_max = "x**d"
+    return S_max
+
+
 def cut_trans(s, pre="tran"):
     """Transpose. Get in-between values by interpolation."""
     # get values near s from all distributions (all systemsizes)
@@ -74,11 +112,8 @@ def cut_trans(s, pre="tran"):
         else:
             raise
 
-        # FIXME: should be actual maximum, this is only correct up to a constant
         d = param.parameters["dimension"]
-        if param.parameters["observable"] == 1:
-            d -= 1
-        S_max = N ** d
+        S_max = getMaximumS(N, d, param.parameters["observable"], param.parameters["typ"])
 
         fname = "{}/{}_{}.dat".format(param.parameters["directory"], prefix, outname)
         P[N] = {}
