@@ -84,7 +84,7 @@ class SpecWalker : public Walker
         void goDownhill(bool maximize, wanted_observable_t observable);
 };
 
-/// do initialization, e.g. calculate the steps and the hull
+/// Do initialization, e.g. calculate the steps and the hull.
 template <class T>
 void SpecWalker<T>::init()
 {
@@ -93,6 +93,7 @@ void SpecWalker<T>::init()
     setHullAlgo(hull_algo); // does also update hull
 }
 
+/// Update the convex hull given the current points.
 template <class T>
 void SpecWalker<T>::updateHull()
 {
@@ -114,6 +115,7 @@ void SpecWalker<T>::setHullAlgo(const hull_algorithm_t a)
     hull_algo = a;
 }
 
+/// Updates the points of the walk given its steps.
 template <class T>
 void SpecWalker<T>::updatePoints(const int start)
 {
@@ -125,6 +127,13 @@ void SpecWalker<T>::updatePoints(const int start)
     }
 }
 
+/** Save a gnuplot file visualizing the walk.
+ *
+ * Works only in d=2. Otherwise yields a projection to d=2.
+ *
+ * \param filename Basename of the outputfile.
+ * \param with_hull Visualize only the walk or also its hull.
+ */
 template <class T>
 void SpecWalker<T>::svg(const std::string filename, const bool with_hull) const
 {
@@ -170,6 +179,13 @@ void SpecWalker<T>::svg(const std::string filename, const bool with_hull) const
     pic.save();
 }
 
+/** Save a povray file visualizing the walk.
+ *
+ * Works only in d=3.
+ *
+ * \param filename Basename of the outputfile.
+ * \param with_hull Visualize only the walk or also its hull.
+ */
 template <class T>
 void SpecWalker<T>::pov(const std::string filename, const bool with_hull) const
 {
@@ -203,6 +219,13 @@ void SpecWalker<T>::pov(const std::string filename, const bool with_hull) const
     pic.save();
 }
 
+/** Save a gnuplot file visualizing the walk.
+ *
+ * Works only in d=2 and d=3.
+ *
+ * \param filename Basename of the outputfile.
+ * \param with_hull Visualize only the walk or also its hull.
+ */
 template <class T>
 void SpecWalker<T>::gp(const std::string filename, const bool with_hull) const
 {
@@ -274,6 +297,7 @@ void SpecWalker<T>::gp(const std::string filename, const bool with_hull) const
     }
 }
 
+/// Get a human readable representation of the walk.
 template <class T>
 std::string SpecWalker<T>::print() const
 {
@@ -284,6 +308,7 @@ std::string SpecWalker<T>::print() const
     return ss.str();
 }
 
+/// Get the maximum extend along any axis.
 template <class T>
 std::vector<double> SpecWalker<T>::maxExtent()
 {
@@ -302,6 +327,7 @@ std::vector<double> SpecWalker<T>::maxExtent()
     return maxE;
 }
 
+/// Get the maximum distance of any two points of the walk.
 template <class T>
 double SpecWalker<T>::maxDiameter()
 {
@@ -318,24 +344,28 @@ double SpecWalker<T>::maxDiameter()
     return maxD;
 }
 
+/// Get the end-to-end distance of the walk.
 template <class T>
 double SpecWalker<T>::r()
 {
     return (points().front() - points().back()).length();
 }
 
+/// Get the x-component of the end-to-end distance of the walk.
 template <class T>
 double SpecWalker<T>::rx()
 {
     return (points().front() - points().back()).x();
 }
 
+/// Get the y-component of the end-to-end distance of the walk.
 template <class T>
 double SpecWalker<T>::ry()
 {
     return (points().front() - points().back()).y();
 }
 
+/// Get the squared end-to-end distance of the walk.
 template <class T>
 double SpecWalker<T>::r2()
 {
@@ -343,6 +373,12 @@ double SpecWalker<T>::r2()
     return tmp * tmp;
 }
 
+/** Performs a greedy downhill optimization to maximize of minimize a
+ * the given observable of a walk.
+ *
+ * \param maximize Determines if maximization or minimization is carried out.
+ * \param observable Which observable should be optimized.
+ */
 template <class T>
 void SpecWalker<T>::goDownhill(const bool maximize, const wanted_observable_t observable)
 {
@@ -371,8 +407,7 @@ void SpecWalker<T>::goDownhill(const bool maximize, const wanted_observable_t ob
     }
 }
 
-/** set the random numbers such that we get an L shape
- */
+/// Set the random numbers such that we get an L shape.
 template <>
 inline void SpecWalker<int>::degenerateMaxVolume()
 {
@@ -384,8 +419,7 @@ inline void SpecWalker<int>::degenerateMaxVolume()
     updateHull();
 }
 
-/** set the random numbers such that we get an L shape in d-1 dimensions
- */
+/// Set the random numbers such that we get an L shape in d-1 dimensions.
 template <>
 inline void SpecWalker<int>::degenerateMaxSurface()
 {
@@ -397,8 +431,7 @@ inline void SpecWalker<int>::degenerateMaxSurface()
     updateHull();
 }
 
-/** set the random numbers such that we get an one dimensional line
- */
+/// Set the random numbers such that we get an one dimensional line.
 template <>
 inline void SpecWalker<int>::degenerateMinVolume()
 {
@@ -410,8 +443,7 @@ inline void SpecWalker<int>::degenerateMinVolume()
     updateHull();
 }
 
-/** set the random numbers such that we always step left, right, left, right
- */
+/// Set the random numbers such that we always step left, right, left, right.
 template <>
 inline void SpecWalker<int>::degenerateMinSurface()
 {
@@ -423,8 +455,7 @@ inline void SpecWalker<int>::degenerateMinSurface()
     updateHull();
 }
 
-/** Set the random numbers such that we get an half circle shape.
- */
+/// Set the random numbers such that we get an half circle shape.
 template <>
 inline void SpecWalker<double>::degenerateMaxVolume()
 {
@@ -443,8 +474,7 @@ inline void SpecWalker<double>::degenerateMaxVolume()
     goDownhill(true, WO_VOLUME);
 }
 
-/** Set the random numbers such that we get an half circle shape in d-1 dimensions.
- */
+/// Set the random numbers such that we get an half circle shape in d-1 dimensions.
 template <>
 inline void SpecWalker<double>::degenerateMaxSurface()
 {
@@ -467,8 +497,7 @@ inline void SpecWalker<double>::degenerateMaxSurface()
     goDownhill(true, WO_SURFACE_AREA);
 }
 
-/** Set the random numbers such that we get an half circle shape in d-1 dimensions.
- */
+/// Set the random numbers such that we get an half circle shape in d-1 dimensions.
 template <>
 inline void SpecWalker<double>::degenerateMinVolume()
 {
@@ -483,8 +512,7 @@ inline void SpecWalker<double>::degenerateMinVolume()
     goDownhill(false, WO_VOLUME);
 }
 
-/** Set the random numbers such that we get an L shape in d-1 dimensions.
- */
+/// Set the random numbers such that we get an L shape in d-1 dimensions.
 template <>
 inline void SpecWalker<double>::degenerateMinSurface()
 {

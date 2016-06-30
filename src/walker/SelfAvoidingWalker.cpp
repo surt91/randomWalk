@@ -293,8 +293,18 @@ void SelfAvoidingWalker::updateSteps()
         m_steps.emplace_back(d, random_numbers[i]);
 }
 
-// TODO: this version does not equilibrate for theta > -50
-//       further kind of change? Parallel Tempering?
+/** Changes the walk, i.e., performs one trial move.
+ *
+ * One change can consist of a "naive change" (80%) or a "pivot change" (20%).
+ * The "naive change" changes one step in the walk, such that all
+ * points after that are moved.
+ * The "pivot change" performs a symmetry operation at a random site in
+ * the walk, i.e., a rotation or mirroring. This leads to faster decorrelation
+ * but is seldom accepted.
+ *
+ * \param rng Random number generator to draw the needed randomness from
+ * \param update Should the hull be updated after the change?
+ */
 void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
 {
     // do a pivot change
@@ -337,6 +347,7 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
     }
 }
 
+/// Undoes the last change.
 void SelfAvoidingWalker::undoChange()
 {
     // which change was done
@@ -346,7 +357,13 @@ void SelfAvoidingWalker::undoChange()
         pivot(undo_index, undo_symmetry);
 }
 
-Step<int> SelfAvoidingWalker::transform(Step<int> &p, const int *m) const
+/**
+ * Applies the transformation matrix m to the point p.
+ *
+ * \param p Point to be transformed.
+ * \param m Transformation matrix to use for the tansform.
+ * \return the transformed point
+ */
 Step<int> SelfAvoidingWalker::transform(const Step<int> &p, const int *m) const
 {
     Step<int> out(d);
@@ -357,6 +374,15 @@ Step<int> SelfAvoidingWalker::transform(const Step<int> &p, const int *m) const
     return out;
 }
 
+/** Pivot Algorithm
+ *
+ * Madras2013, The Self-Avoiding Walk, p. 322 ff (doi 10.1007/978-1-4614-6025-1_9)
+ *
+ *  \param index The pivot site around which the symmetry operation is done.
+ *  \param op The symmetry operation to be done (index of the transformation matrix)
+ *  \param update Should the hull be updated after the transformation.
+ *  \return Was the pivoting successful, or did it cross itself?
+ */
 bool SelfAvoidingWalker::pivot(const int index, const int op, bool update)
 {
     const int* matrix;
@@ -470,6 +496,19 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn, bool update
     return true;
 }
 
+/** Silthering Snake
+ *
+ * Slithering Snake appends one step at the one side and removes the last
+ * step on the other side. Note that this is not ergodic, since the snake
+ * can be trapped. This, however, is mitigated by also using pivoting,
+ * which is ergodic.
+ *
+ * Madras2013, The Self-Avoiding Walk, p. 320 ff (doi 10.1007/978-1-4614-6025-1_9)
+ *
+ *  \param front does sthe snake slither forwards or backwards
+ *  \param rn random number to determine the direction of the slithering
+ *  \return was it successful, or did the walk cross itself?
+ */
 //~ bool SelfAvoidingWalker::slitheringSnake(const int front, const double rn)
 //~ {
     //~ if(front)
