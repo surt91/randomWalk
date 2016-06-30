@@ -347,6 +347,7 @@ void SelfAvoidingWalker::undoChange()
 }
 
 Step<int> SelfAvoidingWalker::transform(Step<int> &p, const int *m) const
+Step<int> SelfAvoidingWalker::transform(const Step<int> &p, const int *m) const
 {
     Step<int> out(d);
     for(int i=0; i<d; ++i)

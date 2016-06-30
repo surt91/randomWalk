@@ -26,7 +26,7 @@ class SelfAvoidingWalker final : public SpecWalker<int>
         void undoChange() final;
 
     protected:
-        Step<int> transform(Step<int> &p, const int *m) const;
+        Step<int> transform(const Step<int> &p, const int *m) const;
         bool pivot(const int index, const int op, bool update=true);
 
         int undo_naive_index;

@@ -107,7 +107,7 @@ const ConvexHull<T>& SpecWalker<T>::convexHull() const
 
 /// Changes the algorithm used to calculate the hull.
 template <class T>
-void SpecWalker<T>::setHullAlgo(hull_algorithm_t a)
+void SpecWalker<T>::setHullAlgo(const hull_algorithm_t a)
 {
     m_convex_hull.setHullAlgo(a);
     updateHull();
@@ -115,7 +115,7 @@ void SpecWalker<T>::setHullAlgo(hull_algorithm_t a)
 }
 
 template <class T>
-void SpecWalker<T>::updatePoints(int start)
+void SpecWalker<T>::updatePoints(const int start)
 {
     for(int i=start; i<=numSteps; ++i)
     {
@@ -344,7 +344,7 @@ double SpecWalker<T>::r2()
 }
 
 template <class T>
-void SpecWalker<T>::goDownhill(bool maximize, wanted_observable_t observable)
+void SpecWalker<T>::goDownhill(const bool maximize, const wanted_observable_t observable)
 {
     std::function<double()> S;
     if(observable == WO_SURFACE_AREA)
