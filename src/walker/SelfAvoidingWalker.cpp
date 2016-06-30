@@ -401,6 +401,7 @@ bool SelfAvoidingWalker::pivot(const int index, const int op, bool update)
             matrix = tMatrix4[op];
             break;
         default:
+            LOG(LOG_ERROR) << "Pivot algorithm only implemented for d<=4";
             throw std::invalid_argument("Pivot algorithm only implemented for d<=4");
     }
 
