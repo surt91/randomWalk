@@ -353,6 +353,7 @@ bool benchmark()
             try{
                 fail |= run_hull(o, w);
             } catch(...) {
+                fail = true;
                 continue;
             }
         }
@@ -415,6 +416,7 @@ bool benchmark()
             try{
                 fail |= run_hull(o, w);
             } catch(...) {
+                fail = true;
                 continue;
             }
         }
