@@ -141,10 +141,10 @@ bool benchmark()
                 o.steps = 100;
                 o.sweep = o.steps;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
-                expected_mean_L = 84.8574757548;
-                expected_mean_A = 344.535;
-                expected_mean_r = 28.6759;
-                expected_mean_r2 = 845.092;
+                expected_mean_L = 86.5346510854;
+                expected_mean_A = 352.3315;
+                expected_mean_r = 29.7926051572;
+                expected_mean_r2 = 907.072;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 130;
@@ -235,10 +235,10 @@ bool benchmark()
                 o.sweep = o.steps;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
                 o.iterations = 100;
-                expected_mean_L = 3050.3158479;
-                expected_mean_A = 9609.615;
-                expected_mean_r = 55.0264487858;
-                expected_mean_r2 = 3053.58;
+                expected_mean_L = 3007.98994932;
+                expected_mean_A = 9709.90666667;
+                expected_mean_r = 55.6246033107;
+                expected_mean_r2 = 3127.2;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 100;

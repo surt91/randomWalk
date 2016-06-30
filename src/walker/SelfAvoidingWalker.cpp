@@ -301,31 +301,31 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
     // choose the pivot
     int idx = rng() * nRN();
     undo_index = idx;
-    int symmetry;
-    switch(d)
-    {
-        case 2:
-            symmetry = rng() * 4; // integer between 0 and 3
-            undo_symmetry = iMatrix2[symmetry];
-            break;
-        case 3:
-            symmetry = rng() * 12; // integer between 0 and 11
-            undo_symmetry = iMatrix3[symmetry];
-            break;
-        case 4:
-            symmetry = rng() * 22; // integer between 0 and 21
-            undo_symmetry = iMatrix4[symmetry];
-            break;
-        default:
-            symmetry = -1;
-            LOG(LOG_WARNING) << "Pivot algorithm only implemented for d<=3, will only use naive changes";
-    }
 
     // choose the change algorithm randomly
     // 20% pivot chance, 80% naive change
     // pivot not implemented for d >= 4
-    if(d <= 3 && rng() > 0.8)
+    if(rng() > 0.8)
     {
+        int symmetry;
+        switch(d)
+        {
+            case 2:
+                symmetry = rng() * 4; // integer between 0 and 3
+                undo_symmetry = iMatrix2[symmetry];
+                break;
+            case 3:
+                symmetry = rng() * 12; // integer between 0 and 11
+                undo_symmetry = iMatrix3[symmetry];
+                break;
+            case 4:
+                symmetry = rng() * 22; // integer between 0 and 21
+                undo_symmetry = iMatrix4[symmetry];
+                break;
+            default:
+                symmetry = -1;
+                LOG(LOG_WARNING) << "Pivot algorithm only implemented for d<=3, will only use naive changes";
+        }
         pivot(idx, symmetry, update);
     }
     else
