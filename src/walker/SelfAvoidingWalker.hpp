@@ -25,6 +25,8 @@ class SelfAvoidingWalker final : public SpecWalker<int>
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
+        void degenerateMinSurface() final;
+
     protected:
         Step<int> transform(const Step<int> &p, const int *m) const;
         bool pivot(const int index, const int op, bool update=true);

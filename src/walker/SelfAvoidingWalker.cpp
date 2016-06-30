@@ -602,28 +602,41 @@ std::list<double> SelfAvoidingWalker::dim(int N)
     }
 }
 
-//~ /** set the random numbers such that we get an one dimensional line
- //~ */
-//~ template <>
-//~ inline void SelfAvoidingWalker::degenerateMinVolume()
-//~ {
-    //~ for(int i=0; i<numSteps; ++i)
-        //~ random_numbers[i] = .99;
+/** Set the random numbers such that we fill a hypercube.
+ *
+ * This will only be exact if the number of steps is a power of the
+ * dimension, but should be good enough for all applications in this
+ * context, which is mainly, estimating limits and equilibration.
+ */
+void SelfAvoidingWalker::degenerateMinSurface()
+{
+    int len = pow(numSteps, 1.0/d); // length of one side, rounded down
+    int k = 0;
+    std::vector<int> counter(d+1, 1);
+    while(k < numSteps)
+    {
+        if(counter[1]%2)
+            random_numbers[k] = 0.5/d;
+        else
+            random_numbers[k] = 0.0;
+        ++k;
 
-    //~ updateSteps();
-    //~ updatePoints();
-    //~ updateHull();
-//~ }
+        for(int i=1; i<d; ++i)
+            if(k > std::pow((double)len, (double)i) * counter[i])
+            {
+                if(k>=numSteps)
+                    break;
 
-//~ /** set the random numbers such that we always step left, right, left, right
- //~ */
-//~ template <>
-//~ inline void SpecWalker<int>::degenerateMinSurface()
-//~ {
-    //~ for(size_t i=0; i<random_numbers.size(); ++i)
-        //~ random_numbers[i] = i % 2 ? .99 : .99 - 1/d;
+                counter[i] += 1;
+                if(counter[i+1]%2)
+                    random_numbers[k] = (1.0/d) * i;
+                else
+                    random_numbers[k] = (1.0/d) * i + 0.5/d;
+                ++k;
+            }
+    }
 
-    //~ updateSteps();
-    //~ updatePoints();
-    //~ updateHull();
-//~ }
+    updateSteps();
+    updatePoints();
+    updateHull();
+}
