@@ -13,7 +13,7 @@ void LoopErasedWalker::updateSteps()
 {
     // add steps
     // save their coordinates in a hashmap with their index
-    // if a new coordinate is already in the hashmap, rease the loop
+    // if a new coordinate is already in the hashmap, erase the loop
     // by setting the current position back to the index obtained from the
     // hashmap. Also clear the hashmap from all entries with a greater index
     // by iterating over the vector of steps taken, starting at index+1
