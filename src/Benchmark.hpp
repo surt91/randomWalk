@@ -21,4 +21,4 @@
 #include "simulation/Metropolis.hpp"
 
 
-void benchmark();
+bool benchmark();

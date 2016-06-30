@@ -21,8 +21,7 @@ int main(int argc, char** argv)
 
     if(o.benchmark)
     {
-        benchmark();
-        return 0;
+        return benchmark();
     }
 
     if(o.onlyBounds)

@@ -17,8 +17,9 @@ std::unique_ptr<Walker> run_walker(const Cmd &o)
     return w;
 }
 
-void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
+bool run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
 {
+    bool fail = false;
     clock_t before_ch = clock();
     w->setHullAlgo(o.chAlg);
 
@@ -28,23 +29,26 @@ void run_hull(const Cmd &o, std::unique_ptr<Walker> &w)
     {
         LOG(LOG_ERROR) << "Wrong L  " << w->L();
         LOG(LOG_ERROR) << "expected " << o.benchmark_L;
-        exit(1);
+        fail = true;
     }
     if(std::abs((w->A() - o.benchmark_A)/o.benchmark_A) > 1e-6)
     {
         LOG(LOG_ERROR) << "Wrong A  " << w->A();
         LOG(LOG_ERROR) << "expected " << o.benchmark_A;
-        exit(1);
+        fail = true;
     }
 
     LOG(LOG_TIMING) << "            " << time_diff(before_ch, before_output);
+
+    return fail;
 }
 
-void run_simulation(const Cmd &o, double expected_mean_A,
+bool run_simulation(const Cmd &o, double expected_mean_A,
                                   double expected_mean_L,
                                   double expected_mean_r,
                                   double expected_mean_r2)
 {
+    bool fail = false;
     clock_t before_mc = clock();
 
     Metropolis s(o);
@@ -56,32 +60,35 @@ void run_simulation(const Cmd &o, double expected_mean_A,
     {
         LOG(LOG_ERROR) << "Wrong <L>  " << s.sum_L / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_L;
-        exit(1);
+        fail = true;
     }
     if(std::abs(s.sum_A / o.iterations - expected_mean_A) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <A>  " << s.sum_A / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_A;
-        exit(1);
+        fail = true;
     }
     if(std::abs(s.sum_r / o.iterations - expected_mean_r) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <r>  " << s.sum_r / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_r;
-        exit(1);
+        fail = true;
     }
     if(std::abs(s.sum_r2 / o.iterations - expected_mean_r2) > threshold)
     {
         LOG(LOG_ERROR) << "Wrong <r2>  " << s.sum_r2 / o.iterations;
         LOG(LOG_ERROR) << "expected " << expected_mean_r2;
-        exit(1);
+        fail = true;
     }
 
     LOG(LOG_TIMING) << "    " << time_diff(before_mc, clock());
+
+    return fail;
 }
 
-void benchmark()
+bool benchmark()
 {
+    bool fail = false;
     Logger::verbosity = LOG_TIMING;
 
     Cmd o;
@@ -177,10 +184,11 @@ void benchmark()
                 break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
-        run_simulation(o, expected_mean_A,
-                          expected_mean_L,
-                          expected_mean_r,
-                          expected_mean_r2);
+        fail |= run_simulation(o,
+                        expected_mean_A,
+                        expected_mean_L,
+                        expected_mean_r,
+                        expected_mean_r2);
     }
 
     clock_t mid1 = clock();
@@ -273,10 +281,11 @@ void benchmark()
                 break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
-        run_simulation(o, expected_mean_A,
-                          expected_mean_L,
-                          expected_mean_r,
-                          expected_mean_r2);
+        fail |= run_simulation(o,
+                        expected_mean_A,
+                        expected_mean_L,
+                        expected_mean_r,
+                        expected_mean_r2);
     }
 
     clock_t mid2 = clock();
@@ -342,7 +351,7 @@ void benchmark()
             o.chAlg = (hull_algorithm_t) j;
             LOG(LOG_INFO) << "        " << CH_LABEL[j];
             try{
-                run_hull(o, w);
+                fail |= run_hull(o, w);
             } catch(...) {
                 continue;
             }
@@ -404,7 +413,7 @@ void benchmark()
             o.chAlg = (hull_algorithm_t) j;
             LOG(LOG_INFO) << "        " << CH_LABEL[j];
             try{
-                run_hull(o, w);
+                fail |= run_hull(o, w);
             } catch(...) {
                 continue;
             }
@@ -415,4 +424,11 @@ void benchmark()
     LOG(LOG_TIMING) << "Mem: " << vmPeak();
 
     LOG(LOG_TIMING) << "Grand Total : " << time_diff(start, clock());
+
+    if(fail)
+    {
+        LOG(LOG_ERROR) << "Some tests failed!";
+    }
+
+    return fail;
 }
