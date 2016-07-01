@@ -35,8 +35,13 @@ class SelfAvoidingWalker final : public SpecWalker<int>
         Step<int> undo_naive_step;
         Step<int> undo_step;
         int undo_symmetry;
+        bool undo_slither_direction;
         bool naiveChange(const int idx, const double rn, bool update=true);
         void naiveChangeUndo();
+
+        bool slitheringSnake(const bool front, const double rn, bool update=true);
+        void undo_slitheringSnake();
+        Step<int> slither(const bool front, const Step<int> &newStep);
 
         std::list<double> dim(int N);
         bool checkOverlapFree(const std::list<double> &l) const;

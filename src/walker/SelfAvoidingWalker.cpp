@@ -315,7 +315,8 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
     // choose the change algorithm randomly
     // 20% pivot chance, 80% naive change
     // pivot not implemented for d >= 4
-    if(rng() > 0.8)
+    double decision = rng();
+    if(decision > 0.8) // 20%
     {
         int symmetry;
         switch(d)
@@ -338,7 +339,14 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
         }
         pivot(idx, symmetry, update);
     }
-    else
+    else if(decision > 0.5) // 30%
+    {
+        undo_index = -2;
+        bool direction = rng() > 0.5;
+        double rn = rng();
+        slitheringSnake(direction, rn, update);
+    }
+    else // 50%
     {
         undo_index = -1;
         int idx = rng() * nRN();
@@ -353,6 +361,8 @@ void SelfAvoidingWalker::undoChange()
     // which change was done
     if(undo_index == -1)
         naiveChangeUndo();
+    else if(undo_index == -2)
+        undo_slitheringSnake();
     else
         pivot(undo_index, undo_symmetry);
 }
@@ -506,14 +516,64 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn, bool update
  *
  * Madras2013, The Self-Avoiding Walk, p. 320 ff (doi 10.1007/978-1-4614-6025-1_9)
  *
- *  \param front does sthe snake slither forwards or backwards
+ *  \param direction does sthe snake slither forwards or backwards
  *  \param rn random number to determine the direction of the slithering
  *  \return was it successful, or did the walk cross itself?
  */
-//~ bool SelfAvoidingWalker::slitheringSnake(const int front, const double rn)
-//~ {
-    //~ if(front)
-//~ }
+bool SelfAvoidingWalker::slitheringSnake(const bool direction, const double rn, bool update)
+{
+    undo_slither_direction = !direction;
+    Step<int> newStep(d, rn);
+    undo_step = slither(direction, newStep);
+
+    updatePoints();
+
+    if(!checkOverlapFree(points()))
+    {
+        slither(undo_slither_direction, undo_step);
+        updatePoints();
+        return false;
+    }
+
+    if(update)
+    {
+        m_old_convex_hull = m_convex_hull;
+        updateHull();
+    }
+
+    return true;
+}
+
+void SelfAvoidingWalker::undo_slitheringSnake()
+{
+    slither(undo_slither_direction, undo_step);
+    updatePoints();
+    m_convex_hull = m_old_convex_hull;
+    //~ std::cout << "undo details: " << undo_slither_direction << undo_step;
+}
+
+Step<int> SelfAvoidingWalker::slither(const bool direction, const Step<int> &newStep)
+{
+    const int N = numSteps;
+    Step<int> overwrite;
+    // copy the whole vector. This. is. slow.
+    // I should have used a deque
+    if(direction)
+    {
+        overwrite = m_steps[0];
+        for(int i=N-2; i>=0; --i)
+            m_steps[i+1] = m_steps[i];
+        m_steps[0] = newStep;
+    }
+    else
+    {
+        overwrite = m_steps[N-1];
+        for(int i=1; i<N; ++i)
+            m_steps[i-1] = m_steps[i];
+        m_steps[N-1] = newStep;
+    }
+    return overwrite;
+}
 
 bool SelfAvoidingWalker::checkOverlapFree(const std::vector<Step<int>> &l) const
 {
