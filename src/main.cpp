@@ -6,6 +6,7 @@
 #include "RNG.hpp"
 #include "walker/Walker.hpp"
 #include "simulation/Metropolis.hpp"
+#include "simulation/MetropolisParallelTempering.hpp"
 #include "simulation/WangLandau.hpp"
 #include "simulation/FastWangLandau.hpp"
 #include "Benchmark.hpp"
@@ -41,6 +42,11 @@ int main(int argc, char** argv)
     if(o.sampling_method == SM_METROPOLIS)
     {
         Metropolis sim(o);
+        sim.run();
+    }
+    else if(o.sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+    {
+        MetropolisParallelTempering sim(o);
         sim.run();
     }
     else if(o.sampling_method == SM_WANG_LANDAU)

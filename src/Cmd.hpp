@@ -69,7 +69,8 @@ const std::vector<std::string> WANTED_OBSERVABLE_LABEL = {
 enum sampling_method_t {
     SM_METROPOLIS = 1,    ///< Metropolis sampling with a artificial temp
     SM_WANG_LANDAU,       ///< Direct WangLandau sampling of the distribution
-    SM_FAST_WANG_LANDAU   ///< Direct 1/t FastWangLandau sampling of the distribution
+    SM_FAST_WANG_LANDAU,  ///< Direct 1/t FastWangLandau sampling of the distribution
+    SM_METROPOLIS_PARALLEL_TEMPERING  ///< Metropolis sampling enhanced with parallel tempering
 };
 
 const std::vector<std::string> SAMPLING_METHOD_LABEL = {
@@ -77,6 +78,7 @@ const std::vector<std::string> SAMPLING_METHOD_LABEL = {
     "Metropolis",
     "Wang Landau",
     "Fast 1/t Wang Landau",
+    "Metropolis and Parallel Tempering",
 };
 
 /** Command line parser.
@@ -95,6 +97,8 @@ class Cmd
         std::string tmp_path;
         std::string data_path;
         std::string conf_path;
+        std::vector<std::string> data_path_vector; ///< vector of output names, one for every temperature (only for parallel tempering);
+        std::vector<std::string> conf_path_vector; ///< vector of output names, one for every temperature (only for parallel tempering);
         std::string svg_path;
         std::string pov_path;
         std::string gp_path;
@@ -110,6 +114,7 @@ class Cmd
         int t_eqMax;
         int parallel;
         double theta;
+        std::vector<double> parallelTemperatures;
         bool simpleSampling;
         std::vector<double> wangLandauBorders;
         int wangLandauBins;

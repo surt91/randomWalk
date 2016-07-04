@@ -189,8 +189,6 @@ void Metropolis::run()
         if(o.t_eq == -1)
         {
             LOG(LOG_WARNING) << "Not equilibrated after " << o.t_eqMax << " sweeps.";
-            //~ oss << "# Does not equilibrate" << std::endl;
-            //~ return;
             oss << "# Did not equilibrate after" << o.t_eqMax << " sweeps. Start measurements now." << std::endl;
             o.t_eq = o.t_eqMax;
         }
@@ -216,9 +214,12 @@ void Metropolis::run()
                     }
                 }
             }
+
+            // for simple sampling the hull is never updated, do it now
             if(o.simpleSampling)
                 w->updateHull();
 
+            // save measurements to file
             if(i >= 2*o.t_eq)
             {
                 if(!o.conf_path.empty())
@@ -247,6 +248,7 @@ void Metropolis::run()
                 oss << std::endl;
             }
 
+            // collect some statistics
             sum_L += w->L();
             sum_A += w->A();
             sum_r += w->r();
@@ -254,6 +256,7 @@ void Metropolis::run()
         }
     }
 
+    // save visualizations
     if(!o.svg_path.empty())
         w->svg(o.svg_path, true);
 

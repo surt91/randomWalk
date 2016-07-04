@@ -32,14 +32,14 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, 0, "integer");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
         TCLAP::ValueArg<int> parallelArg("", "parallel", "use openMP to use this many cpus, zero means all (only available for Wang Landau Sampling)", false, 0, "integer");
-        TCLAP::ValueArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme", false, 0, "double");
+        TCLAP::MultiArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme, multiple for Parallel Tempering", false, "double");
         TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, 0.0, "double");
         TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, 1.0, "double");
         TCLAP::ValueArg<double> lnfArg("", "lnf", "minimum value of ln(f) for the Wang Landau algorithm (default 1e-8)", false, 1e-8, "double");
         TCLAP::ValueArg<double> flatnessArg("", "flatness", "flatness criterion for the Wang Landau algorithm (default 0.8)", false, 0.8, "double");
         TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, ".", "string");
-        TCLAP::ValueArg<std::string> dataPathArg("o", "output", "datafile for the output", false, "out.dat", "string");
-        TCLAP::ValueArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output", false, "", "string");
+        TCLAP::MultiArg<std::string> dataPathArg("o", "output", "datafile for the output, (for each -T / --theta one)", false, "string");
+        TCLAP::MultiArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output, (for each -T / --theta one)", false, "string");
         TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
         TCLAP::ValueArg<std::string> povArg("p", "pov", "povray filename, will be a xyz projection", false, "", "string");
         TCLAP::ValueArg<std::string> gpArg("g", "gnuplot", "gnuplot filename, will be a xyz projection", false, "", "string");
@@ -81,7 +81,7 @@ Cmd::Cmd(int argc, char** argv)
                                                                           "\tvolume       (A)    : 2",
                                                  false, 1, &allowedWO);
 
-        std::vector<int> sm({1, 2, 3});
+        std::vector<int> sm({1, 2, 3, 4});
         TCLAP::ValuesConstraint<int> allowedSM(sm);
         TCLAP::ValueArg<int> samplingMethodArg("m", "samplingMethod", "Sampling Method to use:\n"
                                                                       "\tMetropolis          : 1 (default)\n"
@@ -237,7 +237,7 @@ Cmd::Cmd(int argc, char** argv)
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
 
         sweep = sweepArg.getValue();
-        if(sampling_method == SM_METROPOLIS)
+        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
         {
             if(sweep == -1)
                 sweep = steps;
@@ -259,23 +259,37 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         t_eq = t_eqArg.getValue();
-        if(sampling_method == SM_METROPOLIS)
+        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
             if(t_eq >= 0)
             {
                 LOG(LOG_INFO) << "Set equilibration time to  " << t_eq;
             }
 
         t_eqMax = t_eqMaxArg.getValue();
-        if(sampling_method == SM_METROPOLIS)
+        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
         {
             LOG(LOG_INFO) << "Abort simulation if t_eq > " << t_eqMax;
         }
 
-        theta = thetaArg.getValue();
+        if(!thetaArg.getValue().empty())
+            theta = thetaArg.getValue()[0];
+        else
+            theta = 0.0;
+        parallelTemperatures = thetaArg.getValue();
         if(!simpleSampling && sampling_method == SM_METROPOLIS)
         {
             LOG(LOG_INFO) << "Theta                      " << theta;
         }
+        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        {
+            if(parallelTemperatures.empty())
+            {
+                LOG(LOG_ERROR) << "No temperatures -T/--theta given, specify at least one";
+                exit(1);
+            }
+            LOG(LOG_INFO) << "Thetas = {" << parallelTemperatures << "}";
+        }
+
 
         lnf_min = lnfArg.getValue();
         flatness_criterion = flatnessArg.getValue();
@@ -324,13 +338,61 @@ Cmd::Cmd(int argc, char** argv)
             LOG(LOG_INFO) << "Path to store the gnuplot  " << gp_path;
         }
 
-        data_path = dataPathArg.getValue();
-        LOG(LOG_INFO) << "Path to store the data     " << data_path;
-
-        conf_path = confPathArg.getValue();
-        if(!conf_path.empty())
+        if(!dataPathArg.getValue().empty())
         {
-            LOG(LOG_INFO) << "Path to store the config   " << conf_path;
+            data_path_vector = dataPathArg.getValue();
+            data_path = data_path_vector[0];
+        }
+        else
+        {
+            data_path = "out.dat";
+        }
+        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        {
+            if(parallelTemperatures.size() != data_path_vector.size())
+            {
+                LOG(LOG_ERROR) << "You need " << parallelTemperatures.size() << " paths, one for every -T / --theta, you have: " << data_path_vector.size();\
+                exit(1);
+            }
+            else
+            {
+                LOG(LOG_INFO) << "Paths to store the data     {" << data_path_vector << "}";
+            }
+        }
+        else
+        {
+            LOG(LOG_INFO) << "Path to store the data     " << data_path;
+        }
+
+        if(!confPathArg.getValue().empty())
+        {
+            conf_path_vector = confPathArg.getValue();
+            conf_path = conf_path_vector[0];
+        }
+        else
+        {
+            conf_path = "";
+        }
+        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        {
+            if(conf_path_vector.size() && parallelTemperatures.size() != conf_path_vector.size())
+            {
+                LOG(LOG_ERROR) << "You need " << parallelTemperatures.size() << " paths, one for every -T / --theta, or none, you have: " << conf_path_vector.size();
+                exit(1);
+            }
+            else if(!conf_path_vector.size())
+            {
+                conf_path_vector = std::vector<std::string>(parallelTemperatures.size(), "");
+                LOG(LOG_INFO) << "Do not store the conf";
+            }
+            else
+            {
+                LOG(LOG_INFO) << "Paths to store the conf     {" << conf_path_vector << "}";
+            }
+        }
+        else
+        {
+            LOG(LOG_INFO) << "Path to store the conf     " << conf_path;
         }
 
         tmp_path = tmpPathArg.getValue();

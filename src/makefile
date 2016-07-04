@@ -26,6 +26,7 @@ CPP	 := main.cpp \
         walker/CorrelatedWalker.cpp \
         simulation/Simulation.cpp \
         simulation/Metropolis.cpp \
+        simulation/MetropolisParallelTempering.cpp \
         simulation/WangLandau.cpp \
         simulation/FastWangLandau.cpp \
         simulation/Histogram.cpp \
