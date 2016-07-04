@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 from subprocess import call
 from multiprocessing import Pool
 
@@ -74,7 +75,7 @@ class Gnuplot():
                                     **kwargs))
 
     @staticmethod
-    def plotall():
+    def plotall(png=False):
         os.chdir("plots")
         p = Pool()
 
@@ -86,13 +87,14 @@ class Gnuplot():
         print("gnuplot")
         p.map(silentCall, cmds, 1)
 
-        plots = []
-        for i in os.listdir("."):
-            if ".eps" in i:
-                plots.append(i)
-        cmds = [["inkscape", "-z", "-b", '"#fff"', "-e", i.replace(".eps", ".png").strip(), "-h", "1080", i] for i in plots]
-        print("inkscape")
-        p.map(silentCall, cmds, 1)
+        if png:
+            plots = []
+            for i in os.listdir("."):
+                if ".eps" in i:
+                    plots.append(i)
+            cmds = [["inkscape", "-z", "-b", '"#fff"', "-e", i.replace(".eps", ".png").strip(), "-h", "1080", i] for i in plots]
+            print("inkscape")
+            p.map(silentCall, cmds, 1)
 
         os.chdir("..")
 
@@ -107,7 +109,7 @@ def main():
     g = Gnuplot(**para.parameters)
     print("generate Gnuplot files from Templates")
     g.every()
-    g.plotall()
+    g.plotall("--png" in sys.argv)
 
 
 if __name__ == "__main__":
