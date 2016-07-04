@@ -56,6 +56,9 @@ class Simulation
         std::ofstream oss;
         bool muted;
 
+        void header(std::ofstream &oss);
+        void footer(std::ofstream &oss);
+
     private:
         clock_t begin;
 };
