@@ -315,10 +315,12 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         parallel = parallelArg.getValue();
-        if(sampling_method == SM_WANG_LANDAU || sampling_method == SM_FAST_WANG_LANDAU)
+        if(sampling_method == SM_WANG_LANDAU || sampling_method == SM_FAST_WANG_LANDAU || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
         {
             LOG(LOG_INFO) << "CPUs to use                " << (parallel ? std::to_string(parallel) : "all");
         }
+        if(parallel)
+            omp_set_num_threads(parallel);
 
         svg_path = svgArg.getValue();
         if(!svg_path.empty())

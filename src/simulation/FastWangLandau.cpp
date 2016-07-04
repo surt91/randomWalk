@@ -16,12 +16,6 @@ void FastWangLandau::run()
     // parameters
     const int initial_num_iterations = 1000;
 
-    // run in parallel, in o.parallel threads, or all if not specified
-    if(o.parallel)
-    {
-        omp_set_num_threads(o.parallel);
-    }
-
     #pragma omp parallel for schedule(dynamic)
     for(int n=0; n<o.iterations; ++n)
     {

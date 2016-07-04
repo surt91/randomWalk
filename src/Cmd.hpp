@@ -7,6 +7,14 @@
 
 #include "Logging.hpp"
 
+// test, if we are using openmp
+#ifdef _OPENMP
+   #include <omp.h>
+#else
+   #define omp_get_thread_num() 0
+   #define omp_set_num_threads(x)
+#endif
+
 enum hull_algorithm_t {
     CH_QHULL = 1,   //< use the quick hull implementation Qhull
     CH_QHULL_AKL,   //< use the quick hull implementation Qhull with Akl's heuristic

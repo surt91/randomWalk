@@ -72,12 +72,6 @@ void WangLandau::printCenters(const Cmd &o)
  */
 void WangLandau::run()
 {
-    // run in parallel, in o.parallel threads, or all if not specified
-    if(o.parallel)
-    {
-        omp_set_num_threads(o.parallel);
-    }
-
     // dynamic because every iteration can take wildly different durations
     #pragma omp parallel for schedule(dynamic)
     for(int n=0; n<o.iterations; ++n)

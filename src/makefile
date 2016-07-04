@@ -8,7 +8,7 @@ DOC 	= manual.pdf
 D_MAX = 4
 
 CXXFLAGS = -std=c++11 -fexceptions -pipe
-#CXXFLAGS += -fopenmp
+CXXFLAGS += -fopenmp
 
 CPP	 := main.cpp \
         Cmd.cpp \

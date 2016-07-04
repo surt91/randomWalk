@@ -9,11 +9,6 @@ void MetropolisParallelTempering::run()
 {
     const int numTemperatures = o.parallelTemperatures.size();
 
-    // run in parallel, in o.parallel threads, or all if not specified
-    if(o.parallel)
-    {
-        omp_set_num_threads(o.parallel);
-    }
 
     // TODO: fill "mapThetaToFile"
 
