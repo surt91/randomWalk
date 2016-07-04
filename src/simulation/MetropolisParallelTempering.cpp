@@ -7,14 +7,14 @@ MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o)
 
 void MetropolisParallelTempering::run()
 {
-    // every ... sweeps one swap trial
+    // every how many sweeps per swap trial
     const auto estimated_corr = 100;
 
     const int numTemperatures = o.parallelTemperatures.size();
 
     // create a map of the temperatures
-    // since we will swap temperatures, we need to kepp track
-    // which indices systems with neighboring temperatures have
+    // since we will swap temperatures, we need to keep track
+    // where we swapped them, we need to know, which are neighbors
     std::vector<int> thetaMap(numTemperatures);
     for(int i=0; i<numTemperatures; ++i)
         thetaMap[i] = i;
@@ -33,22 +33,18 @@ void MetropolisParallelTempering::run()
     std::vector<int> acceptance(numTemperatures, 0);
     std::vector<int> swapTrial(numTemperatures, 0);
 
-    LOG(LOG_INFO) << "prepare";
-
     for(int n=0; n<numTemperatures; ++n)
     {
         o.seedRealization = ((long long)(o.seedRealization + n) * (n+1)) % 1800000121;
         prepare(allWalkers[n], o);
     }
 
-    LOG(LOG_INFO) << "start";
-
     #pragma omp parallel
     {
         // give every Thread a different seed
         // ensure that they do not overflow
         // FIXME: think about a better seed
-        int seedMC = ((long long)(o.seedMC+omp_get_thread_num()) * (omp_get_thread_num()+1)) % 1800000113;
+        const int seedMC = ((long long)(o.seedMC+omp_get_thread_num()) * (omp_get_thread_num()+1)) % 1800000113;
         UniformRNG rngMC(seedMC);
 
         for(int i=0; i<o.iterations; )
@@ -56,10 +52,10 @@ void MetropolisParallelTempering::run()
             #pragma omp for
             for(int n=0; n<numTemperatures; ++n)
             {
-                // do some sweeps (~autocorrelation time) before swapping
+                // do some sweeps (~fasted autocorrelation time) before swapping
                 // the higher this value, the lower the multithreading overhead
-                // the closer to the autocorrelation time, the more efficient
-                auto theta = o.parallelTemperatures[thetaMap[n]];
+                // the lower, the more swaps can be performed
+                const auto theta = o.parallelTemperatures[thetaMap[n]];
                 for(int j=0; j<estimated_corr; ++j)
                 {
                     sweep(allWalkers[n], theta, rngMC);
@@ -67,8 +63,7 @@ void MetropolisParallelTempering::run()
                     // save to file (not critical, since every thread has its own file)
                     *files[thetaMap[n]] << i+j << " "
                                         << allWalkers[n]->L() << " "
-                                        << allWalkers[n]->A() << " "
-                                        << o.parallelTemperatures[thetaMap[n]] << "\n";
+                                        << allWalkers[n]->A() << "\n";
                 }
             }
             i += estimated_corr;
@@ -80,11 +75,11 @@ void MetropolisParallelTempering::run()
                 for(int j=1; j<numTemperatures; ++j)
                 {
                     auto &w_low = allWalkers[j-1];
-                    auto T_low = o.parallelTemperatures[thetaMap[j-1]];
+                    const auto T_low = o.parallelTemperatures[thetaMap[j-1]];
                     auto &w_high = allWalkers[j];
-                    auto T_high = o.parallelTemperatures[thetaMap[j]];
-                    auto delta = S(w_high) - S(w_low);
-                    double p_acc = delta > 0. ? std::exp(-(1./T_low - 1./T_high) * delta) : 1.;
+                    const auto T_high = o.parallelTemperatures[thetaMap[j]];
+                    const auto delta = S(w_high) - S(w_low);
+                    const double p_acc = delta > 0. ? std::exp(-(1./T_low - 1./T_high) * delta) : 1.;
 
                     if(p_acc > rngMC())
                     {
@@ -101,9 +96,9 @@ void MetropolisParallelTempering::run()
                     swapTrial[j] += 1;
                 }
             }
+            #pragma omp barrier
             // implicit barrier at end of single block
         }
-
     }
 
     LOG(LOG_INFO) << "# acceptance: " << acceptance;
@@ -116,6 +111,7 @@ void MetropolisParallelTempering::run()
 
     for(int i=0; i<numTemperatures; ++i)
     {
+        *files[i] << ss.str();
         footer(*files[i]);
 
         std::string cmd("gzip -f ");
@@ -129,11 +125,11 @@ void MetropolisParallelTempering::sweep(std::unique_ptr<Walker> &w, double theta
     for(int j=0; j<o.sweep; ++j)
     {
         // change one random number to another random number
-        double oldS = S(w);
+        const double oldS = S(w);
         w->change(rngMC);
 
         // Metropolis rejection
-        double p_acc = std::exp((oldS - S(w))/theta);
+        const double p_acc = std::exp((oldS - S(w))/theta);
         if(p_acc < rngMC())
             w->undoChange();
     }

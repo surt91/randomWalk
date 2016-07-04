@@ -37,7 +37,7 @@ class Simulation
 
         virtual void run() = 0;
         static void prepare(std::unique_ptr<Walker>& w, const Cmd &o);
-        static std::function<double(std::unique_ptr<Walker>&)> prepareS(const Cmd &o);
+        static std::function<double(const std::unique_ptr<Walker>&)> prepareS(const Cmd &o);
         static double getLowerBound(Cmd &o);
         static double getUpperBound(Cmd &o);
 

@@ -102,9 +102,9 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
     w->updateHull();
 }
 
-std::function<double(std::unique_ptr<Walker>&)> Simulation::prepareS(const Cmd &o)
+std::function<double(const std::unique_ptr<Walker>&)> Simulation::prepareS(const Cmd &o)
 {
-    std::function<double(std::unique_ptr<Walker>&)> S;
+    std::function<double(const std::unique_ptr<Walker>&)> S;
 
     if(o.wantedObservable == WO_SURFACE_AREA)
         S = [](const std::unique_ptr<Walker> &w){ return w->L(); };
