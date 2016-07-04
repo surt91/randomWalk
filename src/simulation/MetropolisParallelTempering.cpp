@@ -69,7 +69,8 @@ void MetropolisParallelTempering::run()
             i += estimated_corr;
 
             #pragma omp barrier
-            #pragma omp single
+            #pragma omp master
+            // master instead of single, for determinism
             {
                 // swap neighboring temperatures
                 for(int j=1; j<numTemperatures; ++j)
@@ -97,7 +98,6 @@ void MetropolisParallelTempering::run()
                 }
             }
             #pragma omp barrier
-            // implicit barrier at end of single block
         }
     }
 

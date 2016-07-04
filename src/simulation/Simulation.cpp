@@ -40,8 +40,7 @@ Simulation::~Simulation()
 
 void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
 {
-    // do use different seeds, if using openmp
-    UniformRNG rngReal(o.seedRealization * (omp_get_thread_num()+1));
+    UniformRNG rngReal(o.seedRealization);
 
     if(o.type == WT_RANDOM_WALK)
     {

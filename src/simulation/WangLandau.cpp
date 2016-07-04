@@ -79,8 +79,7 @@ void WangLandau::run()
         // rngs should be local to the threads, with different seeds
         // FIXME: think about a better seed
         UniformRNG rngMC((o.seedMC+n) * (n+1));
-        o.seedRealization += n;
-        o.seedRealization *= n+1;
+        o.seedRealization = ((long long)(o.seedRealization + n) * (n+1)) % 1800000121;
 
         std::unique_ptr<Walker> w;
         prepare(w, o);
