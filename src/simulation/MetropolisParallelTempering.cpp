@@ -36,12 +36,6 @@ void MetropolisParallelTempering::run()
     std::vector<int> acceptance(numTemperatures, 0);
     std::vector<int> swapTrial(numTemperatures, 0);
 
-    for(int n=0; n<numTemperatures; ++n)
-    {
-        o.seedRealization = ((long long)(o.seedRealization + n) * (n+1)) % 1800000121;
-        prepare(allWalkers[n], o);
-    }
-
     #pragma omp parallel
     {
         // give every Thread a different seed
@@ -49,6 +43,15 @@ void MetropolisParallelTempering::run()
         // FIXME: think about a better seed
         const int seedMC = ((long long)(o.seedMC+omp_get_thread_num()) * (omp_get_thread_num()+1)) % 1800000113;
         UniformRNG rngMC(seedMC);
+
+        // init the walks in parallel -> crucial for NUMA memory locality
+        #pragma omp for
+        for(int n=0; n<numTemperatures; ++n)
+        {
+            Cmd tmp(o);
+            tmp.seedRealization = ((long long)(tmp.seedRealization + n) * (n+1)) % 1800000121;
+            prepare(allWalkers[n], tmp);
+        }
 
         for(int i=0; i<o.iterations+2*o.t_eq; )
         {
