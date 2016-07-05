@@ -50,7 +50,7 @@ void MetropolisParallelTempering::run()
         const int seedMC = ((long long)(o.seedMC+omp_get_thread_num()) * (omp_get_thread_num()+1)) % 1800000113;
         UniformRNG rngMC(seedMC);
 
-        for(int i=0; i<o.iterations; )
+        for(int i=0; i<o.iterations+2*o.t_eq; )
         {
             #pragma omp for
             for(int n=0; n<numTemperatures; ++n)
@@ -64,9 +64,10 @@ void MetropolisParallelTempering::run()
                     sweep(allWalkers[n], theta, rngMC);
 
                     // save to file (not critical, since every thread has its own file)
-                    *files[thetaMap[n]] << i+j << " "
-                                        << allWalkers[n]->L() << " "
-                                        << allWalkers[n]->A() << "\n";
+                    if(i >= 2*o.t_eq)
+                        *files[thetaMap[n]] << i+j << " "
+                                            << allWalkers[n]->L() << " "
+                                            << allWalkers[n]->A() << "\n";
                 }
             }
             i += estimated_corr;
