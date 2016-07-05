@@ -12,6 +12,9 @@ void MetropolisParallelTempering::run()
 
     const int numTemperatures = o.parallelTemperatures.size();
 
+    std::string swapGraphName = "swapGraph.dat";
+    std::ofstream swapGraph(swapGraphName, std::ofstream::out);
+
     // create a map of the temperatures
     // since we will swap temperatures, we need to keep track
     // where we swapped them, we need to know, which are neighbors
@@ -96,6 +99,12 @@ void MetropolisParallelTempering::run()
 
                     swapTrial[j] += 1;
                 }
+
+                // detailed data about the swaps
+                swapGraph << i << " ";
+                for(int j=1; j<numTemperatures; ++j)
+                    swapGraph << thetaMap[j] << " ";
+                swapGraph << "\n";
             }
             #pragma omp barrier
         }
@@ -106,15 +115,18 @@ void MetropolisParallelTempering::run()
     std::stringstream ss;
     ss << "# swap success rates:\n";
     for(int j=1; j<numTemperatures; ++j)
-        ss << "#    " << o.parallelTemperatures[thetaMap[j-1]] << " <-> " << o.parallelTemperatures[thetaMap[j]] << " : " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "%\n";
+        ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "%" << " : " << o.parallelTemperatures[j-1] << " <-> " << o.parallelTemperatures[j] << "\n";
     LOG(LOG_INFO) << ss.str();
+
+    std::string cmd("gzip -f ");
+    swapGraph.close();
+    system((cmd+swapGraphName).c_str());
 
     for(int i=0; i<numTemperatures; ++i)
     {
         *files[i] << ss.str();
         footer(*files[i]);
 
-        std::string cmd("gzip -f ");
         system((cmd+o.data_path_vector[i]).c_str());
     }
 }
