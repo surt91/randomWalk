@@ -42,5 +42,5 @@ class UniformRNG
         std::string serialize_rng();
         void deserialize_rng(std::string &s);
 
-
+        std::mt19937& engine();
 };

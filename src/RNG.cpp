@@ -89,7 +89,7 @@ double UniformRNG::levy(const double c, const double alpha)
   return c * t * s;
 }
 
-/* Generates a Cauchy (Lorentz) distributed random number
+/** Generates a Cauchy (Lorentz) distributed random number
  * This code is taken from the GSL (and slightly modified)
  *
  * http://www.gnu.org/software/gsl/
@@ -104,4 +104,12 @@ double UniformRNG::cauchy(const double a)
     while (u == 0.5);
 
     return a * tan(M_PI * u);
+}
+
+/** Returns the engine.
+ * can be useful for stl algorithms, like std::shuffle
+ */
+std::mt19937& UniformRNG::engine()
+{
+    return rng;
 }
