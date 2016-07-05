@@ -111,6 +111,7 @@ parameters = {
     # 1: Metropolis
     # 2: Wang Landau
     # 3: Fast 1/t Wang Landau
+    # 4: Metropolis with parallel tempering
     "sampling": 2,
 
     # how many cpus (only for wang landau), None means all

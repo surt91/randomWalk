@@ -59,7 +59,7 @@ class Simulation():
             p = self.parallel
         energies = kwargs["energies"]
         self.kwargs = kwargs
-        if self.parallel and (sampling != 2 and sampling != 3):
+        if self.parallel and (sampling != 2 and sampling != 3 and sampling != 4):
             print("sampling method", sampling, "does not use parallelism, set parallel to None")
             raise
 
@@ -68,6 +68,8 @@ class Simulation():
             if self.sampling == 1:
                 for T in thetas[N]:
                     self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
+            if self.sampling == 4:
+                self.instances.append(SimulationInstance(steps=N, theta=thetas[N], iterations=iterations, **kwargs))
             if self.sampling == 2 or self.sampling == 3:
                 num = len(energies[N])-1
                 instances_for_N = []
@@ -291,6 +293,8 @@ class SimulationInstance():
                 t = self.T
             self.x += int(1e5*t)
             self.y += int(1e5*t)
+        elif sampling == 4:
+            pass # we only have one process and do not need to change the seeds
         elif sampling == 2 or sampling == 3:
             self.x += int(self.energy[0])
             self.y += int(self.energy[0])
@@ -302,12 +306,23 @@ class SimulationInstance():
 
         if sampling == 1:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
+        elif sampling == 4:
+            self.basename = []
+            for T in self.T:
+                self.basename.append(para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D))
         elif sampling == 2 or sampling == 3:
             self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
 
-        self.filename = "{}/{}.dat".format(self.rawData, self.basename)
-        if self.rawConf:
-            self.confname = "{}/{}.dat".format(self.rawConf, self.basename)
+        if sampling == 4:
+            self.filename = []
+            for bn in self.basename:
+                self.filename.append("{}/{}.dat".format(self.rawData, bn))
+                if self.rawConf:
+                    self.confname = "{}/{}.dat".format(self.rawConf, bn)
+        else:
+            self.filename = "{}/{}.dat".format(self.rawData, self.basename)
+            if self.rawConf:
+                self.confname = "{}/{}.dat".format(self.rawConf, self.basename)
 
     def __str__(self):
         return "RW:\n\tN = {}\n\tt={}".format(self.N, self.t)
@@ -346,9 +361,15 @@ class SimulationInstance():
                 "-d {:d}".format(self.D),
                 "-t {}".format(self.t),
                 "-w {}".format(self.w),
-                "-o {}".format(self.filename),
+
                 "-m {}".format(self.m),
                ]
+
+        if self.m == 4:
+            for f in self.filename:
+                opts.append("-o {}".format(f))
+        else:
+            opts.append("-o {}".format(self.filename))
 
         if self.number_of_walkers:
             opts.append("-M {}".format(self.number_of_walkers))
@@ -377,7 +398,14 @@ class SimulationInstance():
 
             if self.sweep[self.N]:
                 opts.append("-k {:.0f}".format(self.sweep[self.N]))
-        else:
+        elif self.m == 4:
+            for T in self.T:
+                if T != float("inf"):
+                    opts.append("-T {0:.5f}".format(T))
+                else:
+                    opts.append("-T {0:.5f}".format(1.417e32)) # Planck temperature ;)
+
+        elif self.m == 2 or self.m == 3:
             for e in self.energy:
                 opts.append("-e {}".format(e))
             opts.append("-B {}".format(self.nbins))
@@ -395,7 +423,16 @@ class SimulationInstance():
         self.t = 13
 
     def __call__(self):
-        if not os.path.exists(self.filename+".gz"):
+        unfinished = True
+        if self.m == 4:
+            # parallel tempering: ensure that all output files exist
+            if all(os.path.exists(f+".gz") for f in self.filename):
+                unfinished = False
+        elif os.path.exists(self.filename+".gz"):
+            unfinished = False
+
+        # start simulation, if we have no finished result
+        if unfinished:
             if 0 != call(self.get_cmd(), stdout=None, stderr=None):
                 logging.error("Error in command '%s'" % (" ".join(self.get_cmd())))
             print(".", flush=True, end="")
