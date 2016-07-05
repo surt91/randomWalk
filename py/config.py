@@ -59,8 +59,8 @@ class Simulation():
             p = self.parallel
         energies = kwargs["energies"]
         self.kwargs = kwargs
-        if self.parallel and (sampling != 2 and sampling != 3 and sampling != 4):
-            print("sampling method", sampling, "does not use parallelism, set parallel to None")
+        if self.parallel and (self.sampling != 2 and self.sampling != 3 and self.sampling != 4):
+            print("sampling method", self.sampling, "does not use parallelism, set parallel to None")
             raise
 
         self.instances = []
@@ -113,7 +113,12 @@ class Simulation():
 
         # time per sweep
         def getSec(N):
-            if self.sampling == 1:
+            if self.parallel is None:
+                p = 1
+            else:
+                p = self.parallel
+
+            if self.sampling == 1 or self.sampling == 4:
                 t = 0 # time for 1000 sweeps
                 max_t_corr = 1
                 try:
@@ -151,15 +156,12 @@ class Simulation():
                 else:
                     t = 86000*3  # say, 3 days
 
-                if self.parallel is None:
-                    p = 1
-                else:
-                    p = self.parallel
                 return t/p * 3 # factor 3 to be sure
 
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
                                       loader=jinja2.FileSystemLoader("templates"))
+
         template = self.env.get_template("jobarray.sge")
 
         # create .sge files for Hero

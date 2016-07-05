@@ -10,7 +10,7 @@ import commonEvaluation
 if __name__ == "__main__":
     if not "--fast" in sys.argv:
         sampling = param.parameters["sampling"]
-        if sampling == 1:
+        if sampling == 1 or sampling == 4:
             if "--lin" in sys.argv:
                 ht = 1
                 logging.info("Using equi-spaced histogram")
@@ -28,6 +28,9 @@ if __name__ == "__main__":
 
         elif sampling == 2 or sampling == 3:
             evaluateWangLandau.run()
+
+        else:
+            logging.error("unknown sampling method")
 
     else:
         logging.info("Fastmode: do not create new histograms from rawData")

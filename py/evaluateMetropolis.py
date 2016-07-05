@@ -338,6 +338,7 @@ def run(histogram_type=1):
     steps = param.parameters["number_of_steps"]
     d = param.parameters["rawData"]
     out = param.parameters["directory"]
+    sampling = param.parameters["sampling"]
 
     outfiles = []
 
@@ -356,9 +357,16 @@ def run(histogram_type=1):
 
         # find names of needed files
         nameDict = {}
-        for T in theta_for_N:
-            i = SimulationInstance(steps=N, theta=T, **param.parameters)
-            nameDict.update({T: i.basename})
+        if sampling == 1:
+            for T in theta_for_N:
+                i = SimulationInstance(steps=N, theta=T, **param.parameters)
+                nameDict.update({T: i.basename})
+        elif sampling == 4:
+            i = SimulationInstance(steps=N, theta=theta_for_N, **param.parameters)
+            for T, bn in zip(i.T, i.basename):
+                nameDict.update({T: bn})
+        else:
+            logging.error("unkown sampling method")
 
         if float("inf") in theta_for_N:
             eval_simplesampling(nameDict[float("inf")], out, N)

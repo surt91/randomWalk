@@ -105,7 +105,7 @@ def cut_trans(s, pre="tran"):
     P_err = {}
     for N in param.parameters["number_of_steps"]:
         outname = param.basename.format(steps=N, **param.parameters)
-        if param.parameters["sampling"] == 1:
+        if param.parameters["sampling"] == 1 or param.parameters["sampling"] == 4:
             prefix = "whole"
         elif param.parameters["sampling"] == 2 or param.parameters["sampling"] == 3:
             prefix = "WL"
@@ -157,7 +157,7 @@ def get_max_dist():
         f.write("# N maxX err maxY err\n")
     for N in param.parameters["number_of_steps"]:
         name = param.basename.format(steps=N, **param.parameters)
-        if param.parameters["sampling"] == 1:
+        if param.parameters["sampling"] == 1 or param.parameters["sampling"] == 4:
             prefix = "whole"
         elif param.parameters["sampling"] == 2 or param.parameters["sampling"] == 3:
             prefix = "WL"
