@@ -91,9 +91,7 @@ void MetropolisParallelTempering::run()
                         LOG(LOG_TOO_MUCH) << "(" << i << ") swap: " << thetaMap[j-1] << " = " <<  T_low << " <-> " <<  thetaMap[j] << " = " <<  T_high;
 
                         // accepted -> update the map of the temperatures
-                        auto tmp = thetaMap[j-1];
-                        thetaMap[j-1] = thetaMap[j];
-                        thetaMap[j] = tmp;
+                        std::swap(thetaMap[j-1], thetaMap[j]);
 
                         acceptance[j] += 1;
                     }
