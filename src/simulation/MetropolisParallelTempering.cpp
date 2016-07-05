@@ -97,9 +97,12 @@ void MetropolisParallelTempering::run()
             #pragma omp master
             // master instead of single, for determinism
             {
-                // swap neighboring temperatures
-                for(int j=1; j<numTemperatures; ++j)
+                // attempt n-1 swaps of neighboring temperatures
+                for(int k=0; k<numTemperatures-1; ++k)
                 {
+                    // determine which pair to swap, can appear multiple times
+                    const int j = rngMC() * (numTemperatures-1) + 1;
+
                     auto &w_low = allWalkers[j-1];
                     const auto T_low = o.parallelTemperatures[thetaMap[j-1]];
                     auto &w_high = allWalkers[j];
