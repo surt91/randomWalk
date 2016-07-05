@@ -186,6 +186,41 @@ class Simulation():
 
 
 class SimulationInstance():
+    """One Simulation instance
+
+        In [] are the sampling methods where the option is applicable. empty, if all.
+        In () is the data type (e.g. (list[int]))
+
+        :param:steps:      []      (int)         number of steps
+        :param:typ:        []      (int)         type of walk
+        :param:seedMC:     []      (int)         seed for the MC simulation
+        :param:seedR:      []      (int)         seed for the start realization
+        :param:iterations: []      (int)         number of sweeps to perform
+        :param:sweep:      [1,4]   (int)         number of trial move per sweep
+        :param:dimension:  []      (int)         spacial dimension
+        :param:t_eq:       [1,4]   (int)         sweeps for equilibration (-1 for auto config)
+        :param:t_corr:     [1,4]   (int)         sweeps to decorrelate
+        :param:directory:  []      (str)         folder to store the processed data
+        :param:rawData:    []      (str)         folder where the rawData is located
+        :param:rawConf:    []      (str)         folder where the rawConf is located
+        :param:observable: []      (int)         which observable to measure (volume, or surface)
+        :param:method:     []      (int)         convex hull algorithm to use
+        :param:akl:        []      (bool)        use akl heuristic
+        :param:sampling:   []      (int)         sampling method to use
+        :param:parallel:   [2,3,4] (int)         how many threads to use for the simulation (OpenMP)
+        :param:energy:     [2,3]   (list[float]) borders of the energy ranges
+        :param:nbins:      [2,3]   (int)         how many bins in each energy range
+        :param:overlap:    [2,3]   (int)         how many bins to extend beyond the energy range
+        :param:lnf:        [2,3]   (float)       ln of the refinement factor
+        :param:flatness:   [2,3]   (float)       flatness criterion
+        :param:overlap_direction: [2,3] (str)    in which direction to extend beyond the range ("left"/"right")
+        :param:t_eq_max:   [1]     (int)         how long to search for quilibration before aborting
+        :param:theta:      [1]     (float)       temperature to use for the simulation
+        :param:theta:      [4]     (list[float]) temperatures to use for the simulation
+        :param:first:      [2,3]   (bool)        is this the first one? (to not extend range to the left)
+        :param:last:       [2,3]   (bool)        is this the last one? (to not extend range to the right)
+        :param:number_of_walkers: [] (int)       number of independed walkers
+    """
     def __init__(self, steps, typ, seedMC, seedR, iterations,
                        dimension, t_eq, t_corr, directory,
                        rawData, rawConf, observable,
