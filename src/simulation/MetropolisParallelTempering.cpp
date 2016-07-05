@@ -65,9 +65,27 @@ void MetropolisParallelTempering::run()
 
                     // save to file (not critical, since every thread has its own file)
                     if(i >= 2*o.t_eq)
+                    {
                         *files[thetaMap[n]] << i+j << " "
                                             << allWalkers[n]->L() << " "
-                                            << allWalkers[n]->A() << "\n";
+                                            << allWalkers[n]->A() << " ";
+
+                        // simple sampling: signaled by the Planck temperature
+                        // inf or nan do not work with gcc's -ffast-math
+                        if(theta >= 1.4e32)
+                        {
+                            auto maxE = allWalkers[n]->maxExtent();
+                            *files[thetaMap[n]]
+                                << allWalkers[n]->r() << " "
+                                << allWalkers[n]->r2() << " "
+                                << allWalkers[n]->maxDiameter() << " "
+                                << maxE[0] << " "
+                                << maxE[1] << " "
+                                << allWalkers[n]->rx() << " "
+                                << allWalkers[n]->ry();
+                        }
+                        *files[thetaMap[n]] << std::endl; //yes, I want to explicitly flush
+                    }
                 }
             }
             i += estimated_corr;
