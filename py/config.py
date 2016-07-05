@@ -184,9 +184,16 @@ class Simulation():
     # start the calculation
     def __call__(self):
         logging.info("Executing {} jobs".format(len(self.instances)))
-        with Pool() as p:
-            # chunksize of 1 for such for optimal parallelness
-            p.map(run_instance, self.instances, 1)
+
+        if self.parallel and self.parallel > 1:
+            # program is multithreaded, start only one
+            for i in self.instances:
+                run_instance(i)
+        else:
+            # program is single threaded, we do the parallelness
+            with Pool() as p:
+                # chunksize of 1 for such for optimal parallelness
+                p.map(run_instance, self.instances, 1)
 
 
 class SimulationInstance():
