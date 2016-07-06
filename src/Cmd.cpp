@@ -292,7 +292,7 @@ Cmd::Cmd(int argc, char** argv)
                 LOG(LOG_ERROR) << "No temperatures -T/--theta given, specify at least one";
                 exit(1);
             }
-            LOG(LOG_INFO) << "Thetas = {" << parallelTemperatures << "}";
+            LOG(LOG_INFO) << "Thetas =                   {" << parallelTemperatures << "}";
         }
 
 
@@ -364,7 +364,7 @@ Cmd::Cmd(int argc, char** argv)
             }
             else
             {
-                LOG(LOG_INFO) << "Paths to store the data     {" << data_path_vector << "}";
+                LOG(LOG_INFO) << "Paths to store the data    {" << data_path_vector << "}";
             }
         }
         else
