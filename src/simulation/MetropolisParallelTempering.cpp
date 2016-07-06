@@ -12,7 +12,7 @@ void MetropolisParallelTempering::run()
 
     const int numTemperatures = o.parallelTemperatures.size();
 
-    std::string swapGraphName = "swapGraph.dat";
+    std::string swapGraphName = "swapGraph" + std::to_string(o.steps) + ".dat";
     std::ofstream swapGraph(swapGraphName, std::ofstream::out);
 
     // create a map of the temperatures
