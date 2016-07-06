@@ -75,7 +75,9 @@ def getDataFromFile(filename, col, T="?"):
     data = a.transpose()[col]
     t_corr = getAutocorrTime(data, T=T)
     # do only keep statistically independent samples to not underestimate the error
-    return data[::ceil(2*t_corr)]
+    data = data[::ceil(2*t_corr)]
+    logging.info("{} independent samples".format(len(data))
+    return data
 
 
 def getStatistics(dataDict):
@@ -462,10 +464,6 @@ def run(histogram_type=1):
             f.write("# S S_err P(S) P(S)_err\n")
             for i in sorted(whole_distribution):
                 f.write("{} {} {} {}\n".format(i[0], i[1], i[2]-log(area), i[3]))
-
-    print("plot with gnuplot")
-    print("p " + ", ".join(i + " u 1:3:2:4 w xyerr" for n, i in enumerate(outfiles)))
-    print('p "{}" u 1:3:2:4 w xye'.format(whole_distribution_file))
 
     if proposedTheta:
         print("consider adding following thetas:")
