@@ -36,6 +36,12 @@ void MetropolisParallelTempering::run()
     std::vector<int> acceptance(numTemperatures-1, 0);
     std::vector<int> swapTrial(numTemperatures-1, 0);
 
+    // for loop schedule:
+    // static schedule for NUMA locality and chunk size 1, to mix the
+    // temperatures inside the threads, i.e., we do not want to have a
+    // thread calculating all lowest temperatures -> all threads should
+    // need roughly equal time
+
     #pragma omp parallel
     {
         // give every Thread a different seed
@@ -45,7 +51,7 @@ void MetropolisParallelTempering::run()
         UniformRNG rngMC(seedMC);
 
         // init the walks in parallel -> crucial for NUMA memory locality
-        #pragma omp for
+        #pragma omp for schedule(static, 1)
         for(int n=0; n<numTemperatures; ++n)
         {
             Cmd tmp(o);
@@ -55,7 +61,7 @@ void MetropolisParallelTempering::run()
 
         for(int i=0; i<o.iterations+2*o.t_eq; )
         {
-            #pragma omp for
+            #pragma omp for schedule(static, 1)
             for(int n=0; n<numTemperatures; ++n)
             {
                 // do some sweeps (~fasted autocorrelation time) before swapping
