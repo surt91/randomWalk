@@ -33,8 +33,8 @@ void MetropolisParallelTempering::run()
     // create all walkers, with corresponding temperatures
     // can this be done in parallel? (dimerization can take some time)
     std::vector<std::unique_ptr<Walker>> allWalkers(numTemperatures);
-    std::vector<int> acceptance(numTemperatures, 0);
-    std::vector<int> swapTrial(numTemperatures, 0);
+    std::vector<int> acceptance(numTemperatures-1, 0);
+    std::vector<int> swapTrial(numTemperatures-1, 0);
 
     #pragma omp parallel
     {
@@ -117,9 +117,9 @@ void MetropolisParallelTempering::run()
                         // accepted -> update the map of the temperatures
                         std::swap(thetaMap[j-1], thetaMap[j]);
 
-                        acceptance[j] += 1;
+                        acceptance[j-1] += 1;
                     }
-                    swapTrial[j] += 1;
+                    swapTrial[j-1] += 1;
                 }
 
                 // detailed data about the swaps
@@ -136,8 +136,8 @@ void MetropolisParallelTempering::run()
     LOG(LOG_INFO) << "# trials    : " << swapTrial;
     std::stringstream ss;
     ss << "# swap success rates:\n";
-    for(int j=1; j<numTemperatures; ++j)
-        ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "%" << " : " << o.parallelTemperatures[j-1] << " <-> " << o.parallelTemperatures[j] << "\n";
+    for(int j=0; j<numTemperatures-1; ++j)
+        ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "%" << " : " << o.parallelTemperatures[j] << " <-> " << o.parallelTemperatures[j+1] << "\n";
     LOG(LOG_INFO) << ss.str();
 
     swapGraph.close();
