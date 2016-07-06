@@ -1,14 +1,14 @@
 #include "MetropolisParallelTempering.hpp"
 
 MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o)
-    : Simulation(o)
+    : Simulation(o, false)
 {
 }
 
 void MetropolisParallelTempering::run()
 {
     // every how many sweeps per swap trial
-    const auto estimated_corr = 100;
+    const auto estimated_corr = 50;
 
     const int numTemperatures = o.parallelTemperatures.size();
 
@@ -119,7 +119,6 @@ void MetropolisParallelTempering::run()
 
                         acceptance[j] += 1;
                     }
-
                     swapTrial[j] += 1;
                 }
 
@@ -141,16 +140,15 @@ void MetropolisParallelTempering::run()
         ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "%" << " : " << o.parallelTemperatures[j-1] << " <-> " << o.parallelTemperatures[j] << "\n";
     LOG(LOG_INFO) << ss.str();
 
-    std::string cmd("gzip -f ");
     swapGraph.close();
-    system((cmd+swapGraphName).c_str());
+    gzip(swapGraphName);
 
     for(int i=0; i<numTemperatures; ++i)
     {
         *files[i] << ss.str();
         footer(*files[i]);
 
-        system((cmd+o.data_path_vector[i]).c_str());
+        gzip(o.data_path_vector[i]);
     }
 }
 

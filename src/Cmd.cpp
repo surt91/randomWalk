@@ -278,6 +278,11 @@ Cmd::Cmd(int argc, char** argv)
         parallelTemperatures = thetaArg.getValue();
         if(!simpleSampling && sampling_method == SM_METROPOLIS)
         {
+            if(parallelTemperatures.size() > 1)
+            {
+                LOG(LOG_ERROR) << "Do only specify one -T/--theta for this sampling method.";
+                exit(1);
+            }
             LOG(LOG_INFO) << "Theta                      " << theta;
         }
         if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
@@ -351,6 +356,7 @@ Cmd::Cmd(int argc, char** argv)
         }
         if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
         {
+            data_path = "";
             if(parallelTemperatures.size() != data_path_vector.size())
             {
                 LOG(LOG_ERROR) << "You need " << parallelTemperatures.size() << " paths, one for every -T / --theta, you have: " << data_path_vector.size();\

@@ -1,9 +1,10 @@
 #include "Simulation.hpp"
 
-Simulation::Simulation(const Cmd &o)
+Simulation::Simulation(const Cmd &o, const bool fileOutput)
     : o(o),
       oss(o.data_path, std::ofstream::out),
-      muted(false)
+      muted(false),
+      fileOutput(fileOutput)
 {
     begin = clock();
     fails = 0;
@@ -13,14 +14,16 @@ Simulation::Simulation(const Cmd &o)
     sum_r = 0.;
     sum_r2 = 0.;
 
-    header(oss);
+    if(fileOutput)
+        header(oss);
 
     S = prepareS(o);
 }
 
 Simulation::~Simulation()
 {
-    footer(oss);
+    if(fileOutput)
+        footer(oss);
 
     if(!muted)
     {
@@ -34,8 +37,8 @@ Simulation::~Simulation()
         LOG(LOG_INFO) << "# max vmem: " << vmPeak();
     }
 
-    std::string cmd("gzip -f ");
-    system((cmd+o.data_path).c_str());
+    if(fileOutput)
+        gzip(o.data_path);
 }
 
 void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
@@ -169,35 +172,47 @@ double Simulation::getLowerBound(Cmd &o)
 
 void Simulation::header(std::ofstream &oss)
 {
-    // set output to 12 significant digits.
-    // storage is cheap and it can not worsen the results
-    oss.precision(12);
-    // save the commandline invocation to the outputfile
-    oss << "# " << o.text << "\n";
-    oss << "# Version: " << VERSION << "\n";
-    oss << "# Compiled: " << __DATE__ << " " << __TIME__ << std::endl;
 
-    time_t _tm = time(NULL);
-    struct tm *curtime = localtime(&_tm);
-    oss << "# Started: " << asctime(curtime);
-
+    // test, if we can write to the file
     if(!oss.good())
     {
-        LOG(LOG_ERROR) << "Path is not writable " << o.data_path;
-        throw std::invalid_argument("Path is not writable");
+        LOG(LOG_ERROR) << "Path is not writable '" << o.data_path << "'";
+        //~ throw std::invalid_argument("Path is not writable");
+    }
+    else
+    {
+        // set output to 12 significant digits.
+        // storage is cheap and it can not worsen the results
+        oss.precision(12);
+        // save the commandline invocation to the outputfile
+        oss << "# " << o.text << "\n";
+        oss << "# Version: " << VERSION << "\n";
+        oss << "# Compiled: " << __DATE__ << " " << __TIME__ << "\n";
+
+        time_t _tm = time(NULL);
+        struct tm *curtime = localtime(&_tm);
+        oss << "# Started: " << asctime(curtime) << "\n";
     }
 }
 
 void Simulation::footer(std::ofstream &oss)
 {
-    // save runtime statistics
-    oss << "# proposed changes: " << tries << "\n";
-    oss << "# rejected changes: " << fails << " (" << (100.*fails / tries) << "%)" << "\n";
-    // time will be overestimated because of the equilibration
-    time_t _tm = time(NULL);
-    struct tm *curtime = localtime(&_tm);
-    oss << "# Ended: " << asctime(curtime) << std::endl;
-    oss << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations) << "\n";
-    oss << "# max vmem: " << vmPeak() << "\n";
+    if(!oss.good())
+    {
+        LOG(LOG_ERROR) << "Path is not writable '" << o.data_path << "'";
+        //~ throw std::invalid_argument("Path is not writable");
+    }
+    else
+    {
+        // save runtime statistics
+        oss << "# proposed changes: " << tries << "\n";
+        oss << "# rejected changes: " << fails << " (" << (100.*fails / tries) << "%)" << "\n";
+        // time will be overestimated because of the equilibration
+        time_t _tm = time(NULL);
+        struct tm *curtime = localtime(&_tm);
+        oss << "# Ended: " << asctime(curtime) << "\n";
+        oss << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations) << "\n";
+        oss << "# max vmem: " << vmPeak() << "\n";
+    }
     oss.close();
 }

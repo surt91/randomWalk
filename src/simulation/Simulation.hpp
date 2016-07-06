@@ -26,13 +26,14 @@
 #include "../walker/LevyWalker.hpp"
 #include "../walker/CorrelatedWalker.hpp"
 #include "../RNG.hpp"
+#include "../io.hpp"
 
 /** Abstract Base Class, derive classes that sample random walks.
  */
 class Simulation
 {
     public:
-        Simulation(const Cmd &o);
+        Simulation(const Cmd &o, const bool fileOutput=true);
         virtual ~Simulation();
 
         virtual void run() = 0;
@@ -55,6 +56,7 @@ class Simulation
         std::function<double(std::unique_ptr<Walker>&)> S;
         std::ofstream oss;
         bool muted;
+        bool fileOutput;
 
         void header(std::ofstream &oss);
         void footer(std::ofstream &oss);
