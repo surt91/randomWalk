@@ -39,7 +39,7 @@ class Gnuplot():
     def every(self):
         fmt = "%f*d" if self.kwargs["observable"] == 2 else "%f*(d-1)"
         exponent = fmt % nu[self.kwargs["typ"]][self.kwargs["dimension"]]
-        if self.kwargs["sampling"] == 1:
+        if self.kwargs["sampling"] == 1 or self.kwargs["sampling"] == 4:
             self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
             self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
             self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")

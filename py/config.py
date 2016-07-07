@@ -399,14 +399,15 @@ class SimulationInstance():
         if self.akl:
             opts.append("-a")
 
+        if self.m == 1 or self.m == 4:
+            if self.sweep[self.N]:
+                opts.append("-k {:.0f}".format(self.sweep[self.N]))
+
         if self.m == 1:
             if self.T != float("inf"):
                 opts.append("-T {0:.5f}".format(self.T))
             else:
                 opts.append("--simplesampling")
-
-            if self.sweep[self.N]:
-                opts.append("-k {:.0f}".format(self.sweep[self.N]))
         elif self.m == 4:
             for T in self.T:
                 if T != float("inf"):
