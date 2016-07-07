@@ -94,7 +94,7 @@ void MetropolisParallelTempering::run()
                                 << allWalkers[n]->rx() << " "
                                 << allWalkers[n]->ry();
                         }
-                        *files[thetaMap[n]] << std::endl; //yes, I want to explicitly flush
+                        *files[thetaMap[n]] << std::endl; //yes, I want to flush explicitly
                     }
                 }
             }
