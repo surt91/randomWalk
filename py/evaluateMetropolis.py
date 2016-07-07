@@ -76,7 +76,7 @@ def getDataFromFile(filename, col, T="?"):
     t_corr = getAutocorrTime(data, T=T)
     # do only keep statistically independent samples to not underestimate the error
     data = data[::ceil(2*t_corr)]
-    logging.info("{} independent samples".format(len(data))
+    logging.info("{} independent samples".format(len(data)))
     return data
 
 
