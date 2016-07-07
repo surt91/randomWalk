@@ -109,16 +109,15 @@ void MetropolisParallelTempering::run()
                     // determine which pair to swap, can appear multiple times
                     const int j = rngMC() * (numTemperatures-1) + 1;
 
-                    auto &w_low = allWalkers[j-1];
-                    const auto T_low = o.parallelTemperatures[thetaMap[j-1]];
-                    auto &w_high = allWalkers[j];
-                    const auto T_high = o.parallelTemperatures[thetaMap[j]];
-                    const auto delta = S(w_high) - S(w_low);
-                    const double p_acc = delta > 0. ? std::exp(-(1./T_low - 1./T_high) * delta) : 1.;
+                    auto &w_1 = allWalkers[j-1];
+                    const auto T_1 = o.parallelTemperatures[thetaMap[j-1]];
+                    auto &w_2 = allWalkers[j];
+                    const auto T_2 = o.parallelTemperatures[thetaMap[j]];
+                    const double p_acc = std::exp((1./T_2 - 1./T_1) * (S(w_2) - S(w_1)));
 
                     if(p_acc > rngMC())
                     {
-                        LOG(LOG_TOO_MUCH) << "(" << i << ") swap: " << thetaMap[j-1] << " = " <<  T_low << " <-> " <<  thetaMap[j] << " = " <<  T_high;
+                        LOG(LOG_TOO_MUCH) << "(" << i << ") swap: " << thetaMap[j-1] << " = " <<  T_1 << " <-> " <<  thetaMap[j] << " = " <<  T_2;
 
                         // accepted -> update the map of the temperatures
                         std::swap(thetaMap[j-1], thetaMap[j]);
