@@ -28,6 +28,7 @@ void MetropolisParallelTempering::run()
         // this looks like a leak, but unique pointer saves the day
         files.emplace_back(new std::ofstream(o.data_path_vector[i], std::ofstream::out));
         header(*files[i]);
+        *files[i] << "# attempt N-1 = " << numTemperatures-1 << " swap attemps all " << estimated_corr << " sweeps\n";
     }
 
     // create all walkers, with corresponding temperatures
