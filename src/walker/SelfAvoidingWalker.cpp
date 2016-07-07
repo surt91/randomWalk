@@ -339,7 +339,7 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
         }
         pivot(idx, symmetry, update);
     }
-    else if(decision > 0.5) // 30%
+    else if(false)// if(decision > 0.5) // 30%
     {
         undo_index = -2;
         bool direction = rng() > 0.5;
