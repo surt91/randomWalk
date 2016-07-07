@@ -8,7 +8,7 @@ MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o)
 void MetropolisParallelTempering::run()
 {
     // every how many sweeps per swap trial
-    const auto estimated_corr = 50;
+    const auto estimated_corr = std::max(o.steps / o.sweep, 1);
 
     const int numTemperatures = o.parallelTemperatures.size();
 
