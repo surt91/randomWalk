@@ -97,6 +97,10 @@ class Simulation():
         if not os.path.exists("HERO"):
             os.makedirs("HERO")
 
+        # on Hero None means single threaded
+        if self.parallel is None:
+            self.parallel = 1
+
         # in MB
         def getMem(N):
             if N < 1000:
@@ -104,20 +108,10 @@ class Simulation():
             else:
                 m = 300
 
-            if self.parallel is None:
-                p = 1
-            else:
-                p = self.parallel
-
-            return m*p
+            return m*self.parallel
 
         # time per sweep
         def getSec(N):
-            if self.parallel is None:
-                p = 1
-            else:
-                p = self.parallel
-
             if self.sampling == 1 or self.sampling == 4:
                 t = 0 # time for 1000 sweeps
                 max_t_corr = 1
@@ -156,7 +150,7 @@ class Simulation():
                 else:
                     t = 86000*3  # say, 3 days
 
-                return t/p * 3 # factor 3 to be sure
+                return t/self.parallel * 3 # factor 3 to be sure
 
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
