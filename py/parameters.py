@@ -9,38 +9,52 @@ sizes = (32, 64, 128, 256, 512, 1024, 2048)
 sweep = {n: n**0.5 for n in sizes}
 
 # thetas for the system sizes, missing sizes will get the 0 entry
-thetas = { 32: (1, 10, float("inf"), -10, -5, -4, -3, -2, -1),
-           64: (1, 3,  10, float("inf"), -20, -13, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1),
-         }
+# dict{size: list[theta]}
+thetas = {
+      32: (1, 10, float("inf"), -10, -5, -4, -3, -2, -1),
+      64: (1, 3,  10, float("inf"), -20, -13, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1),
+    1024: (1, 3,  10, float("inf"), -20, -13, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1),
+}
 
+# dict{size: dict{theta: t_eq}}
 t_eq = {
-       }
+     512: {-50: 8e4},
+    1024: {T: 10000 for T in thetas[1024]}
+}
 
+# dict{size: dict{theta: t_corr}}
 t_corr = {
-         }
+      64: {-10: 2.0, -15: 1.7},
+     128: {-20: 4.5, 5: 2.3, -50: 1.7, -15:3.8, -30: 1.9, -5: 3, -10: 3.6},
+     256: {10: 2.1, -200: 1.7, -30: 6.2, -10: 2.7, -450: 1.3, -400: 2.1, -370: 2.5, -50: 4.4},
+     512: {-1500: 2.2, -1700: 2.2, -1600: 4.4, -1800: 1.4, -400: 10.4, -300: 8.4},
+    1024: {-6500: 5.3, -6300: 15.9, -6400: 15.9, -6350: 15.9, -6000: 1.9, -1600: 11.7, -1500: 5.9},
+}
 
 # target for rate function: Phi_target -> max_energy = Phi_target*N**d
-energies = {     32: np.linspace(   10,     10000,  6),
-                 64: np.linspace(   20,     80000, 12),
-                128: np.linspace(  800,   1000000, 24),
-                256: np.linspace( 5000,  12000000, 48),
-                384: np.linspace( 9000,  62000000, 48),
-                512: list(np.linspace(   12000,    100000, 10, endpoint=False))
-                   + list(np.linspace(  100000,    160000, 10, endpoint=False))
-                   + list(np.linspace(  160000,   1600000, 10, endpoint=False))
-                   + list(np.linspace( 1600000,  16000000, 10, endpoint=False))
-                   + list(np.linspace(16000000, 132000000, 40)),
-               1024: list(np.linspace(   24000,    400000, 10, endpoint=False))
-                   + list(np.linspace(  400000,    600000, 10, endpoint=False))
-                   + list(np.linspace(  600000,   6000000, 10, endpoint=False))
-                   + list(np.linspace( 6000000,  60000000, 10, endpoint=False))
-                   + list(np.linspace(60000000, 932000000, 40)),
-               2048: list(np.linspace(    48000,    1800000, 10, endpoint=False))
-                   + list(np.linspace(  1800000,    2800000, 10, endpoint=False))
-                   + list(np.linspace(  2800000,   28000000, 10, endpoint=False))
-                   + list(np.linspace( 28000000,  280000000, 10, endpoint=False))
-                   + list(np.linspace(280000000, 5932000000, 40)),
-           }
+# dict{size: list[energy_borders]}
+energies = {
+      32: np.linspace(   10,     10000,  6),
+      64: np.linspace(   20,     80000, 12),
+     128: np.linspace(  800,   1000000, 24),
+     256: np.linspace( 5000,  12000000, 48),
+     384: np.linspace( 9000,  62000000, 48),
+     512: list(np.linspace(   12000,    100000, 10, endpoint=False))
+        + list(np.linspace(  100000,    160000, 10, endpoint=False))
+        + list(np.linspace(  160000,   1600000, 10, endpoint=False))
+        + list(np.linspace( 1600000,  16000000, 10, endpoint=False))
+        + list(np.linspace(16000000, 132000000, 40)),
+    1024: list(np.linspace(   24000,    400000, 10, endpoint=False))
+        + list(np.linspace(  400000,    600000, 10, endpoint=False))
+        + list(np.linspace(  600000,   6000000, 10, endpoint=False))
+        + list(np.linspace( 6000000,  60000000, 10, endpoint=False))
+        + list(np.linspace(60000000, 932000000, 40)),
+    2048: list(np.linspace(    48000,    1800000, 10, endpoint=False))
+        + list(np.linspace(  1800000,    2800000, 10, endpoint=False))
+        + list(np.linspace(  2800000,   28000000, 10, endpoint=False))
+        + list(np.linspace( 28000000,  280000000, 10, endpoint=False))
+        + list(np.linspace(280000000, 5932000000, 40)),
+}
 
 parameters = {
     # what type
@@ -50,13 +64,13 @@ parameters = {
     # 4 random direction
     # 5 Gaussian walk
     # 6 Levy flight
-    "typ": 2,
+    "typ": 5,
     # random seed for Monte Carlo
     "seedMC": 1337,
     # random seed for initial configuration
     "seedR": 42,
     # how many iterations (i.e. sweeps) per theta and N
-    "iterations": 10**4,
+    "iterations": 4,
     # dimension
     "dimension": 2,
 
@@ -106,7 +120,7 @@ parameters = {
 
     # akl heuristic
     # only available in d=2, yet
-    "akl": False,
+    "akl": True,
     # which smapling methd
     # 1: Metropolis
     # 2: Wang Landau
