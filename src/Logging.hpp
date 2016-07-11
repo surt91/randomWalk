@@ -83,6 +83,8 @@ class Logger {
         log_level_t level;
         std::stringstream ss;
 
+        std::string label;
+
         std::string file;
         int line;
         std::string function;
