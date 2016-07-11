@@ -1,8 +1,5 @@
 #include "Cmd.hpp"
 
-/// static verbosity level
-int Logger::verbosity = 0;
-
 /** Constructs the command line parser, given argc and argv.
  */
 Cmd::Cmd(int argc, char** argv)
@@ -43,6 +40,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
         TCLAP::ValueArg<std::string> povArg("p", "pov", "povray filename, will be a xyz projection", false, "", "string");
         TCLAP::ValueArg<std::string> gpArg("g", "gnuplot", "gnuplot filename, will be a xyz projection", false, "", "string");
+        TCLAP::ValueArg<std::string> logfileArg("L", "logfile", "log to file", false, "", "string");
         TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level:\n"
                                                         "\tquiet  : 0\n"
                                                         "\talways : 1\n"
@@ -107,7 +105,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::SwitchArg onlyBoundsSwitch("", "onlyBounds", "just output minimum and maximum of the wanted observable and exit", false);
         TCLAP::SwitchArg onlyCentersSwitch("", "onlyCenters", "just output the centers of the WL bins and exit", false);
         TCLAP::SwitchArg benchmarkSwitch("b", "benchmark", "perform benchmark", false);
-        TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode (equal to -v 0)", false);
+        TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode, log only to file (if specified) and not to stdout", false);
 
         // Add to the parser
         cmd.add(numArg);
@@ -147,6 +145,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(benchmarkSwitch);
 
         cmd.add(quietSwitch);
+        cmd.add(logfileArg);
         cmd.add(verboseArg);
 
         // Parse the argv array.
@@ -177,15 +176,21 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         // Get the value parsed by each arg.
-        if(quietSwitch.getValue())
+        Logger::quiet = quietSwitch.getValue();
+        Logger::verbosity = verboseArg.getValue();
+        Logger::logfilename = logfileArg.getValue();
+
+        // do not log, if there is no way to output
+        if(Logger::quiet && Logger::logfilename.empty())
             Logger::verbosity = 0;
-        else
-            Logger::verbosity = verboseArg.getValue();
+
         LOG(LOG_INFO) << text;
         LOG(LOG_INFO) << "Verbosity                  " << Logger::verbosity;
 
         LOG(LOG_INFO) << "Version: " << VERSION;
         LOG(LOG_INFO) << "Compiled: " << __DATE__ << " " << __TIME__;
+
+        LOG(LOG_INFO) << "Logging to " << Logger::logfilename;
 
         type = (walk_type_t) typeArg.getValue();
         LOG(LOG_INFO) << "Type                       " << TYPE_LABEL[type];

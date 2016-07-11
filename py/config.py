@@ -318,11 +318,13 @@ class SimulationInstance():
 
         if sampling == 4:
             self.filename = []
+            self.logname = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D) + ".log"
             for bn in self.basename:
                 self.filename.append("{}/{}.dat".format(self.rawData, bn))
                 if self.rawConf:
                     self.confname = "{}/{}.dat".format(self.rawConf, bn)
         else:
+            self.logname = "{}.log".format(self.basename)
             self.filename = "{}/{}.dat".format(self.rawData, self.basename)
             if self.rawConf:
                 self.confname = "{}/{}.dat".format(self.rawConf, self.basename)
@@ -335,7 +337,7 @@ class SimulationInstance():
 
     def get_WL_centers(self):
         if self.m == 2 or self.m == 3:
-            cmd = self.get_cmd()
+            cmd = self.get_cmd(logging=False)
             cmd += ["--onlyCenters"]
             out = subprocess.run(cmd, stdout=subprocess.PIPE, universal_newlines=True)
             # one line per range
@@ -349,7 +351,7 @@ class SimulationInstance():
 
         return centers
 
-    def get_cmd(self):
+    def get_cmd(self, logging=True):
         try:
             it = int(self.n * self.t_corr[self.N][self.T])
         except KeyError:
@@ -373,6 +375,9 @@ class SimulationInstance():
                 opts.append("-o {}".format(f))
         else:
             opts.append("-o {}".format(self.filename))
+
+        if logging:
+            opts.append("-L {}".format(self.logname))
 
         if self.number_of_walkers:
             opts.append("-M {}".format(self.number_of_walkers))

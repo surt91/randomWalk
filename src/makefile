@@ -12,6 +12,7 @@ CXXFLAGS += -fopenmp
 
 CPP	 := main.cpp \
         Cmd.cpp \
+        Logging.cpp \
         RNG.cpp \
         io.cpp \
         stat.cpp \

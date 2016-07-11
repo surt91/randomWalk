@@ -7,6 +7,7 @@
 
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <vector>
 
@@ -66,35 +67,13 @@ static const std::vector<std::string> CLABEL = {
  */
 class Logger {
     public:
-        Logger(log_level_t level, std::string file="", int line=0, std::string function="")
-            : level(level),
-              ss(),
-              file(file),
-              line(line),
-              function(function)
-        {
-            ss.precision(12);
-        }
+        Logger(log_level_t level, std::string file="", int line=0, std::string function="");
 
-        ~Logger()
-        {
-            if(level <= verbosity)
-            {
-                #ifdef __unix__
-                if(isatty(fileno(stdout))) // Terminal, use colors
-                    std::cout << CLABEL[level];
-                else
-                #endif
-                    std::cout << LABEL[level];
+        ~Logger();
 
-                if(level <= LOG_WARNING)
-                    ss << " (" << file << ":" << line << " [" << function << "()]) ";
-
-                std::cout << ss.str() << std::endl;
-            }
-        }
-
+        static bool quiet;
         static int verbosity;
+        static std::string logfilename;
 
         template<class T>
         friend std::ostream& operator<<(Logger &&l, const T &obj);
