@@ -60,7 +60,7 @@ def testIfAborted(filename):
     return False
 
 
-def getDataFromFile(filename, col, T="?"):
+def getDataFromFile(filename, col, T="?", t_eq=None):
     """Read timeseries data from a file, and return a subset of that
     data purged from correlation.
     """
@@ -72,10 +72,17 @@ def getDataFromFile(filename, col, T="?"):
         except FileNotFoundError:
             logging.error("cannot find " + filename)
             return
+    mc_time = a.transpose()[0]
     data = a.transpose()[col]
+
+    # adjust for equilibration time, if explicitly given
+    if t_eq:
+        data = data[mc_time > 2*t_eq]
+
     t_corr = getAutocorrTime(data, T=T)
     # do only keep statistically independent samples to not underestimate the error
     data = data[::ceil(2*t_corr)]
+
     logging.info("{} independent samples".format(len(data)))
     return data
 
@@ -341,6 +348,7 @@ def run(histogram_type=1):
     d = param.parameters["rawData"]
     out = param.parameters["directory"]
     sampling = param.parameters["sampling"]
+    t_eq = param.parameters["t_eq"]
 
     outfiles = []
 
@@ -356,6 +364,18 @@ def run(histogram_type=1):
             theta_for_N = thetas[N]
         except KeyError:
             theta_for_N = thetas[0]
+
+        # fill the undefined entries with None
+        try:
+            t_eq[N]
+        except KeyError:
+            t_eq[N] = {T: None for T in theta_for_N}
+        else:
+            for T in theta_for_N:
+                try:
+                    t_eq[N][T]
+                except KeyError:
+                    t_eq[N][T] = None
 
         # find names of needed files
         nameDict = {}
@@ -384,8 +404,9 @@ def run(histogram_type=1):
 
         getMinMaxTime("{}/{}.dat".format(d, n) for n in nameDict.values())
 
+        # read all the files -- in parallel (also adjust for autocorrelation)
         with Pool() as p:
-            tmp = p.starmap(getDataFromFile, [("{}/{}.dat".format(d, nameDict[T]), column, T) for T in theta_for_N])
+            tmp = p.starmap(getDataFromFile, [("{}/{}.dat".format(d, nameDict[T]), column, T, t_eq[N][T]) for T in theta_for_N])
 
         # load data
         dataDict = {theta_for_N[i]: tmp[i] for i in range(len(tmp))}
