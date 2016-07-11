@@ -19,4 +19,4 @@ mkdir -p rawConf
 mkdir -p rawData
 
 #$ -t 1-{{ count }}:1
-$(sed -n ${SGE_TASK_ID}'p' {{ name }}.lst){% if parallel %} --parallel {{ parallel }}{% endif %} --tmp $TMPDIR
+$(sed -n ${SGE_TASK_ID}'p' {{ name }}.lst) --tmp $TMPDIR

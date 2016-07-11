@@ -54,9 +54,8 @@ class Simulation():
         self.sampling = kwargs["sampling"]
         self.parallel = kwargs["parallel"]
         if self.parallel is None:
-            p = 1
-        else:
-            p = self.parallel
+            self.parallel = 1
+        p = self.parallel
         energies = kwargs["energies"]
         self.kwargs = kwargs
         if self.parallel and (self.sampling != 2 and self.sampling != 3 and self.sampling != 4):
@@ -179,7 +178,8 @@ class Simulation():
     def __call__(self):
         logging.info("Executing {} jobs".format(len(self.instances)))
 
-        if self.parallel and self.parallel > 1:
+        # 0 means: use all cores
+        if self.parallel > 1 or self.parallel == 0:
             # program is multithreaded, start only one
             for i in self.instances:
                 run_instance(i)
@@ -366,7 +366,6 @@ class SimulationInstance():
                 "-d {:d}".format(self.D),
                 "-t {}".format(self.t),
                 "-w {}".format(self.w),
-
                 "-m {}".format(self.m),
                ]
 
@@ -384,6 +383,9 @@ class SimulationInstance():
 
         if self.quiet:
             opts.append("-q")
+
+        if self.parallel:
+            opts.append("-P {}").format(self.parallel)
 
         if self.rawConf:
             opts.append("-O {0}".format(self.confname))
