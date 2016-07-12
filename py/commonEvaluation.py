@@ -11,7 +11,11 @@ import parameters as param
 def getMinMaxTimeHelper(filename):
     time, mem, version = 0, 0, ""
     with gzip.open(filename+".gz", "rt") as f:
-        for i in f.readlines():
+        for i in f:
+            # first ask, if this is a comment -> abort fast
+            if i and i[0] != "#":
+                continue
+
             if "# Does not equilibrate" in i:
                 break
 

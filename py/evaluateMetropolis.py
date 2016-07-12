@@ -32,7 +32,6 @@ def getAutocorrTime(data, T="?"):
     returns autocorrelation time
     """
     # just take the first 5000, should be sufficient
-    data = data[:5000]
     autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
     x0 = autocorr[0]
 
@@ -64,24 +63,52 @@ def getDataFromFile(filename, col, T="?", t_eq=None):
     """Read timeseries data from a file, and return a subset of that
     data purged from correlation.
     """
-    try:
-        a = np.loadtxt(filename+".gz")
-    except FileNotFoundError:
+    # read first few lines to determine the autocorrelation
+    t_corr = float("inf")
+    num = 10**2
+    # repeat until autocorrelation time is far smaller than samples used
+    # to determine it
+    while t_corr > num/5:
+        num *= 10
+        mc_time = [0] * num
+        S = [0] * num
+
+        comment = 0
+        start = 0
+        end = num
+        if t_eq:
+            start += 2*t_eq
+            end += 2*t_eq
+
         try:
-            a = np.loadtxt(filename)
+            with gzip.open(filename+".gz", "rt") as f:
+                for n, line in enumerate(f):
+                    if "#" in line:
+                        comment += 1
+                        continue
+                    if n-comment >= end:
+                        break
+                    data = tuple(map(float, line.split()))
+                    #~ print(n, comment, end, num, n-comment, len(mc_time), len(S), col, data)
+                    mc_time[n-comment] = data[0]
+                    S[n-comment] = data[col]
         except FileNotFoundError:
             logging.error("cannot find " + filename)
             return
-    mc_time = a.transpose()[0]
-    data = a.transpose()[col]
 
-    # adjust for equilibration time, if explicitly given
-    if t_eq:
-        data = data[mc_time > 2*t_eq]
+        t_corr = getAutocorrTime(S, T=T)
 
-    t_corr = getAutocorrTime(data, T=T)
     # do only keep statistically independent samples to not underestimate the error
-    data = data[::ceil(2*t_corr)]
+    data = []
+    with gzip.open(filename+".gz", "rt") as f:
+        next_to_read = start
+        for n, line in enumerate(f):
+            if "#" in line:
+                comment += 1
+                continue
+            if n-comment == next_to_read:
+                next_to_read += ceil(2*t_corr)
+                data.append(tuple(map(float, line.split()))[col])
 
     logging.info("{} independent samples".format(len(data)))
     return data
@@ -308,13 +335,14 @@ def eval_simplesampling(name, outdir, N=0):
         with open("{}/simple.dat".format(outdir), "w") as f:
             f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... \n")
     else:
-        a = np.loadtxt("rawData/" + name + ".dat.gz")
-        a = a.transpose()
-        r = a[3]
-        r2 = a[4]
-        maxDiameter = a[5]
-        maxX = a[6]
-        maxY = a[7]
+        name = "rawData/" + name + ".dat"
+        # call getDataFromFile to purge it from correlated samples (by autocorrelationtime)
+        # also, this saves RAM
+        r = getDataFromFile(name, 3, float("inf"))
+        r2 = getDataFromFile(name, 4, float("inf"))
+        maxDiameter = getDataFromFile(name, 5, float("inf"))
+        maxX = getDataFromFile(name, 6, float("inf"))
+        maxY = getDataFromFile(name, 7, float("inf"))
 
         with open("{}/simple.dat".format(outdir), "a") as f:
             s = "{} ".format(N)
