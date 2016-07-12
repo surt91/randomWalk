@@ -9,7 +9,7 @@
 
 #$ -j y
 
-{% if parallel %}
+{% if parallel and parallel > 1 %}
 #$ -pe smp {{ parallel }}
 #$ -R y
 {% endif %}
