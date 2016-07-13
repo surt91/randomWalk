@@ -25,13 +25,11 @@ proposedTheta = []
 
 def getAutocorrTime(data, T="?"):
     """Calculates the autocorrelation time of a time series.
-    Takes only the first 5000 datapoints to speed it up.
 
     :param:data: timeseries
 
     returns autocorrelation time
     """
-    # just take the first 5000, should be sufficient
     autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
     x0 = autocorr[0]
 
