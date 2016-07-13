@@ -338,26 +338,36 @@ def eval_simplesampling(name, outdir, N=0):
         name = "rawData/" + name + ".dat"
         # call getDataFromFile to purge it from correlated samples (by autocorrelationtime)
         # also, this saves RAM
-        r = getDataFromFile(name, 3, float("inf"))
-        r2 = getDataFromFile(name, 4, float("inf"))
-        maxDiameter = getDataFromFile(name, 5, float("inf"))
-        maxX = getDataFromFile(name, 6, float("inf"))
-        maxY = getDataFromFile(name, 7, float("inf"))
+
+        s = "{} ".format(N)
+
+        # r
+        data = getDataFromFile(name, 3, float("inf"))
+        s += "{} {} ".format(*bootstrap(data))
+        s += "{} {} ".format(*bootstrap(data, f=np.var))
+
+        # r2
+        data = getDataFromFile(name, 4, float("inf"))
+        s += "{} {} ".format(*bootstrap(data))
+        s += "{} {} ".format(*bootstrap(data, f=np.var))
+
+        # maxDiameter
+        data = getDataFromFile(name, 5, float("inf"))
+        s += "{} {} ".format(*bootstrap(data))
+        s += "{} {} ".format(*bootstrap(data, f=np.var))
+
+        # maxX
+        data = getDataFromFile(name, 6, float("inf"))
+        s += "{} {} ".format(*bootstrap(data))
+        s += "{} {} ".format(*bootstrap(data, f=np.var))
+
+        # maxY
+        data = getDataFromFile(name, 7, float("inf"))
+        s += "{} {} ".format(*bootstrap(data))
+        s += "{} {} ".format(*bootstrap(data, f=np.var))
+        s += "\n"
 
         with open("{}/simple.dat".format(outdir), "a") as f:
-            s = "{} ".format(N)
-            s += "{} {} ".format(*bootstrap(r))
-            s += "{} {} ".format(*bootstrap(r, f=np.var))
-            s += "{} {} ".format(*bootstrap(r2))
-            s += "{} {} ".format(*bootstrap(r2, f=np.var))
-            s += "{} {} ".format(*bootstrap(maxDiameter))
-            s += "{} {} ".format(*bootstrap(maxDiameter, f=np.var))
-            s += "{} {} ".format(*bootstrap(maxX))
-            s += "{} {} ".format(*bootstrap(maxX, f=np.var))
-            s += "{} {} ".format(*bootstrap(maxY))
-            s += "{} {} ".format(*bootstrap(maxY, f=np.var))
-            s += "\n"
-
             f.write(s)
 
 
@@ -465,14 +475,17 @@ def run(histogram_type=1):
 
         with Pool() as p:
             list_of_ps_log = p.starmap(getDistribution,
-                                        [   (dataDict[T],
-                                            "{}/dist_{}.dat".format(out, nameDict[T]),
-                                            "{}/hist_{}.dat".format(out, nameDict[T]),
-                                            param.parameters["observable"],
-                                            T,
-                                            N,
-                                            bins)
-                                        for T in theta_for_N
+                                        [
+                                            (
+                                                dataDict[T],
+                                                "{}/dist_{}.dat".format(out, nameDict[T]),
+                                                "{}/hist_{}.dat".format(out, nameDict[T]),
+                                                param.parameters["observable"],
+                                                T,
+                                                N,
+                                                bins
+                                            )
+                                            for T in theta_for_N
                                         ]
                                       )
 
