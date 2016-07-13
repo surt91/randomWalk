@@ -434,6 +434,7 @@ def run(histogram_type=1):
         else:
             logging.error("unkown sampling method")
 
+        # evaluate things from simple sampling (mainly for literature comparison)
         if float("inf") in theta_for_N:
             eval_simplesampling(nameDict[float("inf")], out, N)
 
@@ -446,7 +447,14 @@ def run(histogram_type=1):
                 logging.info("not equilibrated: N={}, theta={}".format(N, T))
         theta_for_N = not_aborted
 
-        getMinMaxTime("{}/{}.dat".format(d, n) for n in nameDict.values())
+        # get some stats of the simulation and save it
+        stats = getMinMaxTime("{}/{}.dat".format(d, n) for n in nameDict.values())
+
+        with open("{}/stats_N{}.dat".format(out, N), "w") as f:
+            f.write("# theta time/sweep vmem MC_tries MC_rejects\n")
+            for theta, times, mems, versions, tries, reject in sorted(zip(*stats)):
+                f.write("{} {} {} {} {}\n".format(theta, times, mems, tries, reject))
+
 
         # read all the files -- in parallel (also adjust for autocorrelation)
         with Pool() as p:

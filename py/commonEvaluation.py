@@ -9,34 +9,47 @@ import parameters as param
 
 
 def getMinMaxTimeHelper(filename):
+    theta = float("inf")
     time, mem, version = 0, 0, ""
+    pt_acc = float("nan")
+    reject = float("nan")
+    tries = float("nan")
     with gzip.open(filename+".gz", "rt") as f:
         for i in f:
             # first ask, if this is a comment -> abort fast
             if i and i[0] != "#":
                 continue
 
-            if "# Does not equilibrate" in i:
+            elif "# Does not equilibrate" in i:
                 break
 
-            if "# Version" in i:
+            elif "theta=" in i:
+                theta = float(i.split("=")[1].split(" ")[0].strip())
+            elif "# Version" in i:
                 s = i.split(":")[-1].strip()
                 version = [s]
-            if "# Compiled" in i:
+            elif "# Compiled" in i:
                 s = i.split(":")[1:]
                 version.append(":".join(s).strip())
-            if "# Started" in i:
+            elif "# Started" in i:
                 s = i.split(":")[1:]
                 s = ":".join(s).strip()
                 # ?
-            if "# time in seconds" in i or "# time/sweep in seconds" in i:
+            elif "# time in seconds" in i or "# time/sweep in seconds" in i:
                 s = i.split(":")[-1].strip().strip("s")
                 time = float(s)
-            if "# max vmem: VmPeak" in i:
+            elif "# max vmem: VmPeak" in i:
                 s = i.split(":")[-1].strip().strip(" kB")
                 mem = float(s)
 
-    return time, mem, version
+            elif "# proposed changes" in i:
+                s = i.split(":")[-1].strip()
+                accept = float(s)
+            elif "# rejected changes" in i:
+                s = i.split(":")[-1].strip().split(" ")[0].strip()
+                reject = float(s)
+
+    return theta, time, mem, version, tries, reject
 
 def getMinMaxTime(filenames):
     """Reads files given in first argument and collects metadata from
@@ -48,7 +61,7 @@ def getMinMaxTime(filenames):
     Date of compilation
     """
     with Pool() as p:
-        times, mems, versions = zip(*p.map(getMinMaxTimeHelper, [f for f in filenames]))
+        theta, times, mems, versions, tries, reject = zip(*p.map(getMinMaxTimeHelper, [f for f in filenames]))
 
     try:
         logging.info("time/sweep between {:.2f}s - {:.2f}s".format(min(times), max(times)+0.0051))
@@ -62,6 +75,8 @@ def getMinMaxTime(filenames):
         logging.info("used versions: {}".format(", ".join(set(str(i) for i in versions))))
     except ValueError:
         logging.info("No version information")
+
+    return theta, times, mems, versions, tries, reject
 
 
 def factorial(d):
