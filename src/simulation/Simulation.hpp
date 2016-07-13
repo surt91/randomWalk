@@ -4,6 +4,7 @@
 #include <ctime>
 #include <functional>
 #include <climits>
+#include <cstdint>
 
 // test, if we are using openmp
 #ifdef _OPENMP
@@ -51,8 +52,8 @@ class Simulation
 
     protected:
         Cmd o;
-        int fails;
-        int tries;
+        uint64_t fails;
+        uint64_t tries;
         std::function<double(std::unique_ptr<Walker>&)> S;
         std::ofstream oss;
         bool muted;
