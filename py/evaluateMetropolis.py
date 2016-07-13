@@ -108,7 +108,12 @@ def getDataFromFile(filename, col, T="?", t_eq=None):
                 continue
             if n-comment == next_to_read:
                 next_to_read += ceil(2*t_corr)
-                data.append(tuple(map(float, line.split()))[col])
+                try:
+                    d = tuple(map(float, line.split()))[col]
+                except:
+                    logging.error("can somehow not read col {} at line {}: ('{}')".format(col, n, line)),
+                    d = float("nan")
+                data.append(d)
 
     logging.info("{} independent samples".format(len(data)))
     return data
