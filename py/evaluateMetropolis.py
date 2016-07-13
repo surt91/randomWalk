@@ -86,7 +86,7 @@ def getDataFromFile(filename, col, T="?", t_eq=None):
                     if "#" in line:
                         comment += 1
                         continue
-                    if n-comment >= end:
+                    if n-comment >= num:
                         break
                     data = tuple(map(float, line.split()))
                     #~ print(n, comment, end, num, n-comment, len(mc_time), len(S), col, data)
