@@ -103,7 +103,8 @@ def getDataFromFile(filename, col, T="?", t_eq=None):
     with gzip.open(filename+".gz", "rt") as f:
         next_to_read = start
         for n, line in enumerate(f):
-            if "#" in line:
+            # ignore empty lines and comment lines
+            if "#" in line or not line:
                 comment += 1
                 continue
             if n-comment == next_to_read:
