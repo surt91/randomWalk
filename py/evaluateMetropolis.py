@@ -22,6 +22,22 @@ logging.info("started")
 
 proposedTheta = []
 
+# http://stackoverflow.com/a/16045141/1698412
+def autocorrelation(x):
+    """
+    Compute autocorrelation using FFT
+    The idea comes from
+    http://dsp.stackexchange.com/a/1923/4363 (Hilmar)
+    """
+    x = np.asarray(x)
+    N = len(x)
+    x = x-x.mean()
+    s = np.fft.fft(x, N*2-1)
+    result = np.real(np.fft.ifft(s * np.conjugate(s), N*2-1))
+    result = result[:N]
+    result /= result[0]
+    return result
+
 
 def getAutocorrTime(data, T="?"):
     """Calculates the autocorrelation time of a time series.
@@ -30,7 +46,8 @@ def getAutocorrTime(data, T="?"):
 
     returns autocorrelation time
     """
-    autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
+    #~ autocorr = np.correlate(data-np.mean(data), data-np.mean(data), mode='full')[len(data)-1:]
+    autocorr = autocorrelation(data)
     x0 = autocorr[0]
 
     # integrate only up to the first negative values
