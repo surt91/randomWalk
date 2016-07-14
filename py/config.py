@@ -385,7 +385,7 @@ class SimulationInstance():
             opts.append("-q")
 
         if self.parallel:
-            opts.append("-P {}").format(self.parallel)
+            opts.append("-P {}".format(self.parallel))
 
         if self.rawConf:
             opts.append("-O {0}".format(self.confname))
