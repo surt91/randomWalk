@@ -51,7 +51,7 @@ def getMinMaxTimeHelper(filename):
 
     return theta, time, mem, version, tries, reject
 
-def getMinMaxTime(filenames):
+def getMinMaxTime(filenames, parallelness=1):
     """Reads files given in first argument and collects metadata from
     them.
 
@@ -60,7 +60,7 @@ def getMinMaxTime(filenames):
     git revison
     Date of compilation
     """
-    with Pool() as p:
+    with Pool(parallelness) as p:
         theta, times, mems, versions, tries, reject = zip(*p.map(getMinMaxTimeHelper, [f for f in filenames]))
 
     try:

@@ -1,5 +1,6 @@
 import sys
 import logging
+import multiprocessing
 
 import parameters as param
 
@@ -8,6 +9,20 @@ import evaluateWangLandau
 import commonEvaluation
 
 if __name__ == "__main__":
+    try:
+        parallelness = multiprocessing.cpu_count()
+    except NotImplementedError:
+        parallelness = 1
+
+    for n, i in enumerate(sys.argv):
+        if i == "-p":
+            if len(i > 2):
+                parallelness = i[2:]
+            else:
+                parallelness = sys.argv(n+1)
+
+    logging.info("Using {}-way parallelism".format(parallelness))
+
     if not "--fast" in sys.argv:
         sampling = param.parameters["sampling"]
         if sampling == 1 or sampling == 4:
@@ -24,10 +39,10 @@ if __name__ == "__main__":
                 logging.info("Default: Using log-spaced histogram")
                 ht = 2
 
-            evaluateMetropolis.run(ht)
+            evaluateMetropolis.run(ht, parallelness=parallelness)
 
         elif sampling == 2 or sampling == 3:
-            evaluateWangLandau.run()
+            evaluateWangLandau.run(parallelness=parallelness)
 
         else:
             logging.error("unknown sampling method")

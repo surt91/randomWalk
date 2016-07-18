@@ -392,7 +392,7 @@ def eval_simplesampling(name, outdir, N=0):
             f.write(s)
 
 
-def run(histogram_type=1):
+def run(histogram_type=1, parallelness):
     """Reads rawData files from a finished simulation, specified
     by 'parameters.py' in the same folder and evaluates it.
 
@@ -463,7 +463,7 @@ def run(histogram_type=1):
         theta_for_N = not_aborted
 
         # get some stats of the simulation and save it
-        stats = getMinMaxTime("{}/{}.dat".format(d, n) for n in nameDict.values())
+        stats = getMinMaxTime("{}/{}.dat".format(d, n) for n in nameDict.values(), parallelness)
 
         with open("{}/stats_N{}.dat".format(out, N), "w") as f:
             f.write("# theta time/sweep vmem MC_tries MC_rejects\n")
@@ -472,7 +472,7 @@ def run(histogram_type=1):
 
 
         # read all the files -- in parallel (also adjust for autocorrelation)
-        with Pool() as p:
+        with Pool(parallelness) as p:
             tmp = p.starmap(getDataFromFile, [("{}/{}.dat".format(d, nameDict[T]), column, T, t_eq[N][T]) for T in theta_for_N])
 
         # load data
@@ -502,7 +502,7 @@ def run(histogram_type=1):
         else:
             raise
 
-        with Pool() as p:
+        with Pool(parallelness) as p:
             list_of_ps_log = p.starmap(getDistribution,
                                         [
                                             (
@@ -529,7 +529,7 @@ def run(histogram_type=1):
             zc.append(zc[-1] + i[0])
             zce.append(zce[-1] + i[1])
 
-        with Pool() as p:
+        with Pool(parallelness) as p:
             data = p.starmap(stichFile,
                                [("{}/dist_{}.dat".format(out, nameDict[T]),
                                  "{}/stiched_{}.dat".format(out, nameDict[T]),
