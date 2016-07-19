@@ -140,7 +140,7 @@ def stichInterpol(centers, data, stderr):
             stderr[i+1][j] += summed_err
 
 
-def run(parallelness=parallelness):
+def run(parallelness=1):
     """Reads rawData files from a finished simulation, specified
     by 'parameters.py' in the same folder and evaluates it.
     """
@@ -162,7 +162,7 @@ def run(parallelness=parallelness):
         names = ["{}/{}.dat".format(d, SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), first=not i, last=(i==num-1), **param.parameters).basename) for i in range(num)]
 
         logging.info("N = {}".format(N))
-        getMinMaxTime(f for f in names, parallelness)
+        getMinMaxTime((f for f in names), parallelness)
 
         data = process_data(names,
                             outbase

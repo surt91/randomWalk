@@ -392,7 +392,7 @@ def eval_simplesampling(name, outdir, N=0):
             f.write(s)
 
 
-def run(histogram_type=1, parallelness):
+def run(histogram_type=1, parallelness=1):
     """Reads rawData files from a finished simulation, specified
     by 'parameters.py' in the same folder and evaluates it.
 
@@ -463,7 +463,7 @@ def run(histogram_type=1, parallelness):
         theta_for_N = not_aborted
 
         # get some stats of the simulation and save it
-        stats = getMinMaxTime("{}/{}.dat".format(d, n) for n in nameDict.values(), parallelness)
+        stats = getMinMaxTime(("{}/{}.dat".format(d, n) for n in nameDict.values()), parallelness)
 
         with open("{}/stats_N{}.dat".format(out, N), "w") as f:
             f.write("# theta time/sweep vmem MC_tries MC_rejects\n")
