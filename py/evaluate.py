@@ -1,4 +1,5 @@
 import sys
+import os
 import logging
 import multiprocessing
 
@@ -9,6 +10,7 @@ import evaluateWangLandau
 import commonEvaluation
 
 if __name__ == "__main__":
+    os.makedirs("data", exist_ok=True)
     try:
         parallelness = multiprocessing.cpu_count()
     except NotImplementedError:

@@ -25,6 +25,26 @@ def bootstrap(xRaw, n_resample=100, f=np.mean):
     bootstrapSample = [f(np.random.choice(xRaw, len(xRaw), replace=True)) for i in range(n_resample)]
     return np.mean(bootstrapSample), np.std(bootstrapSample)
 
+
+def bootstrap_dict(xRaw, N, n_resample=100, f=np.histogram, **kwargs):
+    """Bootstrap resampling, reduction function takes a list and returns
+    a list of len N. Returns a list of means and a list of errors.
+
+    :param xRaw:    vector of raw input data
+    :param N:       length of list returned by f
+    :param f:       reduction function, takes a list, returns a list
+    :param kwargs:  keyword arguments for f
+    """
+    if not len(xRaw):
+        return float("NaN"), float("NaN")
+    allCounts = np.zeros((n_resample, N), dtype=np.float)
+    for i in range(n_resample):
+        newDict = {k: np.random.choice(v, len(v), replace=True) for k, v in xRaw.items()}
+        #~ print(N, len(allCounts[i]), kwargs)
+        allCounts[i] = f(newDict, **kwargs)
+    return np.mean(allCounts, 0), np.std(allCounts, 0)
+
+
 def bootstrap_histogram(xRaw, bins, n_resample=100, density=False):
     """Bootstrap resampling, returns mean and stderror"""
     if not len(xRaw):

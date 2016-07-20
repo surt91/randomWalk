@@ -11,7 +11,7 @@ from scipy.interpolate import interp1d
 from scipy.integrate import simps, trapz
 
 import parameters as param
-from config import bootstrap, bootstrap_histogram, histogram_simple_error, SimulationInstance
+from config import bootstrap, bootstrap_dict, SimulationInstance
 from commonEvaluation import getMinMaxTime
 
 
@@ -68,7 +68,7 @@ def testIfAborted(filename):
     """
     with gzip.open(filename+".gz") as f:
         # it will be noted in the first 15 lines, if we aborted
-        for _ in range(15):
+        for _ in range(25):
             if b"# Does not equilibrate" in f.readline():
                 return True
     return False
@@ -173,181 +173,6 @@ def getPercentileBasedBins(dataDict, numBins=100):
     return bins
 
 
-def averageOverSameX(whole_distribution):
-    """Collects datapoints inside the same bins of different temperatures
-    and averages over them. (must happen after stitching the distribution
-    together)
-    """
-    xDict = {}
-    for x, x_err, y, y_err in whole_distribution:
-        if x not in xDict:
-            xDict.update({x: []})
-        xDict[x].append([x_err, y, y_err])
-
-    out = []
-    for x, l in xDict.items():
-        l = list(zip(*l))
-        mean_x_err = np.mean(l[0])
-        mean_y = np.mean(l[1])
-        mean_y_err = np.mean(l[2])
-        out.append([x, mean_x_err, mean_y, mean_y_err])
-
-    return out
-
-def getDistribution(data, outfile, histfile, col, theta, steps, inBins=50):
-    """reads samples from a file, outputs the distribution
-
-    :param:data:        array of the samples (already purged from correlation)
-    :param:outfile:     file to write the rescaled distribution to
-    :param:histfile:    file to write the unrescaled distribution to
-    :param:col:         in which column is the observable to be measured
-    :param:theta:       at which "temperature" was the simulation done
-    :param:steps:       how many steps are the random walks long
-    :param:inBins:      bins to be used for the histogram
-                        can be a number (how many bins)
-                        or an iterable (borders of the bins)
-    """
-    # histograms do not need to be normed, this will happen in the end
-    counts, bins = np.histogram(data, inBins)
-    centers = (bins[1:] + bins[:-1])/2
-    centers_err = [centers[i] - bins[i] for i in range(len(centers))]
-
-    bs_mean, bs_err = bootstrap_histogram(data, bins=bins)
-    #bs_err = histogram_simple_error(counts)
-
-    data_p = []
-    for s, s_err, pts, pts_err in zip(centers, centers_err, bs_mean, bs_err):
-        #~ print(i, exp(i/theta) * j)
-        try:
-            ps_log = s/theta + log(pts)
-            # gaussian erroro propagation
-            ps_log_err = pts_err/pts  + s_err/theta
-            if pts < 10:
-                # ignore bin with too few entries
-                raise ValueError
-                pass
-        except ValueError:
-            pass
-        else:
-            data_p.append((s, s_err, ps_log, ps_log_err))
-
-    logging.info(outfile)
-    with open(outfile, "w") as f:
-        f.write("# S S_err P(S) P(S)_err\n")
-        for d in data_p:
-            f.write("{} {} {} {}\n".format(*d))
-    with open(histfile, "w") as f:
-        f.write("# S S_err P(S) P(S)_err\n")
-        for d in zip(centers, centers_err, bs_mean, bs_err):
-            f.write("{} {} {} {}\n".format(*d))
-
-    if not data_p:
-        data_p.append([np.nan, np.nan, np.nan, np.nan])
-        logging.info("no good data from T={}".format(theta))
-
-    return data_p
-
-
-def getZtheta(list_of_ps_log, thetas, outNames):
-    """Calculate the 'Z' values needed to stitch parts of the distribution
-    together. This is calculated from the overlap of two neighboring
-    temperatures. Warns if there is not enough overlap.
-
-    This version assumes that both temperatures use the same bins. (compare getZthetaInterpol())
-    """
-    # list_of_ps_log is a list in the form [[s1, s1_err, ps_log1, ps_log1_err], [s2, s2_err, ps_log2, ps_log2_err], ..]
-    Ztheta_mean = [(0, 0)]
-    for i in range(len(list_of_ps_log)-1):
-        l1 = list_of_ps_log[i]
-        l2 = list_of_ps_log[i+1]
-
-        x1 = {x for x, _, _, _ in l1}
-        y1 = {x: y for x, _, y, _ in l1}
-        y1_err = {x: y_err for x, _, _, y_err in l1}
-        x2, x2_err, y2, y2_err = zip(*l2)
-
-        # calculate for every s in l2 the difference to l2(s) - l1(s)
-        Z = [y - y1[x] for x, _, y, _ in l2 if x in x1]
-        Z_err = [y_err + y1_err[x] for x, _, _, y_err in l2 if x in x1]
-
-        # save S Z err to a file, to see later if there is a dependence on S (-> not equilibrated)
-        with open(outNames[i], "w") as f:
-            f.write("# s z err\n")
-            for xyee, z, err in zip(l1, Z, Z_err):
-                s = xyee[0]
-                f.write("{} {} {}\n".format(s, z, err))
-
-        # not enough overlap
-        if len(Z) < 5:
-            logging.warning("not enough overlap between {} and {}, insert an intermediate theta".format(thetas[i], thetas[i+1]))
-            proposedTheta.append((thetas[i] + thetas[i+1]) / 2)
-
-        Ztheta_mean.append(bootstrap(Z))
-
-    return Ztheta_mean
-
-
-def getZthetaInterpol(list_of_ps_log, thetas):
-    """Calculate the 'Z' values needed to stitch parts of the distribution
-    together. This is calculated from the overlap of two neighboring
-    temperatures. Warns if there is not enough overlap.
-
-    This version uses spline interpolation to measure 'Z' if the bins
-    of the two temperatures are not the same. (compare getZtheta())
-    """
-    # list_of_ps_log is a list in the form [[s1, s1_err, ps_log1, ps_log1_err], [s2, s2_err, ps_log2, ps_log2_err], ..]
-    Ztheta_mean = [(0, 0)]
-    for i in range(len(list_of_ps_log)-1):
-        l1 = list_of_ps_log[i]
-        l2 = list_of_ps_log[i+1]
-
-        # calculate a cubic spline through l1
-        try:
-            x, x_err, y, y_err = zip(*l1)
-            spline_1 = interp1d(x, y, kind='cubic')
-        except ValueError:
-            logging.error("too few samples")
-            Ztheta_mean.append((0,0))
-            continue
-        except TypeError:
-            logging.error("too few samples")
-            Ztheta_mean.append((0,0))
-            continue
-
-        # calculate for every s in l2 the difference to l2(s) - spline_l1(s)
-        Z = [ps_log - spline_1(s) for s, _, ps_log, _ in l2 if min(x) < s < max(x)]
-
-        # not enough overlap
-        if len(Z) < 5:
-            logging.warning("not enough overlap, insert an intermediate theta, eg. {}".format((thetas[i] + thetas[i+1]) / 2))
-            proposedTheta.append((thetas[i] + thetas[i+1]) / 2)
-
-        Ztheta_mean.append(bootstrap(Z))
-
-    return Ztheta_mean
-
-
-def stichFile(infile, outfile, z, dz):
-    """Applies the 'Z' values to the data to generate a continuous
-    distribution from the single parts.
-    """
-    data = []
-    Dz = 0
-    with open(infile, "r") as fin:
-        with open(outfile, "w") as fout:
-            fout.write("# S S_err P(S) P(S)_err\n")
-            Dz += dz
-            for line in fin.readlines():
-                if line[0] == "#":
-                    continue
-                nums = list(map(float, line.split()))
-                nums[2] -= z
-                nums[3] += Dz
-                data.append(nums)
-                fout.write("{} {} {} {}\n".format(*nums))
-    return data
-
-
 def eval_simplesampling(name, outdir, N=0):
     """Evaluates some fundamental observables from simple sampling
     (i.e. theta = inf)
@@ -390,6 +215,141 @@ def eval_simplesampling(name, outdir, N=0):
 
         with open("{}/simple.dat".format(outdir), "a") as f:
             f.write(s)
+
+
+def getCentersFromBins(bins):
+    """Calculates the centers of the bins.
+
+    :param bins: Borders of bins.
+    """
+    try:
+        iterator = iter(bins)
+    except TypeError:
+        logging.error("bins needs to be an iterable")
+        sys.exit(1)
+
+    centers = (bins[1:] + bins[:-1])/2
+    centers_err = [centers[i] - bins[i] for i in range(len(centers))]
+
+    return centers, centers_err
+
+
+def getZ(l1, l2, T1="?", T2="?"):
+    """Find the value Z to subtract from l2, such that it coincides with
+    l1 (in their overlapping region).
+
+    l1 and l2 are coordinate tuples, i.e., l2 = ((s1, p1), (s2, p2), ...)
+    """
+    # calculate for every s in l2 the difference to l2(s) - l1(s)
+    x1 = {x for x, _ in l1}
+    y1 = {x: y for x, y in l1}
+    Z = [y - y1[x] for x, y in l2 if x in x1]
+
+    #~ if len(Z) < 5:
+        #~ logging.warning("not enough overlap between {} and {}, insert an intermediate theta".format(T1, T2))
+
+    return np.mean(Z)
+
+
+def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False):
+    """Given a dict of samples at different temperatures, return the
+    distribution (combined and stichted).
+
+    This is intendet to be used inside a bootstrap function and therefore
+    does not calculate errors.
+    If write_intermediate_files is true
+
+    :param dataDict: dict{T: [data]} raw data to derive the distribution from
+    :param bins: Number of bins or borders of bins to use in the histogram.
+    :param thetas: sorted list of temperatures
+    :returns: whole distribution
+    """
+
+    ps_log_list = []
+    center_list = []
+    centers, centers_err = getCentersFromBins(bins)
+    Z = []
+    for n, T in enumerate(thetas):
+        data = dataDict[T]
+        counts, bins = np.histogram(data, bins)
+
+        data_p = []
+        tmp_center = []
+        for m, s, pts in zip(range(len(centers)), centers, counts):
+            try:
+                ps_log = s/T + log(pts)
+                if pts < 10:
+                    # ignore bin with too few entries
+                    raise ValueError
+                    pass
+            except ValueError:
+                pass
+            else:
+                data_p.append(ps_log)
+                tmp_center.append(centers[m])
+
+        if not data_p:
+            data_p.append(np.nan)
+            tmp_center.append(np.nan)
+            logging.info("no good data from T={}".format(T))
+
+        ps_log_list.append(np.array(data_p))
+        center_list.append(np.array(tmp_center))
+
+        try:
+            l1 = tuple(zip(center_list[-2], ps_log_list[-2]))
+            l2 = tuple(zip(center_list[-1], ps_log_list[-1]))
+        except IndexError:
+            # in the first iteration, this will fail, but that is ok
+            pass
+        else:
+            Z.append(getZ(l1, l2, thetas[n-1], T))
+
+        #~ if write_intermediate_files:
+            #~ logging.info(distfile)
+            #~ with open(distfile, "w") as f:
+                #~ f.write("# S S_err P(S) P(S)_err\n")
+                #~ for d in zip(centers, centers_err, data_p):
+                    #~ f.write("{} {} {} nan\n".format(*d))
+            #~ with open(histfile, "w") as f:
+                #~ f.write("# S S_err P(S) P(S)_err\n")
+                #~ for d in zip(centers, centers_err, counts):
+                    #~ f.write("{} {} {} nan\n".format(*d))
+
+    # cumulative offset (first span has an offset of 0)
+    zc = [0]
+    for i in Z:
+        zc.append(zc[-1] + i)
+
+    # stitch the single distributions together using zc
+    for i in range(len(zc)):
+        ps_log_list[i] -= zc[i]
+
+    # flatten list, and average entries in the same bin
+    center_array = np.concatenate(center_list, axis=0)
+    ps_log_array = np.concatenate(ps_log_list, axis=0)
+    s = np.array(sorted(set(centers)))
+    p = np.zeros(len(s))
+    for n, i in enumerate(s):
+        p[n] = np.mean(ps_log_array[center_array == i])
+
+    # normalize to area of 1
+    # integrate, to get the normalization constant
+    m = np.max(s)
+    area = trapz(np.exp(p), s)
+    p -= log(area)
+
+    return p
+
+    #~ if write_intermediate_files:
+        #~ logging.info(stitchfile)
+        #~ with open(stitchfile, "w") as f:
+            #~ f.write("# S S_err P(S) P(S)_err\n")
+            #~ for d in zip(centers, centers_err, counts):
+                #~ f.write("{} {} {} nan\n".format(*d))
+
+
+
 
 
 def run(histogram_type=1, parallelness=1):
@@ -485,7 +445,6 @@ def run(histogram_type=1, parallelness=1):
         # guess a good number of bins with rice rule
         num_bins = ceil(2*num_samples**(1/3))
         # in fact, I need more bins, guess them with the sqrt choice
-        #~ num_bins = ceil(num_samples**(1/2))
         # but ensure that we only get max 1 bin per 2 x-axis values
         # since sometimes they are discrete, which can result in artifacts
         num_bins = min(num_bins, (maximum - minimum))
@@ -502,63 +461,19 @@ def run(histogram_type=1, parallelness=1):
         else:
             raise
 
-        with Pool(parallelness) as p:
-            list_of_ps_log = p.starmap(getDistribution,
-                                        [
-                                            (
-                                                dataDict[T],
-                                                "{}/dist_{}.dat".format(out, nameDict[T]),
-                                                "{}/hist_{}.dat".format(out, nameDict[T]),
-                                                param.parameters["observable"],
-                                                T,
-                                                N,
-                                                bins
-                                            )
-                                            for T in theta_for_N
-                                        ]
-                                      )
-
-        for T in theta_for_N:
-            outfiles.append('"{}/stiched_{}.dat"'.format(out, nameDict[T]))
-
-        z = getZtheta(list_of_ps_log, theta_for_N, ["{}/Z_{}.dat".format(out, nameDict[T]) for T in theta_for_N])
-
-        zc = [0]
-        zce = [0]
-        for i in z[1:]:
-            zc.append(zc[-1] + i[0])
-            zce.append(zce[-1] + i[1])
-
-        with Pool(parallelness) as p:
-            data = p.starmap(stichFile,
-                               [("{}/dist_{}.dat".format(out, nameDict[T]),
-                                 "{}/stiched_{}.dat".format(out, nameDict[T]),
-                                 zc[n],
-                                 zce[n]) for n, T in enumerate(theta_for_N)])
-        whole_distribution = []
-        for dat in data:
-            whole_distribution += dat
+        dist, err = bootstrap_dict(dataDict,
+                                   N=len(bins)-1,
+                                   f=getWholeDistribution,
+                                   bins=bins,
+                                   thetas=theta_for_N)
 
         whole_distribution_file = param.basename.format(steps=N, **param.parameters)
         whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
-
-        # purge values with same x, by calculating mean
-        # TODO: generate errors by bootstrapping
-        whole_distribution = averageOverSameX(whole_distribution)
-
-        # integrate, to get the normalization constant
-        t = list(zip(*sorted(whole_distribution)))
-        m = max(t[:][0])
-        #~ area = simps(np.exp(t[2]), t[0])  # simpson is not robust against really small numbers :/
-        area = trapz(np.exp(t[2]), t[0])
+        centers, centers_err = getCentersFromBins(bins)
         with open(whole_distribution_file, "w") as f:
             f.write("# S S_err P(S) P(S)_err\n")
-            for i in sorted(whole_distribution):
-                f.write("{} {} {} {}\n".format(i[0], i[1], i[2]-log(area), i[3]))
-
-    if proposedTheta:
-        print("consider adding following thetas:")
-        print(" ".join(map(str, proposedTheta)))
+            for data in zip(centers, centers_err, dist, err):
+                f.write("{} {} {} {}\n".format(*data))
 
 
 if __name__ == "__main__":
