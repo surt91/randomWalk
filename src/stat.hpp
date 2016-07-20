@@ -30,6 +30,12 @@ T variance(std::vector<T> a, T m=T(0))
     return tmp/a.size();
 }
 
+template <typename T>
+T sdev(std::vector<T> a, T m=T(0))
+{
+    return sqrt(variance(a, m));
+}
+
 std::string vmPeak();
 
 std::string time_diff(clock_t start, clock_t end, int op=1);
