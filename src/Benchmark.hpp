@@ -7,7 +7,7 @@
 
 #include "Cmd.hpp"
 #include "RNG.hpp"
-#include "stat.hpp"
+#include "stat/stat.hpp"
 #include "Logging.hpp"
 #include "walker/Walker.hpp"
 #include "walker/LatticeWalker.hpp"

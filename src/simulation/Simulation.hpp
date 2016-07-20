@@ -16,7 +16,8 @@
 
 #include "../Cmd.hpp"
 #include "../Logging.hpp"
-#include "../stat.hpp"
+#include "../stat/stat.hpp"
+#include "../stat/runtime.hpp"
 #include "../walker/Walker.hpp"
 #include "../walker/MultipleWalker.hpp"
 #include "../walker/LatticeWalker.hpp"

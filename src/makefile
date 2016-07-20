@@ -15,7 +15,8 @@ CPP	 := main.cpp \
         Logging.cpp \
         RNG.cpp \
         io.cpp \
-        stat.cpp \
+        stat/runtime.cpp \
+        stat/RollingMean.cpp \
         Benchmark.cpp \
         walker/Walker.cpp \
         walker/LatticeWalker.cpp \
