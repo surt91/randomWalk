@@ -26,7 +26,13 @@ def bootstrap(xRaw, n_resample=100, f=np.mean):
     return np.mean(bootstrapSample), np.std(bootstrapSample)
 
 
-def bootstrap_dict(xRaw, N, n_resample=100, f=np.histogram, **kwargs):
+def call(tup):
+    i, xRaw, f, kwargs = tup
+    np.random.seed(i)
+    newDict = {k: np.random.choice(v, len(v), replace=True) for k, v in xRaw.items()}
+    return f(newDict, **kwargs)
+
+def bootstrap_dict(xRaw, N, n_resample=100, f=np.histogram, parallelness=1, **kwargs):
     """Bootstrap resampling, reduction function takes a list and returns
     a list of len N. Returns a list of means and a list of errors.
 
@@ -37,11 +43,16 @@ def bootstrap_dict(xRaw, N, n_resample=100, f=np.histogram, **kwargs):
     """
     if not len(xRaw):
         return float("NaN"), float("NaN")
+
+    # do the bootstrapping in parallel, if parallelness is given
+    with Pool(parallelness) as p:
+        tmp = p.map(call, [(i, xRaw, f, kwargs) for i in range(n_resample)])
+
+    # copy results to np.array
     allCounts = np.zeros((n_resample, N), dtype=np.float)
-    for i in range(n_resample):
-        newDict = {k: np.random.choice(v, len(v), replace=True) for k, v in xRaw.items()}
-        #~ print(N, len(allCounts[i]), kwargs)
-        allCounts[i] = f(newDict, **kwargs)
+    for n, i in enumerate(tmp):
+        allCounts[n] = i
+
     return np.mean(allCounts, 0), np.std(allCounts, 0)
 
 

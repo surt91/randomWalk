@@ -43,7 +43,7 @@ class Gnuplot():
             self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
             self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
             self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
-            self.create("stiched", "{/Symbol %s}" % self.observable, "{/Italic p}")
+            self.create("stitched", "{/Symbol %s}" % self.observable, "{/Italic p}")
             self.create("scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
             self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
             self.create("r", "{/Italic N}", "{/Italic r}")

@@ -251,7 +251,7 @@ def getZ(l1, l2, T1="?", T2="?"):
     return np.mean(Z)
 
 
-def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False):
+def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False, out="", nameDict={}):
     """Given a dict of samples at different temperatures, return the
     distribution (combined and stichted).
 
@@ -305,16 +305,19 @@ def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False)
         else:
             Z.append(getZ(l1, l2, thetas[n-1], T))
 
-        #~ if write_intermediate_files:
+        if write_intermediate_files:
+            distfile = "{}/dist_{}.dat".format(out, nameDict[T])
+            histfile = "{}/hist_{}.dat".format(out, nameDict[T])
             #~ logging.info(distfile)
-            #~ with open(distfile, "w") as f:
-                #~ f.write("# S S_err P(S) P(S)_err\n")
-                #~ for d in zip(centers, centers_err, data_p):
-                    #~ f.write("{} {} {} nan\n".format(*d))
-            #~ with open(histfile, "w") as f:
-                #~ f.write("# S S_err P(S) P(S)_err\n")
-                #~ for d in zip(centers, centers_err, counts):
-                    #~ f.write("{} {} {} nan\n".format(*d))
+            with open(distfile, "w") as f:
+                f.write("# S S_err P(S) P(S)_err\n")
+                for d in zip(tmp_center, data_p):
+                    f.write("{} nan {} nan\n".format(*d))
+            #~ logging.info(histfile)
+            with open(histfile, "w") as f:
+                f.write("# S S_err P(S) P(S)_err\n")
+                for d in zip(tmp_center, counts):
+                    f.write("{} nan {} nan\n".format(*d))
 
     # cumulative offset (first span has an offset of 0)
     zc = [0]
@@ -324,6 +327,17 @@ def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False)
     # stitch the single distributions together using zc
     for i in range(len(zc)):
         ps_log_list[i] -= zc[i]
+
+    if write_intermediate_files:
+        for n, T in enumerate(thetas):
+            stitchfile = "{}/stitch_{}.dat".format(out, nameDict[T])
+            c = center_list[n]
+            counts = ps_log_list[n]
+            #~ logging.info(stitchfile)
+            with open(stitchfile, "w") as f:
+                f.write("# S S_err P(S) P(S)_err\n")
+                for d in zip(c, counts):
+                    f.write("{} nan {} nan\n".format(*d))
 
     # flatten list, and average entries in the same bin
     center_array = np.concatenate(center_list, axis=0)
@@ -340,16 +354,6 @@ def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False)
     p -= log(area)
 
     return p
-
-    #~ if write_intermediate_files:
-        #~ logging.info(stitchfile)
-        #~ with open(stitchfile, "w") as f:
-            #~ f.write("# S S_err P(S) P(S)_err\n")
-            #~ for d in zip(centers, centers_err, counts):
-                #~ f.write("{} {} {} nan\n".format(*d))
-
-
-
 
 
 def run(histogram_type=1, parallelness=1):
@@ -461,11 +465,16 @@ def run(histogram_type=1, parallelness=1):
         else:
             raise
 
+        # to create intermediate files (but without errors)
+        getWholeDistribution(dataDict, bins, theta_for_N, True, out, nameDict)
+
+        # estimate the whole distribution with errors
         dist, err = bootstrap_dict(dataDict,
                                    N=len(bins)-1,
                                    f=getWholeDistribution,
                                    bins=bins,
-                                   thetas=theta_for_N)
+                                   thetas=theta_for_N,
+                                   parallelness=parallelness)
 
         whole_distribution_file = param.basename.format(steps=N, **param.parameters)
         whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
