@@ -75,7 +75,7 @@ parameters = {
     "dimension": 2,
 
     # number of walkers
-    "number_of_walkers": 1;
+    "number_of_walkers": 1,
     # list of lengths of the walks
     "number_of_steps": sizes,
     # number of MC tries per sweep

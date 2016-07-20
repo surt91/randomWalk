@@ -16,10 +16,10 @@ if __name__ == "__main__":
 
     for n, i in enumerate(sys.argv):
         if i == "-p":
-            if len(i > 2):
+            if len(i) > 2:
                 parallelness = i[2:]
             else:
-                parallelness = sys.argv(n+1)
+                parallelness = sys.argv[n+1]
 
     logging.info("Using {}-way parallelism".format(parallelness))
 
