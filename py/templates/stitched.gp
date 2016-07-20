@@ -7,7 +7,7 @@
 
     plot \
     {% for theta in thetas[N] %}
-        "{{ path }}/stitched_{{ makebase(basetheta, steps=N, theta=theta) }}.dat" u 1:3:2:4 w xyerr t "{{ theta }}", \
+        "{{ path }}/stitch_{{ makebase(basetheta, steps=N, theta=theta) }}.dat" u 1:3 w p t "{{ theta }}", \
     {% endfor %}
 {% endfor %}
 
