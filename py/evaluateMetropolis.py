@@ -7,6 +7,7 @@ from multiprocessing import Pool
 import gzip
 
 import numpy as np
+import warnings
 from scipy.interpolate import interp1d
 from scipy.integrate import simps, trapz
 
@@ -233,7 +234,11 @@ def getZ(l1, l2, T1="?", T2="?"):
     #~ if len(Z) < 5:
         #~ logging.warning("not enough overlap between {} and {}, insert an intermediate theta".format(T1, T2))
 
-    return np.mean(Z)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        ret = np.nanmean(Z)
+
+    return ret
 
 
 def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False, out="", nameDict={}):
@@ -329,8 +334,11 @@ def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False,
     ps_log_array = np.concatenate(ps_log_list, axis=0)
     s = np.array(sorted(set(centers)))
     p = np.zeros(len(s))
-    for n, i in enumerate(s):
-        p[n] = np.mean(ps_log_array[center_array == i])
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        for n, i in enumerate(s):
+            p[n] = np.nanmean(ps_log_array[center_array == i])
 
     # normalize to area of 1
     # integrate, to get the normalization constant
