@@ -340,10 +340,14 @@ def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False,
         for n, i in enumerate(s):
             p[n] = np.nanmean(ps_log_array[center_array == i])
 
+    # filter nans (i.e. bin with no entries)
+    mask = np.isfinite(p)
+    s_for_int = s[mask]
+    p_for_int = p[mask]
+
     # normalize to area of 1
     # integrate, to get the normalization constant
-    m = np.max(s)
-    area = trapz(np.exp(p), s)
+    area = trapz(np.exp(p_for_int), s_for_int)
     p -= log(area)
 
     return p
