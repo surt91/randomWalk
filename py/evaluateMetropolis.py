@@ -424,7 +424,7 @@ def run(histogram_type=1, parallelness=1):
         theta_for_N = not_aborted
 
         # get some stats of the simulation and save it
-        stats = getMinMaxTime(("{}/{}.dat".format(d, n) for n in nameDict.values()), parallelness)
+        stats = getMinMaxTime(("{}/{}.dat".format(d, n) for n in nameDict.values()), parallelness=parallelness)
 
         with open("{}/stats_N{}.dat".format(out, N), "w") as f:
             f.write("# theta time/sweep vmem MC_tries MC_rejects\n")
