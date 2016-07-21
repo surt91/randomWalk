@@ -330,7 +330,9 @@ Cmd::Cmd(int argc, char** argv)
             LOG(LOG_INFO) << "CPUs to use                " << (parallel ? std::to_string(parallel) : "all");
         }
         if(parallel)
+        {
             omp_set_num_threads(parallel);
+        }
 
         svg_path = svgArg.getValue();
         if(!svg_path.empty())
