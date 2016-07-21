@@ -276,7 +276,7 @@ def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False,
                 pass
             else:
                 data_p.append(ps_log)
-                tmp_center.append(centers[m])
+                tmp_center.append(s)
 
         if not data_p:
             data_p.append(np.nan)
@@ -306,7 +306,7 @@ def getWholeDistribution(dataDict, bins, thetas, write_intermediate_files=False,
             #~ logging.info(histfile)
             with open(histfile, "w") as f:
                 f.write("# S S_err P(S) P(S)_err\n")
-                for d in zip(tmp_center, counts):
+                for d in zip(centers, counts):
                     f.write("{} nan {} nan\n".format(*d))
 
     # cumulative offset (first span has an offset of 0)
