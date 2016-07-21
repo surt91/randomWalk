@@ -26,7 +26,7 @@ def bootstrap(xRaw, f=np.mean, n_resample=100):
     return np.mean(bootstrapSample), np.std(bootstrapSample)
 
 
-def call(tup):
+def bs_wrapper(tup):
     i, xRaw, f, kwargs = tup
     np.random.seed(i)
     newDict = {k: np.random.choice(v, len(v), replace=True) for k, v in xRaw.items()}
@@ -46,7 +46,7 @@ def bootstrap_dict(xRaw, N, f=np.histogram, n_resample=100, parallelness=1, **kw
 
     # do the bootstrapping in parallel, if parallelness is given
     with Pool(parallelness) as p:
-        tmp = p.map(call, [(i, xRaw, f, kwargs) for i in range(n_resample)])
+        tmp = p.map(bs_wrapper, [(i, xRaw, f, kwargs) for i in range(n_resample)])
 
     # copy results to np.array
     allCounts = np.zeros((n_resample, N), dtype=np.float)
