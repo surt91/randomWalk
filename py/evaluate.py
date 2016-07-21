@@ -54,3 +54,5 @@ if __name__ == "__main__":
 
     commonEvaluation.cut_trans(param.parameters["S"])
     commonEvaluation.get_max_dist()
+
+    logging.info("finished")
