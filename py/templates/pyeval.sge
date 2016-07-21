@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#$ -S /bin/bash
+#$ -cwd
+#$ -N pyeval
+
+#$ -l h_rt=89:0:0
+#$ -l h_vmem=8G
+
+#$ -j y
+
+#$ -pe smp 4
+#$ -R y
+
+mkdir -p data
+
+~/bin/bin/python3 evaluate.py -p 4 --lin
