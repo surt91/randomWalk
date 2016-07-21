@@ -51,19 +51,23 @@ void FastWangLandau::run()
                 {
                     for(int i=0; i < initial_num_iterations; ++i)
                     {
-                        double oldS = S(w);
-                        w->change(rngMC);
-                        ++t;
-
-                        double p_acc = exp(g[oldS] - g[S(w)]);
-                        if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                        for(int j=0; j < o.steps; ++j)
                         {
-                            w->undoChange();
-                            ++fails;
-                        }
+                            double oldS = S(w);
+                            w->change(rngMC);
+                            ++tries;
 
-                        g.add(S(w), lnf);
-                        H.add(S(w));
+                            double p_acc = exp(g[oldS] - g[S(w)]);
+                            if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                            {
+                                w->undoChange();
+                                ++fails;
+                            }
+
+                            g.add(S(w), lnf);
+                            H.add(S(w));
+                        }
+                        ++t;
                     }
                 } while(H.min() == 0);
                 // run until we have one entry in each bin
@@ -84,18 +88,22 @@ void FastWangLandau::run()
                     status /= 2;
                 }
 
-                double oldS = S(w);
-                w->change(rngMC);
-                ++t;
-
-                double p_acc = exp(g[oldS] - g[S(w)]);
-                if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                for(int j=0; j < o.steps; ++j)
                 {
-                    w->undoChange();
-                    ++fails;
-                }
+                    double oldS = S(w);
+                    w->change(rngMC);
+                    ++tries;
 
-                g.add(S(w), lnf);
+                    double p_acc = exp(g[oldS] - g[S(w)]);
+                    if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                    {
+                        w->undoChange();
+                        ++fails;
+                    }
+
+                    g.add(S(w), lnf);
+                }
+                ++t;
             }
 
             // save g to file
@@ -103,7 +111,6 @@ void FastWangLandau::run()
             {
                 oss << g.centers() << "\n";
                 oss << g.get_data() << std::endl;
-                tries += t;
             }
         }
     }
