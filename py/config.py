@@ -18,7 +18,7 @@ def run_instance(i):
     i.quiet = True
     i()
 
-def bootstrap(xRaw, n_resample=100, f=np.mean):
+def bootstrap(xRaw, f=np.mean, n_resample=100):
     """Bootstrap resampling, returns mean and stderror"""
     if not len(xRaw):
         return float("NaN"), float("NaN")
@@ -32,7 +32,7 @@ def call(tup):
     newDict = {k: np.random.choice(v, len(v), replace=True) for k, v in xRaw.items()}
     return f(newDict, **kwargs)
 
-def bootstrap_dict(xRaw, N, n_resample=100, f=np.histogram, parallelness=1, **kwargs):
+def bootstrap_dict(xRaw, N, f=np.histogram, n_resample=100, parallelness=1, **kwargs):
     """Bootstrap resampling, reduction function takes a list and returns
     a list of len N. Returns a list of means and a list of errors.
 

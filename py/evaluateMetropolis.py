@@ -173,7 +173,7 @@ def getPercentileBasedBins(dataDict, numBins=100):
     return bins
 
 
-def eval_simplesampling(name, outdir, N=0):
+def eval_simplesampling(name, outdir, N=0, parallelness=1):
     """Evaluates some fundamental observables from simple sampling
     (i.e. theta = inf)
     """
@@ -185,32 +185,17 @@ def eval_simplesampling(name, outdir, N=0):
         # call getDataFromFile to purge it from correlated samples (by autocorrelationtime)
         # also, this saves RAM
 
+        with Pool(parallelness) as p:
+            data = p.starmap(getDataFromFile, [(name, i, float("inf")) for i in [3, 4, 5, 6, 7]])
+            bs_mean = p.starmap(bootstrap, [(d, np.mean) for d in data])
+            bs_var = p.starmap(bootstrap, [(d, np.var) for d in data])
+
         s = "{} ".format(N)
 
-        # r
-        data = getDataFromFile(name, 3, float("inf"))
-        s += "{} {} ".format(*bootstrap(data))
-        s += "{} {} ".format(*bootstrap(data, f=np.var))
+        for m, v in zip(bs_mean, bs_var):
+            s += "{} {} ".format(*bs_mean)
+            s += "{} {} ".format(*bs_var)
 
-        # r2
-        data = getDataFromFile(name, 4, float("inf"))
-        s += "{} {} ".format(*bootstrap(data))
-        s += "{} {} ".format(*bootstrap(data, f=np.var))
-
-        # maxDiameter
-        data = getDataFromFile(name, 5, float("inf"))
-        s += "{} {} ".format(*bootstrap(data))
-        s += "{} {} ".format(*bootstrap(data, f=np.var))
-
-        # maxX
-        data = getDataFromFile(name, 6, float("inf"))
-        s += "{} {} ".format(*bootstrap(data))
-        s += "{} {} ".format(*bootstrap(data, f=np.var))
-
-        # maxY
-        data = getDataFromFile(name, 7, float("inf"))
-        s += "{} {} ".format(*bootstrap(data))
-        s += "{} {} ".format(*bootstrap(data, f=np.var))
         s += "\n"
 
         with open("{}/simple.dat".format(outdir), "a") as f:
@@ -376,7 +361,7 @@ def run(histogram_type=1, parallelness=1):
     outfiles = []
 
     # prepare file
-    eval_simplesampling(None, out)
+    eval_simplesampling(None, out, parallelness=parallelness)
 
     column = param.parameters["observable"]
 
@@ -415,7 +400,7 @@ def run(histogram_type=1, parallelness=1):
 
         # evaluate things from simple sampling (mainly for literature comparison)
         if float("inf") in theta_for_N:
-            eval_simplesampling(nameDict[float("inf")], out, N)
+            eval_simplesampling(nameDict[float("inf")], out, N, parallelness=parallelness)
 
         # remove files from evaluation, which did not equilibrate
         not_aborted = []
