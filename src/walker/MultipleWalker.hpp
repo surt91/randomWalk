@@ -194,8 +194,8 @@ void MultipleWalker<T>::updateHull()
     }
     m_convex_hull.run(&all_points);
 
-    LOG(LOG_INFO) << "Updated";
-    LOG(LOG_INFO) << m_convex_hull.A() << " " << m_convex_hull.L();
+    LOG(LOG_TOO_MUCH) << "Updated";
+    LOG(LOG_TOO_MUCH) << m_convex_hull.A() << " " << m_convex_hull.L();
 }
 
 template <class T>
