@@ -38,8 +38,8 @@ if __name__ == "__main__":
                 ht = 3
                 logging.info("Using percentile-based histogram")
             else:
-                logging.info("Default: Using log-spaced histogram")
-                ht = 2
+                logging.info("Default: Using lin-spaced histogram")
+                ht = 1
 
             evaluateMetropolis.run(ht, parallelness=parallelness)
 
