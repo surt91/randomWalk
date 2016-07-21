@@ -10,8 +10,6 @@ Histogram::Histogram(const int num_bins, const double lower, const double upper)
       above(0),
       below(0),
       data(num_bins, 0)
-
-
 {
     double binwidth = (upper - lower) / num_bins;
     bins.reserve(num_bins);
