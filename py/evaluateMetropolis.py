@@ -194,8 +194,8 @@ def eval_simplesampling(name, outdir, N=0, parallelness=1):
         s = "{} ".format(N)
 
         for m, v in zip(bs_mean, bs_var):
-            s += "{} {} ".format(*bs_mean)
-            s += "{} {} ".format(*bs_var)
+            s += "{} {} ".format(*m)
+            s += "{} {} ".format(*v)
 
         s += "\n"
 
