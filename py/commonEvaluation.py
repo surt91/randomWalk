@@ -4,6 +4,7 @@ from multiprocessing import Pool
 
 import numpy as np
 from scipy.interpolate import interp1d
+from scipy.integrate import trapz
 
 import parameters as param
 
@@ -195,3 +196,19 @@ def get_max_dist():
 
         with open("{}/{}.dat".format(param.parameters["directory"], "max"), "a") as f:
             f.write("{} {} {} {} {}\n".format(N, maxX, xErr, maxY, yErr))
+
+
+def getMeanFromDist(centers, data):
+    """Takes a log-distribution as input and calculates its mean and variance.
+
+    Errors are widly overestimated and useless.
+    TODO: bootstrap error estimates
+    """
+    mean = trapz(np.multiply(centers, np.exp(data)), centers)
+    return mean
+
+def getVarFromDist(centers, data):
+    mean = getMeanFromDist(centers, data)
+    var = trapz(np.multiply(np.power(centers, 2), np.exp(data)), centers) - mean**2
+    return var
+

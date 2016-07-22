@@ -9,7 +9,7 @@ from scipy.integrate import trapz
 
 import parameters as param
 from config import bootstrap, bootstrap_histogram, histogram_simple_error, SimulationInstance
-from commonEvaluation import getMinMaxTime
+from commonEvaluation import getMinMaxTime, getMeanFromDist, getVarFromDist
 
 
 logging.basicConfig(level=logging.INFO,
@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO,
                 datefmt='%d.%m.%YT%H:%M:%S')
 
 
-def process_data(infiles, outformat):
+def process_data(infiles, outformat, N):
     """Reads in the data, calculates the distribution from it, normalizes
     it, and writes it back to files.
     """
@@ -104,6 +104,12 @@ def process_data(infiles, outformat):
         for d in zip(centers, centers_err, data, stderr):
             f.write("{} {} {} {}\n".format(*d))
 
+    means_file = "{}/means.dat".format(param.parameters["directory"])
+    with open(means_file, "a") as f:
+        m = getMeanFromDist(centers, data)
+        v = getVarFromDist(centers, data)
+        f.write("{} {} nan {} nan\n".format(N, m/N, v/N**2))
+
 
 def stichInterpol(centers, data, stderr):
     """Calculate the 'Z' values needed to stitch parts of the distribution
@@ -150,6 +156,9 @@ def run(parallelness=1):
     energies = param.parameters["energies"]
 
     outfiles = []
+    means_file = "{}/means.dat".format(param.parameters["directory"])
+    with open(means_file, "w") as f:
+        f.write("# N mean/T err variance/T err\n")
 
     for N in steps:
         outname = param.basename.format(steps=N, **param.parameters)
@@ -165,11 +174,10 @@ def run(parallelness=1):
         getMinMaxTime((f for f in names), parallelness)
 
         data = process_data(names,
-                            outbase
+                            outbase,
+                            N
                            )
 
-    print("plot with gnuplot")
-    print('p "{}" u 1:2:3 w ye'.format(outbase.format("WL")))
 
 
 if __name__ == "__main__":

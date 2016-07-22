@@ -13,7 +13,7 @@ from scipy.integrate import simps, trapz
 
 import parameters as param
 from config import bootstrap, bootstrap_dict, SimulationInstance
-from commonEvaluation import getMinMaxTime
+from commonEvaluation import getMinMaxTime, getMeanFromDist, getVarFromDist
 
 
 logging.basicConfig(level=logging.INFO,
@@ -374,6 +374,9 @@ def run(histogram_type=1, parallelness=1):
 
     # prepare file
     eval_simplesampling(None, out, parallelness=parallelness)
+    means_file = "{}/means.dat".format(out)
+    with open(means_file, "w") as f:
+        f.write("# N mean/T err variance/T err\n")
 
     column = param.parameters["observable"]
 
@@ -480,6 +483,12 @@ def run(histogram_type=1, parallelness=1):
             f.write("# S S_err P(S) P(S)_err\n")
             for data in zip(centers, centers_err, dist, err):
                 f.write("{} {} {} {}\n".format(*data))
+
+        # TODO get errors by bootstrapping
+        with open(means_file, "a") as f:
+            m = getMeanFromDist(centers, data, err)
+            v = getVarFromDist(centers, data, err)
+            f.write("{} {} nan {} nan\n".format(N, m/N, v/N**2,))
 
 
 if __name__ == "__main__":
