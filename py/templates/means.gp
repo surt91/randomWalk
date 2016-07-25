@@ -6,10 +6,13 @@
 
 set key bottom
 
-f(x) = mu_c - a*x**(-b)
-fit f(x) "{{ path }}/means.dat" u 1:2:3 yerr via a, b, mu_c
+d = {{ dimension }}
+nu = {{ "d" if observable == 2 else "(d-1)" }}*{{ nu[typ][dimension] }}
 
-p "{{ path }}/means.dat" u 1:2:3 w ye, \
+f(x) = mu_c - a*x**(-b)
+fit f(x) "{{ path }}/means.dat" u 1:($2/$1**nu):($3/$1**nu) yerr via a, b, mu_c
+
+p "{{ path }}/means.dat" u 1:($2/$1**nu):($3/$1**nu) w ye t "{/Symbol m}", \
   f(x) t sprintf("{/Symbol m} = {/Symbol m}_c - aT^{-b}, {/Symbol m}_c = %.3f(%.0f), {/Symbol c} = %.1f", mu_c, mu_c_err*1e3/FIT_STDFIT, FIT_STDFIT*FIT_STDFIT)
 
 {% endblock content %}

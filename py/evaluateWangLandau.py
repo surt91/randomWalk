@@ -144,7 +144,6 @@ def histogramfragmentsToDistribution(centers, data, outformat=None):
     area = trapz(np.exp(mdata), mcenters)
     data -= np.log(area)
 
-
     return centers, data
 
 
@@ -183,8 +182,8 @@ def run(parallelness=1):
         dist_centers = np.zeros([len(centers), len(centers[0][0])*len(centers[0])])
         for n, m_d in zip(range(len(centers)), data):
             tmp_c, tmp_d = histogramfragmentsToDistribution(centers[n], m_d, outbase)
-            dist_centers[n] = tmp_c
             dist[n] = tmp_d
+            dist_centers[n] = tmp_c
 
         # componentwise mean and stderr over all distributions
         centers = centers[0].flatten()
@@ -198,8 +197,8 @@ def run(parallelness=1):
             for i in zip(centers, data, stderr):
                 f.write("{} nan {} {}\n".format(*i))
 
+        # calculate mean and variance of the distribution
         sample = [getMeanFromDist(c, dat) for c, dat in zip(dist_centers, dist)]
-        print(sample)
         sample_v = [getVarFromDist(c, dat) for c, dat in zip(dist_centers, dist)]
         m = np.mean(sample)
         m_err = np.std(sample) / (len(dist) - 1)
@@ -207,7 +206,7 @@ def run(parallelness=1):
         v_err = np.std(sample_v) / (len(dist) - 1)
         means_file = "{}/means.dat".format(param.parameters["directory"])
         with open(means_file, "a") as f:
-            f.write("{} {} {} {} {}\n".format(N, m/N, m_err/N, v/N**2, v_err/N**2))
+            f.write("{} {} {} {} {}\n".format(N, m, m_err, v, v_err))
 
 
 if __name__ == "__main__":
