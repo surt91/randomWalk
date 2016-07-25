@@ -57,7 +57,8 @@ class Gnuplot():
             self.create("wl_stitch", "{/Symbol %s}" % self.observable, "{/Italic counts}")
             self.create("wl_rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
 
-        self.create("means", "{/Symbol %s}" % self.observable, "{/Italic p}")
+        self.create("variances", "{/Symbol %s}" % self.observable, "{/Symbol s}^2")
+        self.create("means", "{/Symbol %s}" % self.observable, "{/Symbol m}")
         self.create("accept", "{/Italic T}", "{/Italic p_{acc}}")
         self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
         self.create("max", "N", "max pos")

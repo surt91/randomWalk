@@ -12,7 +12,7 @@ from scipy.interpolate import interp1d
 from scipy.integrate import simps, trapz
 
 import parameters as param
-from config import bootstrap, bootstrap_dict, SimulationInstance
+from config import bootstrap, SimulationInstance
 from commonEvaluation import getMinMaxTime, getMeanFromDist, getVarFromDist
 
 
@@ -22,6 +22,51 @@ logging.basicConfig(level=logging.INFO,
 logging.info("started")
 
 proposedTheta = []
+
+def bs_wrapper(tup):
+    i, xRaw, f, kwargs = tup
+    np.random.seed(i)
+    newDict = {k: np.random.choice(v, len(v), replace=True) for k, v in xRaw.items()}
+    return f(newDict, **kwargs)
+
+def bootstrap_metropolis_distributions(xRaw, N, f=np.histogram, n_resample=100, parallelness=1, centers=None, **kwargs):
+    """Bootstrap resampling, reduction function takes a list and returns
+    a list of len N. Returns a list of means and a list of errors.
+    6 return values:
+        0,1 : distribution, err
+        2,3 : mean, err (i.e. int x p(x) dx)
+        4,5 : var, err (i.e. int x**2 p(x) dx - mu**2)
+
+    :param xRaw:    vector of raw input data
+    :param N:       length of list returned by f
+    :param f:       reduction function, takes a list, returns a list
+    :param kwargs:  keyword arguments for f
+    """
+    if not len(xRaw):
+        return float("NaN"), float("NaN")
+
+    # do the bootstrapping in parallel, if parallelness is given
+    with Pool(parallelness) as p:
+        counts = p.map(bs_wrapper, [(i, xRaw, f, kwargs) for i in range(n_resample)])
+
+    # copy results to np.array
+    allCounts = np.zeros((n_resample, N), dtype=np.float)
+    means = np.zeros((n_resample), dtype=np.float)
+    var = np.zeros((n_resample), dtype=np.float)
+    for n, i in enumerate(counts):
+        allCounts[n] = i
+
+        # kill nan from data
+        c = centers[np.isfinite(i)]
+        i = i[np.isfinite(i)]
+        means[n] = getMeanFromDist(c, i)
+        var[n] = getVarFromDist(c, i)
+
+    return (
+            np.mean(allCounts, 0), np.std(allCounts, 0),
+            np.mean(means), np.std(means),
+            np.mean(var), np.std(var),
+           )
 
 # http://stackoverflow.com/a/16045141/1698412
 def autocorrelation(x):
@@ -466,19 +511,22 @@ def run(histogram_type=1, parallelness=1):
             raise
 
         # to create intermediate files (but without errors)
+        centers, centers_err = getCentersFromBins(bins)
         getWholeDistribution(dataDict, bins, theta_for_N, True, out, nameDict)
 
         # estimate the whole distribution with errors
-        dist, err = bootstrap_dict(dataDict,
-                                   N=len(bins)-1,
-                                   f=getWholeDistribution,
-                                   bins=bins,
-                                   thetas=theta_for_N,
-                                   parallelness=parallelness)
+        dist, err, mean, m_err, var, v_err = bootstrap_metropolis_distributions(
+                            dataDict,
+                            N=len(bins)-1,
+                            f=getWholeDistribution,
+                            bins=bins,
+                            thetas=theta_for_N,
+                            parallelness=parallelness,
+                            centers=centers
+                    )
 
         whole_distribution_file = param.basename.format(steps=N, **param.parameters)
         whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
-        centers, centers_err = getCentersFromBins(bins)
         with open(whole_distribution_file, "w") as f:
             f.write("# S S_err P(S) P(S)_err\n")
             for data in zip(centers, centers_err, dist, err):
@@ -486,9 +534,7 @@ def run(histogram_type=1, parallelness=1):
 
         # TODO get errors by bootstrapping
         with open(means_file, "a") as f:
-            m = getMeanFromDist(centers, data, err)
-            v = getVarFromDist(centers, data, err)
-            f.write("{} {} nan {} nan\n".format(N, m/N, v/N**2,))
+            f.write("{} {} {} {} {}\n".format(N, mean, m_err, var, v_err))
 
 
 if __name__ == "__main__":
