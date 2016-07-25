@@ -17,101 +17,62 @@ logging.basicConfig(level=logging.INFO,
                 datefmt='%d.%m.%YT%H:%M:%S')
 
 
-def process_data(infiles, outformat, N):
-    """Reads in the data, calculates the distribution from it, normalizes
-    it, and writes it back to files.
+def readData(filenames, outformat=None):
+    """Reads the given files and returns a list with n entries each full
+    of fragments sufficient for one distribution.
+
+    The raw data format consists of one file for each energy range,
+    each file having "iterations" independent results.
+    This function reads the files and "transposes" the format, i.e.,
+    the output is are 'center' and 'data' arrays, with "iterations"
+    many entries, containing an array of ranges containing the actual data:
+
+    data[iteration][range(0..number_of_out_files)][bins(0..nbins+overlap)]
     """
-    centers = []
-    data = []
-    for infile in infiles:
+    iterations = param.parameters["iterations"]
+    centers = [[] for _ in range(iterations)]
+    data = [[] for _ in range(iterations)]
+    for infile in filenames:
         with gzip.open(infile+".gz", "rt") as f:
             even = True
-            for l in f.readlines():
-                if "#" in l:
+            comments = 0
+            for n, l in enumerate(f.readlines()):
+                if "#" in l or "Compiled:" in l:
+                    comments += 1
                     continue
                 if not l.split():
+                    comments += 1
                     continue
+                idx = (n-comments) // 2
                 if even:
-                    centers.append([float(i) for i in l.split()])
+                    centers[idx].append(np.array([float(i) for i in l.split()]))
                     even = False
                 else:
-                    data.append([float(i) for i in l.split()])
+                    data[idx].append(np.array([float(i) for i in l.split()]))
                     even = True
 
-    # sort them
-    centers, data = (np.array(x) for x in zip(*sorted(zip(centers, data))))
+    # sort ranges by their minium center value
+    centers, data = zip(*sorted(zip(centers, data), key=lambda x: np.min(x[0])))
+    centers = list(centers)
+    data = list(data)
 
-    outfile = outformat.format("wl_raw")
-    with open(outfile, "w") as f:
-        f.write("# S err count(S) count(S)_err\n")
-        for c, d in zip(centers, data):
-            for l in zip(c, d):
-                f.write("{} {}\n".format(*l))
-            f.write("\n\n")
+    for i in range(iterations):
+        centers[i] = np.array(centers[i])
+        data[i] = np.array(data[i])
 
-    # for identical centers, average their data and take the stderr
-    processed_centers = set()
-    preserve = np.ones(len(data), dtype=np.bool)
-    stderr = np.zeros((len(data), len(data[0])))
-    for i in range(len(centers)):
-        corresponding_data = []
-        if i in processed_centers:
-            preserve[i] = False
-            continue
-        processed_centers.add(i)
-        for n, c in enumerate(centers[i:], start=i):
-            if c[0] == centers[i][0]:
-                processed_centers.add(n)
-                corresponding_data.append(data[n]-np.mean(data[n]))
-        data[i] = np.mean(corresponding_data, axis=0)
-        stderr[i] = np.std(corresponding_data, axis=0)
+    if outformat is not None:
+        outfile = outformat.format("wl_raw")
+        with open(outfile, "w") as f:
+            f.write("# S err count(S) count(S)_err\n")
+            for ce, da in zip(centers, data):
+                for c, d in zip(ce, da):
+                    for l in zip(c, d):
+                        f.write("{} {}\n".format(*l))
+                    f.write("\n\n")
 
-    centers = centers[preserve]
-    data = data[preserve]
-    stderr = stderr[preserve]
+    return centers, data
 
-    stichInterpol(centers, data, stderr)
-
-    outfile = outformat.format("wl_stiched")
-    with open(outfile, "w") as f:
-        f.write("# S err count(S) count(S)_err\n")
-        for c, d, e in zip(centers, data, stderr):
-            for l in zip(c, d, e):
-                f.write("{} {} {}\n".format(*l))
-            f.write("\n\n")
-
-    # flatten and remove overlap
-    #~ overlap = param.parameters["overlap"]
-    #~ centers = [j for i in centers for j in i[overlap//2:-overlap//2]]
-    #~ data = np.array([j for i in data for j in i[overlap//2:-overlap//2]])
-
-    # flatten
-    centers = centers.flatten()
-    centers_err = [0 for i in range(len(centers))]
-    data = data.flatten()
-    stderr = stderr.flatten()
-
-    # normalize
-    mdata = np.ma.masked_array(data, np.isnan(data))
-    data -= np.max(mdata)
-    mdata -= np.max(mdata)
-    area = trapz(np.exp(mdata), centers)
-    data -= np.log(area)
-
-    outfile = outformat.format("WL")
-    with open(outfile, "w") as f:
-        f.write("# S ln(P(S)) ln(P(S)_err)\n")
-        for d in zip(centers, centers_err, data, stderr):
-            f.write("{} {} {} {}\n".format(*d))
-
-    means_file = "{}/means.dat".format(param.parameters["directory"])
-    with open(means_file, "a") as f:
-        m = getMeanFromDist(centers, data)
-        v = getVarFromDist(centers, data)
-        f.write("{} {} nan {} nan\n".format(N, m/N, v/N**2))
-
-
-def stichInterpol(centers, data, stderr):
+def stitchInterpol(centers, data):
     """Calculate the 'Z' values needed to stitch parts of the distribution
     together. This is calculated from the overlap of two neighboring
     ranges. Warns if there is not enough overlap.
@@ -121,15 +82,14 @@ def stichInterpol(centers, data, stderr):
     Applies the 'Z' values to the data to generate a continuous
     distribution from the single parts.
     """
-    summed_err = 0
     for i in range(len(data)-1):
         try:
             spline_1 = interp1d(centers[i], data[i], kind='cubic')
-        except ValueError:
-            logging.error("too few samples")
+        except ValueError as e:
+            logging.error("too few samples: " + str(e))
             continue
-        except TypeError:
-            logging.error("too few samples")
+        except TypeError as e:
+            logging.error("too few samples: " + str(e))
             continue
 
         # calculate for every x the difference to y(x) - spline_1(x)
@@ -140,10 +100,43 @@ def stichInterpol(centers, data, stderr):
             logging.warning("not enough overlap ({}: {} -- {})".format(len(Z), max(centers[i]), min(centers[i+1])))
 
         z, err = bootstrap(Z)
-        summed_err += err
-        for j in range(len(data[i+1])):
-            data[i+1][j] -= z
-            stderr[i+1][j] += summed_err
+        data[i+1] -= z
+
+
+def histogramfragmentsToDistribution(centers, data, outformat=None):
+    """Takes a list of lists, with histogram fragments.
+
+    :param centers: [[centers of range 1], [of range 2], ...]
+    :param data: [[counts of range 1], [of range 2], ...]
+    """
+
+    stitchInterpol(centers, data)
+
+    if outformat is not None:
+        outfile = outformat.format("wl_stiched")
+        with open(outfile, "w") as f:
+            f.write("# S count(S)\n")
+            for c, d in zip(centers, data):
+                for l in zip(c, d):
+                    f.write("{} {}\n".format(*l))
+                f.write("\n\n")
+
+    # flatten
+    centers = centers.flatten()
+    data = data.flatten()
+
+    # normalize
+    mask = np.isfinite(data)
+    mdata = data[mask]
+    mcenters = centers[mask]
+
+    data -= np.max(mdata)
+    mdata -= np.max(mdata)
+    area = trapz(np.exp(mdata), mcenters)
+    data -= np.log(area)
+
+
+    return centers, data
 
 
 def run(parallelness=1):
@@ -173,11 +166,39 @@ def run(parallelness=1):
         logging.info("N = {}".format(N))
         getMinMaxTime((f for f in names), parallelness)
 
-        data = process_data(names,
-                            outbase,
-                            N
-                           )
+        centers, data = readData(names, outbase)
 
+        # centers should always be the same
+        # dist is a matrix with one line per iteration and one column per bin
+        dist = np.zeros([len(centers), len(centers[0][0])*len(centers[0])])
+        dist_centers = np.zeros([len(centers), len(centers[0][0])*len(centers[0])])
+        for n, m_d in zip(range(len(centers)), data):
+            tmp_c, tmp_d = histogramfragmentsToDistribution(centers[n], m_d, outbase)
+            dist_centers[n] = tmp_c
+            dist[n] = tmp_d
+
+        # componentwise mean and stderr over all distributions
+        centers = centers[0].flatten()
+        data = np.mean(dist, 0)
+        stderr = np.std(dist, 0) / (len(dist) - 1)
+
+        # save to file
+        outfile = outbase.format("WL")
+        with open(outfile, "w") as f:
+            f.write("# S err ln(P(S)) ln(P(S)_err)\n")
+            for i in zip(centers, data, stderr):
+                f.write("{} nan {} {}\n".format(*i))
+
+        sample = [getMeanFromDist(c, dat) for c, dat in zip(dist_centers, dist)]
+        print(sample)
+        sample_v = [getVarFromDist(c, dat) for c, dat in zip(dist_centers, dist)]
+        m = np.mean(sample)
+        m_err = np.std(sample) / (len(dist) - 1)
+        v = np.mean(sample_v)
+        v_err = np.std(sample_v) / (len(dist) - 1)
+        means_file = "{}/means.dat".format(param.parameters["directory"])
+        with open(means_file, "a") as f:
+            f.write("{} {} {} {} {}\n".format(N, m/N, m_err/N, v/N**2, v_err/N**2))
 
 
 if __name__ == "__main__":

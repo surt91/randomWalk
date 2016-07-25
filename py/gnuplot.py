@@ -54,7 +54,7 @@ class Gnuplot():
             self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
             self.create("wl_scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
             self.create("wl_raw", "{/Symbol %s}" % self.observable, "{/Italic counts}")
-            self.create("wl_stiched", "{/Symbol %s}" % self.observable, "{/Italic counts}")
+            self.create("wl_stitch", "{/Symbol %s}" % self.observable, "{/Italic counts}")
             self.create("wl_rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
 
         self.create("means", "{/Symbol %s}" % self.observable, "{/Italic p}")
