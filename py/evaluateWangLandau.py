@@ -45,11 +45,20 @@ def readData(filenames, outformat=None):
                     continue
                 idx = (n-comments) // 2
                 if even:
-                    centers[idx].append(np.array([float(i) for i in l.split()]))
+                    centers[idx].append(np.array([float(i) for i in l.replace(",", "").split()]))
                     even = False
                 else:
-                    data[idx].append(np.array([float(i) for i in l.split()]))
+                    data[idx].append(np.array([float(i) for i in l.replace(",", "").split()]))
                     even = True
+
+        # FIXME: this will lead to a subtly wrong error
+        if idx + 1< iterations:
+            logging.warning("found only {}/{} iterations in '{}'".format(idx+1, iterations, infile))
+            logging.warning("consider simulating longer, for now fill up with double results")
+            n = idx + 1
+            for i in range(idx + 1, iterations):
+                centers[i].append(centers[i%n][-1])
+                data[i].append(data[i%n][-1])
 
     # sort ranges by their minium center value
     centers, data = zip(*sorted(zip(centers, data), key=lambda x: np.min(x[0])))
