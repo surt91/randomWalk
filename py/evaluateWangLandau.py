@@ -32,6 +32,7 @@ def readData(filenames, outformat=None):
     iterations = param.parameters["iterations"]
     centers = [[] for _ in range(iterations)]
     data = [[] for _ in range(iterations)]
+    idx = None
     for infile in filenames:
         with gzip.open(infile+".gz", "rt") as f:
             even = True
@@ -52,7 +53,9 @@ def readData(filenames, outformat=None):
                     even = True
 
         # FIXME: this will lead to a subtly wrong error
-        if idx + 1< iterations:
+        if idx is None:
+            logging.warning("no data in '{}'".format(infile))
+        elif idx + 1 < iterations:
             logging.warning("found only {}/{} iterations in '{}'".format(idx+1, iterations, infile))
             logging.warning("consider simulating longer, for now fill up with double results")
             n = idx + 1
