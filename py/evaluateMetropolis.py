@@ -225,14 +225,14 @@ def eval_simplesampling(name, outdir, N=0, parallelness=1):
     """
     if name is None:
         with open("{}/simple.dat".format(outdir), "w") as f:
-            f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... \n")
+            f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... L err varL err A err varA err \n")
     else:
         name = "rawData/" + name + ".dat"
         # call getDataFromFile to purge it from correlated samples (by autocorrelationtime)
         # also, this saves RAM
 
         with Pool(parallelness) as p:
-            data = p.starmap(getDataFromFile, [(name, i, float("inf")) for i in [3, 4, 5, 6, 7]])
+            data = p.starmap(getDataFromFile, [(name, i, float("inf")) for i in [3, 4, 5, 6, 7, 1, 2]])
             bs_mean = p.starmap(bootstrap, [(d, np.mean) for d in data])
             bs_var = p.starmap(bootstrap, [(d, np.var) for d in data])
 
