@@ -89,7 +89,7 @@ class Simulation():
         p = self.parallel
         energies = kwargs["energies"]
         self.kwargs = kwargs
-        if self.parallel and (self.sampling != 2 and self.sampling != 3 and self.sampling != 4):
+        if self.parallel > 1 and (self.sampling != 2 and self.sampling != 3 and self.sampling != 4):
             print("sampling method", self.sampling, "does not use parallelism, set parallel to None")
             raise
 
