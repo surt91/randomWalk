@@ -74,7 +74,7 @@ def binder(a):
     return (3-np.mean(a**4)/np.mean(a**2)**2)/2
 
 def file_not_empty(fpath):
-    return True if os.path.isfile(fpath) and os.path.getsize(fpath) > 0 else False
+    return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
 
 
 class Simulation():
