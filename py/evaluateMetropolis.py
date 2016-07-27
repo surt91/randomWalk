@@ -88,7 +88,7 @@ def autocorrelation(x):
 def getAutocorrTime(data, T="?"):
     """Calculates the autocorrelation time of a time series.
 
-    :param:data: timeseries
+    :param data: timeseries
 
     returns autocorrelation time
     """
