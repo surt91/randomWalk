@@ -372,7 +372,10 @@ class SimulationInstance():
             cmd += ["--onlyCenters"]
             out = subprocess.run(cmd, stdout=subprocess.PIPE, universal_newlines=True)
             # one line per range
-            outlines = [l for l in out.stdout.split("\n") if not l.startswith("#") and not l.startswith("Info") and l]
+            for l in out.stdout.split("\n"):
+                if l.startswith("Warning"):
+                    print(l)
+            outlines = [l for l in out.stdout.split("\n") if not l.startswith("#") and not l.startswith("Info") and not l.startswith("Warning") and l]
             #~ centers = [list(map(float, i.split())) for i in outlines]
             #~ print(out.stdout)
             #~ print(outlines[0].split())
