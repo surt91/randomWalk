@@ -158,6 +158,15 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
 /** Implementation of a Metropolis based large deviations sampling
  *
+ * This will perform Cmd::iterations sweeps, where each sweep consists
+ * of Cmd::sweep trials.
+ * A trial changes the walk slightly from \f$i\f$ to \f$j\f$ and is
+ * accepted with the Metropolis accpetance probability
+ * \f[
+ *  p_{acc} = \min\left(1,\exp((S_i - S_j)/\Theta)\right),
+ * \f]
+ * where \f$S_i\f$ is the observable of interest of state \f$i\f$.
+ *
  * Literature used:
  *   * 10.1103/PhysRevE.65.056102
  *   * 10.1103/PhysRevE.91.052104

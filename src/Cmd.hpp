@@ -102,46 +102,46 @@ class Cmd
             {}
         Cmd(int argc, char** argv);
 
-        std::string tmp_path;
-        std::string data_path;
-        std::string conf_path;
-        std::vector<std::string> data_path_vector; ///< vector of output names, one for every temperature (only for parallel tempering);
-        std::vector<std::string> conf_path_vector; ///< vector of output names, one for every temperature (only for parallel tempering);
-        std::string svg_path;
-        std::string pov_path;
-        std::string gp_path;
-        int steps;
-        int numWalker;
-        int seedRealization;
-        int seedMC;
-        walk_type_t type;
-        int d;
-        int iterations;
-        int sweep;
-        int t_eq;
-        int t_eqMax;
-        int parallel;
-        double theta;
-        std::vector<double> parallelTemperatures;
-        bool simpleSampling;
-        std::vector<double> wangLandauBorders;
-        int wangLandauBins;
-        int wangLandauOverlap;
-        sampling_method_t sampling_method;
-        hull_algorithm_t chAlg;
-        wanted_observable_t wantedObservable;
+        std::string tmp_path;                       ///< path to store temporary files
+        std::string data_path;                      ///< full path of output file
+        std::string conf_path;                      ///< full path to store the full configuration of the walk
+        std::vector<std::string> data_path_vector;  ///< vector of output names, one for every temperature (only for parallel tempering);
+        std::vector<std::string> conf_path_vector;  ///< vector of output names, one for every temperature (only for parallel tempering);
+        std::string svg_path;                       ///< path to store a SVG image of one \f$d=2\f$ walk
+        std::string pov_path;                       ///< path to store a povray file of one \f$d=3\f$ walk
+        std::string gp_path;                        ///< path to store a gnuplot file of one \f$d=2,3\f$ walk
+        int steps;                                  ///< how many steps \f$T\f$ th walk takes
+        int numWalker;                              ///< how many independet walkers should be simulated (hull of their union)
+        int seedRealization;                        ///< RNG seed to construct the initial walk realization
+        int seedMC;                                 ///< RNG seed for randomness needed in the Monte Carlo simulation
+        walk_type_t type;                           ///< type of walk to be simulated
+        int d;                                      ///< space dimension in which the walker lives
+        int iterations;                             ///< number of iterations (e.g. sweeps) in the Monte Carlo simulation
+        int sweep;                                  ///< how many trial changes constitute one sweep
+        int t_eq;                                   ///< equilibration time
+        int t_eqMax;                                ///< time after which to abort equilibration attempts
+        int parallel;                               ///< number of processors used in parallel
+        double theta;                               ///< temperature \f$\Theta\f$ to simulate at (only Metropolis type simulations)
+        std::vector<double> parallelTemperatures;   ///< temperatures \f$\Theta\f$ to simulate at (only parallel tempering type simulations)
+        bool simpleSampling;                        ///< use naive simple sampling
+        std::vector<double> wangLandauBorders;      ///< borders of the Wang Landau bins (only Wang Landau type simulations)
+        int wangLandauBins;                         ///< number of Wang Landau bins
+        int wangLandauOverlap;                      ///< overlap between Wang Landau ranges in bins
+        sampling_method_t sampling_method;          ///< sampling method to use (Metropolis or Wang Landau type)
+        hull_algorithm_t chAlg;                     ///< convex hull algorithm to use
+        wanted_observable_t wantedObservable;       ///< which observable to study
 
-        double mu;
-        double sigma;
-        double lnf_min;
-        double flatness_criterion;
+        double mu;                  ///< mean \f$\mu\f$ of the Gaussian to draw random numbers from (only correlated walks)
+        double sigma;               ///< standard deviation \f$\sigma\f$ of the Gaussian to draw random numbers from (only correlated walks)
+        double lnf_min;             ///< minimum refinement factor up to which is simulated (only Wang Landau type simulations)
+        double flatness_criterion;  ///< flatness criterion to be used (only Wang Landau type simulations)
 
-        bool onlyBounds;
-        bool onlyCenters;
+        bool onlyBounds;            ///< output only the maximum and minimum of the observable and exit
+        bool onlyCenters;           ///< output only the centers of the Wang Landau bins and exit
 
-        bool benchmark;
-        double benchmark_A;
-        double benchmark_L;
+        bool benchmark;             ///< perform benchmarks and exit
+        double benchmark_A;         ///< helper to store expected value of the benchmark
+        double benchmark_L;         ///< helper to store expected value of the benchmark
 
-        std::string text;
+        std::string text;           ///< the full command used to start this program
 };
