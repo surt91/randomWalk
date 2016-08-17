@@ -61,6 +61,7 @@ class Gnuplot():
 
         self.create("variances", "{/Italic N}", "{/Symbol s}_%s^2" % self.observable)
         self.create("means", "{/Italic N}", "{/Symbol m}_%s" % self.observable)
+        self.create("cmp_gauss", "{/Italic %s}" % self.observable, "{/Italic p}_{normed}")
         self.create("accept", "{/Italic T}", "{/Italic p_{acc}}")
         self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
         self.create("max", "N", "max pos")

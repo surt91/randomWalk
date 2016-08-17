@@ -525,8 +525,8 @@ def run(histogram_type=1, parallelness=1):
                             centers=centers
                     )
 
-        whole_distribution_file = param.basename.format(steps=N, **param.parameters)
-        whole_distribution_file = "{}/whole_{}.dat".format(out, whole_distribution_file)
+        outbase = param.basename.format(steps=N, **param.parameters)
+        whole_distribution_file = "{}/whole_{}.dat".format(out, outbase)
         with open(whole_distribution_file, "w") as f:
             f.write("# S S_err P(S) P(S)_err\n")
             for data in zip(centers, centers_err, dist, err):
@@ -535,6 +535,12 @@ def run(histogram_type=1, parallelness=1):
         # TODO get errors by bootstrapping
         with open(means_file, "a") as f:
             f.write("{} {} {} {} {}\n".format(N, mean, m_err, var, v_err))
+
+        normed_file = outbase.format("normed")
+        with open(normed_file, "w") as f:
+            f.write("# S err ln(P(S)) ln(P(S)_err)\n")
+            for i in zip(centers, dist, err):
+                f.write("{} nan {} {}\n".format((i[0]-mean)/var**0.5, np.exp(i[1])*var**0.5, np.exp(i[1])*i[2]))
 
 
 if __name__ == "__main__":

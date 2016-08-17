@@ -211,6 +211,12 @@ def run(parallelness=1):
         with open(means_file, "a") as f:
             f.write("{} {} {} {} {}\n".format(N, m, m_err, v, v_err))
 
+        normed_file = outbase.format("normed")
+        with open(normed_file, "w") as f:
+            f.write("# S err ln(P(S)) ln(P(S)_err)\n")
+            for i in zip(centers, data, stderr):
+                f.write("{} nan {} {}\n".format((i[0]-m)/v**0.5, np.exp(i[1])*v**0.5, np.exp(i[1])*i[2]))
+
 
 if __name__ == "__main__":
     logging.info("started Wang Landau evaluation")
