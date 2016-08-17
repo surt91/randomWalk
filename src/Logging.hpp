@@ -1,3 +1,4 @@
+ /*! \file */
 #pragma once
 
 #ifdef __unix__
@@ -17,16 +18,22 @@
     if(true) {} \
     else Logger(level)
 #else
-// http://stackoverflow.com/a/11826787/1698412
-// low overhead macro
-// prevents construction of the Logger object and evaluation of << operators
+/** Low overhead logging macro.
+ *
+ * Prevents construction of the Logger object and evaluation of << operators
+ * if the Logger::verbosity level is lower than the \a level of the message.
+ * This also enables the output of Filename, Line and Function for every output
+ *
+ * Inspired by:
+ *   http://stackoverflow.com/a/11826787/1698412
+ *   http://stackoverflow.com/questions/1255576/what-is-good-practice-for-generating-verbose-output
+ */
 #define LOG(level) \
     if(level > Logger::verbosity) {} \
     else Logger(level, __FILE__, __LINE__, __func__)
 #endif
 
-// http://stackoverflow.com/questions/1255576/what-is-good-practice-for-generating-verbose-output
-
+/// Enum defining which verbosity level to use, i.e. which events to output
 enum log_level_t {
     LOG_QUIET = 0,
     LOG_ALWAYS,
@@ -39,6 +46,7 @@ enum log_level_t {
     LOG_TOO_MUCH
 };
 
+/// Labels appearing in front of messenges of the associated verbosity levels
 static const std::vector<std::string> LABEL = {
     "",
     "",
@@ -51,6 +59,7 @@ static const std::vector<std::string> LABEL = {
     "Debug3:  "
 };
 
+/// Labels appearing in front of messenges of the associated verbosity levels with color
 static const std::vector<std::string> CLABEL = {
     "",
     "",
@@ -64,6 +73,8 @@ static const std::vector<std::string> CLABEL = {
 };
 
 /** Logs messages depending on a runtime set verbosity level.
+ *
+ *  Use it through the #LOG(level) macro.
  */
 class Logger {
     public:

@@ -1,8 +1,8 @@
 #include "Logging.hpp"
 
-bool Logger::quiet = false;
-int Logger::verbosity = 0;
-std::string Logger::logfilename = "";
+bool Logger::quiet = false;             ///< Log only to file or also to stdout
+int Logger::verbosity = 0;              ///< global verbosity level to use
+std::string Logger::logfilename = "";   ///< Filename to write the messenges to
 
 Logger::Logger(log_level_t level, std::string file, int line, std::string function)
     : level(level),
@@ -24,6 +24,7 @@ Logger::Logger(log_level_t level, std::string file, int line, std::string functi
     }
 }
 
+/// Writes the message to the logfile and flushes it to stdout, according to settings.
 Logger::~Logger()
 {
     if(level <= verbosity)
