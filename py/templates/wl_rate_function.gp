@@ -6,7 +6,7 @@
 
 set log y
 
-d = {{ dimension }}
+d = {{ dimension if observable == 2 else dimension-1 }}
 
 smax(x) = {{ getMaximumSForGnuplot(dimension, observable, typ) }}
 
