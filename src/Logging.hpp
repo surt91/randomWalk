@@ -24,8 +24,8 @@
  * if the Logger::verbosity level is lower than the \a level of the message.
  * This also enables the output of Filename, Line and Function for every output
  *
- * Inspired by:
- *   http://stackoverflow.com/a/11826787/1698412
+ * Inspired by: \n
+ *   http://stackoverflow.com/a/11826787/1698412 \n
  *   http://stackoverflow.com/questions/1255576/what-is-good-practice-for-generating-verbose-output
  */
 #define LOG(level) \
@@ -35,15 +35,15 @@
 
 /// Enum defining which verbosity level to use, i.e. which events to output
 enum log_level_t {
-    LOG_QUIET = 0,
-    LOG_ALWAYS,
-    LOG_ERROR,
-    LOG_WARNING,
-    LOG_INFO,
-    LOG_TIMING,
-    LOG_DEBUG,
-    LOG_ALL,
-    LOG_TOO_MUCH
+    LOG_QUIET = 0,  ///< Do not log anything
+    LOG_ALWAYS,     ///< Do log things that should always be logged
+    LOG_ERROR,      ///< Do log critical error messages which terminate the process
+    LOG_WARNING,    ///< Do log warnings (recommended level)
+    LOG_INFO,       ///< Do log interesting informations
+    LOG_TIMING,     ///< Do log measured timings
+    LOG_DEBUG,      ///< Do log debug messages
+    LOG_ALL,        ///< Do log all messages
+    LOG_TOO_MUCH    ///< Do log everything (this might result probably in log files measured in GB)
 };
 
 /// Labels appearing in front of messenges of the associated verbosity levels
