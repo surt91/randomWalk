@@ -701,3 +701,77 @@ void SelfAvoidingWalker::degenerateMinSurface()
     updatePoints();
     updateHull();
 }
+
+void SelfAvoidingWalker::svgOfPivot(std::string filename)
+{
+    if(d != 2)
+    {
+        LOG(LOG_ERROR) << "Pivot algorithm visualization only implemented for d=2";
+        throw std::invalid_argument("Pivot algorithm visualization only implemented for d=2");
+    }
+
+
+    SVG pic(filename);
+    std::vector<std::vector<double>> ps;
+    int min_x=0, max_x=0, min_y=0, max_y=0;
+    for(auto i : points())
+    {
+        int x1 = i[0], y1 = i[1];
+        std::vector<double> point {(double) x1, (double) y1};
+
+        pic.circle(x1, y1, true, "gray");
+
+        ps.push_back(point);
+
+        if(x1 < min_x)
+            min_x = x1;
+        if(x1 > max_x)
+            max_x = x1;
+        if(y1 < min_y)
+            min_y = y1;
+        if(y1 > max_y)
+            max_y = y1;
+    }
+    pic.polyline(ps, false, "grey");
+    ps.clear();
+
+    LOG(LOG_INFO) << points();
+
+    int idx;
+    int symmetry;
+    do
+    {
+        idx = rng() * nRN();
+        symmetry = rng() * 4; // integer between 0 and 3
+    }
+    while(!pivot(idx, symmetry, true));
+
+    LOG(LOG_INFO) << idx << " " << symmetry;
+    LOG(LOG_INFO) << points();
+
+    for(auto i : points())
+    {
+        int x1 = i[0], y1 = i[1];
+        std::vector<double> point {(double) x1, (double) y1};
+
+        pic.circle(x1, y1, true);
+
+        ps.push_back(point);
+
+        if(x1 < min_x)
+            min_x = x1;
+        if(x1 > max_x)
+            max_x = x1;
+        if(y1 < min_y)
+            min_y = y1;
+        if(y1 > max_y)
+            max_y = y1;
+    }
+    pic.polyline(ps);
+
+    if(d > 2)
+        pic.text(min_x, max_y-20, "projected from d=" + std::to_string(d), "red");
+
+    pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
+    pic.save();
+}

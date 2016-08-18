@@ -5,6 +5,8 @@
 #include "Logging.hpp"
 #include "RNG.hpp"
 #include "walker/Walker.hpp"
+#include "walker/LoopErasedWalker.hpp"
+#include "walker/SelfAvoidingWalker.hpp"
 #include "simulation/Metropolis.hpp"
 #include "simulation/MetropolisParallelTempering.hpp"
 #include "simulation/WangLandau.hpp"
@@ -30,6 +32,24 @@ int main(int argc, char** argv)
         LOG(LOG_WARNING) << "mind that the following min/max values are ony rough estimates by a downhill algorithm";
         std::cout << "max: " << Simulation::getUpperBound(o) << std::endl;
         std::cout << "min: " << Simulation::getLowerBound(o) << std::endl;
+        return 0;
+    }
+
+    if(o.onlyPivotExample)
+    {
+        LOG(LOG_INFO) << "generate a pivot example svg and exit";
+        UniformRNG rngReal(o.seedRealization);
+        SelfAvoidingWalker w(o.d, o.steps, rngReal, o.chAlg);
+        w.svgOfPivot(o.svg_path);
+        return 0;
+    }
+
+    if(o.onlyLERWExample)
+    {
+        LOG(LOG_INFO) << "generate a LERW svg and exit";
+        UniformRNG rngReal(o.seedRealization);
+        LoopErasedWalker w(o.d, o.steps, rngReal, o.chAlg);
+        w.svgOfErasedLoops(o.svg_path);
         return 0;
     }
 

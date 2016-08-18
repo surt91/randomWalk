@@ -27,6 +27,8 @@ class SelfAvoidingWalker final : public SpecWalker<int>
 
         void degenerateMinSurface() final;
 
+        void svgOfPivot(std::string filename);
+
     protected:
         Step<int> transform(const Step<int> &p, const int *m) const;
         bool pivot(const int index, const int op, bool update=true);

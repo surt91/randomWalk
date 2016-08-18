@@ -25,6 +25,8 @@ class LoopErasedWalker final : public SpecWalker<int>
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
+        void svgOfErasedLoops(std::string filename);
+
     protected:
         mutable int random_numbers_used;
         Step<int> newStep;

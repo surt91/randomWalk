@@ -104,6 +104,8 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::SwitchArg simpleSamplingSwitch("", "simplesampling", "use simple sampling instead of the large deviation scheme", false);
         TCLAP::SwitchArg onlyBoundsSwitch("", "onlyBounds", "just output minimum and maximum of the wanted observable and exit", false);
         TCLAP::SwitchArg onlyCentersSwitch("", "onlyCenters", "just output the centers of the WL bins and exit", false);
+        TCLAP::SwitchArg onlyLERWExampleSwitch("", "onlyLERWExample", "just output a picture of erased loops", false);
+        TCLAP::SwitchArg onlyPivotExampleSwitch("", "onlyPivotExample", "just output a picture of a pivot step", false);
         TCLAP::SwitchArg benchmarkSwitch("b", "benchmark", "perform benchmark", false);
         TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode, log only to file (if specified) and not to stdout", false);
 
@@ -142,6 +144,9 @@ Cmd::Cmd(int argc, char** argv)
 
         cmd.add(onlyBoundsSwitch);
         cmd.add(onlyCentersSwitch);
+        cmd.add(onlyLERWExampleSwitch);
+        cmd.add(onlyPivotExampleSwitch);
+
         cmd.add(benchmarkSwitch);
 
         cmd.add(quietSwitch);
@@ -159,6 +164,12 @@ Cmd::Cmd(int argc, char** argv)
             LOG(LOG_INFO) << "Benchmark Mode";
             return;
         }
+
+        if(onlyBounds + onlyCenters + onlyLERWExample + onlyPivotExample > 1)
+        {
+            LOG(LOG_ERROR) << "--only* are mutually exclusive";
+            exit(1);
+        }
         onlyBounds = onlyBoundsSwitch.getValue();
         if(onlyBounds)
         {
@@ -169,11 +180,26 @@ Cmd::Cmd(int argc, char** argv)
         {
             LOG(LOG_INFO) << "onlyCenters Mode";
         }
-        if(onlyBounds && onlyCenters)
+        onlyLERWExample = onlyLERWExampleSwitch.getValue();
+        if(onlyLERWExample)
         {
-            LOG(LOG_ERROR) << "--onlyBounds and --onlyCenters are mutually exclusive";
-            exit(1);
+            if(svgArg.getValue().empty())
+            {
+                LOG(LOG_ERROR) << "-s path needed to save the visualization";
+                exit(1);
+            }
+            LOG(LOG_INFO) << "onlyLERWExample Mode";
         }
+        onlyPivotExample = onlyPivotExampleSwitch.getValue();
+        if(onlyPivotExample)
+        {
+            if(svgArg.getValue().empty())
+            {
+                LOG(LOG_ERROR) << "-s path needed to save the visualization";
+            }
+            LOG(LOG_INFO) << "onlyPivotExample Mode";
+        }
+
 
         // Get the value parsed by each arg.
         Logger::quiet = quietSwitch.getValue();

@@ -124,3 +124,48 @@ void LoopErasedWalker::undoChange()
     updatePoints();
     m_convex_hull = m_old_convex_hull;
 }
+
+void LoopErasedWalker::svgOfErasedLoops(std::string filename)
+{
+    SVG pic(filename);
+    const std::vector<Step<int>> p = points();
+    std::vector<std::vector<double>> points;
+    int min_x=0, max_x=0, min_y=0, max_y=0;
+    Step<int> i(d);
+    for(int j; j<nRN(); ++j)
+    {
+        i += Step<int>(d, random_numbers[j]);
+        int x1 = i[0], y1 = i[1];
+        std::vector<double> point {(double) x1, (double) y1};
+        points.push_back(point);
+
+        pic.circle(x1, y1, true, "grey");
+
+        if(x1 < min_x)
+            min_x = x1;
+        if(x1 > max_x)
+            max_x = x1;
+        if(y1 < min_y)
+            min_y = y1;
+        if(y1 > max_y)
+            max_y = y1;
+    }
+    pic.polyline(points, false, "grey");
+    points.clear();
+    for(auto i : p)
+    {
+        int x1 = i[0], y1 = i[1];
+        std::vector<double> point {(double) x1, (double) y1};
+
+        pic.circle(x1, y1, true);
+
+        points.push_back(point);
+    }
+    pic.polyline(points);
+
+    if(d > 2)
+        pic.text(min_x, max_y-20, "projected from d=" + std::to_string(d), "red");
+
+    pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
+    pic.save();
+}
