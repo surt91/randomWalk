@@ -132,10 +132,10 @@ bool benchmark()
                 o.steps = 30;
                 o.sweep = o.steps;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
-                expected_mean_L = 35.36;
+                expected_mean_L = 35.1526753033;
                 expected_mean_A = 56.32;
-                expected_mean_r = 12.50;
-                expected_mean_r2 = 158.04;
+                expected_mean_r = 12.519018525;
+                expected_mean_r2 = 159.618;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 100;
@@ -229,10 +229,10 @@ bool benchmark()
                 o.sweep = o.steps;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
                 o.iterations = 600;
-                expected_mean_L = 86.845799771;
-                expected_mean_A = 46.9755555556;
-                expected_mean_r = 8.17129392508;
-                expected_mean_r2 = 73.34;
+                expected_mean_L = 87.0967246288;
+                expected_mean_A = 47.6158333333;
+                expected_mean_r = 8.34690569726;
+                expected_mean_r2 = 76.3566666667;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 120;
@@ -316,8 +316,8 @@ bool benchmark()
             case WT_LOOP_ERASED_RANDOM_WALK:
                 o.steps = 10000;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
-                o.benchmark_L = 4063.70552402;
-                o.benchmark_A = 481513.5;
+                o.benchmark_L = 2989.94168838;
+                o.benchmark_A = 538864.5;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 320;
@@ -378,8 +378,8 @@ bool benchmark()
             case WT_LOOP_ERASED_RANDOM_WALK:
                 o.steps = 10000;
                 o.type = WT_LOOP_ERASED_RANDOM_WALK;
-                o.benchmark_L = 165485.186039;
-                o.benchmark_A = 3460280;
+                o.benchmark_L = 156915.992382;
+                o.benchmark_A = 3929040.66667;
                 break;
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 320;
