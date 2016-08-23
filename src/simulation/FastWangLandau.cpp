@@ -5,11 +5,16 @@ FastWangLandau::FastWangLandau(const Cmd &o)
 {
 }
 
-/** Implementation of the "Fast" 1/t Wang Landau algorithm.
+/** Implementation of the "Fast" 1/t Wang Landau algorithm extended by Entropic Sampling.
+ *
+ * Larger values of the final refinement parameter are ok, since
+ * the simulation will be "corrected" by an entropic sampling
+ * simulation after the Wang Landau estimation of g.
  *
  * Literature used:
  *   * 10.1103/PhysRevE.75.046701 (original paper)
  *   * 10.1063/1.2803061 (analytical)
+ *   * http://arxiv.org/pdf/1107.2951v1.pdf (entropic sampling)
  */
 void FastWangLandau::run()
 {
@@ -49,7 +54,7 @@ void FastWangLandau::run()
                 LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f = " << lnf << ", t = " << t;
                 do
                 {
-                    for(int i=0; i < initial_num_iterations; ++i)
+                    for(int k=0; k < initial_num_iterations; ++k)
                     {
                         for(int j=0; j < o.steps; ++j)
                         {
@@ -57,7 +62,7 @@ void FastWangLandau::run()
                             w->change(rngMC);
                             ++tries;
 
-                            double p_acc = exp(g[oldS] - g[S(w)]);
+                            double p_acc = std::exp(g[oldS] - g[S(w)]);
                             if(S(w) < lb || S(w) > ub || p_acc < rngMC())
                             {
                                 w->undoChange();
@@ -94,7 +99,7 @@ void FastWangLandau::run()
                     w->change(rngMC);
                     ++tries;
 
-                    double p_acc = exp(g[oldS] - g[S(w)]);
+                    double p_acc = std::exp(g[oldS] - g[S(w)]);
                     if(S(w) < lb || S(w) > ub || p_acc < rngMC())
                     {
                         w->undoChange();
@@ -104,6 +109,35 @@ void FastWangLandau::run()
                     g.add(S(w), lnf);
                 }
                 ++t;
+            }
+
+            // perform entropic sampling with the bias g
+            // this way the errors caused by too large f_final
+            // are mitigated
+
+            // the entropic sampling phase should be twice as long as
+            // the previous phase
+            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : begin phase 3: entropic sampling at t=" << t << " until t=" << 3*t;
+            int t_limit = 2*t;
+            for(int j=0; j<t_limit; ++j)
+            {
+                double oldS = S(w);
+                w->change(rngMC);
+                ++tries;
+
+                double p_acc = std::exp(g[oldS] - g[S(w)]);
+                if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                {
+                    w->undoChange();
+                    ++fails;
+                }
+                H.add(S(w));
+            }
+
+            // remove the bias
+            for(int j=0; j<g.get_num_bins(); ++j)
+            {
+                g[j] += H[j]/H.mean();
             }
 
             // save g to file

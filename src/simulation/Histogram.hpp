@@ -32,6 +32,7 @@ class Histogram
 
         void add(double where, double what=1);
 
+        int get_num_bins() const;
         int min() const;
         double mean() const;
         int sum() const;
@@ -43,6 +44,7 @@ class Histogram
         const std::vector<double>& get_data() const;
 
         double operator[](const double value) const;
+        double& operator[](const double value);
 
         Histogram& operator+=(const Histogram &other);
 

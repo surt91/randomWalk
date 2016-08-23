@@ -69,6 +69,12 @@ void Histogram::add(double where, double what)
 }
 
 /// minimum value of all bins
+int Histogram::get_num_bins() const
+{
+    return num_bins;
+}
+
+/// minimum value of all bins
 int Histogram::min() const
 {
     return m_cur_min;
@@ -103,6 +109,11 @@ void Histogram::reset()
 }
 
 double Histogram::operator[](const double value) const
+{
+    return operator[](value);
+}
+
+double& Histogram::operator[](const double value)
 {
     if(value >= upper)
         return above;
