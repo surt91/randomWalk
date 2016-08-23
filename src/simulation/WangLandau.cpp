@@ -64,6 +64,8 @@ void WangLandau::printCenters(const Cmd &o)
 
 /** Implementation of the Wang Landau algorithm.
  *
+ * A logarithmic scale is used for \f$g\f$.
+ *
  * Literature used:
  *   * 10.1103/PhysRevLett.86.2050 (original paper)
  *   * 10.1103/PhysRevE.64.056101 (longer original paper)
@@ -106,7 +108,7 @@ void WangLandau::run()
                     w->change(rngMC);
                     ++tries;
 
-                    double p_acc = exp(g[oldS] - g[S(w)]);
+                    double p_acc = std::exp(g[oldS] - g[S(w)]);
                     if(S(w) < lb || S(w) > ub || p_acc < rngMC())
                     {
                         w->undoChange();
