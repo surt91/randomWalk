@@ -121,17 +121,20 @@ void FastWangLandau::run()
             int t_limit = 2*t;
             for(int j=0; j<t_limit; ++j)
             {
-                double oldS = S(w);
-                w->change(rngMC);
-                ++tries;
-
-                double p_acc = std::exp(g[oldS] - g[S(w)]);
-                if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                for(int k=0; k < o.steps; ++k)
                 {
-                    w->undoChange();
-                    ++fails;
+                    double oldS = S(w);
+                    w->change(rngMC);
+                    ++tries;
+
+                    double p_acc = std::exp(g[oldS] - g[S(w)]);
+                    if(S(w) < lb || S(w) > ub || p_acc < rngMC())
+                    {
+                        w->undoChange();
+                        ++fails;
+                    }
+                    H.add(S(w));
                 }
-                H.add(S(w));
             }
 
             // remove the bias
