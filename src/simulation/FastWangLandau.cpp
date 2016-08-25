@@ -19,7 +19,8 @@ FastWangLandau::FastWangLandau(const Cmd &o)
 void FastWangLandau::run()
 {
     // parameters
-    const int initial_num_iterations = 1000;
+    //~ const int initial_num_iterations = 1000;
+    const int initial_num_iterations = 200;
 
     #pragma omp parallel for schedule(dynamic)
     for(int n=0; n<o.iterations; ++n)
