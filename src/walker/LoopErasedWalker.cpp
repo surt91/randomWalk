@@ -132,7 +132,7 @@ void LoopErasedWalker::svgOfErasedLoops(std::string filename)
     std::vector<std::vector<double>> points;
     int min_x=0, max_x=0, min_y=0, max_y=0;
     Step<int> i(d);
-    for(int j; j<nRN(); ++j)
+    for(int j=0; j<nRN(); ++j)
     {
         i += Step<int>(d, random_numbers[j]);
         int x1 = i[0], y1 = i[1];
