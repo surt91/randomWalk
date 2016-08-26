@@ -11,6 +11,10 @@ set log y
 
 {% for n, s in enumerate(S) %}
     f{{ n }}(x) = phi_inf{{ n }} - xi{{ n }}*x**(-gamma{{ n }})
+    phi_inf{{ n }} = 1; xi{{ n }} = 1; gamma{{ n }} = 1;
+    # first stupid fit to get the sign of xi (otherwise the actual fit might fail)
+    fit [{{ N_min[n] }}:] f{{ n }}(x) "{{ path }}/tran_{{ makebase(noNname+"_S{s}", s=s) }}.dat" u 1:2:3 yerr via phi_inf{{ n }}, xi{{ n }}
+    # now the actiual fit
     fit [{{ N_min[n] }}:] f{{ n }}(x) "{{ path }}/tran_{{ makebase(noNname+"_S{s}", s=s) }}.dat" u 1:2:3 yerr via phi_inf{{ n }}, xi{{ n }}, gamma{{ n }}
     chi{{ n }} = FIT_STDFIT
     print "{{ s }} ", phi_inf{{ n }}, phi_inf{{ n }}_err, chi{{ n }}**2
