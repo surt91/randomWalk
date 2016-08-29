@@ -108,6 +108,56 @@ void Histogram::reset()
         data[i] = 0;
 }
 
+/** trim the histogram
+ *
+ * discard all bins left of the smallest without entries
+ * and all bins right of the largest without entries
+ */
+void Histogram::trim()
+{
+    int left=0;
+    int right=num_bins;
+
+    int i=0;
+    while(data[i] == 0)
+    {
+        ++i;
+        left = i;
+    }
+    for(; i<num_bins; ++i)
+        if(data[i] == 0)
+        {
+            right = i;
+            break;
+        }
+
+    if(left == right)
+    {
+        LOG(LOG_ERROR) << "The Histogram is empty after trimming!";
+    }
+
+    lower = bins[left];
+    upper = bins[right];
+    num_bins = right-left;
+
+    std::vector<double> new_bins(num_bins+1);
+    std::vector<double> new_data(num_bins);
+    for(int i=left, j=0; i<=right; ++i, ++j)
+        new_bins[j] = bins[i];
+
+    // minimum needs to be updated
+    m_cur_min = data[left+1];
+    for(int i=left, j=0; i<right; ++i, ++j)
+    {
+        new_data[j] = data[i];
+        if(data[i] < m_cur_min)
+            m_cur_min = data[i];
+    }
+
+    bins = new_bins;
+    data = new_data;
+}
+
 double Histogram::operator[](const double value) const
 {
     return operator[](value);

@@ -12,9 +12,9 @@
 class Histogram
 {
     protected:
-        const int num_bins; ///< total number of bins
-        const double lower; ///< lower bound of the histogram
-        const double upper; ///< upper bound of the histogram
+        int num_bins;         ///< total number of bins
+        double lower;         ///< lower bound of the histogram
+        double upper;         ///< upper bound of the histogram
 
         int m_cur_min;        ///< current minimum entry in the histogram
         int m_total;          ///< total number of inserted data points
@@ -38,6 +38,7 @@ class Histogram
         int sum() const;
         int count() const;
         void reset();
+        void trim();
 
         const std::vector<double> centers() const;
         const std::vector<double>& borders() const;

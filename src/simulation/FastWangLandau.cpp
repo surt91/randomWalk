@@ -75,6 +75,19 @@ void FastWangLandau::run()
                         }
                         ++t;
                     }
+
+                    // if we spend 10% of the time at lnf = 1
+                    // discard all bins left of the smallest without entries
+                    // and all bins right of the largest without entries
+                    if(lnf == 1 && t > 0.1/lnf_min)
+                    {
+                        H.trim();
+                        g.trim();
+                        LOG(LOG_WARNING) << "There are empty bins after t=" << t
+                            << ", trim histogram to " << H.get_num_bins() << " bins";
+                        LOG(LOG_TOO_MUCH) << H.centers();
+                        LOG(LOG_TOO_MUCH) << H.get_data();
+                    }
                 } while(H.min() == 0);
                 // run until we have one entry in each bin
                 H.reset();
