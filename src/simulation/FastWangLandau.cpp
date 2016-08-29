@@ -37,7 +37,7 @@ void FastWangLandau::run()
         {
             const double lb = bins[i].front();
             const double ub = bins[i].back();
-            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " [" << lb << ", " << ub << "] : [" << bins[i] << "]";
+            LOG(LOG_DEBUG) << "[" << lb << ", " << ub << "] : [" << bins[i] << "]";
 
             Histogram H(bins[i]);
             Histogram g(bins[i]);
@@ -46,13 +46,13 @@ void FastWangLandau::run()
             double status = 1.;
 
             findStart(w, lb, ub, rngMC);
-            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " " << lb << " < " << S(w) << " < " << ub << " start!";
-
+            LOG(LOG_DEBUG) << "found configuration: " << lb << " < " << S(w) << " < " << ub << " -> start!";
+            LOG(LOG_DEBUG) << "begin phase 1 (exponential decrease)";
             // start first phase
             double lnf = 1;
             while(t < 10 || lnf > 1./t)
             {
-                LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f = " << lnf << ", t = " << t;
+                LOG(LOG_DEBUG) << "ln f = " << lnf << ", t = " << t;
                 do
                 {
                     for(int k=0; k < initial_num_iterations; ++k)
@@ -83,14 +83,14 @@ void FastWangLandau::run()
 
             //start second phase
             status = 1./t;
-            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : begin phase 2 at t=" << t;
+            LOG(LOG_DEBUG) << "begin phase 2 (power-law decrease) at t=" << t;
             while(lnf > lnf_min)
             {
                 lnf = 1./t;
 
                 if(Logger::verbosity >= LOG_DEBUG && lnf < status)
                 {
-                    LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f = " << lnf << ", t = " << t;
+                    LOG(LOG_DEBUG) << "ln f = " << lnf << ", t = " << t;
                     status /= 2;
                 }
 
@@ -118,7 +118,7 @@ void FastWangLandau::run()
 
             // the entropic sampling phase should be twice as long as
             // the previous phase
-            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : begin phase 3: entropic sampling at t=" << t << " until t=" << 3*t;
+            LOG(LOG_DEBUG) << "begin phase 3 (entropic sampling) at t=" << t << " until t=" << 3*t;
             int t_limit = 2*t;
             for(int j=0; j<t_limit; ++j)
             {

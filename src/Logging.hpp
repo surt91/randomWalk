@@ -12,6 +12,10 @@
 #include <iomanip>
 #include <vector>
 
+#ifdef _OPENMP
+   #include <omp.h>
+#endif
+
 #ifdef NLOG
 // if compiled with -DNLOG, the compiler hopefully optimizes everything after the else away
 #define LOG(level) \

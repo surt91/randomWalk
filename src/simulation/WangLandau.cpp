@@ -90,18 +90,18 @@ void WangLandau::run()
         {
             const double lb = bins[i].front();
             const double ub = bins[i].back();
-            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " [" << lb << ", " << ub << "] : [" << bins[i] << "]";
+            LOG(LOG_DEBUG) << "[" << lb << ", " << ub << "] : [" << bins[i] << "]";
 
             Histogram H(bins[i]);
             Histogram g(bins[i]);
 
             findStart(w, lb, ub, rngMC);
-            LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " " << lb << " < " << S(w) << " < " << ub << " start!";
+            LOG(LOG_DEBUG) << lb << " < " << S(w) << " < " << ub << " start!";
 
             double lnf = 1;
             while(lnf > lnf_min)
             {
-                LOG(LOG_DEBUG) << "t" << omp_get_thread_num() << " : ln f " << lnf;
+                LOG(LOG_DEBUG) << "ln f " << lnf;
                 do
                 {
                     double oldS = S(w);

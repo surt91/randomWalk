@@ -29,6 +29,12 @@ Logger::~Logger()
 {
     if(level <= verbosity)
     {
+        // write current thread, if we are multithreaded
+        #ifdef _OPENMP
+        if(omp_get_num_threads() > 1)
+            ss << " (thread " << omp_get_thread_num() << ")";
+        #endif
+
         if(level <= LOG_WARNING)
             ss << " (" << file << ":" << line << " [" << function << "()]) ";
 
