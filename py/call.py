@@ -27,10 +27,10 @@ def read_parameters():
 
 
 if __name__ == "__main__":
-    run = read_parameters()
-
     logging.info("copy executable")
     shutil.copy2("../src/randomWalk", ".")
+
+    run = read_parameters()
 
     if len(sys.argv) > 1:
         if "hero" in sys.argv:

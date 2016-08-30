@@ -392,7 +392,7 @@ void SpecWalker<T>::goDownhill(const bool maximize, const wanted_observable_t ob
     {
         double veryOldS = S();
         // abort if there is no improvement after 1000 changes
-        for(int i=0; i<100; ++i)
+        for(int i=0; i<1000; ++i)
         {
             // change one random number to another random number
             double oldS = S();
@@ -435,12 +435,14 @@ inline void SpecWalker<int>::degenerateMaxSurface()
 template <>
 inline void SpecWalker<int>::degenerateMinVolume()
 {
-    for(int i=0; i<numSteps; ++i)
-        random_numbers[i] = .99;
+    //~ for(int i=0; i<numSteps; ++i)
+        //~ random_numbers[i] = .99;
 
     updateSteps();
     updatePoints();
     updateHull();
+
+    goDownhill(false, WO_VOLUME);
 }
 
 /// Set the random numbers such that we always step left, right, left, right.

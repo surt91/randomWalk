@@ -145,9 +145,6 @@ double Simulation::getUpperBound(Cmd &o)
 
 double Simulation::getLowerBound(Cmd &o)
 {
-    if(o.wantedObservable == WO_VOLUME)
-        return 0;
-
     double S_min = 0;
 
     std::unique_ptr<Walker> w;

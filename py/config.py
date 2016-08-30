@@ -7,6 +7,8 @@ import warnings
 import math
 import logging
 import operator
+import copy
+import pickle
 
 import numpy as np
 import jinja2
@@ -118,6 +120,33 @@ class Simulation():
                     # not enough overlap
                     if Z < 3:
                         logging.warning("not enough overlap ({}: {} -- {})".format(Z, max(centers[i]), min(centers[i+1])))
+
+                logging.info("checking bounds for  N = {}".format(N))
+                try:
+                    # load cached bounds
+                    with open("cache_bounds_{}.p".format(N), "rb") as f:
+                        bounds = pickle.load(f)
+                except:
+                    # if we can not load them, recalculate them
+                    # restart 10 times
+                    get_bounds_tmp = operator.methodcaller('get_WL_bounds')
+                    tests = [copy.deepcopy(instances_for_N[0]) for _ in range(10)]
+                    # update seeds
+                    for n, i in enumerate(tests):
+                        tests[n].x = n
+                        tests[n].y = n
+                    with Pool() as pool:
+                        bounds = pool.map(get_bounds_tmp, tests)
+                    bounds = min(i[0] for i in bounds), max(i[1] for i in bounds)
+                    with open("cache_bounds_{}.p".format(N), "wb") as f:
+                        pickle.dump(bounds, f)
+
+                logging.info("estimated bounds: [{}, {}]".format(*bounds))
+                # test if the ranges are inside the bounds
+                for i in range(len(centers)-1):
+                    if not all(bounds[0] < c < bounds[1] for c in centers[i]):
+                        logging.warning("some centers are outside of the estimated bounds ({} > {} or {} > {})".format(bounds[0], centers[i][0], centers[i][-1], bounds[1]))
+                        logging.warning("This could result in an infinite loop")
 
     def ihero(self):
         return self.hero(True)
@@ -384,6 +413,23 @@ class SimulationInstance():
             raise
 
         return centers
+
+    def get_WL_bounds(self):
+        cmd = self.get_cmd(logging=False)
+        cmd += ["--onlyBounds"]
+        out = subprocess.run(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+
+        lower, upper = None, None
+        for l in out.stdout.split("\n"):
+            if l.startswith("min: "):
+                lower = float(l.split()[1])
+            if l.startswith("max: "):
+                upper = float(l.split()[1])
+
+        if lower is None or upper is None:
+            raise
+
+        return lower, upper
 
     def get_cmd(self, logging=True):
         try:
