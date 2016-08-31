@@ -47,7 +47,7 @@ void FastWangLandau::run()
 
             findStart(w, lb, ub, rngMC);
             LOG(LOG_DEBUG) << "found configuration: " << lb << " < " << S(w) << " < " << ub << " -> start!";
-            LOG(LOG_DEBUG) << "begin phase 1 (exponential decrease)";
+            LOG(LOG_INFO) << "begin phase 1 (exponential decrease)";
             // start first phase
             double lnf = 1;
             while(t < 10 || lnf > 1./t)
@@ -83,7 +83,7 @@ void FastWangLandau::run()
 
             //start second phase
             status = 1./t;
-            LOG(LOG_DEBUG) << "begin phase 2 (power-law decrease) at t=" << t;
+            LOG(LOG_INFO) << "begin phase 2 (power-law decrease) at t=" << t;
             while(lnf > lnf_min)
             {
                 lnf = 1./t;
@@ -118,7 +118,7 @@ void FastWangLandau::run()
 
             // the entropic sampling phase should be twice as long as
             // the previous phase
-            LOG(LOG_DEBUG) << "begin phase 3 (entropic sampling) at t=" << t << " until t=" << 3*t;
+            LOG(LOG_INFO) << "begin phase 3 (entropic sampling) at t=" << t << " until t=" << 3*t;
             int t_limit = 2*t;
             for(int j=0; j<t_limit; ++j)
             {
