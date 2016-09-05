@@ -28,7 +28,10 @@ def read_parameters():
 
 if __name__ == "__main__":
     logging.info("copy executable")
-    shutil.copy2("../src/randomWalk", ".")
+    try:
+        shutil.copy2("../src/randomWalk", ".")
+    except OSError:
+        logging.warning("could not copy -- proceed with old executable")
 
     run = read_parameters()
 
