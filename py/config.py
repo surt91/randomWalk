@@ -128,9 +128,11 @@ class Simulation():
                         bounds = pickle.load(f)
                 except:
                     # if we can not load them, recalculate them
-                    # restart 10 times
+                    # restart 4 times
+                    # we do not want to get a too good bound, otherwise the
+                    # simulation will not finish.
                     get_bounds_tmp = operator.methodcaller('get_WL_bounds')
-                    tests = [copy.deepcopy(instances_for_N[0]) for _ in range(10)]
+                    tests = [copy.deepcopy(instances_for_N[0]) for _ in range(4)]
                     # update seeds
                     for n, i in enumerate(tests):
                         tests[n].x = n
@@ -143,10 +145,12 @@ class Simulation():
 
                 logging.info("estimated bounds: [{}, {}]".format(*bounds))
                 # test if the ranges are inside the bounds
-                for i in range(len(centers)-1):
-                    if not all(bounds[0] < c < bounds[1] for c in centers[i]):
-                        logging.warning("some centers are outside of the estimated bounds ({} > {} or {} > {})".format(bounds[0], centers[i][0], centers[i][-1], bounds[1]))
-                        logging.warning("This could result in an infinite loop")
+                if bounds[0] > min(min(c) for c in centers):
+                    logging.warning("there are bins below the lower bound ({} > {})".format(bounds[0], min(min(c) for c in centers)))
+                    logging.warning("This could result in an infinite loop")
+                if bounds[1] < max(max(c) for c in centers):
+                    logging.warning("there are bins above the upper bound ({} < {})".format(bounds[1], max(max(c) for c in centers)))
+                    logging.warning("This could result in an infinite loop")
 
     def ihero(self):
         return self.hero(True)

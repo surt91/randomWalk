@@ -118,6 +118,33 @@ std::function<double(const std::unique_ptr<Walker>&)> Simulation::prepareS(const
     return S;
 }
 
+/** Estimate an upper bound with a greedy heuristic */
+double Simulation::getReasonalbleUpperBound(Cmd &o)
+{
+    std::unique_ptr<Walker> w;
+    prepare(w, o);
+    auto S = prepareS(o);
+
+    w->goDownhill(true, o.wantedObservable,100);
+    w->svg("r_upper.svg");
+
+    return S(w);
+}
+
+/** Estimate a lower bound with a greedy heuristic */
+double Simulation::getReasonalbleLowerBound(Cmd &o)
+{
+    std::unique_ptr<Walker> w;
+    prepare(w, o);
+    auto S = prepareS(o);
+
+    w->goDownhill(false, o.wantedObservable, 100);
+    w->svg("r_lower.svg");
+
+    return S(w);
+}
+
+/** get the exact upper bound (possibly infinity) */
 double Simulation::getUpperBound(Cmd &o)
 {
     double S_min = 0;
@@ -143,6 +170,7 @@ double Simulation::getUpperBound(Cmd &o)
     return S_min;
 }
 
+/** get the exact lower bound (possibly zero) */
 double Simulation::getLowerBound(Cmd &o)
 {
     double S_min = 0;

@@ -86,6 +86,8 @@ class MultipleWalker : public Walker
         virtual void pov(const std::string filename, const bool with_hull=false) const;
         virtual void gp(const std::string filename, const bool with_hull=false) const;
 
+        void goDownhill(const bool, const wanted_observable_t, const int ) {LOG(LOG_ERROR) << "not implemented";};
+
     protected:
         std::vector<T> m_walker;
 

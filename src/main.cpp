@@ -30,8 +30,8 @@ int main(int argc, char** argv)
     if(o.onlyBounds)
     {
         LOG(LOG_WARNING) << "mind that the following min/max values are ony rough estimates by a downhill algorithm";
-        std::cout << "max: " << Simulation::getUpperBound(o) << std::endl;
-        std::cout << "min: " << Simulation::getLowerBound(o) << std::endl;
+        std::cout << "max: " << Simulation::getReasonalbleUpperBound(o) << std::endl;
+        std::cout << "min: " << Simulation::getReasonalbleLowerBound(o) << std::endl;
         return 0;
     }
 

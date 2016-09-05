@@ -75,13 +75,13 @@ class SpecWalker : public Walker
         virtual void degenerateMinVolume();
         virtual void degenerateMinSurface();
 
+        void goDownhill(const bool maximize, const wanted_observable_t observable, const int stagnate=1000) final;
+
     protected:
         std::vector<Step<T>> m_steps;
         std::vector<Step<T>> m_points;
         ConvexHull<T> m_convex_hull;
         ConvexHull<T> m_old_convex_hull;
-
-        void goDownhill(bool maximize, wanted_observable_t observable);
 };
 
 /// Do initialization, e.g. calculate the steps and the hull.
@@ -376,11 +376,13 @@ double SpecWalker<T>::r2()
 /** Performs a greedy downhill optimization to maximize of minimize a
  * the given observable of a walk.
  *
- * \param maximize Determines if maximization or minimization is carried out.
+ * \param maximize   Determines if maximization or minimization is carried out.
  * \param observable Which observable should be optimized.
+ * \param stagnate   Abortion criterion, if stagnate many changes yielded no
+                     improvement, finish simulation.
  */
 template <class T>
-void SpecWalker<T>::goDownhill(const bool maximize, const wanted_observable_t observable)
+void SpecWalker<T>::goDownhill(const bool maximize, const wanted_observable_t observable, const int stagnate)
 {
     std::function<double()> S;
     if(observable == WO_SURFACE_AREA)
@@ -392,7 +394,7 @@ void SpecWalker<T>::goDownhill(const bool maximize, const wanted_observable_t ob
     {
         double veryOldS = S();
         // abort if there is no improvement after 1000 changes
-        for(int i=0; i<1000; ++i)
+        for(int i=0; i<stagnate; ++i)
         {
             // change one random number to another random number
             double oldS = S();
@@ -435,14 +437,12 @@ inline void SpecWalker<int>::degenerateMaxSurface()
 template <>
 inline void SpecWalker<int>::degenerateMinVolume()
 {
-    //~ for(int i=0; i<numSteps; ++i)
-        //~ random_numbers[i] = .99;
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i] = .99;
 
     updateSteps();
     updatePoints();
     updateHull();
-
-    goDownhill(false, WO_VOLUME);
 }
 
 /// Set the random numbers such that we always step left, right, left, right.

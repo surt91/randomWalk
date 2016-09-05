@@ -43,6 +43,8 @@ class Simulation
         static std::function<double(const std::unique_ptr<Walker>&)> prepareS(const Cmd &o);
         static double getLowerBound(Cmd &o);
         static double getUpperBound(Cmd &o);
+        static double getReasonalbleUpperBound(Cmd &o);
+        static double getReasonalbleLowerBound(Cmd &o);
 
         void mute() {muted=true;};
 
