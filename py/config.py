@@ -406,7 +406,8 @@ class SimulationInstance():
             out = subprocess.run(cmd, stdout=subprocess.PIPE, universal_newlines=True)
             # one line per range
             for l in out.stdout.split("\n"):
-                if l.startswith("Warning"):
+                if l.startswith("Warning") or l.startswith("Error"):
+                    print(" ".join(cmd))
                     print(l)
             outlines = [l for l in out.stdout.split("\n") if not l.startswith("#") and not l.startswith("Info") and not l.startswith("Warning") and l]
             #~ centers = [list(map(float, i.split())) for i in outlines]
