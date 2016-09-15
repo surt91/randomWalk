@@ -129,12 +129,12 @@ doc/mathjax.zip:
 	mkdir -p doc/html/
 	wget -c https://codeload.github.com/mathjax/MathJax/zip/master -O doc/mathjax.zip
 
-doc/html/mathjax: doc/mathjax.zip
+doc/mathjax: doc/mathjax.zip
 	unzip -qud doc/ doc/mathjax.zip
-	mv doc/MathJax-master doc/html/mathjax
+	mv doc/MathJax-master doc/mathjax
 
 doc: $(DOC)
-$(DOC): doc.conf *.cpp *.hpp cli.dox doc/html/mathjax
+$(DOC): doc.conf *.cpp *.hpp cli.dox | doc/mathjax
 	doxygen doc.conf
 	$(MAKE) -C doc/latex clean
 	$(MAKE) -C doc/latex
