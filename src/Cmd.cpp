@@ -165,22 +165,36 @@ Cmd::Cmd(int argc, char** argv)
             return;
         }
 
+        onlyBounds = onlyBoundsSwitch.getValue();
+        onlyCenters = onlyCentersSwitch.getValue();
+        onlyLERWExample = onlyLERWExampleSwitch.getValue();
+        onlyPivotExample = onlyPivotExampleSwitch.getValue();
         if(onlyBounds + onlyCenters + onlyLERWExample + onlyPivotExample > 1)
         {
             LOG(LOG_ERROR) << "--only* are mutually exclusive";
+            std::string list;
+            if(onlyBounds)
+                list += "--onlyBounds ";
+            if(onlyCenters)
+                list += "--onlyCenters ";
+            if(onlyLERWExample)
+                list += "--onlyLERWExample ";
+            if(onlyPivotExample)
+                list += "--onlyPivotExample ";
+            LOG(LOG_ERROR) << "you activated: " << list;
             exit(1);
         }
-        onlyBounds = onlyBoundsSwitch.getValue();
+
         if(onlyBounds)
         {
             LOG(LOG_INFO) << "onlyBounds Mode";
         }
-        onlyCenters = onlyCentersSwitch.getValue();
+
         if(onlyCenters)
         {
             LOG(LOG_INFO) << "onlyCenters Mode";
         }
-        onlyLERWExample = onlyLERWExampleSwitch.getValue();
+
         if(onlyLERWExample)
         {
             if(svgArg.getValue().empty())
@@ -190,7 +204,7 @@ Cmd::Cmd(int argc, char** argv)
             }
             LOG(LOG_INFO) << "onlyLERWExample Mode";
         }
-        onlyPivotExample = onlyPivotExampleSwitch.getValue();
+
         if(onlyPivotExample)
         {
             if(svgArg.getValue().empty())
