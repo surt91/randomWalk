@@ -183,7 +183,7 @@ void Metropolis::run()
     // header
     oss << "# sweeps L A";
     if(o.simpleSampling)
-        oss << " r r2 maxDiameter maxX maxY rx ry";
+        oss << " r r2 maxDiameter maxX maxY rx ry passage0 passage10 passage100 passage1000";
     oss << "\n";
 
     std::unique_ptr<Walker> w;
@@ -253,6 +253,10 @@ void Metropolis::run()
                         << maxE[1] << " "
                         << w->rx() << " "
                         << w->ry();
+                        << w->ry() << " "
+                        << w->passage(10) << " "
+                        << w->passage(100) << " "
+                        << w->passage(1000) << " ";
                 }
                 oss << std::endl;
             }

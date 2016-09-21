@@ -38,12 +38,13 @@ class Walker
         // convenience functions
         virtual double A() const = 0;   ///< Returns the Volume of the convex hull
         virtual double L() const = 0;   ///< Returns the surface area of the convex hull
-        virtual std::vector<double> maxExtent() = 0; ///< Returns a vector with d entries of the maximum extension in the corresponding dimension
-        virtual double maxDiameter() = 0;            ///< Returns the maximum distance between all pairs
-        virtual double r() = 0;  ///< Distance between start and end point
-        virtual double r2() = 0; ///< Squared distance between start and end point
-        virtual double rx() = 0; ///< x coordinate of endpoint
-        virtual double ry() = 0; ///< y coordinate of endpoint
+        virtual std::vector<double> maxExtent() const = 0; ///< Returns a vector with d entries of the maximum extension in the corresponding dimension
+        virtual double maxDiameter() const = 0;            ///< Returns the maximum distance between all pairs
+        virtual double r() const = 0;  ///< Distance between start and end point
+        virtual double r2() const = 0; ///< Squared distance between start and end point
+        virtual double rx() const = 0; ///< x coordinate of endpoint
+        virtual double ry() const = 0; ///< y coordinate of endpoint
+        virtual int passage(int t1=0) const = 0; // first passage of x=0 after t1
 
         /** Change the Walker by a small amount, appropiate for the type.
          *

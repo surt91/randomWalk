@@ -16,6 +16,14 @@
 #include "../ConvexHull.hpp"
 #include "Walker.hpp"
 
+/// Signum function
+/// returns -1, 0 or 1
+/// http://stackoverflow.com/a/4609795
+template <typename T> int sign(T val) 
+{
+    return (T(0) < val) - (val < T(0));
+}
+
 /** Abstract Class Template SpecWalker.
  *
  * Implements generic things offered by the Walker interface.
@@ -46,12 +54,13 @@ class SpecWalker : public Walker
         ///\name observables
         double A() const final { return convexHull().A(); };
         double L() const final { return convexHull().L(); };
-        std::vector<double> maxExtent() final;
-        double maxDiameter() final;
-        double r() final;
-        double r2() final;
-        double rx() final;
-        double ry() final;
+        std::vector<double> maxExtent() const final;
+        double maxDiameter() const final;
+        double r() const final;
+        double r2() const final;
+        double rx() const final;
+        double ry() const final;
+        int passage(int t1=0) const final;
 
         ///\name get state
         const std::vector<Step<T>>& steps() const { return m_steps; };
@@ -310,7 +319,7 @@ std::string SpecWalker<T>::print() const
 
 /// Get the maximum extend along any axis.
 template <class T>
-std::vector<double> SpecWalker<T>::maxExtent()
+std::vector<double> SpecWalker<T>::maxExtent() const
 {
     std::vector<double> maxE(d, 0);
     int n_hullpoints = hullPoints().size();
@@ -329,7 +338,7 @@ std::vector<double> SpecWalker<T>::maxExtent()
 
 /// Get the maximum distance of any two points of the walk.
 template <class T>
-double SpecWalker<T>::maxDiameter()
+double SpecWalker<T>::maxDiameter() const
 {
     double maxD = 0;
     int n_hullpoints = hullPoints().size();
@@ -346,31 +355,57 @@ double SpecWalker<T>::maxDiameter()
 
 /// Get the end-to-end distance of the walk.
 template <class T>
-double SpecWalker<T>::r()
+double SpecWalker<T>::r() const
 {
     return (points().front() - points().back()).length();
 }
 
 /// Get the x-component of the end-to-end distance of the walk.
 template <class T>
-double SpecWalker<T>::rx()
+double SpecWalker<T>::rx() const
 {
     return (points().front() - points().back()).x();
 }
 
 /// Get the y-component of the end-to-end distance of the walk.
 template <class T>
-double SpecWalker<T>::ry()
+double SpecWalker<T>::ry() const
 {
     return (points().front() - points().back()).y();
 }
 
 /// Get the squared end-to-end distance of the walk.
 template <class T>
-double SpecWalker<T>::r2()
+double SpecWalker<T>::r2() const
 {
     double tmp = r();
     return tmp * tmp;
+}
+
+/// Get the time at which the sign changes after starting at t1
+/// return -1 if no sign change is detected for the remainder of the Walk
+template <class T>
+int SpecWalker<T>::passage(int t1) const
+{
+    if(t1 >= numSteps)
+        return -1;
+    int startSign = sign(points()[t1].x());
+    // if we are on zero, search the next non-null coordinate
+    while(startSign == 0)
+    {
+        if(t1 >= numSteps)
+            return -1;
+        startSign = sign(points()[++t1].x());
+    }
+    for(int i=t1+1; i<numSteps; ++i)
+    {
+        int nextSign = sign(points()[i].x());
+        if(nextSign != 0 && nextSign != startSign)
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 /** Performs a greedy downhill optimization to maximize of minimize a

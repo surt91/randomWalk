@@ -59,12 +59,13 @@ class MultipleWalker : public Walker
         // convenience functions
         double A() const final;
         double L() const final;
-        std::vector<double> maxExtent() final;
-        double maxDiameter() final;
-        double r() final;
-        double rx() final;
-        double ry() final;
-        double r2() final;
+        std::vector<double> maxExtent() const final;
+        double maxDiameter() const final;
+        double r() const final;
+        double rx() const final;
+        double ry() const final;
+        double r2() const final;
+        int passage(int t1=0) const final;
 
         virtual void change(UniformRNG &rng, bool update=true);
         virtual void undoChange();
@@ -205,17 +206,19 @@ double MultipleWalker<T>::A() const { return m_convex_hull.A(); }
 template <class T>
 double MultipleWalker<T>::L() const { return m_convex_hull.L(); }
 template <class T>
-std::vector<double> MultipleWalker<T>::maxExtent() { LOG(LOG_WARNING) << "not yet implemented"; return {0}; }
+std::vector<double> MultipleWalker<T>::maxExtent() const { LOG(LOG_WARNING) << "not yet implemented"; return {0}; }
 template <class T>
-double MultipleWalker<T>::maxDiameter() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+double MultipleWalker<T>::maxDiameter() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
-double MultipleWalker<T>::r() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+double MultipleWalker<T>::r() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
-double MultipleWalker<T>::rx() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+double MultipleWalker<T>::rx() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
-double MultipleWalker<T>::ry() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+double MultipleWalker<T>::ry() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
-double MultipleWalker<T>::r2() { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+double MultipleWalker<T>::r2() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+template <class T>
+int MultipleWalker<T>::passage(int) const {LOG(LOG_ERROR) << "not implemented"; return 0; }
 
 template <class T>
 void MultipleWalker<T>::degenerateMaxVolume() { LOG(LOG_WARNING) << "not yet implemented"; }
