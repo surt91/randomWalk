@@ -90,6 +90,8 @@ void ConvexHull<T>::run(std::vector<Step<T>> *points)
 
     switch(algorithm)
     {
+        case CH_NOP:
+            break;
         case CH_QHULL_AKL:
             preprocessAklToussaintQHull();
         case CH_QHULL:
@@ -140,6 +142,8 @@ void ConvexHull<T>::setHullAlgo(hull_algorithm_t alg)
 template <class T>
 double ConvexHull<T>::A() const
 {
+    if(algorithm == CH_NOP)
+        return 0;
     if(m_A < 0)
     {
         if(d != 2)
@@ -163,6 +167,8 @@ double ConvexHull<T>::A() const
 template <class T>
 double ConvexHull<T>::L() const
 {
+    if(algorithm == CH_NOP)
+        return 0;
     if(m_L < 0)
     {
         if(d != 2)
@@ -187,6 +193,8 @@ double ConvexHull<T>::L() const
 template <class T>
 const std::vector<Step<T>>& ConvexHull<T>::hullPoints() const
 {
+    if(algorithm == CH_NOP)
+        return hullPoints_;
     if(hullPoints_.empty())
         updateHullPoints();
     LOG(LOG_TOO_MUCH) << "Convex Hull: " << hullPoints_;

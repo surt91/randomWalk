@@ -64,9 +64,10 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\tCorrelated random walk: 7",
                                      false, 1, &allowedWT);
 
-        std::vector<int> ch({1, 2, 3, 4});
+        std::vector<int> ch({0, 1, 2, 3, 4});
         TCLAP::ValuesConstraint<int> allowedCH(ch);
         TCLAP::ValueArg<int> chAlgArg("c", "convexHullAlgo", "convex hull algorithm:\n"
+                                                             "\tNOP (do nothing)      : 0\n"
                                                              "\tquickhull (QHull)     : 1 (default)\n"
                                                              "\tAndrews Monotone Chain: 2\n"
                                                              "\tGraham Scan           : 3\n"
@@ -262,8 +263,9 @@ Cmd::Cmd(int argc, char** argv)
 
         bool aklHeuristic = aklHeuristicSwitch.getValue();
         int tmp = chAlgArg.getValue();
-        tmp = (tmp-1)*2 + 1;
-        if(aklHeuristic)
+        if(tmp > 0)
+            tmp = (tmp-1)*2 + 1;
+        if(aklHeuristic && tmp > 0)
             tmp++;
         chAlg = (hull_algorithm_t) tmp;
         LOG(LOG_INFO) << "Convex Hull Algorithm      " << CH_LABEL[chAlg];

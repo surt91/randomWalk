@@ -16,6 +16,7 @@
 #endif
 
 enum hull_algorithm_t {
+    CH_NOP = 0,     //< do not calculate the hull, just return 0
     CH_QHULL = 1,   //< use the quick hull implementation Qhull
     CH_QHULL_AKL,   //< use the quick hull implementation Qhull with Akl's heuristic
     CH_ANDREWS,     //< use Andrews monotone chain algorithm
@@ -29,7 +30,7 @@ enum hull_algorithm_t {
 };
 
 const std::vector<std::string> CH_LABEL = {
-    "nan",
+    "NOP, do nothing",
     "QHull",
     "QHull + Akl",
     "Andrews",
