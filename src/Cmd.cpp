@@ -28,6 +28,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, 0, "integer");
         TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, 0, "integer");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
+        TCLAP::ValueArg<int> passageTimeStartArg("", "passageTimeStart", "reference point to start from", false, 1, "integer");
         TCLAP::ValueArg<int> parallelArg("P", "parallel", "use openMP to use this many cpus, zero means all (only available for Wang Landau Sampling)", false, 1, "integer");
         TCLAP::MultiArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme, multiple for Parallel Tempering", false, "double");
         TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, 0.0, "double");
@@ -73,11 +74,12 @@ Cmd::Cmd(int argc, char** argv)
                                                              "\tGraham Scan           : 3\n"
                                                              "\tJarvis March          : 4",
                                       false, 1, &allowedCH);
-        std::vector<int> wo({1, 2});
+        std::vector<int> wo({1, 2, 3});
         TCLAP::ValuesConstraint<int> allowedWO(wo);
         TCLAP::ValueArg<int> wantedobservableArg("w", "wantedObservable", "observable for which the probability density is desired:\n"
                                                                           "\tsurface area (L)    : 1 (default)\n"
-                                                                          "\tvolume       (A)    : 2",
+                                                                          "\tvolume       (A)    : 2\n"
+                                                                          "\tpassage time (t)    : 3",
                                                  false, 1, &allowedWO);
 
         std::vector<int> sm({1, 2, 3, 4});
@@ -133,6 +135,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(typeArg);
         cmd.add(muArg);
         cmd.add(sigmaArg);
+        cmd.add(passageTimeStartArg);
         cmd.add(svgArg);
         cmd.add(povArg);
         cmd.add(gpArg);
@@ -279,6 +282,13 @@ Cmd::Cmd(int argc, char** argv)
         wantedObservable = (wanted_observable_t) wantedobservableArg.getValue();
         LOG(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
 
+        passageTimeStart = passageTimeStartArg.getValue();
+        LOG(LOG_INFO) << "passageTimeStart           " << passageTimeStart;
+        if(wantedObservable != WO_PASSAGE)
+        {
+            LOG(LOG_WARNING) << "This parameter is only used for -w 3 / --wantedObservable 3";
+        }
+
         svg_path = svgArg.getValue();
         sampling_method = (sampling_method_t) samplingMethodArg.getValue();
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
@@ -341,7 +351,6 @@ Cmd::Cmd(int argc, char** argv)
             }
             LOG(LOG_INFO) << "Thetas =                   {" << parallelTemperatures << "}";
         }
-
 
         lnf_min = lnfArg.getValue();
         flatness_criterion = flatnessArg.getValue();

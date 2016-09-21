@@ -5,6 +5,7 @@ from math import exp, log, ceil
 import logging
 from multiprocessing import Pool
 import gzip
+import math
 
 import numpy as np
 import warnings
@@ -82,6 +83,7 @@ def autocorrelation(x):
     result = np.real(np.fft.ifft(s * np.conjugate(s), N*2-1))
     result = result[:N]
     result /= result[0]
+
     return result
 
 
@@ -104,6 +106,8 @@ def getAutocorrTime(data, T="?"):
             break
 
     tau = sum(autocorr[:m])/x0
+    if math.isnan(tau):
+        tau = 1
     logging.info("theta = {}, t_corr: {:.1f}".format(T, tau))
     return tau
 
@@ -225,7 +229,7 @@ def eval_simplesampling(name, outdir, N=0, parallelness=1):
     """
     if name is None:
         with open("{}/simple.dat".format(outdir), "w") as f:
-            f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... L err varL err A err varA err \n")
+            f.write("# N r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... L err varL err A err varA err\n")
     else:
         name = "rawData/" + name + ".dat"
         # call getDataFromFile to purge it from correlated samples (by autocorrelationtime)
@@ -497,6 +501,7 @@ def run(histogram_type=1, parallelness=1):
         # but ensure that we only get max 1 bin per 2 x-axis values
         # since sometimes they are discrete, which can result in artifacts
         num_bins = min(num_bins, (maximum - minimum))
+        num_bins = max(num_bins, 1)
 
         logging.info("using {} bins".format(num_bins))
 

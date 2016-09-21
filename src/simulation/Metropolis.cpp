@@ -183,7 +183,7 @@ void Metropolis::run()
     // header
     oss << "# sweeps L A";
     if(o.simpleSampling)
-        oss << " r r2 maxDiameter maxX maxY rx ry passage0 passage10 passage100 passage1000";
+        oss << " r r2 maxDiameter maxX maxY rx ry";
     oss << "\n";
 
     std::unique_ptr<Walker> w;
@@ -238,9 +238,18 @@ void Metropolis::run()
                 LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
                 LOG(LOG_DEBUG) << "Iteration: " << i;
 
-                oss << i << " "
-                    << w->L() << " "
-                    << w->A() << " ";
+                // FIXME: this inconsistency is a relict, that should be purged
+                if(o.wantedObservable == WO_SURFACE_AREA || o.wantedObservable == WO_VOLUME)
+                {
+                    oss << i << " "
+                        << w->L() << " "
+                        << w->A() << " ";
+                }
+                else
+                {
+                    oss << i << " "
+                        << S(w) << " ";
+                }
 
                 // some observables are only interesting during simple sampling
                 if(o.simpleSampling)
@@ -252,12 +261,9 @@ void Metropolis::run()
                         << maxE[0] << " "
                         << maxE[1] << " "
                         << w->rx() << " "
-                        << w->ry();
-                        << w->ry() << " "
-                        << w->passage(10) << " "
-                        << w->passage(100) << " "
-                        << w->passage(1000) << " ";
+                        << w->ry() << " ";
                 }
+                // flush after every iteration
                 oss << std::endl;
             }
 

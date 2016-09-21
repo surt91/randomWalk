@@ -80,7 +80,7 @@ def file_not_empty(fpath):
 
 
 class Simulation():
-    def __init__(self, number_of_steps, thetas, iterations, **kwargs):
+    def __init__(self, number_of_steps, thetas, iterations, passageTimeStart=(-1,), **kwargs):
 
         self.Ns = number_of_steps
         self.n = iterations
@@ -94,63 +94,67 @@ class Simulation():
         if self.parallel > 1 and (self.sampling != 2 and self.sampling != 3 and self.sampling != 4):
             print("sampling method", self.sampling, "does not use parallelism, set parallel to None")
             raise
+            
+        if kwargs["observable"] != 3:
+            passageTimeStart = (-1,)
 
         self.instances = []
         for N in number_of_steps:
-            if self.sampling == 1:
-                for T in thetas[N]:
-                    self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, **kwargs))
-            if self.sampling == 4:
-                self.instances.append(SimulationInstance(steps=N, theta=thetas[N], iterations=iterations, **kwargs))
-            if self.sampling == 2 or self.sampling == 3:
-                num = len(energies[N])-1
-                instances_for_N = []
-                for i in range(num):
-                    instances_for_N.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, first=not i, last=(i==num-1), **kwargs))
-                self.instances += instances_for_N
+            for t1 in passageTimeStart:
+                if self.sampling == 1:
+                    for T in thetas[N]:
+                        self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, passageTimeStart=t1, **kwargs))
+                if self.sampling == 4:
+                    self.instances.append(SimulationInstance(steps=N, theta=thetas[N], iterations=iterations, passageTimeStart=t1, **kwargs))
+                if self.sampling == 2 or self.sampling == 3:
+                    num = len(energies[N])-1
+                    instances_for_N = []
+                    for i in range(num):
+                        instances_for_N.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, passageTimeStart=t1, first=not i, last=(i==num-1), **kwargs))
+                    self.instances += instances_for_N
 
-                logging.info("checking overlap for N = {}".format(N))
-                # call the executable to ask for the centers in parallel
-                with Pool() as pool:
-                    get_centers_tmp = operator.methodcaller('get_WL_centers')
-                    centers = pool.map(get_centers_tmp, instances_for_N)
-                # test if there is enough overlap
-                for i in range(len(centers)-1):
-                    Z = sum(1 for x in centers[i+1] if min(centers[i]) < x < max(centers[i]))
-                    # not enough overlap
-                    if Z < 3:
-                        logging.warning("not enough overlap ({}: {} -- {})".format(Z, max(centers[i]), min(centers[i+1])))
-
-                logging.info("checking bounds for  N = {}".format(N))
-                try:
-                    # load cached bounds
-                    with open("cache_bounds_{}.p".format(N), "rb") as f:
-                        bounds = pickle.load(f)
-                except:
-                    # if we can not load them, recalculate them
-                    # restart 4 times
-                    # we do not want to get a too good bound, otherwise the
-                    # simulation will not finish.
-                    get_bounds_tmp = operator.methodcaller('get_WL_bounds')
-                    tests = [copy.deepcopy(instances_for_N[0]) for _ in range(4)]
-                    # update seeds
-                    for n, i in enumerate(tests):
-                        tests[n].x = n
-                        tests[n].y = n
+                    logging.info("checking overlap for N = {}".format(N))
+                    # call the executable to ask for the centers in parallel
                     with Pool() as pool:
-                        bounds = pool.map(get_bounds_tmp, tests)
-                    bounds = min(i[0] for i in bounds), max(i[1] for i in bounds)
-                    with open("cache_bounds_{}.p".format(N), "wb") as f:
-                        pickle.dump(bounds, f)
+                        get_centers_tmp = operator.methodcaller('get_WL_centers')
+                        centers = pool.map(get_centers_tmp, instances_for_N)
+                    # test if there is enough overlap
+                    for i in range(len(centers)-1):
+                        Z = sum(1 for x in centers[i+1] if min(centers[i]) < x < max(centers[i]))
+                        # not enough overlap
+                        if Z < 3:
+                            logging.warning("not enough overlap ({}: {} -- {})".format(Z, max(centers[i]), min(centers[i+1])))
 
-                logging.info("estimated bounds: [{}, {}]".format(*bounds))
-                # test if the ranges are inside the bounds
-                if bounds[0] > min(min(c) for c in centers):
-                    logging.warning("there are bins below the lower bound ({} > {})".format(bounds[0], min(min(c) for c in centers)))
-                    logging.warning("This could result in an infinite loop")
-                if bounds[1] < max(max(c) for c in centers):
-                    logging.warning("there are bins above the upper bound ({} < {})".format(bounds[1], max(max(c) for c in centers)))
-                    logging.warning("This could result in an infinite loop")
+                    logging.info("checking bounds for  N = {}".format(N))
+                    try:
+                        # load cached bounds
+                        with open("cache_bounds_{}.p".format(N), "rb") as f:
+                            bounds = pickle.load(f)
+                    except:
+                        # if we can not load them, recalculate them
+                        # restart 4 times
+                        # we do not want to get a too good bound, otherwise the
+                        # simulation will not finish.
+                        get_bounds_tmp = operator.methodcaller('get_WL_bounds')
+                        tests = [copy.deepcopy(instances_for_N[0]) for _ in range(4)]
+                        # update seeds
+                        for n, i in enumerate(tests):
+                            tests[n].x = n
+                            tests[n].y = n
+                        with Pool() as pool:
+                            bounds = pool.map(get_bounds_tmp, tests)
+                        bounds = min(i[0] for i in bounds), max(i[1] for i in bounds)
+                        with open("cache_bounds_{}.p".format(N), "wb") as f:
+                            pickle.dump(bounds, f)
+
+                    logging.info("estimated bounds: [{}, {}]".format(*bounds))
+                    # test if the ranges are inside the bounds
+                    if bounds[0] > min(min(c) for c in centers):
+                        logging.warning("there are bins below the lower bound ({} > {})".format(bounds[0], min(min(c) for c in centers)))
+                        logging.warning("This could result in an infinite loop")
+                    if bounds[1] < max(max(c) for c in centers):
+                        logging.warning("there are bins above the upper bound ({} < {})".format(bounds[1], max(max(c) for c in centers)))
+                        logging.warning("This could result in an infinite loop")
 
     def ihero(self):
         return self.hero(True)
@@ -289,6 +293,7 @@ class SimulationInstance():
         :param first:      [2,3]   (bool)        is this the first one? (to not extend range to the left)
         :param last:       [2,3]   (bool)        is this the last one? (to not extend range to the right)
         :param number_of_walkers: [] (int)       number of independed walkers
+        :param passageTimeStart: [] (int)        time point reference after which to look for sign changes
     """
     def __init__(self, steps, typ, seedMC, seedR, iterations,
                        dimension, t_eq, t_corr, directory,
@@ -297,7 +302,7 @@ class SimulationInstance():
                        lnf, flatness, overlap_direction="left",
                        t_eq_max=None, theta=None, energy=None,
                        first=False, last=False, sweep=None,
-                       number_of_walkers=None, **not_used):
+                       number_of_walkers=None, passageTimeStart=-1, **not_used):
 
         self.N = steps
         self.number_of_walkers = number_of_walkers
@@ -325,6 +330,7 @@ class SimulationInstance():
         self.flatness = flatness
         self.overlap_direction = overlap_direction
         self.sweep = sweep
+        self.passageTimeStart = passageTimeStart
         self.quiet = False
 
         self.loadFile = None
@@ -372,17 +378,17 @@ class SimulationInstance():
         self.y = abs(self.y) % 1700000339
 
         if sampling == 1:
-            self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
+            self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
         elif sampling == 4:
             self.basename = []
             for T in self.T:
-                self.basename.append(para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D))
+                self.basename.append(para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart))
         elif sampling == 2 or sampling == 3:
-            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D)
+            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
 
         if sampling == 4:
             self.filename = []
-            self.logname = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D) + ".log"
+            self.logname = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart) + ".log"
             for bn in self.basename:
                 self.filename.append("{}/{}.dat".format(self.rawData, bn))
                 if self.rawConf:
@@ -484,6 +490,9 @@ class SimulationInstance():
 
         if self.akl:
             opts.append("-a")
+
+        if self.passageTimeStart >= 0:
+            opts.append("--passageTimeStart {:.0f}".format(self.passageTimeStart))
 
         if self.m == 1 or self.m == 4:
             if self.sweep[self.N]:

@@ -66,13 +66,15 @@ const std::vector<std::string> TYPE_LABEL = {
 
 enum wanted_observable_t {
     WO_SURFACE_AREA = 1,    ///< eg. circumference in d=2
-    WO_VOLUME               ///< eg. area in d=2
+    WO_VOLUME,              ///< eg. area in d=2
+    WO_PASSAGE              ///< time needed to change the sign of the x component
 };
 
 const std::vector<std::string> WANTED_OBSERVABLE_LABEL = {
     "nan",
     "surface area (circumference in d=2)",
-    "volume (area in d=2)"
+    "volume (area in d=2)",
+    "passage time"
 };
 
 enum sampling_method_t {
@@ -131,6 +133,7 @@ class Cmd
         sampling_method_t sampling_method;          ///< sampling method to use (Metropolis or Wang Landau type)
         hull_algorithm_t chAlg;                     ///< convex hull algorithm to use
         wanted_observable_t wantedObservable;       ///< which observable to study
+        int passageTimeStart;                       ///< Reference point after which to look for sign changes
 
         double mu;                  ///< mean \f$\mu\f$ of the Gaussian to draw random numbers from (only correlated walks)
         double sigma;               ///< standard deviation \f$\sigma\f$ of the Gaussian to draw random numbers from (only correlated walks)

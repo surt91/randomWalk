@@ -112,6 +112,11 @@ std::function<double(const std::unique_ptr<Walker>&)> Simulation::prepareS(const
         S = [](const std::unique_ptr<Walker> &w){ return w->L(); };
     else if(o.wantedObservable == WO_VOLUME)
         S = [](const std::unique_ptr<Walker> &w){ return w->A(); };
+    else if(o.wantedObservable == WO_PASSAGE)
+    {
+        int t1 = o.passageTimeStart;
+        S = [t1](const std::unique_ptr<Walker> &w){ return w->passage(t1); };
+    }
     else
         LOG(LOG_ERROR) << "observable " << o.wantedObservable << " is not known";
 
