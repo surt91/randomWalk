@@ -4,7 +4,7 @@
 
 {{ header(filename+N|string, xlabel, ylabel) }}
 
-set log y
+set log xy
 
 d = {{ dimension if observable == 2 else dimension-1 }}
 
@@ -14,5 +14,5 @@ plot \
 {% for N in number_of_steps %}
     "{{ path }}/WL_{{ makebase(basename, steps=N) }}.dat" u ($1/smax({{ N }})):(-$3/{{ N }}):(-$4/{{ N }}) w ye pt 1 t "{{ N }}", \
 {% endfor %}
-
+    "phi_inf.dat" u 1:2:3 w ye pt 8 lc 8 t 'Asymptotic {/Symbol F}', \
 {% endblock content %}
