@@ -28,7 +28,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, 0, "integer");
         TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, 0, "integer");
         TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
-        TCLAP::ValueArg<int> passageTimeStartArg("", "passageTimeStart", "reference point to start from", false, 1, "integer");
+        TCLAP::MultiArg<int> passageTimeStartArg("z", "passageTimeStart", "reference point to start from", false, "integer");
         TCLAP::ValueArg<int> parallelArg("P", "parallel", "use openMP to use this many cpus, zero means all (only available for Wang Landau Sampling)", false, 1, "integer");
         TCLAP::MultiArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme, multiple for Parallel Tempering", false, "double");
         TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, 0.0, "double");
@@ -82,12 +82,14 @@ Cmd::Cmd(int argc, char** argv)
                                                                           "\tpassage time (t)    : 3",
                                                  false, 1, &allowedWO);
 
-        std::vector<int> sm({1, 2, 3, 4});
+        std::vector<int> sm({0, 1, 2, 3, 4});
         TCLAP::ValuesConstraint<int> allowedSM(sm);
         TCLAP::ValueArg<int> samplingMethodArg("m", "samplingMethod", "Sampling Method to use:\n"
+                                                                      "\tSimple Sampling     : 0\n"
                                                                       "\tMetropolis          : 1 (default)\n"
                                                                       "\tWang Landau         : 2\n"
-                                                                      "\tFast Wang Landau    : 3",
+                                                                      "\tFast Wang Landau    : 3\n"
+                                                                      "\tParallel Tempering  : 4",
                                                  false, 1, &allowedSM);
 
         TCLAP::MultiArg<double> wangLandauBordersMArg("e", "energyBorder", "specifies inside which energy ranges, i.e., "
@@ -282,11 +284,19 @@ Cmd::Cmd(int argc, char** argv)
         wantedObservable = (wanted_observable_t) wantedobservableArg.getValue();
         LOG(LOG_INFO) << "Wanted Observable          " << WANTED_OBSERVABLE_LABEL[wantedObservable];
 
-        passageTimeStart = passageTimeStartArg.getValue();
-        LOG(LOG_INFO) << "passageTimeStart           " << passageTimeStart;
-        if(wantedObservable != WO_PASSAGE)
+        passageTimeStarts = passageTimeStartArg.getValue();
+        LOG(LOG_INFO) << "passageTimeStart           " << passageTimeStarts;
+        if(!passageTimeStarts.empty())
         {
-            LOG(LOG_WARNING) << "This parameter is only used for -w 3 / --wantedObservable 3";
+            passageTimeStart = passageTimeStarts[0];
+            if(passageTimeStarts.size() > 1)
+            {
+                LOG(LOG_WARNING) << "more than one passageTimeStart is only meaningful for simple sampling";
+            }
+            if(wantedObservable != WO_PASSAGE)
+            {
+                LOG(LOG_WARNING) << "This parameter is only used for -w 3 / --wantedObservable 3";
+            }
         }
 
         svg_path = svgArg.getValue();

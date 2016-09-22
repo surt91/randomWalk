@@ -7,6 +7,7 @@
 #include "walker/Walker.hpp"
 #include "walker/LoopErasedWalker.hpp"
 #include "walker/SelfAvoidingWalker.hpp"
+#include "simulation/SimpleSampling.hpp"
 #include "simulation/Metropolis.hpp"
 #include "simulation/MetropolisParallelTempering.hpp"
 #include "simulation/WangLandau.hpp"
@@ -77,6 +78,11 @@ int main(int argc, char** argv)
     else if(o.sampling_method == SM_FAST_WANG_LANDAU)
     {
         FastWangLandau sim(o);
+        sim.run();
+    }
+    else if(o.sampling_method == SM_SIMPLESAMPLING)
+    {
+        SimpleSampling sim(o);
         sim.run();
     }
     else

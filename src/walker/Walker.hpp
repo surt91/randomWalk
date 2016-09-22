@@ -30,6 +30,8 @@ class Walker
         const int numSteps;  ///< Number of steps the Walk should have
         const int d;         ///< Dimension in which the Walker walks
 
+        virtual void reconstruct() = 0;
+
         virtual void setHullAlgo(hull_algorithm_t a) = 0;
 
         virtual void setP1(double /*p1*/) { LOG(LOG_WARNING) << "P1 not used for this type of random walk"; };

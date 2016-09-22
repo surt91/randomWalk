@@ -78,6 +78,7 @@ const std::vector<std::string> WANTED_OBSERVABLE_LABEL = {
 };
 
 enum sampling_method_t {
+    SM_SIMPLESAMPLING = 0,///< Simple Sampling, create new walks from scratch
     SM_METROPOLIS = 1,    ///< Metropolis sampling with a artificial temp
     SM_WANG_LANDAU,       ///< Direct WangLandau sampling of the distribution
     SM_FAST_WANG_LANDAU,  ///< Direct 1/t FastWangLandau sampling of the distribution
@@ -85,7 +86,7 @@ enum sampling_method_t {
 };
 
 const std::vector<std::string> SAMPLING_METHOD_LABEL = {
-    "nan",
+    "Simple Sampling",
     "Metropolis",
     "Wang Landau",
     "Fast 1/t Wang Landau",
@@ -133,7 +134,8 @@ class Cmd
         sampling_method_t sampling_method;          ///< sampling method to use (Metropolis or Wang Landau type)
         hull_algorithm_t chAlg;                     ///< convex hull algorithm to use
         wanted_observable_t wantedObservable;       ///< which observable to study
-        int passageTimeStart;                       ///< Reference point after which to look for sign changes
+        int passageTimeStart;                       ///< first reference point after which to look for sign changes
+        std::vector<int> passageTimeStarts;         ///< reference points after which to look for sign changes
 
         double mu;                  ///< mean \f$\mu\f$ of the Gaussian to draw random numbers from (only correlated walks)
         double sigma;               ///< standard deviation \f$\sigma\f$ of the Gaussian to draw random numbers from (only correlated walks)

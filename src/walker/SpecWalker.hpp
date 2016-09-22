@@ -44,6 +44,7 @@ class SpecWalker : public Walker
         virtual ~SpecWalker() {}
 
         void init();
+        virtual void reconstruct();
 
         const ConvexHull<T>& convexHull() const;
         void setHullAlgo(hull_algorithm_t a);
@@ -100,6 +101,15 @@ void SpecWalker<T>::init()
     updateSteps();
     updatePoints();
     setHullAlgo(hull_algo); // does also update hull
+}
+
+/// Get new random numbers and reconstruct the walk
+template <class T>
+void SpecWalker<T>::reconstruct()
+{
+    // write new random numers into our state
+    std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng(); });
+    init();
 }
 
 /// Update the convex hull given the current points.

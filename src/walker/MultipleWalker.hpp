@@ -49,7 +49,9 @@ class MultipleWalker : public Walker
         virtual ~MultipleWalker() {}
 
         int numWalker;
-
+        
+        virtual void reconstruct();
+        
         //\name implementing pure virtual functions
         virtual void setHullAlgo(hull_algorithm_t a);
 
@@ -105,6 +107,14 @@ MultipleWalker<T>::MultipleWalker(int d, int numSteps, int numWalker, UniformRNG
     m_walker.reserve(numWalker);
     for(int i=0; i<numWalker; ++i)
         m_walker.emplace_back(d, numSteps, rng, hull_algo);
+}
+
+/// Get new random numbers and reconstruct the walk
+template <class T>
+void MultipleWalker<T>::reconstruct()
+{
+    for(auto w : m_walker)
+        w.reconstruct();
 }
 
 template <class T>

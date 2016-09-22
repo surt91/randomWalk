@@ -27,6 +27,7 @@ CPP	 := main.cpp \
         walker/LevyWalker.cpp \
         walker/CorrelatedWalker.cpp \
         simulation/Simulation.cpp \
+        simulation/SimpleSampling.cpp \
         simulation/Metropolis.cpp \
         simulation/MetropolisParallelTempering.cpp \
         simulation/WangLandau.cpp \
