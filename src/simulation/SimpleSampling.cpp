@@ -7,7 +7,7 @@ SimpleSampling::SimpleSampling(const Cmd &o)
 
 void SimpleSampling::run()
 {
-UniformRNG rngMC(o.seedMC);
+    UniformRNG rngMC(o.seedMC);
 
     oss << "# simple sampling simulation with steps=" << o.steps << "\n";
 
