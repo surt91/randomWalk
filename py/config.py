@@ -94,14 +94,14 @@ class Simulation():
         if self.parallel > 1 and (self.sampling != 2 and self.sampling != 3 and self.sampling != 4):
             print("sampling method", self.sampling, "does not use parallelism, set parallel to None")
             raise
-            
+
         if kwargs["observable"] != 3:
             passageTimeStart = (-1,)
 
         self.instances = []
         for N in number_of_steps:
             for t1 in passageTimeStart:
-                if self.sampling == 1:
+                if self.sampling == 1 or self.sampling == 0:
                     for T in thetas[N]:
                         self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, passageTimeStart=t1, **kwargs))
                 if self.sampling == 4:
@@ -377,7 +377,7 @@ class SimulationInstance():
         self.x = abs(self.x) % 1700000333
         self.y = abs(self.y) % 1700000339
 
-        if sampling == 1:
+        if sampling == 1 or sampling == 0:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
         elif sampling == 4:
             self.basename = []
@@ -491,8 +491,11 @@ class SimulationInstance():
         if self.akl:
             opts.append("-a")
 
-        if self.passageTimeStart >= 0:
-            opts.append("--passageTimeStart {:.0f}".format(self.passageTimeStart))
+        try:
+            for i in self.passageTimeStart:
+                opts.append("-z {:.0f}".format(i))
+        except ValueError:
+            pass
 
         if self.m == 1 or self.m == 4:
             if self.sweep[self.N]:
