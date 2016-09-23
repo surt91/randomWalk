@@ -24,7 +24,7 @@
 class Walker
 {
     public:
-        Walker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
+        Walker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
         virtual ~Walker() {}
 
         const int numSteps;  ///< Number of steps the Walk should have
@@ -86,6 +86,7 @@ class Walker
         UniformRNG rng;
         mutable std::vector<double> random_numbers;
         hull_algorithm_t hull_algo;
+        bool amnesia; //< if true, will not remember used random numbers, useful for non memory intensive simple sampling
 
         int undo_index;
         double undo_value;

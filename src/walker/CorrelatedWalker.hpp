@@ -17,7 +17,7 @@
 class CorrelatedWalker final : public SpecWalker<double>
 {
     public:
-        CorrelatedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
+        CorrelatedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void reconstruct() final;
 

@@ -11,7 +11,7 @@
 class LatticeWalker final : public SpecWalker<int>
 {
     public:
-        LatticeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
+        LatticeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void updateSteps() final;
 

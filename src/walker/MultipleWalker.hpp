@@ -45,7 +45,7 @@ template <class T>
 class MultipleWalker : public Walker
 {
     public:
-        MultipleWalker(int d, int numSteps, int numWalkers, UniformRNG &rng, hull_algorithm_t hull_algo);
+        MultipleWalker(int d, int numSteps, int numWalkers, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
         virtual ~MultipleWalker() {}
 
         int numWalker;
@@ -100,13 +100,13 @@ class MultipleWalker : public Walker
 };
 
 template <class T>
-MultipleWalker<T>::MultipleWalker(int d, int numSteps, int numWalker, UniformRNG &rng, hull_algorithm_t hull_algo)
-    : Walker(d, numSteps, rng, hull_algo),
+MultipleWalker<T>::MultipleWalker(int d, int numSteps, int numWalker, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
+    : Walker(d, numSteps, rng, hull_algo, amnesia),
       numWalker(numWalker)
 {
     m_walker.reserve(numWalker);
     for(int i=0; i<numWalker; ++i)
-        m_walker.emplace_back(d, numSteps, rng, hull_algo);
+        m_walker.emplace_back(d, numSteps, rng, hull_algo, amnesia);
 }
 
 /// Get new random numbers and reconstruct the walk

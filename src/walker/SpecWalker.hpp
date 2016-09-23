@@ -35,8 +35,8 @@ template <class T>
 class SpecWalker : public Walker
 {
     public:
-        SpecWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-            : Walker(d, numSteps, rng, hull_algo),
+        SpecWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false)
+            : Walker(d, numSteps, rng, hull_algo, amnesia),
               m_points(numSteps+1, Step<T>(d))
         {
         }

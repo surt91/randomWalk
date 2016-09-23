@@ -1,7 +1,7 @@
 #include "LatticeWalker.hpp"
 
-LatticeWalker::LatticeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-    : SpecWalker<int>(d, numSteps, rng, hull_algo)
+LatticeWalker::LatticeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
+    : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia)
 {
     random_numbers = rng.vector(numSteps);
     newStep = Step<int>(d);

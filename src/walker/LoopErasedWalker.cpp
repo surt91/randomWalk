@@ -1,11 +1,29 @@
 #include "LoopErasedWalker.hpp"
 
-LoopErasedWalker::LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-    : SpecWalker<int>(d, numSteps, rng, hull_algo)
+LoopErasedWalker::LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
+    : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia)
 {
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
-    random_numbers = rng.vector(numSteps);
+    if(!amnesia)
+        random_numbers = rng.vector(numSteps);
+    init();
+}
+
+/// Get new random numbers and reconstruct the walk
+void LoopErasedWalker::reconstruct()
+{
+    if(!amnesia)
+    {
+        // If the random number vector is far longer than what we actually need,
+        // truncate it, to save some memory bandwidth (-> computing time)
+        size_t expected_space_needed = std::max(5*numSteps, 2*random_numbers_used);
+        if(random_numbers.size() > expected_space_needed)
+            random_numbers.resize(expected_space_needed); // resize will not free memory
+
+        // write new random numers into our state
+        std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng(); });
+    }
     init();
 }
 
@@ -33,15 +51,22 @@ void LoopErasedWalker::updateSteps()
     int index=0;
     while(index < numSteps)
     {
-        // generate more random numbers if necessary
-        if(i >= N)
+        if(!amnesia)
         {
-            N *= 2;
-            random_numbers.resize(N);
+            // generate more random numbers if necessary
+            if(i >= N)
+            {
+                N *= 2;
+                random_numbers.resize(N);
 
-            std::generate(random_numbers.begin() + i, random_numbers.end(), [this]{ return this->rng(); });
+                std::generate(random_numbers.begin() + i, random_numbers.end(), [this]{ return this->rng(); });
+            }
+            s.fillFromRN(random_numbers[i]);
         }
-        s.fillFromRN(random_numbers[i]);
+        else
+        {
+            s.fillFromRN(rng());
+        }
         p += s;
 
         // if already occupied, erase loop

@@ -16,7 +16,9 @@
 class LoopErasedWalker final : public SpecWalker<int>
 {
     public:
-        LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
+        LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
+
+        void reconstruct() final;
 
         void updateSteps() final;
 

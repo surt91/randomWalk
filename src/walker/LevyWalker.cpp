@@ -1,7 +1,7 @@
 #include "LevyWalker.hpp"
 
-LevyWalker::LevyWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo)
-    : SpecWalker<double>(d, numSteps, rng, hull_algo)
+LevyWalker::LevyWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
+    : SpecWalker<double>(d, numSteps, rng, hull_algo, amnesia)
 {
     // we need d random numbers per step, for each angle one
     random_numbers = rng.vector(d * numSteps);

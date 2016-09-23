@@ -18,7 +18,7 @@
 class SelfAvoidingWalker final : public SpecWalker<int>
 {
     public:
-        SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
+        SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void updateSteps() final;
 

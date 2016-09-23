@@ -101,6 +101,7 @@ bool benchmark()
     o.t_eq = -1;
     o.t_eqMax = 1000;
     o.simpleSampling = true;
+    o.sampling_method = SM_METROPOLIS;
 
     clock_t start = clock();
     LOG(LOG_INFO) << "Starting 2D Simple Sampling Simulations";
