@@ -14,6 +14,8 @@ class LevyWalker final : public SpecWalker<double>
     public:
         LevyWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
 
+        void reconstruct();
+
         void updateSteps() final;
 
         void change(UniformRNG &rng, bool update=true) final;

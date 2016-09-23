@@ -12,6 +12,16 @@ LevyWalker::LevyWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hu
     init();
 }
 
+void LevyWalker::reconstruct()
+{
+    // write new gaussian random numers into our state
+    std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng(); });
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i*d] = std::abs(rng.cauchy(1.));
+    init();
+}
+
+
 /** Generate a step with a Levy distributed distance and angles determined by the
  * d random numbers after first (inclusive first).
  *

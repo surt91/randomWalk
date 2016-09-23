@@ -8,6 +8,14 @@ GaussWalker::GaussWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t 
     init();
 }
 
+/// Get new random numbers and reconstruct the walk
+void GaussWalker::reconstruct()
+{
+    // write new gaussian random numers into our state
+    std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng.gaussian(); });
+    init();
+}
+
 /** Generate a step by unit distance and angles determined by the
  * d-1 random numbers after first (inclusive first).
  *

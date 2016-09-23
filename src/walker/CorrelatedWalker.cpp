@@ -16,6 +16,20 @@ CorrelatedWalker::CorrelatedWalker(int d, int numSteps, UniformRNG &rng, hull_al
     init();
 }
 
+/// Get new random numbers and reconstruct the walk
+void CorrelatedWalker::reconstruct()
+{
+    // write new random numers into our state
+    // we need d random numbers per step, for each angle difference one and a distance
+    // we generate d per step and overwrite unnecessary ones afterwards
+    // TODO: replace Gaussian by wrapped normal
+    std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng.gaussian(); });
+    // and for the distance a uniformly distributed one
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i*d] = rng.uniform();
+    init();
+}
+
 /** Generate a step by distance $\in [0,1)$ and d-1 gaussian angles differences.
  *
  * Algortihm see http://en.wikipedia.org/wiki/N-sphere#Spherical_coordinates

@@ -12,6 +12,8 @@ class GaussWalker final : public SpecWalker<double>
     public:
         GaussWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo);
 
+        void reconstruct() final;
+
         void updateSteps() final;
 
         void change(UniformRNG &rng, bool update=true) final;
