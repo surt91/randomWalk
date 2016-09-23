@@ -53,5 +53,15 @@ UniformRNG rngMC(o.seedMC);
         // flush after every iteration
         oss << std::endl;
     }
+
+    // save visualizations
+    if(!o.svg_path.empty())
+        w->svg(o.svg_path, true);
+
+    if(!o.pov_path.empty())
+        w->pov(o.pov_path, true);
+
+    if(!o.gp_path.empty())
+        w->gp(o.gp_path, true);
 }
 
