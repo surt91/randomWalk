@@ -67,7 +67,7 @@ class MultipleWalker : public Walker
         double rx() const final;
         double ry() const final;
         double r2() const final;
-        int passage(int t1=0) const final;
+        int passage(int t1=0, int axis=0) const final;
 
         virtual void change(UniformRNG &rng, bool update=true);
         virtual void undoChange();
@@ -228,7 +228,7 @@ double MultipleWalker<T>::ry() const { LOG(LOG_WARNING) << "not yet implemented"
 template <class T>
 double MultipleWalker<T>::r2() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
-int MultipleWalker<T>::passage(int) const {LOG(LOG_ERROR) << "not implemented"; return 0; }
+int MultipleWalker<T>::passage(int, int) const {LOG(LOG_ERROR) << "not implemented"; return 0; }
 
 template <class T>
 void MultipleWalker<T>::degenerateMaxVolume() { LOG(LOG_WARNING) << "not yet implemented"; }

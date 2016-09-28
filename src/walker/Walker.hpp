@@ -46,7 +46,7 @@ class Walker
         virtual double r2() const = 0; ///< Squared distance between start and end point
         virtual double rx() const = 0; ///< x coordinate of endpoint
         virtual double ry() const = 0; ///< y coordinate of endpoint
-        virtual int passage(int t1=0) const = 0; // first passage of x=0 after t1
+        virtual int passage(int t1=0, int axis=0) const = 0; ///< first passage of x=0 after t1
 
         /** Change the Walker by a small amount, appropiate for the type.
          *

@@ -61,7 +61,7 @@ class SpecWalker : public Walker
         double r2() const final;
         double rx() const final;
         double ry() const final;
-        int passage(int t1=0) const final;
+        int passage(int t1=0, int axis=0) const final;
 
         ///\name get state
         const std::vector<Step<T>>& steps() const { return m_steps; };
@@ -395,21 +395,21 @@ double SpecWalker<T>::r2() const
 /// Get the time at which the sign changes after starting at t1
 /// return -1 if no sign change is detected for the remainder of the Walk
 template <class T>
-int SpecWalker<T>::passage(int t1) const
+int SpecWalker<T>::passage(int t1, int axis) const
 {
     if(t1 >= numSteps)
         return -1;
-    int startSign = sign(points()[t1].x());
+    int startSign = sign(points()[t1].x(axis));
     // if we are on zero, search the next non-null coordinate
     while(startSign == 0)
     {
         if(t1 >= numSteps)
             return -1;
-        startSign = sign(points()[++t1].x());
+        startSign = sign(points()[++t1].x(axis));
     }
     for(int i=t1+1; i<numSteps; ++i)
     {
-        int nextSign = sign(points()[i].x());
+        int nextSign = sign(points()[i].x(axis));
         if(nextSign != 0 && nextSign != startSign)
         {
             return i;
