@@ -285,6 +285,14 @@ SelfAvoidingWalker::SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hul
     init();
 }
 
+/// Get new random numbers and reconstruct the walk
+void SelfAvoidingWalker::reconstruct()
+{
+    auto l(dim(numSteps));
+    random_numbers = std::vector<double>(l.begin(), l.end());
+    init();
+}
+
 void SelfAvoidingWalker::updateSteps()
 {
     m_steps.clear();
