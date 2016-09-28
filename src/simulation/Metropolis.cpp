@@ -262,6 +262,9 @@ void Metropolis::run()
                         << maxE[1] << " "
                         << w->rx() << " "
                         << w->ry() << " ";
+
+                    for(auto j : o.passageTimeStarts)
+                        oss << w->passage(j) << " ";
                 }
                 // flush after every iteration
                 oss << std::endl;
