@@ -10,10 +10,10 @@
  *
  * See http://arxiv.org/pdf/cond-mat/0701672.pdf
  */
-class FastWangLandau : public WangLandau
+class FastWLEntropic : public WangLandau
 {
     public:
-        FastWangLandau(const Cmd &o);
+        FastWLEntropic(const Cmd &o);
         virtual void run();
 
     protected:

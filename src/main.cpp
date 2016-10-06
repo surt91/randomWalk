@@ -11,7 +11,7 @@
 #include "simulation/Metropolis.hpp"
 #include "simulation/MetropolisParallelTempering.hpp"
 #include "simulation/WangLandau.hpp"
-#include "simulation/FastWangLandau.hpp"
+#include "simulation/FastWLEntropic.hpp"
 #include "Benchmark.hpp"
 
 /** randomWalk
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
     }
     else if(o.sampling_method == SM_FAST_WANG_LANDAU)
     {
-        FastWangLandau sim(o);
+        FastWLEntropic sim(o);
         sim.run();
     }
     else if(o.sampling_method == SM_SIMPLESAMPLING)

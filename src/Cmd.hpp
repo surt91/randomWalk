@@ -81,7 +81,7 @@ enum sampling_method_t {
     SM_SIMPLESAMPLING = 0,///< Simple Sampling, create new walks from scratch
     SM_METROPOLIS = 1,    ///< Metropolis sampling with a artificial temp
     SM_WANG_LANDAU,       ///< Direct WangLandau sampling of the distribution
-    SM_FAST_WANG_LANDAU,  ///< Direct 1/t FastWangLandau sampling of the distribution
+    SM_FAST_WANG_LANDAU,  ///< Direct 1/t FastWLEntropic sampling of the distribution
     SM_METROPOLIS_PARALLEL_TEMPERING  ///< Metropolis sampling enhanced with parallel tempering
 };
 

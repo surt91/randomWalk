@@ -13,7 +13,7 @@
  * and using this function to accept or reject changes as
  * \f[ p_\mathrm{acc}(E_1 \to E_2) = \min\left(1, \frac{g(E_1)}{g(E_2)}\right). \f]
  * The estimate of \f$g\f$ is updated by multiplication with some refinement
- * parameter \f$f\$, which is updated when \f$g\f$ is a sufficiently good
+ * parameter \f$f\f$, which is updated when \f$g\f$ is a sufficiently good
  * estimate of the real density function (i.e., the histogram of visited
  * energies is sufficiently flat).
  *

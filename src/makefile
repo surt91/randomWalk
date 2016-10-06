@@ -31,7 +31,7 @@ CPP	 := main.cpp \
         simulation/Metropolis.cpp \
         simulation/MetropolisParallelTempering.cpp \
         simulation/WangLandau.cpp \
-        simulation/FastWangLandau.cpp \
+        simulation/FastWLEntropic.cpp \
         simulation/Histogram.cpp \
         visualization/Svg.cpp \
         visualization/Povray.cpp \
@@ -130,7 +130,7 @@ doc/mathjax.zip:
 	mkdir -p doc/html/
 	wget -c https://codeload.github.com/mathjax/MathJax/zip/master -O doc/mathjax.zip
 
-doc/mathjax: doc/mathjax.zip
+doc/mathjax: | doc/mathjax.zip
 	unzip -qud doc/ doc/mathjax.zip
 	mv doc/MathJax-master doc/mathjax
 

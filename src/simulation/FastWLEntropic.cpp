@@ -1,6 +1,6 @@
-#include "FastWangLandau.hpp"
+#include "FastWLEntropic.hpp"
 
-FastWangLandau::FastWangLandau(const Cmd &o)
+FastWLEntropic::FastWLEntropic(const Cmd &o)
     : WangLandau(o)
 {
 }
@@ -16,7 +16,7 @@ FastWangLandau::FastWangLandau(const Cmd &o)
  *   * 10.1063/1.2803061 (analytical)
  *   * http://arxiv.org/pdf/1107.2951v1.pdf (entropic sampling)
  */
-void FastWangLandau::run()
+void FastWLEntropic::run()
 {
     // parameters
     //~ const int initial_num_iterations = 1000;
