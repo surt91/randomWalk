@@ -141,7 +141,7 @@ void FastWLEntropic::run()
             // remove the bias
             for(int j=0; j<g.get_num_bins(); ++j)
             {
-                g[j] += H[j]/H.mean();
+                g.at(j) += H.at(j)/H.mean();
             }
 
             // save g to file

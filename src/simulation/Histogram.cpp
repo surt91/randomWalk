@@ -175,6 +175,11 @@ double& Histogram::operator[](const double value)
     return data[idx];
 }
 
+double& Histogram::at(int idx)
+{
+    return data[idx];
+}
+
 /// vector of num_bins elements containing their centers
 const std::vector<double> Histogram::centers() const
 {

@@ -31,6 +31,7 @@ class Histogram
         Histogram(const std::vector<double> bins);
 
         void add(double where, double what=1);
+        double& at(int idx);
 
         int get_num_bins() const;
         int min() const;
