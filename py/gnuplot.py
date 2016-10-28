@@ -39,32 +39,41 @@ class Gnuplot():
     def every(self):
         fmt = "%f*d" if self.kwargs["observable"] == 2 else "%f*(d-1)"
         exponent = fmt % nu[self.kwargs["typ"]][self.kwargs["dimension"]]
-        if self.kwargs["sampling"] == 1 or self.kwargs["sampling"] == 4:
-            self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
-            self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
-            self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
-            self.create("stitched", "{/Symbol %s}" % self.observable, "{/Italic p}")
-            self.create("scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
-            self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
-            self.create("r", "{/Italic N}", "{/Italic r}")
-            self.create("r2", "{/Italic r^2}", "{/Italic N}")
-            self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
-            self.create("rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
-            self.create("simpleMeansL", "{/Italic N}", "{/Italic L}")
-            self.create("simpleMeansA", "{/Italic N}", "{/Italic A}")
-        elif self.kwargs["sampling"] == 2 or self.kwargs["sampling"] == 3:
-            self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
-            self.create("wl_scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
-            self.create("wl_raw", "{/Symbol %s}" % self.observable, "{/Italic counts}")
-            self.create("wl_stitch", "{/Symbol %s}" % self.observable, "{/Italic counts}")
-            self.create("wl_rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
 
-        self.create("variances", "{/Italic N}", "{/Symbol s}_%s^2" % self.observable)
-        self.create("means", "{/Italic N}", "{/Symbol m}_%s" % self.observable)
-        self.create("cmp_gauss", "{/Italic %s}" % self.observable, "{/Italic p}_{normed}")
-        self.create("accept", "{/Italic T}", "{/Italic p_{acc}}")
-        self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
-        self.create("max", "N", "max pos")
+        if self.kwargs["sampling"] == 0:
+            self.create("simpleDelV", "{/Italic T}", "{/Italic V}")
+            self.create("simpleV", "{/Italic T}", "{/Italic V}")
+            self.create("simpleVarDelV", "{/Italic T}", "{/Italic V}")
+            self.create("simpleVarV", "{/Italic T}", "{/Italic V}")
+            self.create("simpleR", "{/Italic T}", "{/Italic r}")
+        else:
+            if self.kwargs["sampling"] == 1 or self.kwargs["sampling"] == 4:
+                self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
+                self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
+                self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
+                self.create("stitched", "{/Symbol %s}" % self.observable, "{/Italic p}")
+                self.create("scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
+                self.create("whole_distribution", "{/Symbol %s}" % self.observable, "{/Italic p}")
+                self.create("r", "{/Italic N}", "{/Italic r}")
+                self.create("r2", "{/Italic r^2}", "{/Italic N}")
+                self.create("Z", "{/Italic %s}" % self.observable, "ln({/Italic Z}(theta_i)) ratios minus their mean")
+                self.create("rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
+                self.create("simpleMeansL", "{/Italic N}", "{/Italic L}")
+                self.create("simpleMeansA", "{/Italic N}", "{/Italic A}")
+            elif self.kwargs["sampling"] == 2 or self.kwargs["sampling"] == 3:
+                self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
+                self.create("wl_scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
+                self.create("wl_raw", "{/Symbol %s}" % self.observable, "{/Italic counts}")
+                self.create("wl_stitch", "{/Symbol %s}" % self.observable, "{/Italic counts}")
+                self.create("wl_rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
+
+            #~ self.create("peakFit", "{/Symbol %s}" % self.observable, "{/Italic p}")
+            self.create("variances", "{/Italic N}", "{/Symbol s}_%s^2" % self.observable)
+            self.create("means", "{/Italic N}", "{/Symbol m}_%s" % self.observable)
+            self.create("cmp_gauss", "{/Italic %s}" % self.observable, "{/Italic p}_{normed}")
+            self.create("accept", "{/Italic T}", "{/Italic p_{acc}}")
+            self.create("wl_rate_function_tran", "{/Symbol %s}" % self.observable, "{/Symbol F}")
+            self.create("max", "N", "max pos")
 
     def create(self, name="something", xl="", yl="", **kwargs):
         template = self.env.get_template(name+".gp")
