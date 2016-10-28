@@ -493,8 +493,12 @@ class SimulationInstance():
 
         try:
             for i in self.passageTimeStart:
+                if self.N < i:
+                    i = 1 # some dummy
                 opts.append("-z {:.0f}".format(i))
         except ValueError:
+            pass
+        except TypeError:
             pass
 
         if self.m == 1 or self.m == 4:

@@ -15,6 +15,8 @@ void SimpleSampling::run()
     oss << "# sweeps L A";
     oss << " r r2 maxDiameter maxX maxY rx ry S";
     for(auto i : o.passageTimeStarts)
+        oss << " c" << i;
+    for(auto i : o.passageTimeStarts)
         oss << " z" << i;
     oss << "\n";
 
@@ -47,8 +49,11 @@ void SimpleSampling::run()
         oss << i << " "
             << S(w) << " ";
 
-        for(auto i : o.passageTimeStarts)
-            oss << w->passage(i) << " ";
+        //~ auto c = w->correlation(o.passageTimeStarts);
+        //~ for(auto j : c)
+            //~ oss << j << " ";
+        for(auto j : o.passageTimeStarts)
+            oss << w->passage(j) << " ";
 
         // flush after every iteration
         oss << std::endl;
@@ -64,4 +69,3 @@ void SimpleSampling::run()
     if(!o.gp_path.empty())
         w->gp(o.gp_path, true);
 }
-

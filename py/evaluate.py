@@ -7,6 +7,7 @@ import parameters as param
 
 import evaluateMetropolis
 import evaluateWangLandau
+import evaluateSimple
 import commonEvaluation
 
 if __name__ == "__main__":
@@ -46,13 +47,16 @@ if __name__ == "__main__":
         elif sampling == 2 or sampling == 3:
             evaluateWangLandau.run(parallelness=parallelness)
 
+        elif sampling == 0:
+            evaluateSimple.run(parallelness=parallelness)
         else:
             logging.error("unknown sampling method")
 
     else:
         logging.info("Fastmode: do not create new histograms from rawData")
 
-    commonEvaluation.cut_trans(param.parameters["S"])
+    if sampling != 0:
+        commonEvaluation.cut_trans(param.parameters["S"])
     commonEvaluation.get_max_dist()
 
     logging.info("finished")

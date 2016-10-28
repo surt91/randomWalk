@@ -1,4 +1,5 @@
 import os
+import math
 
 import numpy as np
 import matplotlib
@@ -6,6 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 import parameters as param
+from evaluateMetropolis import getAutocorrTime
 
 os.makedirs("plots", exist_ok=True)
 
@@ -16,21 +18,30 @@ for N in param.parameters["number_of_steps"]:
         a = np.loadtxt("rawData/{}.dat.gz".format(param.basetheta.format(t1=t1, steps=N, theta=float("inf"), **param.parameters)))
         a = a.transpose()
         a = a[(-len(t1s))+n]
+        t_eq = 1000
+        a = a[t_eq:]
         b = a[a >= 0]
+
+        # if a markov chain algorithm was used, discard correlated samples
+#        if param.parameters["sampling"] == 1:
+#            if len(b) > 100:
+#                tau = math.ceil(getAutocorrTime(b))
+#            a = a[::2*tau]
+#            b = a[a >= 0]
 
         total = len(a)
         evenlonger = len(a[a < 0])
 
-        plt.title("t1 = {}".format(t1))
-        plt.xlabel("t2")
-        plt.ylabel("count")
+#        plt.title("t1 = {}".format(t1))
+#        plt.xlabel("t2")
+#        plt.ylabel("count")
 
-        y, x, _ = plt.hist(b, 50)
-        with open("plots/t1_{}_N{}.dat".format(t1, N), "w") as f:
-            for l in zip(x, y):
-                f.write("{} {}\n".format(*l))
-        plt.savefig("plots/t1_{}_N{}.png".format(t1, N))
-        plt.clf()
+#        y, x, _ = plt.hist(b, 50)
+#        with open("plots/t1_{}_N{}.dat".format(t1, N), "w") as f:
+#            for l in zip(x, y):
+#                f.write("{} {}\n".format(*l))
+#        plt.savefig("plots/t1_{}_N{}.png".format(t1, N))
+#        plt.clf()
 
         with open("plots/q_{}_N{}.dat".format(t1, N), "w") as f:
             f.write("# t1 t2 Q\n")

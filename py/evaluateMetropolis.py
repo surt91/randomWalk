@@ -428,6 +428,8 @@ def run(histogram_type=1, parallelness=1):
         f.write("# N mean/T err variance/T err\n")
 
     column = param.parameters["observable"]
+    if column == 3:
+        column = 1
 
     for N in steps:
         logging.info("N = {}".format(N))
