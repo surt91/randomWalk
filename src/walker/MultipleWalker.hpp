@@ -203,7 +203,7 @@ void MultipleWalker<T>::updateHull()
 
     for(auto w : m_walker)
     {
-        auto &p = w.points();
+        auto &p = w.hullPoints();
         all_points.insert(all_points.end(), p.begin(), p.end());
     }
     m_convex_hull.run(&all_points);
