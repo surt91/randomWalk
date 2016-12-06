@@ -115,6 +115,7 @@ void MultipleWalker<T>::reconstruct()
 {
     for(auto w : m_walker)
         w.reconstruct();
+    updateHull();
 }
 
 template <class T>
