@@ -31,6 +31,8 @@ class UniformRNG
             return uniform();
         }
 
+        void reseed(int seed);
+
         std::vector<double> vector(int n);
         std::vector<double> vector_gaussian(int n, const double mu=0., const double sigma=1.);
 

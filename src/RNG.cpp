@@ -6,6 +6,11 @@ std::vector<double> rng(int n, int seed)
     return u.vector(n);
 }
 
+void UniformRNG::reseed(int seed)
+{
+    rng.seed(seed);
+}
+
 std::vector<double> UniformRNG::vector(int n)
 {
     std::vector<double> v(n);
