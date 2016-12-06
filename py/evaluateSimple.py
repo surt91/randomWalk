@@ -55,7 +55,7 @@ def eval_simplesampling(name, outdir, N=0, parallelness=1):
             f.write("# N L err varL err A err varA err r err varR err r2 err varR2 err maxDiameter err varMaxDiameter err ... \n")
     else:
         name = "rawData/" + name + ".dat"
-        data = np.loadtxt(filename+".gz").transpose()
+        data = np.loadtxt(name+".gz").transpose()[1:]  # exclude the number of the sample
 
         with Pool(parallelness) as p:
             bs_mean = p.starmap(bootstrap, [(d, np.mean) for d in data])
@@ -131,7 +131,7 @@ def run(parallelness=1):
         logging.info("N = {}".format(N))
 
         # find names of needed files
-        i = SimulationInstance(steps=N, theta=T, **param.parameters)
+        i = SimulationInstance(steps=N, theta=float("inf"), **param.parameters)
         name = i.basename
 
         # evaluate things from simple sampling (mainly for literature comparison)
