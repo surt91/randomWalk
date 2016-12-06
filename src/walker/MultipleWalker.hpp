@@ -113,7 +113,7 @@ MultipleWalker<T>::MultipleWalker(int d, int numSteps, int numWalker, UniformRNG
 template <class T>
 void MultipleWalker<T>::reconstruct()
 {
-    for(auto w : m_walker)
+    for(auto &w : m_walker)
         w.reconstruct();
     updateHull();
 }
@@ -121,21 +121,21 @@ void MultipleWalker<T>::reconstruct()
 template <class T>
 void MultipleWalker<T>::setHullAlgo(hull_algorithm_t a)
 {
-    for(auto w : m_walker)
+    for(auto &w : m_walker)
         w.setHullAlgo(a);
 }
 
 template <class T>
 void MultipleWalker<T>::setP1(double p1)
 {
-    for(auto w : m_walker)
+    for(auto &w : m_walker)
         w.setP1(p1);
 }
 
 template <class T>
 void MultipleWalker<T>::setP2(double p2)
 {
-    for(auto w : m_walker)
+    for(auto &w : m_walker)
         w.setP2(p2);
 }
 
@@ -164,7 +164,7 @@ void MultipleWalker<T>::undoChange()
 template <class T>
 void MultipleWalker<T>::updateSteps()
 {
-    for(auto w : m_walker)
+    for(auto &w : m_walker)
         w.updateSteps();
 }
 
@@ -173,7 +173,7 @@ void MultipleWalker<T>::updateSteps()
 template <class T>
 void MultipleWalker<T>::updatePoints(int /*start*/)
 {
-    for(auto w : m_walker)
+    for(auto &w : m_walker)
         w.updatePoints();
 }
 
@@ -244,7 +244,7 @@ template <class T>
 int MultipleWalker<T>::nRN() const
 {
     int n = 0;
-    for(auto w : m_walker)
+    for(const auto &w : m_walker)
         n += w.nRN();
     return n;
 }
@@ -254,7 +254,7 @@ std::string MultipleWalker<T>::print() const
 {
     std::stringstream ss;
 
-    for(auto w : m_walker)
+    for(const auto &w : m_walker)
         ss << "[" << w.print() << "]\n";
     ss << "\n";
     return ss.str();
@@ -268,7 +268,7 @@ void MultipleWalker<T>::svg(const std::string filename, const bool with_hull) co
     SVG pic(filename);
     int min_x=0, max_x=0, min_y=0, max_y=0;
     int idx = 0;
-    for(auto w : m_walker)
+    for(const auto &w : m_walker)
     {
         ++idx;
         std::vector<std::vector<double>> points;
@@ -325,7 +325,7 @@ void MultipleWalker<T>::gp(const std::string filename, const bool with_hull) con
         Gnuplot2D pic(filename);
 
         int idx = 0;
-        for(auto w : m_walker)
+        for(const auto &w : m_walker)
         {
             ++idx;
             const auto p = w.points();
