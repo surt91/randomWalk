@@ -293,6 +293,18 @@ void MultipleWalker<T>::svg(const std::string filename, const bool with_hull) co
                 max_y = y1;
         }
         pic.polyline(points, false, COLOR[idx%COLOR.size()]);
+
+        points.clear();
+        if(with_hull)
+        {
+            const auto h = w.hullPoints();
+            for(auto &i : h)
+            {
+                std::vector<double> point {(double) i[0], (double) i[1]};
+                points.push_back(point);
+            }
+            pic.polyline(points, true, COLOR[idx%COLOR.size()]);
+        }
     }
 
     if(d > 2)
