@@ -11,6 +11,7 @@
 #include "../visualization/Povray.hpp"
 #include "../visualization/Gnuplot2D.hpp"
 #include "../visualization/Gnuplot3D.hpp"
+#include "../visualization/Threejs.hpp"
 #include "../RNG.hpp"
 #include "../Step.hpp"
 #include "../ConvexHull.hpp"
@@ -77,6 +78,7 @@ class SpecWalker : public Walker
         void svg(const std::string filename, const bool with_hull) const final;
         void pov(const std::string filename, const bool with_hull) const final;
         void gp(const std::string filename, const bool with_hull) const final;
+        void threejs(const std::string filename, const bool with_hull) const final;
         std::string print() const final;
 
         ///\name degenerate cases
@@ -232,6 +234,76 @@ void SpecWalker<T>::pov(const std::string filename, const bool with_hull) const
             std::vector<double> p2 {(double) i[1][0], (double) i[1][1], (double) i[1][2]};
             std::vector<double> p3 {(double) i[2][0], (double) i[2][1], (double) i[2][2]};
             pic.facet(p1, p2, p3);
+        }
+    }
+
+    pic.save();
+}
+
+/** Save a threejs file visualizing the walk.
+ *
+ * Works only in d=2 and d=3.
+ *
+ * \param filename Basename of the outputfile.
+ * \param with_hull Visualize only the walk or also its hull.
+ */
+template <class T>
+void SpecWalker<T>::threejs(const std::string filename, const bool with_hull) const
+{
+    Threejs pic(filename);
+    const std::vector<Step<T>> p = points();
+    std::vector<std::vector<double>> points;
+    for(auto i : p)
+    {
+        T x = i[0], y = i[1], z = 0;
+        if(d > 2)
+            z = i[2];
+        std::vector<double> point {(double) x, (double) y, (double) z};
+
+        points.push_back(point);
+    }
+    pic.polyline(points);
+
+    points.clear();
+    if(with_hull && d > 2)
+    {
+        const std::vector<std::vector<Step<T>>> h = convexHull().hullFacets();
+
+        double mx = 0, my = 0, mz = 0;
+        auto &points = convexHull().hullPoints();
+        for(auto &i : points)
+        {
+            mx += i[0];
+            my += i[1];
+            mz += i[2];
+        }
+        mx /= points.size();
+        my /= points.size();
+        mz /= points.size();
+        const Step<T> origin(std::vector<T>({(T) mx, (T) my, (T) mz}));
+
+
+        for(auto &i : h)
+        {
+            std::vector<double> p1 {(double) i[0][0], (double) i[0][1], (double) i[0][2]};
+            std::vector<double> p2 {(double) i[1][0], (double) i[1][1], (double) i[1][2]};
+            std::vector<double> p3 {(double) i[2][0], (double) i[2][1], (double) i[2][2]};
+
+            // add both, since our hull should be transparent,
+            // we want to see them from inside
+            //~ pic.facet(p1, p3, p2);
+            //~ pic.facet(p1, p2, p3);
+
+            if(side(i[0], i[1], i[2], origin) < 0)
+            {
+                // the origin is in front of the facet -> reorder for good normals
+                pic.facet(p1, p3, p2);
+            }
+            else
+            {
+                // the origin is behind the facet -> everything is good
+                pic.facet(p1, p2, p3);
+            }
         }
     }
 

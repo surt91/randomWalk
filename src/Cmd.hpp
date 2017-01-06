@@ -114,6 +114,7 @@ class Cmd
         std::string svg_path;                       ///< path to store a SVG image of one \f$d=2\f$ walk
         std::string pov_path;                       ///< path to store a povray file of one \f$d=3\f$ walk
         std::string gp_path;                        ///< path to store a gnuplot file of one \f$d=2,3\f$ walk
+        std::string threejs_path;                   ///< path to store a three.js html file of one \f$d=2,3\f$ walk
         int steps;                                  ///< how many steps \f$T\f$ th walk takes
         int numWalker;                              ///< how many independet walkers should be simulated (hull of their union)
         int seedRealization;                        ///< RNG seed to construct the initial walk realization

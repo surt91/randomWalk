@@ -79,6 +79,7 @@ class Walker
         virtual void svg(const std::string filename, const bool with_hull=false) const = 0;
         virtual void pov(const std::string filename, const bool with_hull=false) const = 0;
         virtual void gp(const std::string filename, const bool with_hull=false) const = 0;
+        virtual void threejs(const std::string filename, const bool with_hull=false) const = 0;
 
         virtual void goDownhill(const bool maximize, const wanted_observable_t observable, const int stagnate=1000) = 0;
 

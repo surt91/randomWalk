@@ -41,6 +41,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
         TCLAP::ValueArg<std::string> povArg("p", "pov", "povray filename, will be a xyz projection", false, "", "string");
         TCLAP::ValueArg<std::string> gpArg("g", "gnuplot", "gnuplot filename, will be a xyz projection", false, "", "string");
+        TCLAP::ValueArg<std::string> threejsArg("j", "threejs", "three.js filename, will be a xyz projection", false, "", "string");
         TCLAP::ValueArg<std::string> logfileArg("L", "logfile", "log to file", false, "", "string");
         TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level:\n"
                                                         "\tquiet  : 0\n"
@@ -141,6 +142,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(svgArg);
         cmd.add(povArg);
         cmd.add(gpArg);
+        cmd.add(threejsArg);
         cmd.add(dataPathArg);
         cmd.add(confPathArg);
         cmd.add(tmpPathArg);
@@ -415,6 +417,12 @@ Cmd::Cmd(int argc, char** argv)
         if(!gp_path.empty())
         {
             LOG(LOG_INFO) << "Path to store the gnuplot  " << gp_path;
+        }
+
+        threejs_path = threejsArg.getValue();
+        if(!threejs_path.empty())
+        {
+            LOG(LOG_INFO) << "Path to store the three.js " << threejs_path;
         }
 
         if(!dataPathArg.getValue().empty())

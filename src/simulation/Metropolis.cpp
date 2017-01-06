@@ -287,4 +287,7 @@ void Metropolis::run()
 
     if(!o.gp_path.empty())
         w->gp(o.gp_path, true);
+
+    if(!o.threejs_path.empty())
+        w->threejs(o.threejs_path, true);
 }

@@ -88,6 +88,7 @@ class MultipleWalker : public Walker
         virtual void svg(const std::string filename, const bool with_hull=false) const;
         virtual void pov(const std::string filename, const bool with_hull=false) const;
         virtual void gp(const std::string filename, const bool with_hull=false) const;
+        virtual void threejs(const std::string filename, const bool with_hull=false) const;
 
         void goDownhill(const bool, const wanted_observable_t, const int ) {LOG(LOG_ERROR) << "not implemented";};
 
@@ -329,6 +330,8 @@ void MultipleWalker<T>::svg(const std::string filename, const bool with_hull) co
 // can probably be reduced
 template <class T>
 void MultipleWalker<T>::pov(const std::string /*filename*/, const bool /*with_hull*/) const { LOG(LOG_WARNING) << "not yet implemented"; }
+template <class T>
+void MultipleWalker<T>::threejs(const std::string /*filename*/, const bool /*with_hull*/) const { LOG(LOG_WARNING) << "not yet implemented"; }
 template <class T>
 void MultipleWalker<T>::gp(const std::string filename, const bool with_hull) const
 {

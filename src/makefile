@@ -37,6 +37,7 @@ CPP	 := main.cpp \
         visualization/Povray.cpp \
         visualization/Gnuplot2D.cpp \
         visualization/Gnuplot3D.cpp \
+        visualization/Threejs.cpp \
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 DEP	 = $(CPP:%.cpp=dep/%.d)
