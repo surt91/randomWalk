@@ -29,6 +29,7 @@ Threejs::Threejs(const std::string &filename)
                             "    var directionalLight = new THREE.DirectionalLight(0xffffff,1);\n"
                             "    directionalLight.position.set(1, 1, 1).normalize();\n"
                             "    scene.add(directionalLight);\n"
+                            "    group = new THREE.Group();\n"
                             "    var trace = new THREE.Geometry();\n"
                             "    var hull = new THREE.Geometry();\n"
                         );
@@ -41,10 +42,9 @@ Threejs::Threejs(const std::string &filename)
                             "    material = new THREE.MeshPhongMaterial( { color: 0xee0000, transparent: true, opacity: 0.5, shininess: 60 } );\n"
                             "    material.shading = THREE.FlatShading;\n"
                             "    materialTrace = new THREE.MeshPhongMaterial( { color: 0x444444 } );\n"
-                            "    materialTrace.shading = THREE.FlatShading;\n"
+                            "    materialTrace.shading = THREE.SmoothShading;\n"
                             "    hullMesh = new THREE.Mesh( hull, material );\n"
                             "    traceMesh = new THREE.Mesh( trace, materialTrace );\n"
-                            "    group = new THREE.Group();\n"
                             "    group.add(hullMesh);\n"
                             "    group.add(traceMesh);\n"
                             "    scene.add( group );\n"
@@ -71,24 +71,38 @@ Threejs::Threejs(const std::string &filename)
                         );
 }
 
-void Threejs::box(const double x, const double y, const double z, const double dx, const double dy, const double dz)
+void Threejs::connection(const double x, const double y, const double z, const double dx, const double dy, const double dz, const double thickness)
 {
-    //~ var box = new THREE.BoxGeometry(1, 1, 1);
-    //~ var boxMesh = new THREE.Mesh(box);
-    //~ boxMesh.updateMatrix(); // as needed
-    //~ singleGeometry.merge(boxMesh.geometry, boxMesh.matrix);
+    const double length = std::sqrt(dx*dx + dy*dy + dz*dz);
 
-    //~ buffer << "//placeBox(<" << x << "," << y << "," << z << ">, <" << dx << "," << dy << "," << dz << ">)\n";
-
-    buffer << "var box = new THREE.BoxGeometry( " << dx << "," << dy << "," << dz << " );\n"
+    buffer << "var box = new THREE.CylinderGeometry( " << thickness << "," << thickness << "," << length << " );\n"
+              "var dir = new THREE.Vector3( " << dx << ", " << dy << ", " << dz << " ).normalize();\n"
+              "var q = new THREE.Quaternion();"
+              "q.setFromUnitVectors( new THREE.Vector3(0, 1, 0), dir );"
+              "var m = new THREE.Matrix4();"
+              "m.makeRotationFromQuaternion(q);"
+              "box.applyMatrix(m);\n"
               "box.translate( " << x << "," << y << "," << z << " );\n"
               "var boxMesh = new THREE.Mesh(box);\n"
               "boxMesh.updateMatrix();\n"
-              "trace.merge(boxMesh.geometry, boxMesh.matrix);\n";
+              "trace.merge(boxMesh.geometry, boxMesh.matrix);\n"
+
+              "var sphere = new THREE.SphereGeometry( " << (thickness * 1.2) << " );\n"
+              "sphere.translate( " << (x+dx/2) << "," << (y+dy/2) << "," << (z+dz/2) << " );\n"
+              "var sphereMesh = new THREE.Mesh(sphere);\n"
+              "sphereMesh.updateMatrix();\n"
+              "trace.merge(sphereMesh.geometry, sphereMesh.matrix);\n";
 }
 
 void Threejs::polyline(const std::vector<std::vector<double>> &points)
 {
+   // place a sphere on the beginning
+    buffer << "var sphere = new THREE.SphereGeometry( " << (thickness * 1.2) << " );\n"
+              "sphere.translate( 0, 0, 0 );\n"
+              "var sphereMesh = new THREE.Mesh(sphere);\n"
+              "sphereMesh.updateMatrix();\n"
+              "trace.merge(sphereMesh.geometry, sphereMesh.matrix);\n";
+
     for(size_t i=1; i<points.size(); ++i)
     {
         const double cX1 = points[i-1][0], cX2 = points[i][0];
@@ -98,11 +112,11 @@ void Threejs::polyline(const std::vector<std::vector<double>> &points)
         double x = (cX1+cX2)/2;
         double y = (cY1+cY2)/2;
         double z = (cZ1+cZ2)/2;
-        double dx = (0.1 + std::abs(cX1-cX2)*2)/2;
-        double dy = (0.1 + std::abs(cY1-cY2)*2)/2;
-        double dz = (0.1 + std::abs(cZ1-cZ2)*2)/2;
+        double dx = cX2-cX1;
+        double dy = cY2-cY1;
+        double dz = cZ2-cZ1;
 
-        box(x, y, z, dx, dy, dz);
+        connection(x, y, z, dx, dy, dz, 0.05);
     }
 }
 
