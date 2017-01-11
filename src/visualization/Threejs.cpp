@@ -13,10 +13,31 @@ Threejs::Threejs(const std::string &filename)
                             "<body>\n"
                             "<script>\n"
                             "var camera, scene, renderer,\n"
-                            "geometry, material, hullMesh, traceMesh, mesh, group;\n"
+                            "geometry, material, hullMesh, trace, traceMesh, group;\n"
 
                             "init();\n"
                             "animate();\n"
+
+                            "function cylinder(trace, x, y, z, dx, dy, dz, thickness) {\n"
+                            "    var length = Math.sqrt(dx*dx + dy*dy + dz*dz);\n"
+                            "    var box = new THREE.CylinderGeometry( thickness, thickness, length );\n"
+                            "    var dir = new THREE.Vector3( dx, dy, dz ).normalize();\n"
+                            "    var q = new THREE.Quaternion();"
+                            "    q.setFromUnitVectors( new THREE.Vector3(0, 1, 0), dir );"
+                            "    var m = new THREE.Matrix4();"
+                            "    m.makeRotationFromQuaternion(q);"
+                            "    box.applyMatrix(m);\n"
+                            "    box.translate( x, y, z );\n"
+                            "    var boxMesh = new THREE.Mesh(box);\n"
+                            "    boxMesh.updateMatrix();\n"
+                            "    trace.merge(boxMesh.geometry, boxMesh.matrix);\n"
+
+                            "    var sphere = new THREE.SphereGeometry( thickness * 1.2 );\n"
+                            "    sphere.translate(x+dx/2, y+dy/2, z+dz/2);\n"
+                            "    var sphereMesh = new THREE.Mesh(sphere);\n"
+                            "    sphereMesh.updateMatrix();\n"
+                            "    trace.merge(sphereMesh.geometry, sphereMesh.matrix);\n"
+                            "}\n"
 
                             "function init() {\n"
                             "    scene = new THREE.Scene();\n"
@@ -71,32 +92,10 @@ Threejs::Threejs(const std::string &filename)
                         );
 }
 
-void Threejs::connection(const double x, const double y, const double z, const double dx, const double dy, const double dz, const double thickness)
-{
-    const double length = std::sqrt(dx*dx + dy*dy + dz*dz);
-
-    buffer << "var box = new THREE.CylinderGeometry( " << thickness << "," << thickness << "," << length << " );\n"
-              "var dir = new THREE.Vector3( " << dx << ", " << dy << ", " << dz << " ).normalize();\n"
-              "var q = new THREE.Quaternion();"
-              "q.setFromUnitVectors( new THREE.Vector3(0, 1, 0), dir );"
-              "var m = new THREE.Matrix4();"
-              "m.makeRotationFromQuaternion(q);"
-              "box.applyMatrix(m);\n"
-              "box.translate( " << x << "," << y << "," << z << " );\n"
-              "var boxMesh = new THREE.Mesh(box);\n"
-              "boxMesh.updateMatrix();\n"
-              "trace.merge(boxMesh.geometry, boxMesh.matrix);\n"
-
-              "var sphere = new THREE.SphereGeometry( " << (thickness * 1.2) << " );\n"
-              "sphere.translate( " << (x+dx/2) << "," << (y+dy/2) << "," << (z+dz/2) << " );\n"
-              "var sphereMesh = new THREE.Mesh(sphere);\n"
-              "sphereMesh.updateMatrix();\n"
-              "trace.merge(sphereMesh.geometry, sphereMesh.matrix);\n";
-}
-
 void Threejs::polyline(const std::vector<std::vector<double>> &points)
 {
-   // place a sphere on the beginning
+    const double thickness = 0.05;
+    // place a sphere on the beginning
     buffer << "var sphere = new THREE.SphereGeometry( " << (thickness * 1.2) << " );\n"
               "sphere.translate( 0, 0, 0 );\n"
               "var sphereMesh = new THREE.Mesh(sphere);\n"
@@ -116,7 +115,7 @@ void Threejs::polyline(const std::vector<std::vector<double>> &points)
         double dy = cY2-cY1;
         double dz = cZ2-cZ1;
 
-        connection(x, y, z, dx, dy, dz, 0.05);
+        buffer << "    cylinder(trace, " << x << ", " << y << ", " << z << ", " << dx << ", " << dy << ", " << dz << ", " << thickness << ");\n";
     }
 }
 
