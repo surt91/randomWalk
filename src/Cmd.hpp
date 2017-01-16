@@ -51,6 +51,7 @@ enum walk_type_t {
     WT_GAUSSIAN_RANDOM_WALK,        //< Gaussian random walk
     WT_LEVY_FLIGHT,                 //< Levy flight
     WT_CORRELATED_RANDOM_WALK,      //< Correlated random walk
+    WT_ESCAPE_RANDOM_WALK,          //< Escape random walk
 };
 
 const std::vector<std::string> TYPE_LABEL = {
@@ -62,6 +63,7 @@ const std::vector<std::string> TYPE_LABEL = {
     "Gaussian Random Walk",
     "Levy Flight",
     "Correlated Random Walk",
+    "Escape Random Walk",
 };
 
 enum wanted_observable_t {

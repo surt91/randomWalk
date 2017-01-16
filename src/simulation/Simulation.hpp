@@ -27,6 +27,7 @@
 #include "../walker/GaussWalker.hpp"
 #include "../walker/LevyWalker.hpp"
 #include "../walker/CorrelatedWalker.hpp"
+#include "../walker/EscapeWalker.hpp"
 #include "../RNG.hpp"
 #include "../io.hpp"
 

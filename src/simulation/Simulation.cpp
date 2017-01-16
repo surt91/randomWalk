@@ -99,6 +99,13 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
         w->setP1(o.mu);
         w->setP2(o.sigma);
     }
+    else if(o.type == WT_ESCAPE_RANDOM_WALK)
+    {
+        if(o.numWalker == 1)
+            w = std::unique_ptr<Walker>(new EscapeWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
+        else
+            w = std::unique_ptr<Walker>(new MultipleWalker<EscapeWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+    }
     else
     {
         LOG(LOG_ERROR) << "type " << o.type << " is not known";

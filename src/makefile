@@ -15,6 +15,7 @@ CPP	 := main.cpp \
         Logging.cpp \
         RNG.cpp \
         io.cpp \
+        Graph.cpp \
         stat/runtime.cpp \
         stat/RollingMean.cpp \
         Benchmark.cpp \
@@ -26,6 +27,7 @@ CPP	 := main.cpp \
         walker/GaussWalker.cpp \
         walker/LevyWalker.cpp \
         walker/CorrelatedWalker.cpp \
+        walker/EscapeWalker.cpp \
         simulation/Simulation.cpp \
         simulation/SimpleSampling.cpp \
         simulation/Metropolis.cpp \
