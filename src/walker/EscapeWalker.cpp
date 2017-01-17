@@ -69,6 +69,8 @@ bool EscapeWalker::escapable(const Step<int> next) const
     // This will be far too slow
     // But this will only be a test
     int dif = max-min + 1;
+    std::unordered_map<int, Step<int>> map;
+
     Graph g(dif*dif);
     for(int i=0; i<dif; ++i)
         for(int j=0; j<dif; ++j)
@@ -79,6 +81,9 @@ bool EscapeWalker::escapable(const Step<int> next) const
                 g.add_edge(n, n-1);
             if(n>=dif)
                 g.add_edge(n, n-dif);
+
+            Step<int> s(std::vector<int>{i+min, j+min});
+            map.emplace(n, s);
         }
 
     for(auto i : occupied)
@@ -88,7 +93,7 @@ bool EscapeWalker::escapable(const Step<int> next) const
     }
 
     int n = (next[0]-min)*dif + next[1]-min;
-    return g.connected(n, 0);
+    return g.connected(n, 0, map);
 }
 
 void EscapeWalker::updateSteps()

@@ -33,7 +33,7 @@ void Graph::remove_edges(int s)
     m_adj_list[s].clear();
 }
 
-bool Graph::connected(int s, int t)
+bool Graph::bfs(int s, int t)
 {
     std::deque<int> seen;
     std::unordered_set<int> visited;

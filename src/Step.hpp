@@ -68,6 +68,9 @@ class Step
         Step<T>& operator-=(const Step<T> &other);
         Step<T>& operator/=(const double d);
 
+        int dist(const Step<int> &other) const;
+        double dist(const Step<double> &other) const;
+
         template <class U>
         friend Step<U> cross(const Step<U> &a, const Step<U> &b);
 
@@ -329,6 +332,40 @@ double dot(const Step<T> &a, const Step<T> &b)
         p += a[i]*b[i];
 
     return p;
+}
+
+/// Manhattan distance
+template<>
+inline int Step<int>::dist(const Step<int> &other) const
+{
+    if(m_d != other.m_d)
+        throw std::invalid_argument("dimensions do not agree");
+
+    int d = 0;
+    for(int i=0; i<m_d; ++i)
+        d += x(i) - other.x(i);
+
+    return d;
+}
+
+/// Euclidean distance
+template<>
+inline double Step<double>::dist(const Step<double> &other) const
+{
+    if(m_d != other.m_d)
+        throw std::invalid_argument("dimensions do not agree");
+
+    double d = 0;
+
+    for(int i=0; i<m_d; ++i)
+    {
+        double t = x(i) - other.x(i);
+        d += t*t;
+    }
+
+    d = std::sqrt(d);
+
+    return d;
 }
 
 template <class T>
