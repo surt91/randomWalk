@@ -41,6 +41,8 @@ class EscapeWalker final : public SpecWalker<int>
         void create();
 
         Graph g;
+        int graph_size;
+        void init_graph(int N);
         std::unordered_map<int, Step<int>> map;
         int min, max, dif;
 };

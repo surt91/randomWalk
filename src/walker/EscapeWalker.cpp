@@ -3,8 +3,28 @@
 EscapeWalker::EscapeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia)
 {
-    min = -numSteps + 3;
-    max = numSteps + 3;
+    // start with 256x256
+    // we will make it bigger if we need to
+    init_graph(256);
+
+    create();
+    newStep = Step<int>(d);
+    init();
+
+}
+
+void EscapeWalker::reconstruct()
+{
+    create();
+    init();
+}
+
+void EscapeWalker::init_graph(int N)
+{
+    graph_size = N;
+
+    min = -N + 3;
+    max = N + 3;
 
     // This will be far too slow
     // But this will only be a test
@@ -24,17 +44,6 @@ EscapeWalker::EscapeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_
             Step<int> s(std::vector<int>{i+min, j+min});
             map.emplace(n, s);
         }
-
-    create();
-    newStep = Step<int>(d);
-    init();
-
-}
-
-void EscapeWalker::reconstruct()
-{
-    create();
-    init();
 }
 
 void EscapeWalker::create()
@@ -99,6 +108,9 @@ bool EscapeWalker::escapable(const Step<int> next)
     miny -= 1;
     maxx += 1;
     maxy += 1;
+
+    if(std::max(maxx-minx, maxy-miny) > graph_size)
+        init_graph(graph_size*2);
 
     // next find the corner of the bounding box
     // nearest to the head position such that we need only a
