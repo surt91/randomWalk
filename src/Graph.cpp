@@ -1,39 +1,36 @@
 #include "Graph.hpp"
 
-const std::unordered_set<int>& Graph::nodes() const
+Graph::Graph(int N)
+{
+    m_node_set.reserve(N);
+    for(int i=0; i<N; ++i)
+    {
+        m_node_set.push_back(i);
+        m_adj_list.emplace_back();
+    }
+}
+
+const std::vector<int>& Graph::nodes() const
 {
     return m_node_set;
 }
 
-std::unordered_set<int>& Graph::neighbors(int node)
+std::vector<int>& Graph::neighbors(int node)
 {
     return m_adj_list[node];
 }
 
-void Graph::add_node(int node)
-{
-    if(!m_node_set.count(node))
-    {
-        m_node_set.insert(node);
-    }
-    m_adj_list.emplace(node, std::unordered_set<int>());
-}
-
-void Graph::remove_node(int node)
-{
-    m_node_set.erase(node);
-    m_adj_list.erase(node);
-    for(auto &i : m_node_set)
-        m_adj_list[i].erase(node);
-}
-
 void Graph::add_edge(int s, int t)
 {
-    if(m_node_set.count(s) && m_node_set.count(t))
-    {
-        m_adj_list[s].insert(t);
-        m_adj_list[t].insert(s);
-    }
+    m_adj_list[s].push_back(t);
+    m_adj_list[t].push_back(s);
+}
+
+void Graph::remove_edges(int s)
+{
+    for(int t : neighbors(s))
+        m_adj_list[t].erase(std::find(m_adj_list[t].begin(), m_adj_list[t].end(), s));
+    m_adj_list[s].clear();
 }
 
 bool Graph::connected(int s, int t)

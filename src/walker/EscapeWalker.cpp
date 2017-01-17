@@ -68,23 +68,24 @@ bool EscapeWalker::escapable(const Step<int> next) const
 
     // This will be far too slow
     // But this will only be a test
-    Graph g;
     int dif = max-min + 1;
+    Graph g(dif*dif);
     for(int i=0; i<dif; ++i)
         for(int j=0; j<dif; ++j)
         {
-            Step<int> s(std::vector<int>{i+min, j+min});
-            if(!occupied.count(s))
-            {
-                int n = i*dif+j;
+            int n = i*dif+j;
 
-                g.add_node(n);
-                if(n>0)
-                    g.add_edge(n, n-1);
-                if(n>=dif)
-                    g.add_edge(n, n-dif);
-            }
+            if(n>0)
+                g.add_edge(n, n-1);
+            if(n>=dif)
+                g.add_edge(n, n-dif);
         }
+
+    for(auto i : occupied)
+    {
+        int n = (i[0]-min)*dif + i[1]-min;
+        g.remove_edges(n);
+    }
 
     int n = (next[0]-min)*dif + next[1]-min;
     return g.connected(n, 0);

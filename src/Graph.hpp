@@ -4,6 +4,7 @@
 #include <deque>
 #include <unordered_set>
 #include <unordered_map>
+#include <algorithm>
 
 #include "Logging.hpp"
 
@@ -16,19 +17,17 @@
 class Graph
 {
     public:
-        Graph() {};
+        Graph(int N);
 
-        const std::unordered_set<int>& nodes() const;
-        std::unordered_set<int>& neighbors(int node);
+        const std::vector<int>& nodes() const;
+        std::vector<int>& neighbors(int node);
 
-        void add_node(int node);
-        void remove_node(int node);
         void add_edge(int s, int t);
+        void remove_edges(int s);
 
         bool connected(int s, int t);
 
     protected:
-        std::vector<int> m_nodes;
-        std::unordered_set<int> m_node_set;
-        std::unordered_map<int, std::unordered_set<int>> m_adj_list;
+        std::vector<int> m_node_set;
+        std::vector<std::vector<int>> m_adj_list;
 };
