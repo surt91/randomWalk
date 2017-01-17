@@ -343,7 +343,7 @@ inline int Step<int>::dist(const Step<int> &other) const
 
     int d = 0;
     for(int i=0; i<m_d; ++i)
-        d += x(i) - other.x(i);
+        d += std::abs(x(i) - other.x(i));
 
     return d;
 }

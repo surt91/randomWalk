@@ -37,6 +37,10 @@ class EscapeWalker final : public SpecWalker<int>
         Step<int> undo_step;
         bool checkOverlapFree(const std::vector<Step<int>> &l);
 
-        bool escapable(const Step<int> next) const;
+        bool escapable(const Step<int> next);
         void create();
+
+        Graph g;
+        std::unordered_map<int, Step<int>> map;
+        int min, max, dif;
 };

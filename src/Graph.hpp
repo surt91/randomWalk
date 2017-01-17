@@ -20,6 +20,7 @@ class Graph
 {
     public:
         Graph(int N);
+        Graph() {};
 
         const std::vector<int>& nodes() const;
         std::vector<int>& neighbors(int node);
@@ -28,22 +29,15 @@ class Graph
         void remove_edges(int s);
 
         template<class T>
-        bool connected(int s, int t, std::unordered_map<int, Step<T>>);
+        bool bestfs(int s, int t, std::unordered_set<Step<int>>& occupied, std::unordered_map<int, Step<T>>& map);
+
 
     protected:
         std::vector<int> m_node_set;
         std::vector<std::vector<int>> m_adj_list;
 
         bool bfs(int s, int t);
-        template<class T>
-        bool bestfs(int s, int t, std::unordered_map<int, Step<T>>);
 };
-
-template<class T>
-bool Graph::connected(int s, int t, std::unordered_map<int, Step<T>> map)
-{
-    return bestfs(s, t, map);
-}
 
 struct thingy {
     thingy(int v, int k) : key(k), value(v) {};
@@ -51,12 +45,12 @@ struct thingy {
     int value;
     bool operator<(const thingy &other) const
     {
-        return key < other.key;
+        return key > other.key;
     };
 };
 
 template<class T>
-bool Graph::bestfs(int s, int t, std::unordered_map<int, Step<T>> map)
+bool Graph::bestfs(int s, int t, std::unordered_set<Step<int>>& occupied, std::unordered_map<int, Step<T>>& map)
 {
     std::priority_queue<thingy> q;
     std::unordered_set<int> visited;
@@ -72,10 +66,12 @@ bool Graph::bestfs(int s, int t, std::unordered_map<int, Step<T>> map)
 
         T D = target.dist(map[c]);
         if(c == t)
+        {
             return true;
+        }
         for(auto i : neighbors(c))
         {
-            if(!visited.count(i))
+            if(!visited.count(i) && !occupied.count(map[i]))
             {
                 visited.insert(i);
                 T d = target.dist(map[i]);

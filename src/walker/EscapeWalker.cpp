@@ -3,9 +3,32 @@
 EscapeWalker::EscapeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia)
 {
+    min = -numSteps + 3;
+    max = numSteps + 3;
+
+    // This will be far too slow
+    // But this will only be a test
+    dif = max-min + 1;
+
+    g = Graph(dif*dif);
+    for(int i=0; i<dif; ++i)
+        for(int j=0; j<dif; ++j)
+        {
+            int n = i*dif+j;
+
+            if(n>0)
+                g.add_edge(n, n-1);
+            if(n>=dif)
+                g.add_edge(n, n-dif);
+
+            Step<int> s(std::vector<int>{i+min, j+min});
+            map.emplace(n, s);
+        }
+
     create();
     newStep = Step<int>(d);
     init();
+
 }
 
 void EscapeWalker::reconstruct()
@@ -41,7 +64,7 @@ void EscapeWalker::create()
 
 /* test if the walk can escape to infinity, if it did the step next
  */
-bool EscapeWalker::escapable(const Step<int> next) const
+bool EscapeWalker::escapable(const Step<int> next)
 {
     // TODO: implement some efficient search, maybe A*?
 
@@ -51,49 +74,56 @@ bool EscapeWalker::escapable(const Step<int> next) const
         exit(1);
     }
 
-    int min = 0;
-    int max = 0;
-    int t = 3;
+    // get a bounding box, such that we dont explore the whole possible lattice
+    int minx = 0;
+    int maxx = 0;
+    int miny = 0;
+    int maxy = 0;
     for(auto i : occupied)
     {
-        if(min > i[0] - t)
-            min = i[0] - t;
-        if(min > i[1] - t)
-            min = i[1] - t;
-        if(max < i[0] + t)
-            max = i[0] + t;
-        if(max < i[1] + t)
-            max = i[1] +t;
+        if(minx > i[0])
+            minx = i[0];
+        if(miny > i[1])
+            miny = i[1];
+        if(maxx < i[0])
+            maxx = i[0];
+        if(maxy < i[1])
+            maxy = i[1];
     }
+    minx -= min;
+    miny -= min;
+    maxx -= min;
+    maxy -= min;
 
-    // This will be far too slow
-    // But this will only be a test
-    int dif = max-min + 1;
-    std::unordered_map<int, Step<int>> map;
+    minx -= 1;
+    miny -= 1;
+    maxx += 1;
+    maxy += 1;
 
-    Graph g(dif*dif);
-    for(int i=0; i<dif; ++i)
-        for(int j=0; j<dif; ++j)
-        {
-            int n = i*dif+j;
+    // next find the corner of the bounding box
+    // nearest to the head position such that we need only a
+    // few steps to reach infinity
+    int d = next.dist(map[maxx*dif+maxy]);
+    int target = maxx*dif+maxy;
 
-            if(n>0)
-                g.add_edge(n, n-1);
-            if(n>=dif)
-                g.add_edge(n, n-dif);
-
-            Step<int> s(std::vector<int>{i+min, j+min});
-            map.emplace(n, s);
-        }
-
-    for(auto i : occupied)
+    if(next.dist(map[minx*dif+maxy]) < d)
     {
-        int n = (i[0]-min)*dif + i[1]-min;
-        g.remove_edges(n);
+        d = next.dist(map[minx*dif+maxy]);
+        target = minx*dif+maxy;
+    }
+    if(next.dist(map[minx*dif+miny]) < d)
+    {
+        d = next.dist(map[minx*dif+miny]);
+        target = minx*dif+miny;
+    }
+    if(next.dist(map[max*dif+miny]) < d)
+    {
+        d = next.dist(map[maxx*dif+miny]);
+        target = maxx*dif+miny;
     }
 
     int n = (next[0]-min)*dif + next[1]-min;
-    return g.connected(n, 0, map);
+    return g.bestfs(n, target, occupied, map);
 }
 
 void EscapeWalker::updateSteps()
