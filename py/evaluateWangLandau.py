@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
+import os
 import logging
 import gzip
+import re
+from pathlib import Path
 
 import numpy as np
 from scipy.interpolate import interp1d
@@ -17,12 +20,33 @@ logging.basicConfig(level=logging.INFO,
                 datefmt='%d.%m.%YT%H:%M:%S')
 
 
+def mergeResults(filename):
+    """For parallelization, it is possible that the results are in multiple
+    files instead of one file. Therefore we search all files with the pattern
+    filename.\d+ and merge them into the actual file."""
+    p = Path(filename)
+    directory = p.parent
+    files = os.listdir(directory)
+    components = re.findall(filename+"\.\d+")
+    # if there are no fragments
+    if not components:
+        return
+    with open(filename, "a") as f:
+        for c in components:
+            with open(c, "r") as r:
+                f.write(r.read())
+
+
 def readData(filenames, outformat=None):
     """Reads the given files and returns a list with n entries each full
     of fragments sufficient for one distribution.
 
     The raw data format consists of one file for each energy range,
     each file having "iterations" independent results.
+    It is also possible that there are multiple files each containing
+    the results of a few iterations. Therefore we fist merge merge all
+    files with the same basename but a number at the end into the actual
+    file.
     This function reads the files and "transposes" the format, i.e.,
     the output is are 'center' and 'data' arrays, with "iterations"
     many entries, containing an array of ranges containing the actual data:
