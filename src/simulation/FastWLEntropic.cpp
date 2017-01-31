@@ -118,8 +118,10 @@ void FastWLEntropic::run()
 
             // the entropic sampling phase should be twice as long as
             // the previous phase
-            LOG(LOG_INFO) << "begin phase 3 (entropic sampling) at t=" << t << " until t=" << 3*t;
-            int t_limit = 2*t;
+            // int t_limit = 2*t;
+            int t_limit = t;
+            LOG(LOG_INFO) << "begin phase 3 (entropic sampling) at t=" << t
+                          << " until t=" << (t+t_limit);
             for(int j=0; j<t_limit; ++j)
             {
                 for(int k=0; k < o.steps; ++k)
