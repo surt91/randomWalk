@@ -10,7 +10,8 @@ Cmd::Cmd(int argc, char** argv)
         text += " ";
     }
 
-    std::string version = VERSION " (Compiled: " __DATE__ " " __TIME__ ")";
+    std::string version = VERSION " (Compiled: " __DATE__ " " __TIME__ ","
+                                     "D_MAX=" + std::to_string(D_MAX) + ")";
 
     // TCLAP throws exceptions
     try{
