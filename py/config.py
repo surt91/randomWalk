@@ -17,9 +17,11 @@ import jinja2
 import parameters as para
 from timing import time
 
+
 def run_instance(i):
     i.quiet = True
     i()
+
 
 def bootstrap(xRaw, f=np.mean, n_resample=100):
     """Bootstrap resampling, returns mean and stderror"""
@@ -34,6 +36,7 @@ def bs_wrapper(tup):
     np.random.seed(i)
     newDict = {k: np.random.choice(v, len(v), replace=True) for k, v in xRaw.items()}
     return f(newDict, **kwargs)
+
 
 def bootstrap_dict(xRaw, N, f=np.histogram, n_resample=100, parallelness=1, **kwargs):
     """Bootstrap resampling, reduction function takes a list and returns
@@ -68,16 +71,62 @@ def bootstrap_histogram(xRaw, bins, n_resample=100, density=False):
         allCounts[i], _ = np.histogram(np.random.choice(xRaw, len(xRaw), replace=True), bins=bins, density=density)
     return np.mean(allCounts, 0), np.std(allCounts, 0)
 
+
 def histogram_simple_error(counts):
     return np.sqrt(counts)
+
 
 def binder(a):
     if(np.mean(a) == 0):
         return 0
     return (3-np.mean(a**4)/np.mean(a**2)**2)/2
 
+
 def file_not_empty(fpath):
     return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
+
+
+def WL_check_overlap(N, instances_for_N, centers):
+    logging.info("checking overlap for N = {}".format(N))
+    # test if there is enough overlap
+    for i in range(len(centers)-1):
+        Z = sum(1 for x in centers[i+1] if min(centers[i]) < x < max(centers[i]))
+        # not enough overlap
+        if Z < 5:
+            logging.warning("not enough overlap ({}: {} -- {})".format(Z, max(centers[i]), min(centers[i+1])))
+
+
+def WL_check_bounds(N, instances_for_N, centers):
+    logging.info("checking bounds for  N = {}".format(N))
+    try:
+        # load cached bounds
+        with open("cache_bounds_{}.p".format(N), "rb") as f:
+            bounds = pickle.load(f)
+    except:
+        # if we can not load them, recalculate them
+        # restart 4 times
+        # we do not want to get a too good bound, otherwise the
+        # simulation will not finish.
+        get_bounds_tmp = operator.methodcaller('get_WL_bounds')
+        tests = [copy.deepcopy(instances_for_N[0]) for _ in range(4)]
+        # update seeds
+        for n, i in enumerate(tests):
+            tests[n].x = n
+            tests[n].y = n
+        with Pool() as pool:
+            bounds = pool.map(get_bounds_tmp, tests)
+        bounds = min(i[0] for i in bounds), max(i[1] for i in bounds)
+        with open("cache_bounds_{}.p".format(N), "wb") as f:
+            pickle.dump(bounds, f)
+
+    logging.info("estimated bounds: [{}, {}]".format(*bounds))
+    # test if the ranges are inside the bounds
+    if bounds[0] > min(min(c) for c in centers):
+        logging.warning("there are bins below the lower bound ({} > {})".format(bounds[0], min(min(c) for c in centers)))
+        logging.warning("This could result in an infinite loop")
+    if bounds[1] < max(max(c) for c in centers):
+        logging.warning("there are bins above the upper bound ({} < {})".format(bounds[1], max(max(c) for c in centers)))
+        logging.warning("This could result in an infinite loop")
 
 
 class Simulation():
@@ -114,48 +163,13 @@ class Simulation():
                         instances_for_N.append(SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), iterations=iterations, passageTimeStart=t1, first=not i, last=(i==num-1), **kwargs))
                     self.instances += instances_for_N
 
-                    logging.info("checking overlap for N = {}".format(N))
                     # call the executable to ask for the centers in parallel
                     with Pool() as pool:
                         get_centers_tmp = operator.methodcaller('get_WL_centers')
                         centers = pool.map(get_centers_tmp, instances_for_N)
-                    # test if there is enough overlap
-                    for i in range(len(centers)-1):
-                        Z = sum(1 for x in centers[i+1] if min(centers[i]) < x < max(centers[i]))
-                        # not enough overlap
-                        if Z < 3:
-                            logging.warning("not enough overlap ({}: {} -- {})".format(Z, max(centers[i]), min(centers[i+1])))
 
-                    logging.info("checking bounds for  N = {}".format(N))
-                    try:
-                        # load cached bounds
-                        with open("cache_bounds_{}.p".format(N), "rb") as f:
-                            bounds = pickle.load(f)
-                    except:
-                        # if we can not load them, recalculate them
-                        # restart 4 times
-                        # we do not want to get a too good bound, otherwise the
-                        # simulation will not finish.
-                        get_bounds_tmp = operator.methodcaller('get_WL_bounds')
-                        tests = [copy.deepcopy(instances_for_N[0]) for _ in range(4)]
-                        # update seeds
-                        for n, i in enumerate(tests):
-                            tests[n].x = n
-                            tests[n].y = n
-                        with Pool() as pool:
-                            bounds = pool.map(get_bounds_tmp, tests)
-                        bounds = min(i[0] for i in bounds), max(i[1] for i in bounds)
-                        with open("cache_bounds_{}.p".format(N), "wb") as f:
-                            pickle.dump(bounds, f)
-
-                    logging.info("estimated bounds: [{}, {}]".format(*bounds))
-                    # test if the ranges are inside the bounds
-                    if bounds[0] > min(min(c) for c in centers):
-                        logging.warning("there are bins below the lower bound ({} > {})".format(bounds[0], min(min(c) for c in centers)))
-                        logging.warning("This could result in an infinite loop")
-                    if bounds[1] < max(max(c) for c in centers):
-                        logging.warning("there are bins above the upper bound ({} < {})".format(bounds[1], max(max(c) for c in centers)))
-                        logging.warning("This could result in an infinite loop")
+                    WL_check_overlap(N, instances_for_N, centers)
+                    WL_check_bounds(N, instances_for_N, centers)
 
     def ihero(self):
         return self.hero(True)
