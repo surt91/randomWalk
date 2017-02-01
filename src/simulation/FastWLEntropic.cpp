@@ -84,6 +84,12 @@ void FastWLEntropic::run()
             //start second phase
             status = 1./t;
             LOG(LOG_INFO) << "begin phase 2 (power-law decrease) at t=" << t;
+            if(lnf_min > 1./t)
+            {
+                lnf_min = 1./(t+1./lnf_min);
+                LOG(LOG_INFO) << "this seems to take too much time, reduce target, do more iterations until t=" << 1./lnf_min;
+            }
+
             while(lnf > lnf_min)
             {
                 lnf = 1./t;
