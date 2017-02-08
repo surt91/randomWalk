@@ -259,7 +259,7 @@ class Simulation():
                                 # we will get n identical results
                                 sim.x += k
                                 sim.y += k
-                                if not incremental or not os.path.exists(i.filename+".gz"):
+                                if not incremental or not os.path.exists(sim.filename+".gz"):
                                     f.write(" ".join(sim.get_cmd()) + "\n")
                                     ctr += 1
                         else:
