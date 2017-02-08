@@ -11,8 +11,13 @@ import numpy as np
 import warnings
 from scipy.interpolate import interp1d
 from scipy.integrate import simps, trapz
+from scipy.optimize import curve_fit
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 
 import parameters as param
+from data import nu as nu_dict
 from config import bootstrap, SimulationInstance
 from commonEvaluation import getMinMaxTime, getMeanFromDist, getVarFromDist
 
@@ -21,6 +26,59 @@ logging.basicConfig(level=logging.INFO,
                 format='%(asctime)s -- %(levelname)s :: %(message)s',
                 datefmt='%d.%m.%YT%H:%M:%S')
 logging.info("started")
+
+
+def powerlaw(x, a, b, c):
+    return a*x**b + c
+
+
+def asymptoteFromFit(N, S, err=None, p0=(-2, -0.5, 1), outname=None):
+    popt, pcov = curve_fit(powerlaw, N, S, p0, sigma=err)
+    if outname is not None:
+        plt.clf()
+        lin = np.linspace(min(N), max(N), num=1000)
+        plt.plot(lin, powerlaw(lin, *popt), 'b')
+        plt.plot(N, S)
+        plt.savefig(outname)
+    return popt[2]
+
+
+def asymptoticMeans(Ns, filenames):
+    d = param.parameters["dimension"]
+    nu = nu_dict[param.parameters["typ"]][d]
+
+    n_resample = 200
+    Lc = []
+    Ac = []
+    data = {}
+    for N in Ns:
+        name = filenames[N]
+        name = "rawData/" + name + ".dat"
+        data[N] = np.loadtxt(name+".gz").transpose()[1:3]
+
+    length = len(data[N][0])
+
+    for i in range(n_resample):
+        L = []
+        Lerr = []
+        A = []
+        Aerr = []
+        for N in Ns:
+            Lsample = np.random.choice(data[N][0]/N**((d-1)*nu), length, replace=True)
+            L.append(np.mean(Lsample))
+            Lerr.append(np.std(Lsample))
+            Asample = np.random.choice(data[N][1]/N**((d)*nu), length, replace=True)
+            A.append(np.mean(Asample))
+            Aerr.append(np.std(Asample))
+
+        Lc.append(asymptoteFromFit(Ns, L, err=Lerr))
+        Ac.append(asymptoteFromFit(Ns, A, err=Aerr))
+
+    asymptoteFromFit(Ns, L, outname="Ltest.png")
+    asymptoteFromFit(Ns, A, outname="Atest.png")
+
+    print("L:", np.mean(Lc), np.std(Lc))
+    print("A:", np.mean(Ac), np.std(Ac))
 
 
 def getPercentileBasedBins(dataDict, numBins=100):
@@ -127,12 +185,15 @@ def run(parallelness=1):
     # prepare file
     eval_simplesampling(None, out, parallelness=parallelness)
 
+    # find names of needed files
+    filenames = {N: SimulationInstance(steps=N, theta=float("inf"), **param.parameters).basename for N in steps}
+
+    #~ asymptoticMeans(steps, filenames)
+
     for N in steps:
         logging.info("N = {}".format(N))
 
-        # find names of needed files
-        i = SimulationInstance(steps=N, theta=float("inf"), **param.parameters)
-        name = i.basename
+        name = filenames[N]
 
         # evaluate things from simple sampling (mainly for literature comparison)
         eval_simplesampling(name, out, N, parallelness=parallelness)
