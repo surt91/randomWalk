@@ -17,6 +17,12 @@
  * Note that this type has different behavior than SAW. I am not sure if
  * it was studied before, though it is often mentioned as the naive
  * SAW implementation, which has different properties.
+ *
+ * In the literature it is known as the smart kinetic self-avoiding walk (SKSAW):
+ * 10.1007/s10955-015-1271-4
+ *
+ * The exponent nu is expected to be 4/7.
+ * 10.1103/PhysRevLett.59.539
  */
 class EscapeWalker final : public SpecWalker<int>
 {
