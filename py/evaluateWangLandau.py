@@ -25,15 +25,19 @@ def mergeResults(filename):
     files instead of one file. Therefore we search all files with the pattern
     filename.\d+ and merge them into the actual file."""
     p = Path(filename)
-    directory = p.parent
+    directory = str(p.parent)
     files = os.listdir(directory)
-    components = re.findall(filename+"\.\d+")
+    components = []
+    for f in files:
+        if re.findall(p.name+".\d+.gz", f):
+            components.append(f)
+    print("merge:", filename+".gz", "<-", components)
     # if there are no fragments
     if not components:
         return
-    with open(filename, "a") as f:
+    with gzip.open(filename + ".gz", "w") as f:
         for c in components:
-            with open(c, "r") as r:
+            with gzip.open(os.path.join(directory, c), "r") as r:
                 f.write(r.read())
 
 
@@ -197,6 +201,10 @@ def run(parallelness=1):
             p = param.parameters["parallel"]
         num = len(energies[N])-1
         names = ["{}/{}.dat".format(d, SimulationInstance(steps=N, energy=list(energies[N][i:i+p+1]), first=not i, last=(i==num-1), **param.parameters).basename) for i in range(num)]
+
+        # merge files if necessary
+        for f in names:
+            mergeResults(f)
 
         logging.info("N = {}".format(N))
         getMinMaxTime((f for f in names), parallelness)
