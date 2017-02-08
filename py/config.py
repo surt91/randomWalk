@@ -247,22 +247,23 @@ class Simulation():
             with open(os.path.join("HERO", name+".lst"), "w") as f:
                 for i in self.instances:
                     if i.N == N:
-                        if not incremental or not os.path.exists(i.filename+".gz"):
-                            # for wang landau sampling, split the iterations into
-                            # own processes
-                            if self.sampling == 2 or self.sampling == 3:
-                                for k in range(1, self.n+1):
-                                    sim = copy(i)
-                                    sim.n = 1
-                                    sim.filename = i.filename + ".{}".format(k)
-                                    sim.logname = i.logname + ".{}".format(k)
-                                    # we need to change the seeds, otherwise
-                                    # we will get n identical results
-                                    sim.x += k
-                                    sim.y += k
+                        # for wang landau sampling, split the iterations into
+                        # own processes
+                        if self.sampling == 2 or self.sampling == 3:
+                            for k in range(1, self.n+1):
+                                sim = copy(i)
+                                sim.n = 1
+                                sim.filename = i.filename + ".{}".format(k)
+                                sim.logname = i.logname + ".{}".format(k)
+                                # we need to change the seeds, otherwise
+                                # we will get n identical results
+                                sim.x += k
+                                sim.y += k
+                                if not incremental or not os.path.exists(i.filename+".gz"):
                                     f.write(" ".join(sim.get_cmd()) + "\n")
                                     ctr += 1
-                            else:
+                        else:
+                            if not incremental or not os.path.exists(i.filename+".gz"):
                                 f.write(" ".join(i.get_cmd()) + "\n")
                                 ctr += 1
             with open(os.path.join("HERO", name+".sge"), "w") as f:
