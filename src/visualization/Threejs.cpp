@@ -79,16 +79,16 @@ Threejs::Threejs(const std::string &filename)
                             "    render();\n"
                             "}\n"
                             "\n"
-                            "// call this function from the debug console to create a screenshot\n";
-                            "function screenshot() {\n";
-                            "    var r = new THREE.WebGLRenderer( { alpha: true, antialias: true, preserveDrawingBuffer: true } );\n";
-                            "    r.setSize(4096, 4096);\n";
-                            "    var c = new THREE.PerspectiveCamera( 75, w / h, 1, 10000 );\n";
-                            "    c.position.z = 2;\n";
-                            "    r.render( scene, c );\n";
-                            "    window.open( r.domElement.toDataURL( 'image/png' ), 'screenshot' );\n";
-                            "}\n";
-                            "\n";
+                            "// call this function from the debug console to create a screenshot\n"
+                            "function screenshot() {\n"
+                            "    var r = new THREE.WebGLRenderer( { alpha: true, antialias: true, preserveDrawingBuffer: true } );\n"
+                            "    r.setSize(4096, 4096);\n"
+                            "    var c = new THREE.PerspectiveCamera( 75, w / h, 1, 10000 );\n"
+                            "    c.position.z = 2;\n"
+                            "    r.render( scene, c );\n"
+                            "    window.open( r.domElement.toDataURL( 'image/png' ), 'screenshot' );\n"
+                            "}\n"
+                            "\n"
                             "function render() {\n"
                             "    group.rotation.x += 0.003;\n"
                             "    group.rotation.y += 0.006;\n"
