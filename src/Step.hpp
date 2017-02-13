@@ -45,6 +45,7 @@ class Step
         explicit Step(const std::vector<T> &coord);
 
         void fillFromRN(double rn, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
+        std::vector<Step<int>> neighbors(){ throw std::invalid_argument("neighbors() only implemented for Step<int>"); };
 
         // properties
         double length() const;
@@ -125,6 +126,19 @@ inline void Step<int>::fillFromRN(double rn, bool clean)
             // after the wanted one will be filled by -1
             break;
         }
+}
+
+/// Yields neighbors
+template <>
+inline std::vector<Step<int>> Step<int>::neighbors()
+{
+    std::vector<Step<int>> ret(2*m_d, *this);
+    for(int i=0; i<m_d; ++i)
+    {
+        ret[2*i][i] += 1;
+        ret[2*i+1][i] -= 1;
+    }
+    return ret;
 }
 
 #if D_MAX == 0

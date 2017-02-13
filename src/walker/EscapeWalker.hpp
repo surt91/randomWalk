@@ -4,7 +4,8 @@
 #include <unordered_set>
 
 #include "../Logging.hpp"
-#include "../Graph.hpp"
+#include "../Hypercube.hpp"
+// #include "../Graph.hpp"
 #include "SpecWalker.hpp"
 
 /** Escape Walk on a Hypercubic lattice.
@@ -33,22 +34,25 @@ class EscapeWalker final : public SpecWalker<int>
 
         void updateSteps() final;
 
+        int nRN() const final;
+
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
-    private:
+        int toInt(const std::vector<int> &s) const;
+        int toInt(const Step<int> &s) const;
+
+    protected:
         Step<int> newStep;
+        Step<int> undoStep;
         std::unordered_set<Step<int>> occupied;
 
         Step<int> undo_step;
         bool checkOverlapFree(const std::vector<Step<int>> &l);
 
         bool escapable(const Step<int> next);
-        void create();
 
-        Graph g;
-        int graph_size;
-        void init_graph(int N);
-        std::unordered_map<int, Step<int>> map;
-        int min, max, dif;
+        mutable int random_numbers_used;
+
+        Hypercube g;
 };

@@ -3,57 +3,89 @@
 EscapeWalker::EscapeWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia)
 {
-    // start with 256x256
-    // we will make it bigger if we need to
-    init_graph(256);
-
-    create();
     newStep = Step<int>(d);
-    init();
+    undoStep = Step<int>(d);
+    m_steps = std::vector<Step<int>>(numSteps);
+    if(!amnesia)
+        random_numbers = rng.vector(numSteps);
 
+    init();
 }
 
 void EscapeWalker::reconstruct()
 {
-    create();
+    if(!amnesia)
+    {
+        // If the random number vector is far longer than what we actually need,
+        // truncate it, to save some memory bandwidth (-> computing time)
+        size_t expected_space_needed = std::max(5*numSteps, 2*random_numbers_used);
+        if(random_numbers.size() > expected_space_needed)
+            random_numbers.resize(expected_space_needed); // resize will not free memory
+
+        // write new random numers into our state
+        std::generate(random_numbers.begin(), random_numbers.end(), std::ref(rng));
+    }
     init();
 }
 
-void EscapeWalker::init_graph(int N)
+/* test if the walk can escape to infinity, if it did the step next
+ */
+bool EscapeWalker::escapable(const Step<int> next)
 {
-    graph_size = N;
+    // TODO: implement the winding angle method (for d=2)
 
-    min = -N + 3;
-    max = N + 3;
+    // get a bounding box, such that we dont explore the whole possible lattice
+    std::vector<int> min_b(d, 0);
+    std::vector<int> max_b(d, 0);
 
-    // This will be far too slow
-    // But this will only be a test
-    dif = max-min + 1;
-
-    g = Graph(dif*dif);
-    for(int i=0; i<dif; ++i)
-        for(int j=0; j<dif; ++j)
+    for(auto i : occupied)
+    {
+        for(int axis=0; axis<d; ++axis)
         {
-            int n = i*dif+j;
-
-            if(n>0)
-                g.add_edge(n, n-1);
-            if(n>=dif)
-                g.add_edge(n, n-dif);
-
-            Step<int> s(std::vector<int>{i+min, j+min});
-            map.emplace(n, s);
+            if(min_b[axis] > i[axis])
+                min_b[axis] = i[axis];
+            if(max_b[axis] < i[axis])
+                max_b[axis] = i[axis];
         }
+    }
+    for(int axis=0; axis<d; ++axis)
+    {
+        min_b[axis] -= 1;
+        max_b[axis] += 1;
+    }
+
+    // next find the corner of the bounding box
+    // nearest to the head position such that we need only a
+    // few steps to reach infinity
+    std::vector<int> point(d, 0);
+    Step<int> target;
+    int dist = 2000000000;
+    for(int i=0; i<std::pow(2, d); ++i)
+    {
+        for(int j=0; j<d; ++j)
+        {
+            point[j] = (i & (1 << j)) ? min_b[j] : max_b[j];
+        }
+
+        if(next.dist(Step<int>(point)) < dist)
+        {
+            target = Step<int>(point);
+            dist = next.dist(target);
+        }
+    }
+    return g.bestfs(next, target, occupied);
 }
 
-void EscapeWalker::create()
+void EscapeWalker::updateSteps()
 {
-    random_numbers.clear();
+    int N = random_numbers.size();
+
     occupied.clear();
     occupied.insert(Step<int>(d));
 
     Step<int> head(d);
 
+    int j = 0;
     for(int i=0; i<numSteps; ++i)
     {
         Step<int> next(d);
@@ -61,146 +93,72 @@ void EscapeWalker::create()
         double rn;
         do
         {
-            rn = rng();
+            if(!amnesia)
+            {
+                // generate more random numbers if necessary
+                if(j >= N)
+                {
+                    N *= 2;
+                    random_numbers.resize(N);
+
+                    std::generate(random_numbers.begin() + j, random_numbers.end(), std::ref(rng));
+                }
+                rn = random_numbers[j];
+            }
+            else
+            {
+                rn = rng();
+            }
+            ++j;
+
             next.fillFromRN(rn);
             tmp = head + next;
         } while(occupied.count(tmp) || !escapable(tmp));
+
         head += next;
+        m_steps[i] = next;
         occupied.insert(head);
-        random_numbers.push_back(rn);
     }
+    random_numbers_used = j;
 }
 
-/* test if the walk can escape to infinity, if it did the step next
- */
-bool EscapeWalker::escapable(const Step<int> next)
+int EscapeWalker::nRN() const
 {
-    // TODO: implement some efficient search, maybe A*?
-
-    if(d != 2)
-    {
-        LOG(LOG_ERROR) << "this function is only implemented for d=2. Generalize it!";
-        exit(1);
-    }
-
-    // get a bounding box, such that we dont explore the whole possible lattice
-    int minx = 0;
-    int maxx = 0;
-    int miny = 0;
-    int maxy = 0;
-    for(auto i : occupied)
-    {
-        if(minx > i[0])
-            minx = i[0];
-        if(miny > i[1])
-            miny = i[1];
-        if(maxx < i[0])
-            maxx = i[0];
-        if(maxy < i[1])
-            maxy = i[1];
-    }
-    minx -= min;
-    miny -= min;
-    maxx -= min;
-    maxy -= min;
-
-    minx -= 1;
-    miny -= 1;
-    maxx += 1;
-    maxy += 1;
-
-    if(std::max(maxx-minx, maxy-miny) > graph_size)
-        init_graph(graph_size*2);
-
-    // next find the corner of the bounding box
-    // nearest to the head position such that we need only a
-    // few steps to reach infinity
-    int d = next.dist(map[maxx*dif+maxy]);
-    int target = maxx*dif+maxy;
-
-    if(next.dist(map[minx*dif+maxy]) < d)
-    {
-        d = next.dist(map[minx*dif+maxy]);
-        target = minx*dif+maxy;
-    }
-    if(next.dist(map[minx*dif+miny]) < d)
-    {
-        d = next.dist(map[minx*dif+miny]);
-        target = minx*dif+miny;
-    }
-    if(next.dist(map[max*dif+miny]) < d)
-    {
-        d = next.dist(map[maxx*dif+miny]);
-        target = maxx*dif+miny;
-    }
-
-    int n = (next[0]-min)*dif + next[1]-min;
-    return g.bestfs(n, target, occupied, map);
-}
-
-void EscapeWalker::updateSteps()
-{
-    m_steps.clear();
-    m_steps.reserve(numSteps);
-    for(int i=0; i<numSteps; ++i)
-        m_steps.emplace_back(d, random_numbers[i]);
-}
-
-bool EscapeWalker::checkOverlapFree(const std::vector<Step<int>> &l)
-{
-    occupied.clear();
-    occupied.reserve(l.size());
-
-    auto it(l.begin());
-    while(it != l.end())
-    {
-        if(occupied.count(*it))
-            return false;
-        occupied.insert(*it);
-        ++it;
-    }
-    return true;
+    return random_numbers_used;
 }
 
 void EscapeWalker::change(UniformRNG &rng, bool update)
 {
-    LOG(LOG_ERROR) << "the change method is not yet implemented in a way which is useful for Metropolis ~ no detailed balance";
-    exit(1);
-
     int idx = rng() * nRN();
     undo_index = idx;
     undo_value = random_numbers[idx];
-    undo_step = m_steps[idx];
+    random_numbers[idx] = rng();
 
-    Step<int> head = points()[idx];
-    Step<int> newStep(d);
-    Step<int> tmp(d);
-    do
-    {
-        double rn = rng();
-        random_numbers[idx] = rn;
-        newStep.fillFromRN(rn);
-        m_steps[idx] = newStep;
-        tmp = head + newStep;
-        updatePoints(idx+1);
-    } while(!checkOverlapFree(points()) || !escapable(tmp));
+    newStep.fillFromRN(random_numbers[idx]);
+    // test if something changes
+    undoStep.fillFromRN(undo_value);
+    if(newStep == undoStep)
+        return;
+
+    updateSteps();
+    updatePoints();
 
     if(update)
     {
         m_old_convex_hull = m_convex_hull;
         updateHull();
     }
+
 }
 
 void EscapeWalker::undoChange()
 {
-    // no change happened
-    if(undo_index == -1)
+    random_numbers[undo_index] = undo_value;
+    // test if something changed
+    if(newStep == undoStep)
         return;
 
-    random_numbers[undo_index] = undo_value;
-    m_steps[undo_index] = undo_step;
-
-    updatePoints(undo_index+1);
+    updateSteps();
+    updatePoints();
     m_convex_hull = m_old_convex_hull;
 }
