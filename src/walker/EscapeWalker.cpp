@@ -30,9 +30,18 @@ void EscapeWalker::reconstruct()
 
 /* test if the walk can escape to infinity, if it did the step next
  */
-bool EscapeWalker::escapable(const Step<int> next)
+bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current)
 {
     // TODO: implement the winding angle method (for d=2)
+
+    // we can not get trapped if the current step
+    // only has one neighbor (but with two, we can get trapped)
+    int ctr2 = 0;
+    for(const auto &i : current.neighbors(true))
+        if(occupied.count(i))
+            ++ctr2;
+    if(ctr2 < 2)
+        return true;
 
     // get a bounding box, such that we dont explore the whole possible lattice
     std::vector<int> min_b(d, 0);
@@ -113,7 +122,7 @@ void EscapeWalker::updateSteps()
 
             next.fillFromRN(rn);
             tmp = head + next;
-        } while(occupied.count(tmp) || !escapable(tmp));
+        } while(occupied.count(tmp) || !escapable(tmp, head));
 
         head += next;
         m_steps[i] = next;

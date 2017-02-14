@@ -45,7 +45,7 @@ class Step
         explicit Step(const std::vector<T> &coord);
 
         void fillFromRN(double rn, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
-        std::vector<Step<int>> neighbors(){ throw std::invalid_argument("neighbors() only implemented for Step<int>"); };
+        std::vector<Step<int>> neighbors(bool diagonal=false) const { throw std::invalid_argument("neighbors() only implemented for Step<int>"); };
 
         // properties
         double length() const;
@@ -130,14 +130,41 @@ inline void Step<int>::fillFromRN(double rn, bool clean)
 
 /// Yields neighbors
 template <>
-inline std::vector<Step<int>> Step<int>::neighbors()
+inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
 {
-    std::vector<Step<int>> ret(2*m_d, *this);
+    // A d dimensional hypercube has 2*d direct neighbors, in positive
+    // and negative direction for every dimension.
+    std::vector<Step<int>> ret(2*m_d + std::pow(2, m_d), *this);
     for(int i=0; i<m_d; ++i)
     {
         ret[2*i][i] += 1;
         ret[2*i+1][i] -= 1;
     }
+
+    if(diagonal)
+    {
+        Step<int> diff(m_d);
+        // A d dimensional hypercube has 2^d diagonal elements
+        // we can enumerate them with bitfiddling, i.e., to
+        // generate all 2^d possibilities, we take all numbers
+        // up to 2^d-1 and interpret their j-th bit as a displacement
+        // in negative direction for 0 and positive for 1.
+        // The sum of the center and this displacement generates
+        // all cornerstones.
+        for(int i=0; i<std::pow(2, m_d); ++i)
+        {
+            for(int j=0; j<m_d; ++j)
+            {
+                diff[j] = (i & (1 << j)) ? 1 : -1;
+            }
+            ret[2*m_d + i] += diff;
+        }
+    }
+    else
+    {
+        ret.resize(2*m_d);
+    }
+
     return ret;
 }
 

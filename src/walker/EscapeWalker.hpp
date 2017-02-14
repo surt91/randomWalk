@@ -39,18 +39,14 @@ class EscapeWalker final : public SpecWalker<int>
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
-        int toInt(const std::vector<int> &s) const;
-        int toInt(const Step<int> &s) const;
-
     protected:
         Step<int> newStep;
         Step<int> undoStep;
         std::unordered_set<Step<int>> occupied;
 
         Step<int> undo_step;
-        bool checkOverlapFree(const std::vector<Step<int>> &l);
 
-        bool escapable(const Step<int> next);
+        bool escapable(const Step<int> &next, const Step<int> &current);
 
         mutable int random_numbers_used;
 

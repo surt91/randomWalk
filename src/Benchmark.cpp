@@ -111,7 +111,7 @@ bool benchmark()
     o.d = 2;
     o.chAlg = CH_ANDREWS_AKL;
     o.iterations = 1000;
-    for(int i=1; i<=7; ++i)
+    for(int i=1; i<=8; ++i)
     {
         double expected_mean_L = 0;
         double expected_mean_A = 0;
@@ -142,10 +142,6 @@ bool benchmark()
                 o.steps = 100;
                 o.sweep = o.steps;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
-                //~ expected_mean_L = 84.4260508481;
-                //~ expected_mean_A = 341.266;
-                //~ expected_mean_r = 28.5289738331;
-                //~ expected_mean_r2 = 836.764;
                 expected_mean_L = 86.5346510854;
                 expected_mean_A = 352.3315;
                 expected_mean_r = 29.7926051572;
@@ -187,6 +183,15 @@ bool benchmark()
                 expected_mean_r = 9.17497080667;
                 expected_mean_r2 = 96.0109448785;
                 break;
+            case WT_ESCAPE_RANDOM_WALK:
+                o.steps = 30;
+                o.sweep = o.steps;
+                o.type = WT_ESCAPE_RANDOM_WALK;
+                expected_mean_L = 29.0173126288;
+                expected_mean_A = 42.0055;
+                expected_mean_r = 9.04605822968;
+                expected_mean_r2 = 88.092;
+                break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
         fail |= run_simulation(o,
@@ -206,7 +211,7 @@ bool benchmark()
     o.theta = -20;
     o.d = 3;
     o.chAlg = CH_QHULL;
-    for(int i=1; i<=7; ++i)
+    for(int i=1; i<=8; ++i)
     {
         double expected_mean_L = 0;
         double expected_mean_A = 0;
@@ -240,10 +245,6 @@ bool benchmark()
                 o.sweep = o.steps;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
                 o.iterations = 100;
-                //~ expected_mean_L = 2973.58110915;
-                //~ expected_mean_A = 9306.72333333;
-                //~ expected_mean_r = 55.1497119514;
-                //~ expected_mean_r2 = 3098.84;
                 expected_mean_L = 3007.98994932;
                 expected_mean_A = 9709.90666667;
                 expected_mean_r = 55.6246033107;
@@ -288,6 +289,16 @@ bool benchmark()
                 expected_mean_r = 25.8766506636;
                 expected_mean_r2 = 710.389952596;
                 break;
+            case WT_ESCAPE_RANDOM_WALK:
+                o.steps = 40;
+                o.sweep = o.steps;
+                o.type = WT_ESCAPE_RANDOM_WALK;
+                o.iterations = 100;
+                expected_mean_L = 118.04597545;
+                expected_mean_A = 80.2966666667;
+                expected_mean_r = 8.81999414734;
+                expected_mean_r2 = 87.28;
+                break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
         fail |= run_simulation(o,
@@ -303,7 +314,7 @@ bool benchmark()
 
     LOG(LOG_INFO) << "Starting Hull Comparison";
 
-    for(int i=1; i<=7; ++i)
+    for(int i=1; i<=8; ++i)
     {
         o.d = 2;
         switch(i)
@@ -349,6 +360,12 @@ bool benchmark()
                 o.type = WT_CORRELATED_RANDOM_WALK;
                 o.benchmark_L = 2443.76382544;
                 o.benchmark_A = 403708.247784;
+                break;
+            case WT_ESCAPE_RANDOM_WALK:
+                o.steps = 10000;
+                o.type = WT_ESCAPE_RANDOM_WALK;
+                o.benchmark_L = 963.31167262;
+                o.benchmark_A = 60810.5;
                 break;
         }
 
@@ -411,6 +428,12 @@ bool benchmark()
                 o.type = WT_CORRELATED_RANDOM_WALK;
                 o.benchmark_L = 2535998.2343;
                 o.benchmark_A = 241570113.447;
+                break;
+            case WT_ESCAPE_RANDOM_WALK:
+                o.steps = 10000;
+                o.type = WT_ESCAPE_RANDOM_WALK;
+                o.benchmark_L = 25552.1280682;
+                o.benchmark_A = 319318.833333;
                 break;
         }
 
