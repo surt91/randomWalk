@@ -22,7 +22,7 @@ void LoopErasedWalker::reconstruct()
             random_numbers.resize(expected_space_needed); // resize will not free memory
 
         // write new random numers into our state
-        std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng(); });
+        std::generate(random_numbers.begin(), random_numbers.end(), std::ref(rng));
     }
     init();
 }
@@ -59,7 +59,7 @@ void LoopErasedWalker::updateSteps()
                 N *= 2;
                 random_numbers.resize(N);
 
-                std::generate(random_numbers.begin() + i, random_numbers.end(), [this]{ return this->rng(); });
+                std::generate(random_numbers.begin() + i, random_numbers.end(), std::ref(rng));
             }
             s.fillFromRN(random_numbers[i]);
         }
