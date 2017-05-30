@@ -33,6 +33,7 @@ void EscapeWalker::reconstruct()
 bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current)
 {
     // TODO: implement the winding angle method (for d=2)
+    // https://doi.org/10.1103/PhysRevLett.54.267
 
     // we can not get trapped if the current step
     // only has one neighbor (but with two, we can get trapped)
