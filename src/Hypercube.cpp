@@ -9,7 +9,7 @@ bool Hypercube::bestfs(Step<int> source, Step<int> target, std::unordered_set<St
 
     while(!q.empty())
     {
-        const Step<int> &c = q.top().value;
+        Step<int> c = q.top().value;
         q.pop();
 
         double D = target.dist(c);
