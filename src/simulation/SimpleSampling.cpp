@@ -25,7 +25,7 @@ void SimpleSampling::run()
 
     for(int i=0; i<o.iterations; ++i)
     {
-        w->reconstruct();
+        w->generate_independent_sample();
 
         // save measurements to file
         if(!o.conf_path.empty())

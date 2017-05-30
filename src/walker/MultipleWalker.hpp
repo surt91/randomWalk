@@ -51,6 +51,7 @@ class MultipleWalker : public Walker
         int numWalker;
 
         virtual void reconstruct();
+        virtual void generate_independent_sample();
 
         //\name implementing pure virtual functions
         virtual void setHullAlgo(hull_algorithm_t a);
@@ -117,6 +118,17 @@ void MultipleWalker<T>::reconstruct()
 {
     for(auto &w : m_walker)
         w.reconstruct();
+    updateHull();
+}
+
+/// For most Walks this will be just a simple reconstruct, but
+/// e.g., SAW will need a MCMC equilibration with the pivot algorithm
+/// which will be performed in this call
+template <class T>
+void MultipleWalker<T>::generate_independent_sample()
+{
+    for(auto &w : m_walker)
+        w.generate_independent_sample();
     updateHull();
 }
 

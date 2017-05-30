@@ -31,6 +31,7 @@ class Walker
         const int d;         ///< Dimension in which the Walker walks
 
         virtual void reconstruct() = 0;
+        virtual void generate_independent_sample() = 0;
 
         virtual void setHullAlgo(hull_algorithm_t a) = 0;
 

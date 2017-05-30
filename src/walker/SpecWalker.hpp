@@ -47,6 +47,7 @@ class SpecWalker : public Walker
 
         void init();
         virtual void reconstruct();
+        virtual void generate_independent_sample();
 
         const ConvexHull<T>& convexHull() const;
         void setHullAlgo(hull_algorithm_t a);
@@ -114,6 +115,15 @@ void SpecWalker<T>::reconstruct()
     // write new random numers into our state
     std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng(); });
     init();
+}
+
+/// For most Walks this will be just a simple reconstruct, but
+/// e.g., SAW will need a MCMC equilibration with the pivot algorithm
+/// which will be performed in this call
+template <class T>
+void SpecWalker<T>::generate_independent_sample()
+{
+    reconstruct();
 }
 
 /// Update the convex hull given the current points.
