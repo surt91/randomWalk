@@ -324,7 +324,7 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
     // 20% pivot chance, 80% naive change
     // pivot not implemented for d >= 4
     double decision = rng();
-    if(decision > 0.8) // 20%
+    if(decision > 0.5) // 50%
     {
         int symmetry;
         switch(d)
@@ -346,13 +346,6 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
                 LOG(LOG_WARNING) << "Pivot algorithm only implemented for d<=3, will only use naive changes";
         }
         pivot(idx, symmetry, update);
-    }
-    else if(false)// if(decision > 0.5) // 30%
-    {
-        undo_index = -2;
-        bool direction = rng() > 0.5;
-        double rn = rng();
-        slitheringSnake(direction, rn, update);
     }
     else // 50%
     {
