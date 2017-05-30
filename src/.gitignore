@@ -1,7 +1,10 @@
 dep/
 obj/
+*.gch
+callgrind.out*
 
 randomWalk
+passage*/
 
 *.dat
 *.gz
@@ -9,9 +12,14 @@ randomWalk
 *.png
 *.pov
 *.svg
+*.html
 
 *.log
+*.bench
+*.eq
 
 doc/
 cli.dox
 manual.pdf
+
+img/

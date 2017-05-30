@@ -3,6 +3,8 @@ randomWalk
 HERO
 plots
 __pycache__
+*.pyc
+doc/
 data
 rawData
 rawConf

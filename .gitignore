@@ -9,10 +9,18 @@ lit/
 images/
 
 py2
-LoopErasedMetropolis
-LoopErasedMetropolis3D
-RandomWalkMetropolis
-RandomWalkMetropolis3D
-SelfAvoidingMetropolis
-SelfAvoidingMetropolis3D
+RandomWalkMetropolis*
+RandomWalkWL*
+RealRandomWalkMetropolis
+GaussWalk*
+M*GRW3D
+RandomWalkFWL*
+passage*/
+html/
+gallery/
 src/svg/
+_build/
+trash
+
+*/cache*.p
+bench*.gz
