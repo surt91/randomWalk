@@ -142,10 +142,10 @@ bool benchmark()
                 o.steps = 100;
                 o.sweep = o.steps;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
-                expected_mean_L = 86.9574123547;
-                expected_mean_A = 352.8355;
-                expected_mean_r = 29.4885006273;
-                expected_mean_r2 = 884.648;
+                expected_mean_L = 88.1181934544;
+                expected_mean_A = 360.7425;
+                expected_mean_r = 30.0432821553;
+                expected_mean_r2 = 894.006;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 130;
@@ -245,10 +245,10 @@ bool benchmark()
                 o.sweep = o.steps;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
                 o.iterations = 100;
-                expected_mean_L = 3130.61436786;
-                expected_mean_A = 10300.6083333;
-                expected_mean_r = 56.5774128114;
-                expected_mean_r2 = 3202.46;
+                expected_mean_L = 3084.40953949;
+                expected_mean_A = 9710.35833333;
+                expected_mean_r = 54.1900879743;
+                expected_mean_r2 = 2988.34;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 100;
@@ -334,8 +334,8 @@ bool benchmark()
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 320;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
-                o.benchmark_L = 153.467524349;
-                o.benchmark_A = 1614.5;
+                o.benchmark_L = 165.717781332;
+                o.benchmark_A = 1671;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 1000000;
@@ -402,8 +402,8 @@ bool benchmark()
             case WT_SELF_AVOIDING_RANDOM_WALK:
                 o.steps = 320;
                 o.type = WT_SELF_AVOIDING_RANDOM_WALK;
-                o.benchmark_L = 1705.20312604;
-                o.benchmark_A = 4176.16666667;
+                o.benchmark_L = 1578.09282712;
+                o.benchmark_A = 4215;
                 break;
             case WT_REAL_RANDOM_WALK:
                 o.steps = 1000000;

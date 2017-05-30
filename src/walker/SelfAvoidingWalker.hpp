@@ -21,6 +21,8 @@ class SelfAvoidingWalker final : public SpecWalker<int>
         SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void reconstruct() final;
+        void generate_from_MCMC();
+        void generate_from_dimerization();
 
         void updateSteps() final;
 
@@ -48,6 +50,7 @@ class SelfAvoidingWalker final : public SpecWalker<int>
         Step<int> slither(const bool front, const Step<int> &newStep);
 
         std::list<double> dim(int N);
+        std::unordered_set<Step<int>> overlap_test;
         bool checkOverlapFree(const std::list<double> &l) const;
         bool checkOverlapFree(const std::vector<Step<int>> &l) const;
 };

@@ -280,17 +280,41 @@ static const int iMatrix4[] =
 SelfAvoidingWalker::SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia)
 {
-    auto l(dim(numSteps));
-    random_numbers = std::vector<double>(l.begin(), l.end());
-    init();
+    overlap_test.reserve(numSteps);
+
+    generate_from_MCMC();
 }
 
 /// Get new random numbers and reconstruct the walk
 void SelfAvoidingWalker::reconstruct()
 {
+    // start with a straight line
+    generate_from_MCMC();
+}
+
+/// special initialization for SAW: use dimerization (with exponential runtime)
+void SelfAvoidingWalker::generate_from_dimerization()
+{
     auto l(dim(numSteps));
     random_numbers = std::vector<double>(l.begin(), l.end());
     init();
+}
+
+/// special initialization for SAW: use MCMC and pivot
+void SelfAvoidingWalker::generate_from_MCMC()
+{
+    // start with a straight line
+    random_numbers = std::vector<double>(numSteps, 0.);
+    init();
+    // TODO: MCMC to generate an equilibrated configuration
+    // problem: How to detect, when I am equilibrated?
+    // just do N pivots and hope for the best?
+    // generally this should be ok, since it is just a starting condition
+    // for the real MCMC
+    // TODO: compare simple sampling results
+    // we do 2*numSteps, since every second change is a naive one
+    for(int i=0; i<2*numSteps; ++i)
+        change(rng, true);
 }
 
 void SelfAvoidingWalker::updateSteps()
@@ -321,7 +345,7 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
     undo_index = idx;
 
     // choose the change algorithm randomly
-    // 20% pivot chance, 80% naive change
+    // 50% pivot chance, 50% naive change
     // pivot not implemented for d >= 4
     double decision = rng();
     if(decision > 0.5) // 50%
@@ -420,8 +444,7 @@ bool SelfAvoidingWalker::pivot(const int index, const int op, bool update)
     // first just a dry test -- most of the time it will fail and it is
     // probably cheaper to do it twice in case of success instead of
     // undo much work everytime
-    std::unordered_set<Step<int>> overlap_test;
-    overlap_test.reserve(numSteps);
+    overlap_test.clear();
     Step<int> positioni(d);
     Step<int> positionj(d);
     overlap_test.emplace(d);
