@@ -72,6 +72,14 @@ void FastWLEntropic::run()
 
                             g.add(S(w), lnf);
                             H.add(S(w));
+
+                            // if(tries % 100 == 0)
+                            // {
+                            //     std::ofstream osg(std::to_string(tries)+".g");
+                            //     std::ofstream osH(std::to_string(tries)+".H");
+                            //     osg << g.ascii_table();
+                            //     osH << H.ascii_table();
+                            // }
                         }
                         ++t;
                     }
@@ -114,6 +122,13 @@ void FastWLEntropic::run()
                     }
 
                     g.add(S(w), lnf);
+                    // if(tries % 100 == 0)
+                    // {
+                    //     std::ofstream osg(std::to_string(tries)+".g");
+                    //     std::ofstream osH(std::to_string(tries)+".H");
+                    //     osg << g.ascii_table();
+                    //     osH << H.ascii_table();
+                    // }
                 }
                 ++t;
             }

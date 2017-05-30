@@ -3,6 +3,9 @@
 #include "Simulation.hpp"
 #include "Histogram.hpp"
 
+#include <iostream>
+#include <fstream>
+
 /** Wang Landau Sampling of the distribution of a given observable.
  *
  * Wang Landau sampling will sample the distribution over the full
