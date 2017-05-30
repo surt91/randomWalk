@@ -47,6 +47,7 @@ class Walker
         virtual double rx() const = 0; ///< x coordinate of endpoint
         virtual double ry() const = 0; ///< y coordinate of endpoint
         virtual int passage(int t1=0, int axis=0) const = 0; ///< first passage of x=0 after t1
+        virtual std::vector<double> correlation(std::vector<int> t, int axis=0) const = 0; ///< output a vector of points to calculate a correlation later
 
         /** Change the Walker by a small amount, appropiate for the type.
          *

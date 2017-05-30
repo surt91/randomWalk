@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <algorithm>
 
 #include "../io.hpp"
 #include "../Cmd.hpp"
@@ -20,7 +21,7 @@
 /// Signum function
 /// returns -1, 0 or 1
 /// http://stackoverflow.com/a/4609795
-template <typename T> int sign(T val) 
+template <typename T> int sign(T val)
 {
     return (T(0) < val) - (val < T(0));
 }
@@ -63,6 +64,7 @@ class SpecWalker : public Walker
         double rx() const final;
         double ry() const final;
         int passage(int t1=0, int axis=0) const final;
+        std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
         ///\name get state
         const std::vector<Step<T>>& steps() const { return m_steps; };
@@ -488,6 +490,32 @@ int SpecWalker<T>::passage(int t1, int axis) const
         }
     }
     return -1;
+}
+
+/** Get position in one direction at the specified timepoints.
+ *
+ * Can be used to calculate a correlation function.
+ * \f[ \left< x_{t_1} x_{t_2} \right> - \left< x_{t_1} \right>\left< x_{t_2} \right> \f]
+ *
+ * \param t    vector of timepoints
+ * \param axis component of the steps that should be outputted
+ * \returns vector of the coordinate components
+ */
+template <class T>
+std::vector<double> SpecWalker<T>::correlation(std::vector<int> t, int axis) const
+{
+    std::vector<double> out;
+    if(*std::max_element(t.begin(), t.end()) >= numSteps)
+    {
+        LOG(LOG_ERROR) << "asked for a too big value (t_max = " << *std::max_element(t.begin(), t.end()) << " > " << numSteps << " = T)";
+        exit(1);
+    }
+    for(auto i : t)
+    {
+        out.push_back(points()[i].x(axis));
+    }
+
+    return out;
 }
 
 /** Performs a greedy downhill optimization to maximize of minimize a

@@ -49,9 +49,9 @@ class MultipleWalker : public Walker
         virtual ~MultipleWalker() {}
 
         int numWalker;
-        
+
         virtual void reconstruct();
-        
+
         //\name implementing pure virtual functions
         virtual void setHullAlgo(hull_algorithm_t a);
 
@@ -68,6 +68,7 @@ class MultipleWalker : public Walker
         double ry() const final;
         double r2() const final;
         int passage(int t1=0, int axis=0) const final;
+        std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
         virtual void change(UniformRNG &rng, bool update=true);
         virtual void undoChange();
@@ -195,7 +196,7 @@ void MultipleWalker<T>::updateHull()
     //~ for(auto w : m_walker)
         //~ w.convexHull();
 
-    // FIXME: this will be coping way too much and needs to be
+    // FIXME: this will be copying way too much and needs to be
     // optimized. Maybe with a new method of ConvexHull which takes
     // multiple vectors?
     // omg this seems not right
@@ -231,6 +232,8 @@ template <class T>
 double MultipleWalker<T>::r2() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 int MultipleWalker<T>::passage(int, int) const {LOG(LOG_ERROR) << "not implemented"; return 0; }
+template <class T>
+std::vector<double> MultipleWalker<T>::correlation(std::vector<int>, int) const  {LOG(LOG_ERROR) << "not implemented"; return std::vector<double>(); }
 
 template <class T>
 void MultipleWalker<T>::degenerateMaxVolume() { LOG(LOG_WARNING) << "not yet implemented"; }
