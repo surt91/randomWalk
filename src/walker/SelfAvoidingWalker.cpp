@@ -277,8 +277,8 @@ static const int iMatrix4[] =
     19
 };
 
-SelfAvoidingWalker::SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
-    : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia)
+SelfAvoidingWalker::SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+    : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia)
 {
     auto l(dim(numSteps));
     random_numbers = std::vector<double>(l.begin(), l.end());

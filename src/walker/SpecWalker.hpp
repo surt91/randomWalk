@@ -113,7 +113,7 @@ template <class T>
 void SpecWalker<T>::reconstruct()
 {
     // write new random numers into our state
-    std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng(); });
+    std::generate(random_numbers.begin(), random_numbers.end(), std::ref(rng));
     init();
 }
 

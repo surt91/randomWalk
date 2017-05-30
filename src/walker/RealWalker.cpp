@@ -1,7 +1,7 @@
 #include "RealWalker.hpp"
 
-RealWalker::RealWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
-    : SpecWalker<double>(d, numSteps, rng, hull_algo, amnesia)
+RealWalker::RealWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+    : SpecWalker<double>(d, numSteps, rng_in, hull_algo, amnesia)
 {
     // we need d-1 random numbers per step, for each angle one
     random_numbers = rng.vector((d-1) * numSteps);

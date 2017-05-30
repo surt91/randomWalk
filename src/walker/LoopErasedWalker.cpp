@@ -1,7 +1,7 @@
 #include "LoopErasedWalker.hpp"
 
-LoopErasedWalker::LoopErasedWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
-    : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia)
+LoopErasedWalker::LoopErasedWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+    : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia)
 {
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
