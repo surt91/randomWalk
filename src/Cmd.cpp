@@ -330,7 +330,7 @@ Cmd::Cmd(int argc, char** argv)
         }
         else if(simpleSampling)
         {
-            LOG(LOG_WARNING) << "The --simplesampling switch is a badly named. It just ensures that Metropolis is simulated at infinite temperature. It is useless for every other sampling method"; 
+            LOG(LOG_WARNING) << "The --simplesampling switch is a badly named. It just ensures that Metropolis is simulated at infinite temperature. It is useless for every other sampling method";
         }
 
         t_eq = t_eqArg.getValue();
