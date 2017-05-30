@@ -180,6 +180,17 @@ double& Histogram::at(int idx)
     return data[idx];
 }
 
+const std::string Histogram::ascii_table() const
+{
+    std::stringstream ss;
+    ss << ("# centers counts\n");
+    auto c = centers();
+    auto d = get_data();
+    for(int i=0; i<num_bins; ++i)
+        ss << c[i] << " " << d[i] << "\n";
+    return ss.str();
+}
+
 /// vector of num_bins elements containing their centers
 const std::vector<double> Histogram::centers() const
 {
