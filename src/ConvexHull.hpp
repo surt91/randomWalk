@@ -94,16 +94,19 @@ void ConvexHull<T>::run(std::vector<Step<T>> *points)
             break;
         case CH_QHULL_AKL:
             preprocessAklToussaintQHull();
+            // fall through
         case CH_QHULL:
             runQhull();
             break;
         case CH_ANDREWS_AKL:
             preprocessAklToussaint();
+            // fall through
         case CH_ANDREWS:
             runAndrews();
             break;
         case CH_JARVIS_AKL:
             preprocessAklToussaint();
+            // fall through
         case CH_JARVIS:
             runJarvis();
             break;

@@ -44,7 +44,7 @@ class Step
         /// Construct a Step from a coordinate vector.
         explicit Step(const std::vector<T> &coord);
 
-        void fillFromRN(double rn, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
+        void fillFromRN(double /*rn*/, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
         std::vector<Step<int>> neighbors(bool diagonal=false) const { throw std::invalid_argument("neighbors() only implemented for Step<int>"); };
 
         // properties

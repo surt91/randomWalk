@@ -75,7 +75,7 @@ CXXFLAGS += -DD_MAX=$(D_MAX)
 #CXXFLAGS = -fsanitize=undefined -O2
 
 WARNLEVEL = -Wall -Wextra -Wpedantic -Werror
-WARNLEVEL += -Wno-unknown-pragmas -Wno-implicit-fallthrough -Wno-unused-result
+WARNLEVEL += -Wno-unknown-pragmas -Wno-unused-result -Wno-unused-parameter
 #WARNLEVEL += -Wfloat-equal -Wshadow -Wextra-semi -Wdocumentation -Wdeprecated
 #WANRLEVEL += -Weverything -Wno-c++98-compat -Wno-c++98-compat-bind-to-temporary-copy -Wno-padded
 

@@ -160,7 +160,14 @@ void Histogram::trim()
 
 double Histogram::operator[](const double value) const
 {
-    return operator[](value);
+    if(value >= upper)
+        return above;
+    if(value < lower)
+        return below;
+
+    int idx = std::upper_bound(bins.begin(), bins.end(), value) - bins.begin();
+    --idx;
+    return data[idx];
 }
 
 double& Histogram::operator[](const double value)

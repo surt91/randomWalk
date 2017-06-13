@@ -46,11 +46,11 @@ class SpecWalker : public Walker
         virtual ~SpecWalker() {}
 
         void init();
-        virtual void reconstruct();
-        virtual void generate_independent_sample();
+        virtual void reconstruct() override;
+        virtual void generate_independent_sample() override;
 
         const ConvexHull<T>& convexHull() const;
-        void setHullAlgo(hull_algorithm_t a);
+        virtual void setHullAlgo(hull_algorithm_t a) override final;
 
         /// function to make the type of T accessable outside (e.g. per decltype)
         static T T_type() { return T(); };
@@ -85,10 +85,10 @@ class SpecWalker : public Walker
         std::string print() const final;
 
         ///\name degenerate cases
-        virtual void degenerateMaxVolume();
-        virtual void degenerateMaxSurface();
-        virtual void degenerateMinVolume();
-        virtual void degenerateMinSurface();
+        virtual void degenerateMaxVolume() override;
+        virtual void degenerateMaxSurface() override;
+        virtual void degenerateMinVolume() override;
+        virtual void degenerateMinSurface() override;
 
         void goDownhill(const bool maximize, const wanted_observable_t observable, const int stagnate=1000) final;
 
