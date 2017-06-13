@@ -143,7 +143,9 @@ cli.md: $(TARGET) about.txt
 	@echo documentation for cli
 	@echo '\mainpage randomWalk' > cli.md
 	@cat '../README.md' >> cli.md
+	@echo '' >> cli.md
 	@echo '## CLI Usage' >> cli.md
+	@echo '' >> cli.md
 	@echo '```' >> cli.md
 	@./randomWalk -h >> cli.md
 	@echo '```' >> cli.md

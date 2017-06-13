@@ -6,10 +6,8 @@
 
 To clone the needed libraries, like qhull and tclap run:
 
-```
-git submodule init
-git submodule update
-```
+    git submodule init
+    git submodule update
 
 
 ## Documentatation
