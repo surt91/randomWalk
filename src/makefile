@@ -130,20 +130,12 @@ $(QHULL):
 $(TARGET): $(OBJ) $(QHULL)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
-doc/mathjax.zip:
-	mkdir -p doc/html/
-	wget -c https://codeload.github.com/mathjax/MathJax/zip/master -O doc/mathjax.zip
-
-doc/html/mathjax: | doc/mathjax.zip
-	unzip -qud doc/ doc/mathjax.zip
-	mv doc/MathJax-master doc/html/mathjax
-
 manual.pdf: doc
 	$(MAKE) -C doc/latex clean
 	$(MAKE) -C doc/latex
 	cp doc/latex/refman.pdf $@
 
-doc: doc.conf *.cpp *.hpp cli.dox | doc/html/mathjax
+doc: doc.conf *.cpp *.hpp cli.md
 	doxygen doc.conf
 
 cli.dox: $(TARGET) about.txt
