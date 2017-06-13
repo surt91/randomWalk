@@ -74,7 +74,8 @@ CXXFLAGS += -DD_MAX=$(D_MAX)
 #CXXFLAGS = -fsanitize=memory -fno-omit-frame-pointer -g -O2 -fsanitize-memory-track-origins
 #CXXFLAGS = -fsanitize=undefined -O2
 
-WARNLEVEL= -Wall -Wextra -Wpedantic -Werror -Wno-unknown-pragmas
+WARNLEVEL = -Wall -Wextra -Wpedantic -Werror
+WARNLEVEL += -Wno-unknown-pragmas -Wno-implicit-fallthrough -Wno-unused-result
 #WARNLEVEL += -Wfloat-equal -Wshadow -Wextra-semi -Wdocumentation -Wdeprecated
 #WANRLEVEL += -Weverything -Wno-c++98-compat -Wno-c++98-compat-bind-to-temporary-copy -Wno-padded
 
@@ -133,16 +134,17 @@ doc/mathjax.zip:
 	mkdir -p doc/html/
 	wget -c https://codeload.github.com/mathjax/MathJax/zip/master -O doc/mathjax.zip
 
-doc/mathjax: | doc/mathjax.zip
+doc/html/mathjax: | doc/mathjax.zip
 	unzip -qud doc/ doc/mathjax.zip
-	mv doc/MathJax-master doc/mathjax
+	mv doc/MathJax-master doc/html/mathjax
 
-doc: $(DOC)
-$(DOC): doc.conf *.cpp *.hpp cli.dox | doc/mathjax
-	doxygen doc.conf
+manual.pdf: doc
 	$(MAKE) -C doc/latex clean
 	$(MAKE) -C doc/latex
 	cp doc/latex/refman.pdf $@
+
+doc: doc.conf *.cpp *.hpp cli.dox | doc/html/mathjax
+	doxygen doc.conf
 
 cli.dox: $(TARGET) about.txt
 	@echo documentation for cli

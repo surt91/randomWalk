@@ -24,3 +24,5 @@ trash
 
 */cache*.p
 bench*.gz
+
+doc/

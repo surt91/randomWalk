@@ -1,0 +1,26 @@
+language: cpp
+script:
+  - make randomWalk
+  - make test
+  - make doc
+
+compiler:
+  - gcc
+  - clang
+
+dist: trusty
+
+addons:
+  apt:
+    packages:
+      - doxygen
+      - graphviz
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GH_TOKEN
+  local_dir: src/doc/html
+  on:
+    branch: master
+    condition: "$CC = gcc"

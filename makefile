@@ -7,6 +7,10 @@ randomWalk: $(shell find src | sed 's/ /\\ /g')
 	$(MAKE) -C src
 	cp -p src/$@ $@
 
+doc:
+	$(MAKE) doc -C src
+	cp -r src/doc .
+
 test: randomWalk
 	touch test
 	./$< -b
