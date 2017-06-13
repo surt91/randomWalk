@@ -20,6 +20,7 @@ CPP	 := main.cpp \
         stat/RollingMean.cpp \
         Benchmark.cpp \
         walker/Walker.cpp \
+        walker/SpecWalker.cpp \
         walker/LatticeWalker.cpp \
         walker/LoopErasedWalker.cpp \
         walker/SelfAvoidingWalker.cpp \
