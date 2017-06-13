@@ -1,7 +1,8 @@
+# randomWalk
+
 [![Build Status](https://travis-ci.com/surt91/randomWalk.svg?token=KcmDorpEqtSzJp2wyhgU&branch=master)](https://travis-ci.com/surt91/randomWalk)
 
-Initialization
---------------
+## Initialization
 
 To clone the needed libraries, like qhull and tclap run:
 
@@ -11,14 +12,12 @@ git submodule update
 ```
 
 
-Documentatation
----------------
+## Documentatation
 
 Doxygen documentation of the latest version is at [surt91.github.io/randomWalk](https://surt91.github.io/randomWalk).
 
 
-Dependencies
-------------
+## Dependencies
 
 * C++11 compatible compiler (e.g. gcc >=4.8.1)
 * python3
@@ -27,8 +26,7 @@ Dependencies
 * gnuplot
 
 
-Usage
------
+## Usage
 
 1. Compile and run test with a call to `make` from the root directory.
 2. Change the `./py/parameters.py` to the wanted values.

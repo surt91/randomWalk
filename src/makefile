@@ -136,17 +136,16 @@ manual.pdf: doc
 	cp doc/latex/refman.pdf $@
 
 doc: doc.conf *.cpp *.hpp cli.md
-	doxygen doc.conf
+	doxygen doc.conf > doxy.log
 
-cli.dox: $(TARGET) about.txt
+cli.md: $(TARGET) about.txt
 	@echo documentation for cli
-	@echo '/**' > cli.dox
-	@echo '\mainpage randomWalk' >> cli.dox
-	@cat about.txt >> cli.dox
-	@echo '```' >> cli.dox
-	@./randomWalk -h >> cli.dox
-	@echo '```' >> cli.dox
-	@echo '*/' >> cli.dox
+	@echo '\mainpage randomWalk' > cli.md
+	@cat '../README.md' >> cli.md
+	@echo '## CLI Usage' >> cli.md
+	@echo '```' >> cli.md
+	@./randomWalk -h >> cli.md
+	@echo '```' >> cli.md
 
 proper:
 	rm -rf $(OBJ)
