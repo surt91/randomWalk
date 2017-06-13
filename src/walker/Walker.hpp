@@ -54,8 +54,7 @@ class Walker
          *
          * Ensure that SpecWalker<T>::m_steps, SpecWalker<T>::m_points
          * and SpecWalker<T>::m_convex_hull are correct
-         * afterwards, by either setting #stepsDirty, #pointsDirty and
-         * #hullDirty to true, call updateSteps(), updatePoints() or
+         * afterwards, call updateSteps(), updatePoints() or
          * updateHull() or doing it manually in the implementation.
          */
         virtual void change(UniformRNG &rng, bool update=true) = 0;

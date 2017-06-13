@@ -30,12 +30,12 @@ void CorrelatedWalker::reconstruct()
     init();
 }
 
-/** Generate a step by distance $\in [0,1)$ and d-1 gaussian angles differences.
+/** Generate a step by distance \f$\in [0,1)\f$ and \f$d-1\f$ gaussian angles differences.
  *
  * Algortihm see http://en.wikipedia.org/wiki/N-sphere#Spherical_coordinates
  *
  * \param first iterator to the first random number to use, must have at
- *        least $d$ following entries
+ *        least \f$d\f$ following entries
  * \return Step
  */
 Step<double> CorrelatedWalker::genStep(std::vector<double>::iterator first) const

@@ -6,12 +6,12 @@
 /** A correlated random walk, i.e., the next directions depends on the previous.
  *
  * Random walk, which chooses at each step a random direction difference
- * $\Delta \theta$ from a wrapped normal distribution and a distance
+ * \f$\Delta \theta\f$ from a wrapped normal distribution and a distance
  * from a uniform distribution.
  *
  * This class behaves abit different than the other walkers. Since
- * this is not a Markov Process, ::steps does not contain steps, but
- * a stepsize and d-1 angles which are converted to proper points in the
+ * this is not a Markov Process, ::m_steps does not contain steps, but
+ * a stepsize and \f$d-1\f$ angles which are converted to proper points in the
  * updatePoints() function.
  */
 class CorrelatedWalker final : public SpecWalker<double>
