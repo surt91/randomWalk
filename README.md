@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/surt91/randomWalk.svg?token=KcmDorpEqtSzJp2wyhgU&branch=master)](https://travis-ci.com/surt91/randomWalk)
+
 Initialization
 --------------
 
@@ -12,7 +14,7 @@ git submodule update
 Documentatation
 ---------------
 
-Doxygen documentation is at https://hendrik.schawe.me/randomWalk
+Doxygen documentation of the latest version is at [surt91.github.io/randomWalk](https://surt91.github.io/randomWalk).
 
 
 Dependencies
