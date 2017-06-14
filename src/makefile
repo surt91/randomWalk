@@ -141,18 +141,18 @@ doc: doc.conf *.cpp *.hpp cli.md
 
 cli.md: $(TARGET) ../README.md makefile
 	@echo documentation for cli
-	@sed ' 1 s/.*/& {#mainpage}/' ../README.md > cli.md
-	@echo -ne "    " > version.dat
+	@sed ' 1 s/.*/&     {#mainpage}/' ../README.md > cli.md
+	@printf "\n    " > version.dat
 	@./randomWalk --version | tr -d '\n' >> version.dat
-	@echo -e "\n\n" >> version.dat
+	@printf "\n\n" >> version.dat
 	@sed -i "4 r version.dat" cli.md
 	@rm version.dat
 	@echo '' >> cli.md
 	@echo '## CLI Usage' >> cli.md
 	@echo '' >> cli.md
-	@echo '```' >> cli.md
+	@echo '~~~' >> cli.md
 	@./randomWalk -h >> cli.md
-	@echo '```' >> cli.md
+	@echo '~~~' >> cli.md
 
 proper:
 	rm -rf $(OBJ)

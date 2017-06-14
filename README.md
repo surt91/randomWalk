@@ -1,4 +1,5 @@
-# randomWalk
+randomWalk
+==========
 
 [![Build Status](https://travis-ci.com/surt91/randomWalk.svg?token=KcmDorpEqtSzJp2wyhgU&branch=master)](https://travis-ci.com/surt91/randomWalk)
 
