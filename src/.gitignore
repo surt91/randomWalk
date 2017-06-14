@@ -19,7 +19,7 @@ passage*/
 *.eq
 
 doc/
-cli.dox
+cli.md
 manual.pdf
 
 img/

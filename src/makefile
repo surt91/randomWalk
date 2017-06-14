@@ -139,10 +139,9 @@ manual.pdf: doc
 doc: doc.conf *.cpp *.hpp cli.md
 	doxygen doc.conf > doxy.log
 
-cli.md: $(TARGET) about.txt
+cli.md: $(TARGET) ../README.md makefile
 	@echo documentation for cli
-	@echo '\mainpage randomWalk' > cli.md
-	@cat '../README.md' >> cli.md
+	@sed ' 1 s/.*/& {#mainpage}/' ../README.md > cli.md
 	@echo '' >> cli.md
 	@echo '## CLI Usage' >> cli.md
 	@echo '' >> cli.md
