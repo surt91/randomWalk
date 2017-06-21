@@ -212,3 +212,10 @@ def getVarFromDist(centers, data):
     var = trapz(np.multiply(np.power(centers, 2), np.exp(data)), centers) - mean**2
     return var
 
+
+def reduce_distribution(num):
+    """Take the datapoints from the input array and return 'num' (roughly) equally spaced datapoints.
+
+    This is meant as preprocessing for plotting.
+    """
+    raise NotImplementedError

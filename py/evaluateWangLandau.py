@@ -31,7 +31,7 @@ def mergeResults(filename):
     for f in files:
         if re.findall(p.name+".\d+.gz", f):
             components.append(f)
-    print("merge:", filename+".gz", "<-", components)
+    # print("merge:", filename+".gz", "<-", components)
     # if there are no fragments
     if not components:
         return

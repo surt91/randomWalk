@@ -57,6 +57,6 @@ if __name__ == "__main__":
 
     if sampling != 0:
         commonEvaluation.cut_trans(param.parameters["S"])
-    commonEvaluation.get_max_dist()
+        commonEvaluation.get_max_dist()
 
     logging.info("finished")
