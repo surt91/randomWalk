@@ -29,6 +29,7 @@ CPP	 := main.cpp \
         walker/LevyWalker.cpp \
         walker/CorrelatedWalker.cpp \
         walker/EscapeWalker.cpp \
+        walker/ScentWalker.cpp \
         simulation/Simulation.cpp \
         simulation/SimpleSampling.cpp \
         simulation/Metropolis.cpp \
