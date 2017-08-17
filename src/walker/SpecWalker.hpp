@@ -78,7 +78,7 @@ class SpecWalker : public Walker
         virtual void updateHull() override;
 
         ///\name visualization
-        void svg(const std::string filename, const bool with_hull) const final;
+        virtual void svg(const std::string filename, const bool with_hull) const override;
         void pov(const std::string filename, const bool with_hull) const final;
         void gp(const std::string filename, const bool with_hull) const final;
         void threejs(const std::string filename, const bool with_hull) const final;

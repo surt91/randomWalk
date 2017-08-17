@@ -106,6 +106,11 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
         else
             w = std::unique_ptr<Walker>(new MultipleWalker<EscapeWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
     }
+    else if(o.type == WT_SCENT_RANDOM_WALK)
+    {
+        // TODO pass sidelength and Tas
+        w = std::unique_ptr<Walker>(new ScentWalker(o.d, o.steps, o.numWalker, 100, 20, rngReal, o.chAlg, amnesia));
+    }
     else
     {
         LOG(LOG_ERROR) << "type " << o.type << " is not known";

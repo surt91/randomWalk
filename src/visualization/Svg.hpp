@@ -9,6 +9,20 @@
 
 #include "../Logging.hpp"
 
+/// Colors used by the SVG backend for different walks
+static const std::vector<std::string> COLOR = {
+    "green",
+    "blue",
+    "yellow",
+    "orange",
+    "indigo",
+    "cyan",
+    "brown",
+    "crimson",
+    "darkmagenta",
+    "deepskyblue"
+};
+
 /** Class to easily create 2d pictures in svg format.
  */
 class SVG

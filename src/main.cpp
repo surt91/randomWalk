@@ -54,6 +54,16 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    // TODO
+    // if(o.onlyScentHistogram)
+    // {
+    //     LOG(LOG_INFO) << "generate a scent histogram svg and exit";
+    //     UniformRNG rngReal(o.seedRealization);
+    //     LoopErasedWalker w(o.d, o.steps, rngReal, o.chAlg);
+    //     w.svgOfErasedLoops(o.svg_path);
+    //     return 0;
+    // }
+
     if(o.onlyCenters)
     {
         WangLandau::printCenters(o);
