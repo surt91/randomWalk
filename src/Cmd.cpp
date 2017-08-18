@@ -34,6 +34,8 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::MultiArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme, multiple for Parallel Tempering", false, "double");
         TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, 0.0, "double");
         TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, 1.0, "double");
+        TCLAP::ValueArg<int> widthArg("", "width", "width of the field (only for t=9: scent walk)", false, 10, "integer");
+        TCLAP::ValueArg<int> tasArg("", "tas", "lifetime of the scent (only for t=9: scent walk)", false, 1000, "integer");
         TCLAP::ValueArg<double> lnfArg("", "lnf", "minimum value of ln(f) for the Wang Landau algorithm (default 1e-8)", false, 1e-8, "double");
         TCLAP::ValueArg<double> flatnessArg("", "flatness", "flatness criterion for the Wang Landau algorithm (default 0.8)", false, 0.8, "double");
         TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, ".", "string");
@@ -141,6 +143,8 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(typeArg);
         cmd.add(muArg);
         cmd.add(sigmaArg);
+        cmd.add(widthArg);
+        cmd.add(tasArg);
         cmd.add(passageTimeStartArg);
         cmd.add(svgArg);
         cmd.add(povArg);
@@ -255,6 +259,17 @@ Cmd::Cmd(int argc, char** argv)
         if(sigma != 1.0)
         {
             LOG(LOG_INFO) << "sigma                      " << sigma;
+        }
+
+        width = widthArg.getValue();
+        if(width != 10)
+        {
+            LOG(LOG_INFO) << "width                      " << width;
+        }
+        tas = tasArg.getValue();
+        if(tas != 1000)
+        {
+            LOG(LOG_INFO) << "tas                        " << tas;
         }
 
         steps = numArg.getValue();

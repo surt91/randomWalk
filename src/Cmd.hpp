@@ -144,6 +144,10 @@ class Cmd
 
         double mu;                  ///< mean \f$\mu\f$ of the Gaussian to draw random numbers from (only correlated walks)
         double sigma;               ///< standard deviation \f$\sigma\f$ of the Gaussian to draw random numbers from (only correlated walks)
+
+        int width;                  ///< side length of a periodic field (only Scent walks)
+        int tas;                    ///< lifetime of the scent (only Scent walks)
+
         double lnf_min;             ///< minimum refinement factor up to which is simulated (only Wang Landau type simulations)
         double flatness_criterion;  ///< flatness criterion to be used (only Wang Landau type simulations)
 
