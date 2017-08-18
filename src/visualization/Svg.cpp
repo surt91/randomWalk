@@ -33,6 +33,23 @@ void SVG::circle(const double x, const double y, const int filled, const std::st
     buffer << "/>\n";
 }
 
+/** Write a square at the given coordinate to the output SVG file.
+ *
+ * \param x       x-coordinate of the center of the square
+ * \param y       y-coordinate of the center of the square
+ * \param w       sidelength of the square
+ * \param color   color to fill the square
+*/
+void SVG::square(const double x, const double y, const double w, const std::string color, const double alpha)
+{
+    buffer << "<rect width='" << w << "' height='" << w <<
+        "' x='" << x + w/2. << "' y='" << y + w/2. <<
+        "' opacity='" << alpha << 
+        "' stroke='black' stroke-width='0'";
+    buffer << " fill='" + color + "'";
+    buffer << "/>\n";
+}
+
 /** Schreibt einen Kreis in die gegebene Datei im SVG Format
  *
  * \param x1      x-start-coordinate of the line

@@ -30,6 +30,7 @@ class HistogramND
         template<class T>
         void add(T &coordinate);
         int sum() const;
+        int max() const;
         void reset();
 
         const std::vector<double> centers() const;
@@ -56,7 +57,7 @@ void HistogramND::add(T &coordinate)
 {
     if((size_t) d != coordinate.size())
     {
-        LOG(LOG_ERROR) << "dimensions do not agree";
+        LOG(LOG_ERROR) << "dimensions do not agree: d = " << d <<", input = " << coordinate.size();
         throw std::invalid_argument("dimensions do not agree");
     }
 

@@ -121,7 +121,6 @@ void ScentWalker::svg(const std::string filename, const bool with_hull) const
     int idx = 0;
     for(const auto &p : pos)
     {
-        ++idx;
         std::vector<std::vector<double>> points;
 
         for(auto i : p)
@@ -146,6 +145,8 @@ void ScentWalker::svg(const std::string filename, const bool with_hull) const
         //     }
         //     pic.polyline(points, true, COLOR[idx%COLOR.size()]);
         // }
+
+        ++idx;
     }
 
     if(d > 2)
@@ -164,6 +165,8 @@ void ScentWalker::svg(const std::string filename, const bool with_hull) const
     // }
     pic.setGeometry(-1, -1, sideLength + 1, sideLength + 1);
     pic.save();
+
+    svg_histogram("histo_" + filename);
 }
 
 void ScentWalker::svg_histogram(const std::string filename) const
@@ -176,6 +179,25 @@ void ScentWalker::svg_histogram(const std::string filename) const
     // place rectangles for every bin
     // color should scale with number of entries
     // histograms of different walkers need to be merged
+    for(int i=0; i<numWalker; ++i)
+    {
+        for(int x=0; x<sideLength; ++x)
+        {
+            for(int y=0; y<sideLength; ++y)
+            {
+                auto &data = histograms[i].get_data();
+                // ignore not-visited fields
+                if(!data[x + sideLength*y])
+                    continue;
+
+                // color should scale with number of entries
+                std::string color = COLOR[i%COLOR.size()];
+                double m = histograms[i].max();
+                double opacity = data[x + sideLength*y] / m;
+                pic.square(x, y, 1., color, opacity);
+            }
+        }
+    }
 
     if(d > 2)
         pic.text(0, sideLength-20, "projected from d=" + std::to_string(d), "red");

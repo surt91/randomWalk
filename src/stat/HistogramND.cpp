@@ -13,6 +13,7 @@
 
 HistogramND::HistogramND(const int bins, const int d, const double lower, const double upper)
     :   bins(bins),
+        d(d),
         lower(lower),
         upper(upper),
         data(std::pow(bins, d), 0)
@@ -28,6 +29,18 @@ int HistogramND::sum() const
         s += data[i];
 
     return s;
+}
+
+/// max of all bins (for standard histograms)
+int HistogramND::max() const
+{
+    int m = 0;
+
+    for(int i=0, total_bins=std::pow(bins, d); i<total_bins; ++i)
+        if(data[i] > m)
+            m = data[i];
+
+    return m;
 }
 
 void HistogramND::reset()
@@ -62,7 +75,21 @@ void HistogramND::svg(const std::string filename) const
     SVG pic(filename);
 
     // place rectangles for every bin
-    // color should scale with number of entries
+    for(int x=0; x<bins; ++x)
+    {
+        for(int y=0; y<bins; ++y)
+        {
+            // ignore not-visited fields
+            if(!data[x + bins*y])
+                continue;
+
+            // color should scale with number of entries
+            std::string color = "#ff0000";
+            double m = max();
+            double opacity = data[x + bins*y] / m;
+            pic.square(x, y, 1., "red", opacity);
+        }
+    }
 
     if(d > 2)
         pic.text(lower, upper-20, "projected from d=" + std::to_string(d), "red");
