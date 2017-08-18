@@ -189,6 +189,6 @@ void ScentWalker::svg_histogram(const std::string filename) const
     if(d > 2)
         pic.text(0, sideLength-20, "projected from d=" + std::to_string(d), "red");
 
-    pic.setGeometry(0-1, 0-1, sideLength+1, sideLength+1);
+    pic.setGeometry(0, 0, sideLength+1, sideLength+1);
     pic.save();
 }
