@@ -1,7 +1,5 @@
 #include "ScentWalker.hpp"
 
-// TODO this does not seem very abstract -> rename to ScentWalker
-
 ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia),
       numWalker(numWalker_in),
@@ -9,6 +7,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       Tas(Tas_in)
 {
     random_numbers = rng.vector(numSteps*numWalker);
+    histograms = std::vector<HistogramND>(numWalker, HistogramND(sideLength, d, 0, sideLength));
     init();
 }
 
@@ -20,6 +19,8 @@ void ScentWalker::updateSteps()
     pos.resize(numWalker);
     for(auto &k : pos)
         k.resize(numSteps, Step<int>(d));
+    for(auto &h : histograms)
+        h.reset();
 
     // data structures: hashmap/bitmap: site -> deque[(time of last visit, who visited)]
     // data structures: hashmap: site -> (map: who -> when)
@@ -81,6 +82,7 @@ void ScentWalker::updateSteps()
                 pos[j][i+1].fillFromRN(rng());
                 pos[j][i+1] += pos[j][i];
             }
+            histograms[j].add(pos[j][i+1]);
         }
     }
 
@@ -112,8 +114,10 @@ void ScentWalker::undoChange()
 
 void ScentWalker::svg(const std::string filename, const bool with_hull) const
 {
+    // TODO
+    LOG(LOG_WARNING) << "not yet implemented";
+
     SVG pic(filename);
-    int min_x=0, max_x=0, min_y=0, max_y=0;
     int idx = 0;
     for(const auto &p : pos)
     {
@@ -128,15 +132,6 @@ void ScentWalker::svg(const std::string filename, const bool with_hull) const
             pic.circle(x1, y1, true, COLOR[idx%COLOR.size()]);
 
             points.push_back(point);
-
-            if(x1 < min_x)
-                min_x = x1;
-            if(x1 > max_x)
-                max_x = x1;
-            if(y1 < min_y)
-                min_y = y1;
-            if(y1 > max_y)
-                max_y = y1;
         }
         pic.polyline(points, false, COLOR[idx%COLOR.size()]);
 
@@ -154,7 +149,7 @@ void ScentWalker::svg(const std::string filename, const bool with_hull) const
     }
 
     if(d > 2)
-        pic.text(min_x, max_y-20, "projected from d=" + std::to_string(d), "red");
+        pic.text(0, sideLength-20, "projected from d=" + std::to_string(d), "red");
 
     // if(with_hull)
     // {
@@ -167,6 +162,24 @@ void ScentWalker::svg(const std::string filename, const bool with_hull) const
     //     }
     //     pic.polyline(points, true, std::string("red"));
     // }
-    pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
+    pic.setGeometry(-1, -1, sideLength + 1, sideLength + 1);
+    pic.save();
+}
+
+void ScentWalker::svg_histogram(const std::string filename) const
+{
+    // TODO
+    LOG(LOG_WARNING) << "not yet implemented";
+
+    SVG pic(filename);
+
+    // place rectangles for every bin
+    // color should scale with number of entries
+    // histograms of different walkers need to be merged
+
+    if(d > 2)
+        pic.text(0, sideLength-20, "projected from d=" + std::to_string(d), "red");
+
+    pic.setGeometry(0-1, 0-1, sideLength+1, sideLength+1);
     pic.save();
 }

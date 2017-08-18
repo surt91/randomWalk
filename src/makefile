@@ -18,6 +18,7 @@ CPP	 := main.cpp \
         Hypercube.cpp \
         stat/runtime.cpp \
         stat/RollingMean.cpp \
+        stat/HistogramND.cpp \
         Benchmark.cpp \
         walker/Walker.cpp \
         walker/SpecWalker.cpp \

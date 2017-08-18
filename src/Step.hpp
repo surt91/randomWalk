@@ -94,6 +94,8 @@ class Step
         T operator[](std::size_t idx) const { return m_coordinates[idx]; };
         T& operator[](std::size_t idx) { return m_coordinates[idx]; };
 
+        size_t size() { return m_d; };
+
         void swap(Step<T>&) throw();
 
         // getter

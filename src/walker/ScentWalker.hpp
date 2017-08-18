@@ -5,6 +5,7 @@
 
 #include "../Logging.hpp"
 #include "../visualization/Svg.hpp"
+#include "../stat/HistogramND.hpp"
 #include "SpecWalker.hpp"
 
 /** Agent based random walk on a hypercube.
@@ -32,8 +33,10 @@ class ScentWalker final : public SpecWalker<int>
         void undoChange() final;
 
         virtual void svg(const std::string filename, const bool with_hull) const override;
+        void svg_histogram(const std::string filename) const;
 
         std::vector<std::vector<Step<int>>> pos;
+        std::vector<HistogramND> histograms;
 
         const int numWalker;
         const int sideLength;
