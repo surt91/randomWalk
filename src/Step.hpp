@@ -72,6 +72,8 @@ class Step
         int dist(const Step<int> &other) const;
         double dist(const Step<double> &other) const;
 
+        void periodic(const int len);
+
         template <class U>
         friend Step<U> cross(const Step<U> &a, const Step<U> &b);
 
@@ -409,6 +411,13 @@ inline double Step<double>::dist(const Step<double> &other) const
     d = std::sqrt(d);
 
     return d;
+}
+
+template <class T>
+void Step<T>::periodic(const int len)
+{
+    for(auto &k : m_coordinates)
+        k = (k+len) % len;
 }
 
 template <class T>

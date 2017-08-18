@@ -81,6 +81,7 @@ void ScentWalker::updateSteps()
                 // else do a random step
                 pos[j][i+1].fillFromRN(rng());
                 pos[j][i+1] += pos[j][i];
+                pos[j][i+1].periodic(sideLength);
             }
             histograms[j].add(pos[j][i+1]);
         }
