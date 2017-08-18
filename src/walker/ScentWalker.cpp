@@ -159,6 +159,15 @@ void ScentWalker::svg_histogram(const std::string filename) const
 {
     SVG pic(filename);
 
+    // find the global maximum
+    int maximum = 0;
+    for(int i=0; i<numWalker; ++i)
+    {
+        int m = histograms[i].max();
+        if(m > maximum)
+            maximum = m;
+    }
+
     // place rectangles for every bin
     // color should scale with number of entries
     // histograms of different walkers need to be merged
@@ -173,8 +182,7 @@ void ScentWalker::svg_histogram(const std::string filename) const
 
                 // color should scale with number of entries
                 std::string color = COLOR[i%COLOR.size()];
-                double m = histograms[i].max();
-                double opacity = data[x + sideLength*y] / m;
+                double opacity = std::log(data[x + sideLength*y]) / std::log(maximum);
                 pic.square(x, y, 1., color, opacity);
             }
 
