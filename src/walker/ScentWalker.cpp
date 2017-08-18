@@ -8,6 +8,24 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
 {
     random_numbers = rng.vector(numSteps*numWalker);
     histograms = std::vector<HistogramND>(numWalker, HistogramND(sideLength, d, 0, sideLength));
+    newStep = Step<int>(d);
+    undoStep = Step<int>(d);
+
+    pos.resize(numWalker);
+    for(auto &k : pos)
+        k.resize(numSteps, Step<int>(d));
+    for(auto &h : histograms)
+        h.reset();
+
+    for(int j=0; j<numWalker; ++j)
+    {
+        std::vector<int> init;
+        for(int k=0; k<d; ++k)
+            init.push_back(rng() * sideLength);
+
+        starts.emplace_back(init);
+    }
+
     init();
 }
 
@@ -15,12 +33,6 @@ void ScentWalker::updateSteps()
 {
     // use numWalker vectors for the steps (scent traces will be steps[now-Tas:now])
     // every walker has its own history
-    pos.clear();
-    pos.resize(numWalker);
-    for(auto &k : pos)
-        k.resize(numSteps, Step<int>(d));
-    for(auto &h : histograms)
-        h.reset();
 
     // data structures: hashmap: site -> (map: who -> when)
     std::unordered_map<Step<int>, std::map<int, int>> trail(sideLength*sideLength);
@@ -30,12 +42,8 @@ void ScentWalker::updateSteps()
     // start the agent simulation
     // init with random positions
     for(int j=0; j<numWalker; ++j)
-    {
-        std::vector<int> init;
-        init.push_back(rng() * sideLength);
-        init.push_back(rng() * sideLength);
-        pos[j][0] = Step<int>(init);
-    }
+        pos[j][0] = starts[j];
+
     // iterate the time, every agent does one move each timestep
     for(int i=0; i<numSteps-1; ++i)
         for(int j=0; j<numWalker; ++j)
@@ -58,14 +66,14 @@ void ScentWalker::updateSteps()
 
             // if we are on a foreign scent: retreat
             // if there is more than one marker (one marker is from us)
-            if(current.size() > 1)
+            if(current.size() > 1 && i > 0)
             {
                 pos[j][i+1] = pos[j][i-1];
             }
             else
             {
                 // else do a random step
-                pos[j][i+1].fillFromRN(rng());
+                pos[j][i+1].fillFromRN(random_numbers[i*numWalker + j]);
                 pos[j][i+1] += pos[j][i];
                 pos[j][i+1].periodic(sideLength);
             }
@@ -81,6 +89,7 @@ void ScentWalker::updateSteps()
 
     // copy steps and points of walker 0 to m_steps and m_points
     // and everything will work -- though with a bit of overhead
+    m_points = pos[0];
 }
 
 void ScentWalker::updatePoints(const int /*start*/)
@@ -90,12 +99,39 @@ void ScentWalker::updatePoints(const int /*start*/)
 
 void ScentWalker::change(UniformRNG &rng, bool update)
 {
-    LOG(LOG_WARNING) << "not yet implemented";
+    // I should do this in a far more clever way
+    int idx = rng() * nRN();
+    undo_index = idx;
+    undo_value = random_numbers[idx];
+    random_numbers[idx] = rng();
+
+    newStep.fillFromRN(random_numbers[idx]);
+    // test if something changes
+    undoStep.fillFromRN(undo_value);
+    if(newStep == undoStep)
+        return;
+
+    updateSteps();
+    updatePoints();
+
+    if(update)
+    {
+        // FIXME: problems with not-full dimensional walks
+        m_old_convex_hull = m_convex_hull;
+        updateHull();
+    }
 }
 
 void ScentWalker::undoChange()
 {
-    LOG(LOG_WARNING) << "not yet implemented";
+    random_numbers[undo_index] = undo_value;
+    // test if something changed
+    if(newStep == undoStep)
+        return;
+
+    updateSteps();
+    updatePoints();
+    m_convex_hull = m_old_convex_hull;
 }
 
 void ScentWalker::svg(const std::string filename, const bool with_hull) const
