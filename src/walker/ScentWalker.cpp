@@ -22,13 +22,11 @@ void ScentWalker::updateSteps()
     for(auto &h : histograms)
         h.reset();
 
-    // data structures: hashmap/bitmap: site -> deque[(time of last visit, who visited)]
     // data structures: hashmap: site -> (map: who -> when)
     std::unordered_map<Step<int>, std::map<int, int>> trail(sideLength*sideLength);
 
     std::vector<int> to_remove;
 
-    // TODO
     // start the agent simulation
     // init with random positions
     for(int j=0; j<numWalker; ++j)
@@ -40,7 +38,6 @@ void ScentWalker::updateSteps()
     }
     // iterate the time, every agent does one move each timestep
     for(int i=0; i<numSteps-1; ++i)
-    {
         for(int j=0; j<numWalker; ++j)
         {
             auto &current = trail[pos[j][i]];
@@ -48,27 +45,16 @@ void ScentWalker::updateSteps()
             //  at every visit remove expired entries from the back of the deque
             //  and entries of oneself (because oneself left a new scent in that moment)
             if(current.count(j))
-            {
-                // update last visited
-                current[j] = i;
-            }
+                current[j] = i; // update last visited
             else
-            {
                 current.emplace(j, i);
-            }
 
             for(auto &k : current)
-            {
                 if(k.second < i-Tas)
-                {
                     to_remove.push_back(k.first);
-                }
-            }
 
             for(auto &k : to_remove)
-            {
                 current.erase(k);
-            }
 
             // if we are on a foreign scent: retreat
             // if there is more than one marker (one marker is from us)
@@ -85,7 +71,6 @@ void ScentWalker::updateSteps()
             }
             histograms[j].add(pos[j][i+1]);
         }
-    }
 
     // also, we need periodic boundaries and a fixed size on this one
 
@@ -172,18 +157,13 @@ void ScentWalker::svg(const std::string filename, const bool with_hull) const
 
 void ScentWalker::svg_histogram(const std::string filename) const
 {
-    // TODO
-    LOG(LOG_WARNING) << "not yet implemented";
-
     SVG pic(filename);
 
     // place rectangles for every bin
     // color should scale with number of entries
     // histograms of different walkers need to be merged
     for(int i=0; i<numWalker; ++i)
-    {
         for(int x=0; x<sideLength; ++x)
-        {
             for(int y=0; y<sideLength; ++y)
             {
                 auto &data = histograms[i].get_data();
@@ -197,8 +177,6 @@ void ScentWalker::svg_histogram(const std::string filename) const
                 double opacity = data[x + sideLength*y] / m;
                 pic.square(x, y, 1., color, opacity);
             }
-        }
-    }
 
     if(d > 2)
         pic.text(0, sideLength-20, "projected from d=" + std::to_string(d), "red");

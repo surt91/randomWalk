@@ -1,16 +1,5 @@
 #include "HistogramND.hpp"
 
-
- /*  _    _ _     _                                  _   _ _____
- | |  | (_)   | |                                | \ | |  __ \
- | |__| |_ ___| |_ ___   __ _ _ __ __ _ _ __ ___ |  \| | |  | |
- |  __  | / __| __/ _ \ / _` | '__/ _` | '_ ` _ \| . ` | |  | |
- | |  | | \__ \ || (_) | (_| | | | (_| | | | | | | |\  | |__| |
- |_|  |_|_|___/\__\___/ \__, |_|  \__,_|_| |_| |_|_| \_|_____/
-                         __/ |
-                        |___/                                  */
-
-
 HistogramND::HistogramND(const int bins, const int d, const double lower, const double upper)
     :   bins(bins),
         d(d),
@@ -43,12 +32,14 @@ int HistogramND::max() const
     return m;
 }
 
+/// resets the histogram
 void HistogramND::reset()
 {
     for(int i=0, total_bins=std::pow(bins, d); i<total_bins; ++i)
         data[i] = 0;
 }
 
+/// return the centers of the bins
 const std::vector<double> HistogramND::centers() const
 {
     std::vector<double> center;
@@ -62,21 +53,19 @@ const std::vector<double> HistogramND::centers() const
     return center;
 }
 
+/// get a reference to the raw data array
 const std::vector<double>& HistogramND::get_data() const
 {
     return data;
 }
 
+/// save a visualization, only d = 2
 void HistogramND::svg(const std::string filename) const
 {
-    // TODO
-    LOG(LOG_WARNING) << "not yet implemented";
-
     SVG pic(filename);
 
     // place rectangles for every bin
     for(int x=0; x<bins; ++x)
-    {
         for(int y=0; y<bins; ++y)
         {
             // ignore not-visited fields
@@ -87,9 +76,8 @@ void HistogramND::svg(const std::string filename) const
             std::string color = "#ff0000";
             double m = max();
             double opacity = data[x + bins*y] / m;
-            pic.square(x, y, 1., "red", opacity);
+            pic.square(x, y, 1., color, opacity);
         }
-    }
 
     if(d > 2)
         pic.text(lower, upper-20, "projected from d=" + std::to_string(d), "red");
