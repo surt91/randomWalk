@@ -69,13 +69,13 @@ void HistogramND::svg(const std::string filename) const
         for(int y=0; y<bins; ++y)
         {
             // ignore not-visited fields
-            if(!data[x + bins*y])
+            if(!data[x*bins + y])
                 continue;
 
             // color should scale with number of entries
             std::string color = "#ff0000";
             double m = max();
-            double opacity = data[x + bins*y] / m;
+            double opacity = data[x*bins + y] / m;
             pic.square(x, y, 1., color, opacity);
         }
 
