@@ -578,7 +578,9 @@ inline int ConvexHull<int>::countZerosAndUpdateCmd(std::string &cmd)
     for(int i=0; i<d; ++i)
     {
         int j = 0;
-        while(j < limit && coords[j*d+i] == 0)
+        // test if one column contains only one value -> no extesnsion in this
+        // dimension
+        while(j < limit && coords[j*d+i] == coords[i])
             ++j;
         if(j == limit)
         {
