@@ -40,9 +40,13 @@ void ScentWalker::updateSteps()
     std::vector<int> to_remove;
 
     // start the agent simulation
-    // init with random positions
     for(int j=0; j<numWalker; ++j)
+    {
+        // init with random positions
         pos[j][0] = starts[j];
+        // reset the histograms
+        histograms[j].reset();
+    }
 
     // iterate the time, every agent does one move each timestep
     for(int i=0; i<numSteps-1; ++i)
@@ -77,15 +81,9 @@ void ScentWalker::updateSteps()
                 pos[j][i+1] += pos[j][i];
                 pos[j][i+1].periodic(sideLength);
             }
+            // populate the histogram (for a figure as in the articel)
             histograms[j].add(pos[j][i+1]);
         }
-
-    // also, we need periodic boundaries and a fixed size on this one
-
-    // populate the histogram (for a figure as in the artikel)
-
-    // maybe update the points inside this function
-    // if they are always up to date, `updatePoints` can be a noop
 
     // copy steps and points of walker 0 to m_steps and m_points
     // and everything will work -- though with a bit of overhead
@@ -114,9 +112,9 @@ void ScentWalker::change(UniformRNG &rng, bool update)
     updateSteps();
     updatePoints();
 
+
     if(update)
     {
-        // FIXME: problems with not-full dimensional walks
         m_old_convex_hull = m_convex_hull;
         updateHull();
     }
