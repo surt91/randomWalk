@@ -42,7 +42,7 @@ class ScentWalker final : public SpecWalker<int>
     protected:
         std::vector<Step<int>> starts;
         std::vector<std::vector<Step<int>>> pos;
-        std::vector<Step<int>> tmp_steps;
+        std::vector<std::vector<Step<int>>> steps;
         std::vector<HistogramND> histograms;
 
     private:

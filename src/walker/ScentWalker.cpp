@@ -16,11 +16,15 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     undoStep = Step<int>(d);
 
     m_steps = std::vector<Step<int>>(numSteps, Step<int>(d));
-    tmp_steps = std::vector<Step<int>>(numSteps+relax, Step<int>(d));
 
     pos.resize(numWalker);
     for(auto &k : pos)
         k.resize(numSteps+relax, Step<int>(d));
+
+    steps.resize(numWalker);
+    for(auto &k : steps)
+        k.resize(numSteps+relax, Step<int>(d));
+
     for(auto &h : histograms)
         h.reset();
 
@@ -80,13 +84,13 @@ void ScentWalker::updateSteps()
             if(current.size() > 1 && i > 0)
             {
                 pos[j][i+1] = pos[j][i-1];
-                tmp_steps[i] = -tmp_steps[i-1];
+                steps[j][i] = -steps[j][i-1];
             }
             else
             {
                 // else do a random step
-                tmp_steps[i].fillFromRN(random_numbers[i*numWalker + j]);
-                pos[j][i+1] = pos[j][i] + tmp_steps[i];
+                steps[j][i].fillFromRN(random_numbers[i*numWalker + j]);
+                pos[j][i+1] = pos[j][i] + steps[j][i];
                 pos[j][i+1].periodic(sideLength);
             }
             // populate the histogram (for a figure as in the articel)
@@ -94,9 +98,9 @@ void ScentWalker::updateSteps()
                 histograms[j].add(pos[j][i+1]);
         }
 
-    // copy steps and points of walker 0 to tmp_steps and m_points
+    // copy steps of walker 0 to m_steps
     // and everything will work -- though with a bit of overhead
-    m_steps = std::vector<Step<int>>(begin(tmp_steps)+relax, end(tmp_steps));
+    m_steps = std::vector<Step<int>>(begin(steps[0])+relax, end(steps[0]));
 }
 
 void ScentWalker::change(UniformRNG &rng, bool update)
@@ -138,6 +142,8 @@ void ScentWalker::undoChange()
 void ScentWalker::svg(const std::string filename, const bool with_hull) const
 {
     SpecWalker::svg(filename, with_hull);
+
+    histograms[0].svg("histo0_" + filename);
 
     svg_histogram("histo_" + filename);
 }
