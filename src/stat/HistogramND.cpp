@@ -54,7 +54,7 @@ const std::vector<double> HistogramND::centers() const
 }
 
 /// get a reference to the raw data array
-const std::vector<double>& HistogramND::get_data() const
+const std::vector<int>& HistogramND::get_data() const
 {
     return data;
 }

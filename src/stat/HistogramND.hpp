@@ -22,7 +22,7 @@ class HistogramND
         double lower;             ///< lower bound of the histogram
         double upper;             ///< upper bound of the histogram
 
-        std::vector<double> data; ///< data inside the bins
+        std::vector<int> data; ///< data inside the bins
 
     public:
         HistogramND(const int bins, const int d, const double lower, const double upper);
@@ -34,7 +34,7 @@ class HistogramND
         void reset();
 
         const std::vector<double> centers() const;
-        const std::vector<double>& get_data() const;
+        const std::vector<int>& get_data() const;
 
         void svg(const std::string filename) const;
 
