@@ -137,57 +137,7 @@ void ScentWalker::undoChange()
 
 void ScentWalker::svg(const std::string filename, const bool with_hull) const
 {
-    // TODO
-    LOG(LOG_WARNING) << "not yet implemented";
-
-    SVG pic(filename);
-    int idx = 0;
-    for(const auto &p : pos)
-    {
-        std::vector<std::vector<double>> points;
-
-        for(auto i : p)
-        {
-            auto x1 = i[0], y1 = i[1];
-            std::vector<double> point {(double) x1, (double) y1};
-
-            pic.circle(x1, y1, true, COLOR[idx%COLOR.size()]);
-
-            points.push_back(point);
-        }
-        pic.polyline(points, false, COLOR[idx%COLOR.size()]);
-
-        // points.clear();
-        // if(with_hull)
-        // {
-        //     const auto h = w.hullPoints();
-        //     for(auto &i : h)
-        //     {
-        //         std::vector<double> point {(double) i[0], (double) i[1]};
-        //         points.push_back(point);
-        //     }
-        //     pic.polyline(points, true, COLOR[idx%COLOR.size()]);
-        // }
-
-        ++idx;
-    }
-
-    if(d > 2)
-        pic.text(0, sideLength-20, "projected from d=" + std::to_string(d), "red");
-
-    // if(with_hull)
-    // {
-    //     std::vector<std::vector<double>> points;
-    //     const auto h = m_convex_hull.hullPoints();
-    //     for(auto &i : h)
-    //     {
-    //         std::vector<double> point {(double) i[0], (double) i[1]};
-    //         points.push_back(point);
-    //     }
-    //     pic.polyline(points, true, std::string("red"));
-    // }
-    pic.setGeometry(-1, -1, sideLength + 1, sideLength + 1);
-    pic.save();
+    SpecWalker::svg(filename, with_hull);
 
     svg_histogram("histo_" + filename);
 }
