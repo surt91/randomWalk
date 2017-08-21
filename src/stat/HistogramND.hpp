@@ -38,6 +38,8 @@ class HistogramND
 
         void svg(const std::string filename) const;
 
+        void print2D() const;
+
         // double operator[](const double value) const;
         // double& operator[](const double value);
         //

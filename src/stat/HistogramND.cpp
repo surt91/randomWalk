@@ -85,3 +85,18 @@ void HistogramND::svg(const std::string filename) const
     pic.setGeometry(lower-1, lower-1, upper+1, upper+1);
     pic.save();
 }
+
+void HistogramND::print2D() const
+{
+    if(d != 2)
+    {
+        LOG(LOG_ERROR) << "this function does only work for d = 2";
+        return;
+    }
+    for(int x=0; x<bins; ++x)
+    {
+        for(int y=0; y<bins; ++y)
+            printf(" %5d", data[x*bins + y]);
+        printf("\n");
+    }
+}
