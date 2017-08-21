@@ -11,6 +11,8 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
 
+    m_steps = std::vector<Step<int>>(numSteps, Step<int>(d));
+
     pos.resize(numWalker);
     for(auto &k : pos)
         k.resize(numSteps, Step<int>(d));
@@ -73,12 +75,13 @@ void ScentWalker::updateSteps()
             if(current.size() > 1 && i > 0)
             {
                 pos[j][i+1] = pos[j][i-1];
+                m_steps[i] = -m_steps[i-1];
             }
             else
             {
                 // else do a random step
-                pos[j][i+1].fillFromRN(random_numbers[i*numWalker + j]);
-                pos[j][i+1] += pos[j][i];
+                m_steps[i].fillFromRN(random_numbers[i*numWalker + j]);
+                pos[j][i+1] = pos[j][i] + m_steps[i];
                 pos[j][i+1].periodic(sideLength);
             }
             // populate the histogram (for a figure as in the articel)
@@ -87,12 +90,6 @@ void ScentWalker::updateSteps()
 
     // copy steps and points of walker 0 to m_steps and m_points
     // and everything will work -- though with a bit of overhead
-    m_points = pos[0];
-}
-
-void ScentWalker::updatePoints(const int /*start*/)
-{
-    // points are always up to date, see `ScentWalker::updateSteps()`
 }
 
 void ScentWalker::change(UniformRNG &rng, bool update)
