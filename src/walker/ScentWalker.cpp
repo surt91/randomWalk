@@ -4,18 +4,23 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia),
       numWalker(numWalker_in),
       sideLength(sideLength_in),
-      Tas(Tas_in)
+      Tas(Tas_in),
+      relax(2*Tas)
 {
-    random_numbers = rng.vector(numSteps*numWalker);
+    // TODO: pass relax as parameter
+    LOG(LOG_INFO) << "This type needs to realx first, " << relax << " additional steps will be simulated.";
+
+    random_numbers = rng.vector((numSteps+relax)*numWalker);
     histograms = std::vector<HistogramND>(numWalker, HistogramND(sideLength, d, 0, sideLength));
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
 
     m_steps = std::vector<Step<int>>(numSteps, Step<int>(d));
+    tmp_steps = std::vector<Step<int>>(numSteps+relax, Step<int>(d));
 
     pos.resize(numWalker);
     for(auto &k : pos)
-        k.resize(numSteps, Step<int>(d));
+        k.resize(numSteps+relax, Step<int>(d));
     for(auto &h : histograms)
         h.reset();
 
@@ -51,7 +56,7 @@ void ScentWalker::updateSteps()
     }
 
     // iterate the time, every agent does one move each timestep
-    for(int i=0; i<numSteps-1; ++i)
+    for(int i=0; i<numSteps+relax-1; ++i)
         for(int j=0; j<numWalker; ++j)
         {
             auto &current = trail[pos[j][i]];
@@ -75,21 +80,23 @@ void ScentWalker::updateSteps()
             if(current.size() > 1 && i > 0)
             {
                 pos[j][i+1] = pos[j][i-1];
-                m_steps[i] = -m_steps[i-1];
+                tmp_steps[i] = -tmp_steps[i-1];
             }
             else
             {
                 // else do a random step
-                m_steps[i].fillFromRN(random_numbers[i*numWalker + j]);
-                pos[j][i+1] = pos[j][i] + m_steps[i];
+                tmp_steps[i].fillFromRN(random_numbers[i*numWalker + j]);
+                pos[j][i+1] = pos[j][i] + tmp_steps[i];
                 pos[j][i+1].periodic(sideLength);
             }
             // populate the histogram (for a figure as in the articel)
-            histograms[j].add(pos[j][i+1]);
+            if(i > relax)
+                histograms[j].add(pos[j][i+1]);
         }
 
-    // copy steps and points of walker 0 to m_steps and m_points
+    // copy steps and points of walker 0 to tmp_steps and m_points
     // and everything will work -- though with a bit of overhead
+    m_steps = std::vector<Step<int>>(begin(tmp_steps)+relax, end(tmp_steps));
 }
 
 void ScentWalker::change(UniformRNG &rng, bool update)
@@ -108,7 +115,6 @@ void ScentWalker::change(UniformRNG &rng, bool update)
 
     updateSteps();
     updatePoints();
-
 
     if(update)
     {

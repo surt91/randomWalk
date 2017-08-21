@@ -27,7 +27,6 @@ class ScentWalker final : public SpecWalker<int>
         ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void updateSteps() final;
-        void updatePoints(const int start=0) final;
 
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
@@ -35,17 +34,16 @@ class ScentWalker final : public SpecWalker<int>
         virtual void svg(const std::string filename, const bool with_hull) const override;
         void svg_histogram(const std::string filename) const;
 
-        std::vector<std::vector<Step<int>>> pos;
-        std::vector<HistogramND> histograms;
-
         const int numWalker;
         const int sideLength;
         const int Tas;
+        const int relax;    //< number of steps to relax the walk before measurements are taken
 
     protected:
         std::vector<Step<int>> starts;
-        std::vector<std::vector<Step<int>>> steps;
-        std::vector<std::vector<Step<int>>> points;
+        std::vector<std::vector<Step<int>>> pos;
+        std::vector<Step<int>> tmp_steps;
+        std::vector<HistogramND> histograms;
 
     private:
         Step<int> newStep;
