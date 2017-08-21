@@ -175,7 +175,7 @@ void ScentWalker::svg_histogram(const std::string filename) const
 
                 // color should scale with number of entries
                 std::string color = COLOR[i%COLOR.size()];
-                double opacity = std::log(data[x*sideLength + y]) / std::log(maximum);
+                double opacity = std::max(0.1, std::log(data[x*sideLength + y]) / std::log(maximum));
                 pic.square(x, y, 1., color, opacity);
             }
 
