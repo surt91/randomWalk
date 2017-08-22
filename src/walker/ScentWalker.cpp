@@ -78,10 +78,7 @@ void ScentWalker::updateSteps()
 
             //  at every visit remove expired entries from the back of the deque
             //  and entries of oneself (because oneself left a new scent in that moment)
-            if(current.count(j))
-                current[j] = i; // update last visited
-            else
-                current.emplace(j, i);
+            current[j] = i; // update last visited
 
             updateField(current, i);
 
