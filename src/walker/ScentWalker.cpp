@@ -28,13 +28,13 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     for(auto &h : histograms)
         h.reset();
 
+    std::vector<int> tmp_start(d);
     for(int j=0; j<numWalker; ++j)
     {
-        std::vector<int> init;
         for(int k=0; k<d; ++k)
-            init.push_back(rng() * sideLength);
+            tmp_start[k] = rng() * sideLength;
 
-        starts.emplace_back(init);
+        starts.emplace_back(tmp_start);
     }
 
     init();
