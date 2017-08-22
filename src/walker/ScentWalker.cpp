@@ -10,7 +10,9 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     // TODO: pass relax as parameter
     LOG(LOG_INFO) << "This type needs to relax first, " << relax << " additional steps will be simulated.";
 
-    random_numbers = rng.vector((numSteps+relax)*numWalker);
+    if(!amnesia)
+        random_numbers = rng.vector((numSteps+relax)*numWalker);
+
     histograms = std::vector<HistogramND>(numWalker, HistogramND(sideLength+1, d, 0, sideLength));
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
@@ -94,7 +96,10 @@ void ScentWalker::updateSteps()
             else
             {
                 // else do a random step
-                steps[j][i].fillFromRN(random_numbers[i*numWalker + j]);
+                if(!amnesia)
+                    steps[j][i].fillFromRN(random_numbers[i*numWalker + j]);
+                else
+                    steps[j][i].fillFromRN(rng());
                 pos[j][i+1] = pos[j][i] + steps[j][i];
                 pos[j][i+1].periodic(sideLength);
             }
