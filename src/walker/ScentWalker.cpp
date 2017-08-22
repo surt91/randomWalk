@@ -90,8 +90,43 @@ void ScentWalker::updateSteps()
             // if there is more than one marker (one marker is from us)
             if(current.size() > 1 && i > 0)
             {
-                pos[j][i+1] = pos[j][i-1];
-                steps[j][i] = -steps[j][i-1];
+                int forbidden = 0x0;
+                // test which possible neighboring sites do not contain the
+                // encountered scent
+                auto neighbors = pos[j][i].neighbors();
+                for(size_t n=0; n<neighbors.size(); ++n)
+                    for(const auto &s : current)
+                    {
+                        if(s.first == j)
+                            continue;
+
+                        updateField(trail[neighbors[n]], i);
+                        if(trail[neighbors[n]].count(s.first))
+                        {
+                            forbidden |= 0x1 << n;
+                            break;
+                        }
+                    }
+
+                candidates.clear();
+                for(size_t n=0; n<neighbors.size(); ++n)
+                    if(forbidden & (0x1 << n))
+                        candidates.push_back(std::move(neighbors[n]));
+
+                if(candidates.size() == 0)
+                {
+                    // LOG(LOG_WARNING) << "I am trapped, retreat directly";
+                    pos[j][i+1] = pos[j][i-1];
+                    steps[j][i] = -steps[j][i-1];
+                }
+                else
+                {
+                    // LOG(LOG_INFO) << "escaped";
+                    int idx = candidates.size() * random_numbers[i*numWalker + j];
+                    auto next = candidates[idx];
+                    pos[j][i+1] = next;
+                    steps[j][i] = next - pos[j][i];
+                }
             }
             else
             {
