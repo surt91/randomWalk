@@ -46,7 +46,7 @@ void GnuplotContour::data(const std::vector<HistogramND> &histograms)
     buffer << "\n"
               "set size ratio -1\n"
               "set term pngcairo size 1080,1080\n"
-              "set output '" + filename_png + "'' \n";
+              "set output '" + filename_png + "'\n";
 
     buffer << "\nplot";
     for(size_t i=0; i<histograms.size(); ++i)
