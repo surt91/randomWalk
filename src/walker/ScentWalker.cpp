@@ -8,7 +8,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       relax(2*Tas)
 {
     // TODO: pass relax as parameter
-    LOG(LOG_INFO) << "This type needs to realx first, " << relax << " additional steps will be simulated.";
+    LOG(LOG_INFO) << "This type needs to relax first, " << relax << " additional steps will be simulated.";
 
     random_numbers = rng.vector((numSteps+relax)*numWalker);
     histograms = std::vector<HistogramND>(numWalker, HistogramND(sideLength, d, 0, sideLength));
