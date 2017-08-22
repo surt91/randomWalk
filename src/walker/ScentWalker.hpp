@@ -8,6 +8,15 @@
 #include "../stat/HistogramND.hpp"
 #include "SpecWalker.hpp"
 
+/// tracks scent for one site
+typedef std::map<int, int> Site;
+
+/** tracks the scent marks on the plane
+ *
+ * hashmap: site -> (map: who -> when)
+ */
+typedef std::unordered_map<Step<int>, Site> Field;
+
 /** Agent based random walk on a hypercube.
  *
  *  * multiple, interacting walkers
@@ -27,6 +36,7 @@ class ScentWalker final : public SpecWalker<int>
         ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void updateSteps() final;
+        void updateField(Site &site, int time);
 
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;

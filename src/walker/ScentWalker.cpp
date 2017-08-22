@@ -40,15 +40,27 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     init();
 }
 
+void ScentWalker::updateField(Site &site, int time)
+{
+    // static -> vector will be allocated only once
+    static std::vector<int> to_remove;
+    to_remove.clear();
+
+    for(auto &k : site)
+        if(k.second < time-Tas)
+            to_remove.push_back(k.first);
+
+    for(auto &k : to_remove)
+        site.erase(k);
+}
+
 void ScentWalker::updateSteps()
 {
     // use numWalker vectors for the steps (scent traces will be steps[now-Tas:now])
     // every walker has its own history
 
-    // data structures: hashmap: site -> (map: who -> when)
-    std::unordered_map<Step<int>, std::map<int, int>> trail(sideLength*sideLength);
-
-    std::vector<int> to_remove;
+    Field trail(sideLength*sideLength);
+    std::vector<Step<int>> candidates;
 
     // start the agent simulation
     for(int j=0; j<numWalker; ++j)
@@ -64,7 +76,7 @@ void ScentWalker::updateSteps()
         for(int j=0; j<numWalker; ++j)
         {
             auto &current = trail[pos[j][i]];
-            to_remove.clear();
+
             //  at every visit remove expired entries from the back of the deque
             //  and entries of oneself (because oneself left a new scent in that moment)
             if(current.count(j))
@@ -72,12 +84,7 @@ void ScentWalker::updateSteps()
             else
                 current.emplace(j, i);
 
-            for(auto &k : current)
-                if(k.second < i-Tas)
-                    to_remove.push_back(k.first);
-
-            for(auto &k : to_remove)
-                current.erase(k);
+            updateField(current, i);
 
             // if we are on a foreign scent: retreat
             // if there is more than one marker (one marker is from us)
