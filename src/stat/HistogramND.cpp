@@ -5,6 +5,7 @@ HistogramND::HistogramND(const int bins, const int d, const double lower, const 
         d(d),
         lower(lower),
         upper(upper),
+        bin_width((upper-lower) / bins),
         data(std::pow(bins, d), 0)
 {
 }

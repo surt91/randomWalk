@@ -16,13 +16,14 @@
 class HistogramND
 {
     protected:
-        int bins;                 ///< total number of bins in each direction
-        int d;                    ///< dimension of the histogram
+        const int bins;                 ///< total number of bins in each direction
+        const int d;                    ///< dimension of the histogram
 
-        double lower;             ///< lower bound of the histogram
-        double upper;             ///< upper bound of the histogram
+        const double lower;             ///< lower bound of the histogram
+        const double upper;             ///< upper bound of the histogram
+        const double bin_width;         ///< width of a single bin
 
-        std::vector<int> data; ///< data inside the bins
+        std::vector<int> data;          ///< data inside the bins
 
     public:
         HistogramND(const int bins, const int d, const double lower, const double upper);
@@ -71,7 +72,8 @@ void HistogramND::add(T &coordinate)
     std::vector<int> indices(d, 0);
     for(int i=0; i<d; ++i)
     {
-        int idx = (coordinate[i] - lower) / (upper - lower) * bins;
+
+        int idx = (coordinate[i] - lower) / bin_width;
 
         // if we hit the upper border -> put it into the highest bin
         if(idx == bins)
