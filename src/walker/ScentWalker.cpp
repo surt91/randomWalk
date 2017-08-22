@@ -19,13 +19,8 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
 
     m_steps = std::vector<Step<int>>(numSteps, Step<int>(d));
 
-    pos.resize(numWalker);
-    for(auto &k : pos)
-        k.resize(3, Step<int>(d));
-
-    steps.resize(numWalker);
-    for(auto &k : steps)
-        k.resize(3, Step<int>(d));
+    pos = std::vector<Step<int>>(numWalker, Step<int>(d));
+    step = std::vector<Step<int>>(numWalker, Step<int>(d));
 
     for(auto &h : histograms)
         h.reset();
@@ -67,7 +62,7 @@ void ScentWalker::updateSteps()
     for(int j=0; j<numWalker; ++j)
     {
         // init with random positions
-        pos[j][0] = starts[j];
+        pos[j] = starts[j];
         // reset the histograms
         histograms[j].reset();
     }
@@ -76,7 +71,7 @@ void ScentWalker::updateSteps()
     for(int i=0; i<numSteps+relax-1; ++i)
         for(int j=0; j<numWalker; ++j)
         {
-            auto &current = trail[pos[j][i%3]];
+            auto &current = trail[pos[j]];
 
             //  at every visit remove expired entries from the back of the deque
             //  and entries of oneself (because oneself left a new scent in that moment)
@@ -90,25 +85,26 @@ void ScentWalker::updateSteps()
             // withour the encountered scent
             if(current.size() > 1 && i > 0)
             {
-                pos[j][(i+1)%3] = pos[j][(i-1)%3];
-                steps[j][i%3] = -steps[j][(i-1)%3];
+                step[j] = -step[j];
+                pos[j] += step[j];
             }
             else
             {
                 // else do a random step
                 if(!amnesia)
-                    steps[j][i%3].fillFromRN(random_numbers[i*numWalker + j]);
+                    step[j].fillFromRN(random_numbers[i*numWalker + j]);
                 else
-                    steps[j][i%3].fillFromRN(rng());
-                pos[j][(i+1)%3] = pos[j][i%3] + steps[j][i%3];
-                pos[j][(i+1)%3].periodic(sideLength);
+                    step[j].fillFromRN(rng());
+                pos[j] += step[j];
+                pos[j].periodic(sideLength);
             }
 
             // populate the histogram (for a figure as in the articel)
             if(i > relax)
             {
-                histograms[j].add(pos[j][(i+1)%3]);
-                m_steps.push_back(steps[j][i%3]);
+                // TODO: maybe just the last relax many steps?
+                histograms[j].add(pos[j]);
+                m_steps.push_back(step[j]);
             }
         }
 }
