@@ -42,6 +42,7 @@ CPP	 := main.cpp \
         visualization/Povray.cpp \
         visualization/Gnuplot2D.cpp \
         visualization/Gnuplot3D.cpp \
+        visualization/GnuplotContour.cpp \
         visualization/Threejs.cpp \
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)

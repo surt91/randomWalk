@@ -190,3 +190,12 @@ void ScentWalker::svg_histogram(const std::string filename) const
     pic.setGeometry(0, 0, sideLength+1, sideLength+1);
     pic.save();
 }
+
+void ScentWalker::gp(const std::string filename, const bool with_hull) const
+{
+    GnuplotContour pic(filename);
+
+    pic.data(histograms);
+
+    pic.save();
+}

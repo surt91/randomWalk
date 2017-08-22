@@ -59,6 +59,12 @@ const std::vector<int>& HistogramND::get_data() const
     return data;
 }
 
+/// get the number of bins in each direction
+int HistogramND::num_bins() const
+{
+    return bins;
+}
+
 /// save a visualization, only d = 2
 void HistogramND::svg(const std::string filename) const
 {

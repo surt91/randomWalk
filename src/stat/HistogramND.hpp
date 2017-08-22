@@ -35,6 +35,7 @@ class HistogramND
 
         const std::vector<double> centers() const;
         const std::vector<int>& get_data() const;
+        int num_bins() const;
 
         void svg(const std::string filename) const;
 

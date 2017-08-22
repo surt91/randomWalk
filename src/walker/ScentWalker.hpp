@@ -5,6 +5,7 @@
 
 #include "../Logging.hpp"
 #include "../visualization/Svg.hpp"
+#include "../visualization/GnuplotContour.hpp"
 #include "../stat/HistogramND.hpp"
 #include "SpecWalker.hpp"
 
@@ -42,6 +43,7 @@ class ScentWalker final : public SpecWalker<int>
         void undoChange() final;
 
         virtual void svg(const std::string filename, const bool with_hull) const override;
+        virtual void gp(const std::string filename, const bool with_hull) const override;
         void svg_histogram(const std::string filename) const;
 
         const int numWalker;
