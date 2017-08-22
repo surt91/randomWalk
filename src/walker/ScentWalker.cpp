@@ -60,7 +60,6 @@ void ScentWalker::updateSteps()
     // every walker has its own history
 
     Field trail(sideLength*sideLength);
-    std::vector<Step<int>> candidates;
 
     // start the agent simulation
     for(int j=0; j<numWalker; ++j)
@@ -91,30 +90,30 @@ void ScentWalker::updateSteps()
             if(current.size() > 1 && i > 0)
             {
                 int forbidden = 0x0;
+                int popcount = 0;
                 // test which possible neighboring sites do not contain the
                 // encountered scent
                 auto neighbors = pos[j][i].neighbors();
-                for(size_t n=0; n<neighbors.size(); ++n)
+                int numNeigh = neighbors.size();
+                std::array<int, 2*D_MAX> map {};
+                for(int n=0; n<numNeigh; ++n)
                     for(const auto &s : current)
                     {
                         if(s.first == j)
                             continue;
 
-                        updateField(trail[neighbors[n]], i);
                         if(trail[neighbors[n]].count(s.first))
                         {
                             forbidden |= 0x1 << n;
+                            map[popcount] = n;
+                            ++popcount;
                             break;
                         }
                     }
 
-                candidates.clear();
-                for(size_t n=0; n<neighbors.size(); ++n)
-                    if(forbidden & (0x1 << n))
-                        candidates.push_back(std::move(neighbors[n]));
-
-                if(candidates.size() == 0)
+                if(numNeigh == popcount)
                 {
+                    // all neighbors have foreign scent marks
                     // LOG(LOG_WARNING) << "I am trapped, retreat directly";
                     pos[j][i+1] = pos[j][i-1];
                     steps[j][i] = -steps[j][i-1];
@@ -122,8 +121,8 @@ void ScentWalker::updateSteps()
                 else
                 {
                     // LOG(LOG_INFO) << "escaped";
-                    int idx = candidates.size() * random_numbers[i*numWalker + j];
-                    auto next = candidates[idx];
+                    int idx = popcount * random_numbers[i*numWalker + j];
+                    auto next = neighbors[map[idx]];
                     pos[j][i+1] = next;
                     steps[j][i] = next - pos[j][i];
                 }
