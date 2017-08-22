@@ -87,45 +87,12 @@ void ScentWalker::updateSteps()
 
             // if we are on a foreign scent: retreat
             // if there is more than one marker (one marker is from us)
+            // TODO: do not retreat directly but on a random neighboring field
+            // withour the encountered scent
             if(current.size() > 1 && i > 0)
             {
-                int forbidden = 0x0;
-                int popcount = 0;
-                // test which possible neighboring sites do not contain the
-                // encountered scent
-                auto neighbors = pos[j][i].neighbors();
-                int numNeigh = neighbors.size();
-                std::array<int, 2*D_MAX> map {};
-                for(int n=0; n<numNeigh; ++n)
-                    for(const auto &s : current)
-                    {
-                        if(s.first == j)
-                            continue;
-
-                        if(trail[neighbors[n]].count(s.first))
-                        {
-                            forbidden |= 0x1 << n;
-                            map[popcount] = n;
-                            ++popcount;
-                            break;
-                        }
-                    }
-
-                if(numNeigh == popcount)
-                {
-                    // all neighbors have foreign scent marks
-                    // LOG(LOG_WARNING) << "I am trapped, retreat directly";
-                    pos[j][i+1] = pos[j][i-1];
-                    steps[j][i] = -steps[j][i-1];
-                }
-                else
-                {
-                    // LOG(LOG_INFO) << "escaped";
-                    int idx = popcount * random_numbers[i*numWalker + j];
-                    auto next = neighbors[map[idx]];
-                    pos[j][i+1] = next;
-                    steps[j][i] = next - pos[j][i];
-                }
+                pos[j][i+1] = pos[j][i-1];
+                steps[j][i] = -steps[j][i-1];
             }
             else
             {

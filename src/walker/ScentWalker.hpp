@@ -2,7 +2,6 @@
 
 #include <unordered_map>
 #include <map>
-#include <array>
 
 #include "../Logging.hpp"
 #include "../visualization/Svg.hpp"
