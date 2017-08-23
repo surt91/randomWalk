@@ -123,8 +123,7 @@ obj/%.o: %.cpp | obj
 	@mkdir -p $(@D)
 	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
 
-$(QHULL): qhull.build
-	touch qhull.build
+$(QHULL):
 	$(MAKE) -C qhull cleanall
 	$(MAKE) -C qhull
 

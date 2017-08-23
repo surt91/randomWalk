@@ -16,10 +16,6 @@ addons:
       - doxygen
       - graphviz
 
-env:
-  global:
-    - MAKEFLAGS="-j 2"
-
 deploy:
   provider: pages
   skip_cleanup: true
