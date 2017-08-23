@@ -8,8 +8,6 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include "Logging.hpp"
-
 template<class T>
 class Step;
 namespace std {
@@ -296,7 +294,6 @@ inline int Step<int>::winding_angle(const Step<int> &next) const
     if(m_coordinates[0] == -next.m_coordinates[1])
         return 1;
 
-    LOG(LOG_ERROR) << "you use the winding_angle function wrong!";
     throw std::invalid_argument("you use the winding_angle function wrong!");
 }
 
