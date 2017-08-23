@@ -52,7 +52,7 @@ class Step
         // properties
         double length() const;
         double angle(int i=0, int j=1) const;
-        int winding_angle(Step<T> &next) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); };
+        int winding_angle(const Step<T> &next) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); };
 
         // comparison operators
         template <class U>
@@ -253,7 +253,7 @@ double Step<T>::angle(int i, int j) const
  *   0 for straight
  */
 template <>
-inline int Step<int>::winding_angle(Step<int> &next) const
+inline int Step<int>::winding_angle(const Step<int> &next) const
 {
     if(m_coordinates[0] == next.m_coordinates[0])
         return 0;
