@@ -48,6 +48,7 @@ class Step
 
         void fillFromRN(double /*rn*/, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
         std::vector<Step<int>> neighbors(bool diagonal=false) const { throw std::invalid_argument("neighbors() only implemented for Step<int>"); };
+        std::vector<Step<int>> front_nneighbors(const Step<int> &direction) const { throw std::invalid_argument("front_nneighbors() only implemented for Step<int>"); };
 
         // properties
         double length() const;
@@ -171,6 +172,39 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
     {
         ret.resize(2*m_d);
     }
+
+    return ret;
+}
+
+/** Yields neighbors in front of a 2-dimensional step
+ *
+ * this should be a position
+ *
+ * \param direction should be a step of length 1 indication the direction
+ * i.e. the step taken to arrive at the position
+ *
+ * \returns a vector of positions in front of this position
+ */
+template <>
+inline std::vector<Step<int>> Step<int>::front_nneighbors(const Step<int> &direction) const
+{
+    if(m_d != 2)
+        throw std::invalid_argument("front_nneighbors() is only implemented for d=2!");
+
+    // A d dimensional hypercube has 2*d direct neighbors, in positive
+    // and negative direction for every dimension.
+    Step<int> orthogonal(m_d);
+    orthogonal.m_coordinates[0] = direction.m_coordinates[1];
+    orthogonal.m_coordinates[1] = direction.m_coordinates[0];
+
+    std::vector<Step<int>> ret(5, *this);
+    ret[0] += direction;  // straight ahead
+    ret[1] += orthogonal; // left
+    ret[2] -= orthogonal; // right
+    ret[3] += direction;
+    ret[3] += orthogonal; // front left
+    ret[4] += direction;
+    ret[4] -= orthogonal; // front right
 
     return ret;
 }

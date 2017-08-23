@@ -38,9 +38,14 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current)
     // we can not get trapped if the current step
     // only has one neighbor (but with two, we can get trapped)
     int ctr2 = 0;
-    for(const auto &i : current.neighbors(true))
-        if(occupied.count(i))
-            ++ctr2;
+    if(d==2)
+        for(const auto &i : current.front_nneighbors(next-current))
+            if(occupied.count(i))
+                ++ctr2;
+    else
+        for(const auto &i : current.neighbors(true))
+            if(occupied.count(i))
+                ++ctr2;
     if(ctr2 < 2)
         return true;
 
