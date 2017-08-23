@@ -8,6 +8,8 @@
 #include <stdexcept>
 #include <algorithm>
 
+#include "Logging.hpp"
+
 template<class T>
 class Step;
 namespace std {
@@ -50,6 +52,7 @@ class Step
         // properties
         double length() const;
         double angle(int i=0, int j=1) const;
+        int winding_angle(Step<T> &next) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); };
 
         // comparison operators
         template <class U>
@@ -69,10 +72,10 @@ class Step
         Step<T>& operator-=(const Step<T> &other);
         Step<T>& operator/=(const double d);
 
-        int dist(const Step<int> &other) const;
-        double dist(const Step<double> &other) const;
+        T dist(const Step<T> &other) const;
 
         void periodic(const int len);
+        void invert();
 
         template <class U>
         friend Step<U> cross(const Step<U> &a, const Step<U> &b);
@@ -238,6 +241,29 @@ template <class T>
 double Step<T>::angle(int i, int j) const
 {
     return atan2(m_coordinates[j], m_coordinates[i]);
+}
+
+/** winding angle between two steps
+ *
+ * the arguments need to be steps of length 1 and not positions
+ *
+ * only well defined in d=2 for neighboring steps on a square lattice
+ *  +1 for right turn
+ *  -1 for left turn
+ *   0 for straight
+ */
+template <>
+inline int Step<int>::winding_angle(Step<int> &next) const
+{
+    if(m_coordinates[0] == next.m_coordinates[0])
+        return 0;
+    if(m_coordinates[0] == next.m_coordinates[1])
+        return -1;
+    if(m_coordinates[0] == -next.m_coordinates[1])
+        return 1;
+
+    LOG(LOG_ERROR) << "you use the winding_angle function wrong!";
+    throw std::invalid_argument("you use the winding_angle function wrong!");
 }
 
 template <class T>
@@ -413,11 +439,21 @@ inline double Step<double>::dist(const Step<double> &other) const
     return d;
 }
 
+/// ensures that the step is inside [0, len]^d with periodic boundaries
 template <class T>
 void Step<T>::periodic(const int len)
 {
+    // FIXME will not always work
     for(auto &k : m_coordinates)
         k = (k+len) % len;
+}
+
+/// inverts the step
+template <class T>
+void Step<T>::invert()
+{
+    for(auto &k : m_coordinates)
+        k *= -1;
 }
 
 template <class T>
