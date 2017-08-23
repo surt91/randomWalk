@@ -1,8 +1,7 @@
 language: cpp
+
 script:
-  - make randomWalk
-  - make test
-  - make doc
+  - make test doc
 
 compiler:
   - gcc
