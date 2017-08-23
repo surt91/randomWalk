@@ -7,7 +7,7 @@ randomWalk: $(shell find src | sed 's/ /\\ /g')
 	$(MAKE) -C src
 	cp -p src/$@ $@
 
-doc:
+doc: randomWalk
 	$(MAKE) doc -C src
 	cp -r src/doc .
 
