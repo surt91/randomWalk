@@ -85,7 +85,7 @@ void ScentWalker::updateSteps()
             // withour the encountered scent
             if(current.size() > 1 && i > 0)
             {
-                step[j] = -step[j];
+                step[j].invert();
                 pos[j] += step[j];
             }
             else
