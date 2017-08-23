@@ -47,6 +47,8 @@ class Step
         void fillFromRN(double /*rn*/, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
         std::vector<Step<int>> neighbors(bool diagonal=false) const { throw std::invalid_argument("neighbors() only implemented for Step<int>"); };
         std::vector<Step<int>> front_nneighbors(const Step<int> &direction) const { throw std::invalid_argument("front_nneighbors() only implemented for Step<int>"); };
+        bool left_of(const Step<T> &direction) const { throw std::invalid_argument("left_of() only implemented for Step<int>"); };
+        bool right_of(const Step<T> &direction) const { throw std::invalid_argument("right_of() only implemented for Step<int>"); };
 
         // properties
         double length() const;
@@ -193,7 +195,10 @@ inline std::vector<Step<int>> Step<int>::front_nneighbors(const Step<int> &direc
     // and negative direction for every dimension.
     Step<int> orthogonal(m_d);
     orthogonal.m_coordinates[0] = direction.m_coordinates[1];
-    orthogonal.m_coordinates[1] = direction.m_coordinates[0];
+    if(direction.m_coordinates[0])
+        orthogonal.m_coordinates[1] = direction.m_coordinates[0];
+    else
+        orthogonal.m_coordinates[1] = -direction.m_coordinates[0];
 
     std::vector<Step<int>> ret(5, *this);
     ret[0] += direction;  // straight ahead
@@ -205,6 +210,48 @@ inline std::vector<Step<int>> Step<int>::front_nneighbors(const Step<int> &direc
     ret[4] -= orthogonal; // front right
 
     return ret;
+}
+
+/// is step this a left turn from the point of view of `direction`
+template <>
+inline bool Step<int>::left_of(const Step<int> &direction) const
+{
+    if(m_d != 2)
+        throw std::invalid_argument("front_nneighbors() is only implemented for d=2!");
+
+    if(m_coordinates[0])
+    {
+        if(m_coordinates[0] == -direction.m_coordinates[1])
+            return true;
+    }
+    else
+    {
+        if(m_coordinates[1] == direction.m_coordinates[0])
+            return true;
+    }
+
+    return false;
+}
+
+/// is step this a right turn from the point of view of `direction`
+template <>
+inline bool Step<int>::right_of(const Step<int> &direction) const
+{
+    if(m_d != 2)
+        throw std::invalid_argument("front_nneighbors() is only implemented for d=2!");
+
+    if(m_coordinates[0])
+    {
+        if(m_coordinates[0] == direction.m_coordinates[1])
+            return true;
+    }
+    else
+    {
+        if(m_coordinates[1] == -direction.m_coordinates[0])
+            return true;
+    }
+
+    return false;
 }
 
 #if D_MAX == 0
