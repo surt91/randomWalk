@@ -125,9 +125,6 @@ obj/%.o: %.cpp | obj
 
 $(QHULL):
 	$(MAKE) -j1 -C qhull cleanall
-	# usually works after trying 3 times
-	$(MAKE) -j1 -C qhull
-	$(MAKE) -j1 -C qhull
 	$(MAKE) -j1 -C qhull
 
 $(TARGET): $(OBJ) $(QHULL)
