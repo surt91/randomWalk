@@ -5,17 +5,16 @@ DOC 	= manual.pdf
 # max dimension
 # 0 for arbitrary (needs heap allocations, may be slower)
 # do a "make clean" after changing this
-D_MAX = 5
+D_MAX = 4
 
 CXXFLAGS = -std=c++11 -fexceptions -pipe
-CXXFLAGS += -fopenmp
+#CXXFLAGS += -fopenmp
 
 CPP	 := main.cpp \
         Cmd.cpp \
         Logging.cpp \
         RNG.cpp \
         io.cpp \
-        Hypercube.cpp \
         stat/runtime.cpp \
         stat/RollingMean.cpp \
         stat/HistogramND.cpp \
