@@ -28,33 +28,114 @@ void EscapeWalker::reconstruct()
     init();
 }
 
+/** Determine the sites which are safe to visit, only d = 2
+ *
+ * \param current position of the head of the walk
+ * \param direction the walk is pointed in, i.e., the last step
+ *
+ * \returns a flag of 5 bits for the directions, which ones are safe
+ *          1: a left
+ *          2: b straight ahead
+ *          3: c right
+ */
+std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<int> &direction)
+{
+    // first: everything is safe
+    std::bitset<3> safe;
+    safe.set();
+
+    auto neighbors = current.front_nneighbors(direction);
+    bool a = occupied.count(neighbors[1]);
+    bool b = occupied.count(neighbors[0]);
+    bool c = occupied.count(neighbors[2]);
+    bool d = occupied.count(neighbors[3]);
+    bool e = occupied.count(neighbors[4]);
+
+    // nothing occupied -> everything is safe
+    if(!(a || b || c || d || e))
+        return safe;
+
+    // occupied sites are not safe
+    safe.set(0, !a);
+    safe.set(1, !b);
+    safe.set(2, !c);
+
+    // FIXME there is an error in the following block
+    // until it is fixed, fall back to search
+    safe.reset();
+    return safe;
+
+    // if b is occupied and both a and c not, we need to determine which of both is safe
+    if(!a && b && !c)
+    {
+        int winding = winding_angle[occupied[current]] - winding_angle[occupied[neighbors[0]]];
+        if(winding < 0)
+            // left a will trap, right c is safe
+            safe.set(0, false);
+        if(winding > 0)
+            // left a is safe, right c will trap
+            safe.set(2, false);
+        if(winding == 0)
+        {
+            LOG(LOG_WARNING) << "This should never happen!";
+        }
+        return safe;
+    }
+
+    // if d and e are not occupied, everything is simple
+    if(!d && !e)
+        return safe;
+
+    // ony d or e occupied case
+    // TODO
+    safe.reset();
+    return safe;
+}
+
 /* test if the walk can escape to infinity, if it did the step next
  */
-bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current)
+bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, const Step<int> &direction, const Step<int> &next_direction)
 {
-    // TODO: implement the winding angle method (for d=2)
-    // https://doi.org/10.1103/PhysRevLett.54.267
-
     // we can not get trapped if the current step
     // only has one neighbor (but with two, we can get trapped)
     int ctr2 = 0;
+
+    // the winding angle method for d=2
+    // https://doi.org/10.1103/PhysRevLett.54.267
+    // https://doi.org/10.1007/s10955-015-1271-4
+    // bool test;
     if(d==2)
-        for(const auto &i : current.front_nneighbors(next-current))
-            if(occupied.count(i))
-                ++ctr2;
+    {
+        auto opt = safeOptions(current, direction);
+        // LOG(LOG_INFO) << next_direction << " " << direction
+        //               << " a: " << opt[0] << " " << next_direction.left_of(direction)
+        //               << " b: " << opt[1] << " " << (next_direction == direction)
+        //               << " c: " << opt[2] << " " << next_direction.right_of(direction);
+        if(opt[0] && next_direction.left_of(direction))
+            return true;
+        if(opt[1] && next_direction == direction)
+            return true;
+        if(opt[2] && next_direction.right_of(direction))
+            return true;
+    }
     else
+    {
+        // higher dimensions: do a brute force search
         for(const auto &i : current.neighbors(true))
             if(occupied.count(i))
                 ++ctr2;
-    if(ctr2 < 2)
-        return true;
+
+        if(ctr2 < 2)
+            return true;
+    }
 
     // get a bounding box, such that we dont explore the whole possible lattice
     std::vector<int> min_b(d, 0);
     std::vector<int> max_b(d, 0);
 
-    for(auto i : occupied)
+    for(const auto &j : occupied)
     {
+        const auto &i = j.first;
         for(int axis=0; axis<d; ++axis)
         {
             if(min_b[axis] > i[axis])
@@ -88,15 +169,21 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current)
             dist = next.dist(target);
         }
     }
-    return g.bestfs(next, target, occupied);
+    bool test2 = g.bestfs(next, target, occupied);
+    // if(test2 != test)
+    // {
+    //     LOG(LOG_WARNING) << test2 << " != " << test;
+    // }
+    return test2;
 }
 
 void EscapeWalker::updateSteps()
 {
     int N = random_numbers.size();
+    winding_angle = std::vector<int>(numSteps, 0);
 
     occupied.clear();
-    occupied.insert(Step<int>(d));
+    occupied.emplace(Step<int>(d), 0);
 
     Step<int> head(d);
 
@@ -105,6 +192,7 @@ void EscapeWalker::updateSteps()
     {
         Step<int> next(d);
         Step<int> tmp(d);
+        Step<int> prev(d);
         double rn;
         do
         {
@@ -128,11 +216,20 @@ void EscapeWalker::updateSteps()
 
             next.fillFromRN(rn);
             tmp = head + next;
-        } while(occupied.count(tmp) || !escapable(tmp, head));
+
+            if(i)
+                prev = m_steps[i-1];
+            else
+                prev = Step<int>(d);
+        } while(occupied.count(tmp) || !escapable(tmp, head, prev, next));
 
         head += next;
+
+        if(d==2 && i > 0)
+            winding_angle[i] = m_steps[i-1].winding_angle(next) + winding_angle[i-1];
+
         m_steps[i] = next;
-        occupied.insert(head);
+        occupied.emplace(head, i);
     }
     random_numbers_used = j;
 }
