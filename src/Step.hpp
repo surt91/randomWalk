@@ -49,11 +49,11 @@ class Step
         std::vector<Step<int>> front_nneighbors(const Step<int> &direction) const { throw std::invalid_argument("front_nneighbors() only implemented for Step<int>"); };
         bool left_of(const Step<T> &direction) const { throw std::invalid_argument("left_of() only implemented for Step<int>"); };
         bool right_of(const Step<T> &direction) const { throw std::invalid_argument("right_of() only implemented for Step<int>"); };
+        int winding_angle(const Step<T> &next) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); };
 
         // properties
         double length() const;
         double angle(int i=0, int j=1) const;
-        int winding_angle(const Step<T> &next) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); };
 
         // comparison operators
         template <class U>
@@ -254,6 +254,27 @@ inline bool Step<int>::right_of(const Step<int> &direction) const
     return false;
 }
 
+/** winding angle between two steps
+ *
+ * the arguments need to be steps of length 1 and not positions
+ *
+ * only well defined in d=2 for neighboring steps on a square lattice
+ *  +1 for right turn
+ *  -1 for left turn
+ *   0 for straight
+ */
+template <>
+inline int Step<int>::winding_angle(const Step<int> &next) const
+{
+    if(next.left_of(*this))
+        return -1;
+    if(next.right_of(*this))
+        return 1;
+    return 0;
+    // 
+    // throw std::invalid_argument("you use the winding_angle function wrong!");
+}
+
 #if D_MAX == 0
 /// Construct a d dimensional zero Step.
 template <class T>
@@ -320,28 +341,6 @@ template <class T>
 double Step<T>::angle(int i, int j) const
 {
     return atan2(m_coordinates[j], m_coordinates[i]);
-}
-
-/** winding angle between two steps
- *
- * the arguments need to be steps of length 1 and not positions
- *
- * only well defined in d=2 for neighboring steps on a square lattice
- *  +1 for right turn
- *  -1 for left turn
- *   0 for straight
- */
-template <>
-inline int Step<int>::winding_angle(const Step<int> &next) const
-{
-    if(m_coordinates[0] == next.m_coordinates[0])
-        return 0;
-    if(m_coordinates[0] == next.m_coordinates[1])
-        return -1;
-    if(m_coordinates[0] == -next.m_coordinates[1])
-        return 1;
-
-    throw std::invalid_argument("you use the winding_angle function wrong!");
 }
 
 template <class T>
