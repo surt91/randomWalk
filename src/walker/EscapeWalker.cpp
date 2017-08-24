@@ -60,11 +60,6 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
     safe.set(1, !b);
     safe.set(2, !c);
 
-    // FIXME there is an error in the following block
-    // until it is fixed, fall back to search
-    safe.reset();
-    return safe;
-
     // if b is occupied and both a and c not, we need to determine which of both is safe
     if(!a && b && !c)
     {
@@ -86,7 +81,7 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
     if(!d && !e)
         return safe;
 
-    // ony d or e occupied case
+    // only d or e occupied case
     // TODO
     safe.reset();
     return safe;
