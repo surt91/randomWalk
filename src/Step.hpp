@@ -53,6 +53,7 @@ class Step
 
         // properties
         double length() const;
+        double length2() const;
         double angle(int i=0, int j=1) const;
 
         // comparison operators
@@ -329,11 +330,18 @@ inline Step<int>::Step(int d, double rn)
 template <class T>
 double Step<T>::length() const
 {
+    return std::sqrt(length2());
+}
+
+/// Squared Euclidean distance to zero.
+template <class T>
+double Step<T>::length2() const
+{
     double s=0;
     for(int i=0; i<m_d; ++i)
         s += m_coordinates[i]*m_coordinates[i];
 
-    return std::sqrt(s);
+    return s;
 }
 
 /// Only 2D projection on axis i and j.
