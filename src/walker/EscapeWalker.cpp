@@ -44,6 +44,10 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
     std::bitset<3> safe;
     safe.set();
 
+    // if direction is zero -> this happens at the first step -> everything is safe
+    if(direction.length2() == 0)
+        return safe;
+
     auto neighbors = current.front_nneighbors(direction);
     bool a = occupied.count(neighbors[1]);
     bool b = occupied.count(neighbors[0]);
@@ -81,8 +85,64 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
     if(!d && !e)
         return safe;
 
-    // only d or e occupied case
-    // TODO
+    // if d and e are both occupied
+    // TODO: think of a better method
+    // for now fall back to search
+    if(d && e)
+    {
+        safe.reset();
+        return safe;
+    }
+
+    // only d or e occupied case (last remaining option for non-trapped walks)
+    if(d)
+    {
+        int winding = winding_angle[occupied[current]] - winding_angle[occupied[neighbors[3]]];
+        if(winding < 0 || a)
+        {
+            // left a will trap, c and b are safe
+            safe.set(0, false);
+        }
+        if(winding > 0 || c)
+        {
+            // left a is safe, c and b will trap
+            safe.set(2, false);
+            safe.set(1, false);
+        }
+        if(winding == 0)
+        {
+            if(!a && !c)
+            {
+                LOG(LOG_WARNING) << "This should never happen!";
+            }
+        }
+        return safe;
+    }
+    if(e)
+    {
+        int winding = winding_angle[occupied[current]] - winding_angle[occupied[neighbors[4]]];
+        if(winding < 0 || a)
+        {
+            // left a and b will trap, c is safe
+            safe.set(0, false);
+            safe.set(1, false);
+        }
+        if(winding > 0 || c)
+        {
+            // left a and b are safe, c will trap
+            safe.set(2, false);
+        }
+        if(winding == 0)
+        {
+            if(!a && !c)
+            {
+                LOG(LOG_WARNING) << "This should never happen!";
+            }
+        }
+        return safe;
+    }
+
+    LOG(LOG_WARNING) << "This should never happen!";
     safe.reset();
     return safe;
 }
@@ -98,7 +158,6 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
     // the winding angle method for d=2
     // https://doi.org/10.1103/PhysRevLett.54.267
     // https://doi.org/10.1007/s10955-015-1271-4
-    // bool test;
     if(d==2)
     {
         auto opt = safeOptions(current, direction);
@@ -164,12 +223,7 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
             dist = next.dist(target);
         }
     }
-    bool test2 = g.bestfs(next, target, occupied);
-    // if(test2 != test)
-    // {
-    //     LOG(LOG_WARNING) << test2 << " != " << test;
-    // }
-    return test2;
+    return g.bestfs(next, target, occupied);
 }
 
 void EscapeWalker::updateSteps()
