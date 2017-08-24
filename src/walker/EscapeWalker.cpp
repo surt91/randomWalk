@@ -30,6 +30,10 @@ void EscapeWalker::reconstruct()
 
 /** Determine the sites which are safe to visit, only d = 2
  *
+ * Uses the winding angle method for d=2:
+ * https://doi.org/10.1103/PhysRevLett.54.267
+ * https://doi.org/10.1007/s10955-015-1271-4
+ *
  * \param current position of the head of the walk
  * \param direction the walk is pointed in, i.e., the last step
  *
@@ -64,6 +68,18 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
     safe.set(1, !b);
     safe.set(2, !c);
 
+    if(a && b && c)
+    {
+        LOG(LOG_ERROR) << "I am trapped!";
+        LOG(LOG_INFO) << "from " << current << " look at" << neighbors;
+        LOG(LOG_INFO) << b << " " << a << " " << c << " " << d << " " << e << " ";
+        exit(1);
+    }
+
+    // if there is only one option, take it, it will never trap
+    if((a && b) || (b && c) || (a && c))
+        return safe;
+
     // if b is occupied and both a and c not, we need to determine which of both is safe
     if(!a && b && !c)
     {
@@ -86,11 +102,33 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
         return safe;
 
     // if d and e are both occupied
-    // TODO: think of a better method
-    // for now fall back to search
     if(d && e)
     {
-        safe.reset();
+        int w = winding_angle[occupied[current]];
+        const int w_d = winding_angle[occupied[neighbors[3]]];
+        const int w_e = winding_angle[occupied[neighbors[4]]];
+
+        if(w > w_d && w > w_e)
+        {
+            safe.set(2, false);
+            safe.set(1, false);
+        }
+        else if(w < w_d && w < w_e)
+        {
+            safe.set(0, false);
+            safe.set(1, false);
+        }
+        else if((w < w_d && w_e < w) || (w < w_e && w_d < w))
+        {
+            safe.set(0, false);
+            safe.set(2, false);
+        }
+        else
+        {
+            LOG(LOG_WARNING) << "This should never happen!";
+            safe.reset();
+        }
+
         return safe;
     }
 
@@ -155,16 +193,9 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
     // only has one neighbor (but with two, we can get trapped)
     int ctr2 = 0;
 
-    // the winding angle method for d=2
-    // https://doi.org/10.1103/PhysRevLett.54.267
-    // https://doi.org/10.1007/s10955-015-1271-4
     if(d==2)
     {
         auto opt = safeOptions(current, direction);
-        // LOG(LOG_INFO) << next_direction << " " << direction
-        //               << " a: " << opt[0] << " " << next_direction.left_of(direction)
-        //               << " b: " << opt[1] << " " << (next_direction == direction)
-        //               << " c: " << opt[2] << " " << next_direction.right_of(direction);
         if(opt[0] && next_direction.left_of(direction))
             return true;
         if(opt[1] && next_direction == direction)
