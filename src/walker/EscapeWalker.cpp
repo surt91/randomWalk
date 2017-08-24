@@ -195,6 +195,7 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
 
     if(d==2)
     {
+        // in d = 2 use winding angle method
         auto opt = safeOptions(current, direction);
         if(opt[0] && next_direction.left_of(direction))
             return true;
@@ -205,12 +206,17 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
     }
     else
     {
-        // higher dimensions: do a brute force search
+        // higher dimensions: do a brute force search, if it is possible that
+        // we get trapped
         for(const auto &i : current.neighbors(true))
             if(occupied.count(i))
                 ++ctr2;
 
-        if(ctr2 < 2)
+        // in d = 3 wee need to pass through a compact ring of 8 occupied sites
+        // plus one neighbor of the site we came from
+        // d > 3 needs even more occupied sites
+        // this will only happen very rarely -> no need to optimize it
+        if(ctr2 < 9)
             return true;
     }
 
