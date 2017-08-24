@@ -45,6 +45,7 @@ class Step
         explicit Step(const std::vector<T> &coord);
 
         void fillFromRN(double /*rn*/, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
+        double readToRN(){ throw std::invalid_argument("readToRN() only implemented for Step<int>"); };
         std::vector<Step<int>> neighbors(bool diagonal=false) const { throw std::invalid_argument("neighbors() only implemented for Step<int>"); };
         std::vector<Step<int>> front_nneighbors(const Step<int> &direction) const { throw std::invalid_argument("front_nneighbors() only implemented for Step<int>"); };
         bool left_of(const Step<T> &direction) const { throw std::invalid_argument("left_of() only implemented for Step<int>"); };
@@ -123,6 +124,8 @@ inline void Step<int>::fillFromRN(double rn, bool clean)
 {
     if(!clean)
         setZero();
+
+    // TODO: replace loop by direct calculation
     for(int i=0; i<m_d; ++i)
         if(rn * m_d < i+1) // direction i
         {
@@ -135,6 +138,23 @@ inline void Step<int>::fillFromRN(double rn, bool clean)
             // after the wanted one will be filled by -1
             break;
         }
+}
+
+/// returns a "random number" which will fill a Step with the same values as
+/// this, if used with fillFromRN()
+template <>
+inline double Step<int>::readToRN()
+{
+    for(int i=0; i<m_d; ++i)
+        if(m_coordinates[i] != 0)
+        {
+            double rn = i / (double) m_d + 0.5 / (2*m_d);
+            if(m_coordinates[i] == -1)
+                rn += 0.5 / m_d;
+
+            return rn;
+        }
+    return 0;
 }
 
 /// Yields neighbors
