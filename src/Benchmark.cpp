@@ -362,10 +362,10 @@ bool benchmark()
                 o.benchmark_A = 403708.247784;
                 break;
             case WT_ESCAPE_RANDOM_WALK:
-                o.steps = 10000;
+                o.steps = 50000;
                 o.type = WT_ESCAPE_RANDOM_WALK;
-                o.benchmark_L = 983.549320941;
-                o.benchmark_A = 61633.5;
+                o.benchmark_L = 2890.52164184;
+                o.benchmark_A = 321628;
                 break;
         }
 
@@ -430,10 +430,10 @@ bool benchmark()
                 o.benchmark_A = 241570113.447;
                 break;
             case WT_ESCAPE_RANDOM_WALK:
-                o.steps = 10000;
+                o.steps = 30000;
                 o.type = WT_ESCAPE_RANDOM_WALK;
-                o.benchmark_L = 35041.1669027;
-                o.benchmark_A = 491562.833333;
+                o.benchmark_L = 102682.515707;
+                o.benchmark_A = 2395953.66667;
                 break;
         }
 
