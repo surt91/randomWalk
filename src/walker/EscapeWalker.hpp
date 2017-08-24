@@ -36,8 +36,6 @@ class EscapeWalker final : public SpecWalker<int>
 
         void updateSteps() final;
 
-        int nRN() const final;
-
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 

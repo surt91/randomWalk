@@ -265,7 +265,6 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
 
 void EscapeWalker::updateSteps()
 {
-    int N = random_numbers.size();
     winding_angle = std::vector<int>(numSteps, 0);
 
     occupied.clear();
@@ -273,42 +272,29 @@ void EscapeWalker::updateSteps()
 
     Step<int> head(d);
 
-    int j = 0;
     for(int i=0; i<numSteps; ++i)
     {
         Step<int> next(d);
         Step<int> tmp(d);
         Step<int> prev(d);
-        double rn;
-        do
+
+        double rn = random_numbers[i];
+        while(true)
         {
-            if(!amnesia)
-            {
-                // generate more random numbers if necessary
-                if(j >= N)
-                {
-                    N *= 2;
-                    random_numbers.resize(N);
-
-                    std::generate(random_numbers.begin() + j, random_numbers.end(), std::ref(rng));
-                }
-                rn = random_numbers[j];
-            }
-            else
-            {
-                rn = rng();
-            }
-            ++j;
-
             next.fillFromRN(rn);
-
             tmp = head + next;
 
             if(i)
                 prev = m_steps[i-1];
             else
                 prev = Step<int>(d);
-        } while(occupied.count(tmp) || !escapable(tmp, head, prev, next));
+
+            if(occupied.count(tmp) || !escapable(tmp, head, prev, next))
+                rn = rng();
+            else
+                break;
+        }
+        random_numbers[i] = rn;
 
         head += next;
 
@@ -318,12 +304,6 @@ void EscapeWalker::updateSteps()
         m_steps[i] = next;
         occupied.emplace(head, i);
     }
-    random_numbers_used = j;
-}
-
-int EscapeWalker::nRN() const
-{
-    return random_numbers_used;
 }
 
 void EscapeWalker::change(UniformRNG &rng, bool update)
