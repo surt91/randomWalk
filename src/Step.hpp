@@ -192,23 +192,21 @@ inline std::vector<Step<int>> Step<int>::front_nneighbors(const Step<int> &direc
     if(m_d != 2)
         throw std::invalid_argument("front_nneighbors() is only implemented for d=2!");
 
-    // A d dimensional hypercube has 2*d direct neighbors, in positive
-    // and negative direction for every dimension.
+    // build a step that steps to the right side
     Step<int> orthogonal(m_d);
-    orthogonal.m_coordinates[0] = direction.m_coordinates[1];
     if(direction.m_coordinates[0])
-        orthogonal.m_coordinates[1] = direction.m_coordinates[0];
-    else
         orthogonal.m_coordinates[1] = -direction.m_coordinates[0];
+    else
+        orthogonal.m_coordinates[0] = direction.m_coordinates[1];
 
     std::vector<Step<int>> ret(5, *this);
     ret[0] += direction;  // straight ahead
-    ret[1] += orthogonal; // left
-    ret[2] -= orthogonal; // right
+    ret[1] -= orthogonal; // left
+    ret[2] += orthogonal; // right
     ret[3] += direction;
-    ret[3] += orthogonal; // front left
+    ret[3] -= orthogonal; // front left
     ret[4] += direction;
-    ret[4] -= orthogonal; // front right
+    ret[4] += orthogonal; // front right
 
     return ret;
 }
@@ -218,7 +216,7 @@ template <>
 inline bool Step<int>::left_of(const Step<int> &direction) const
 {
     if(m_d != 2)
-        throw std::invalid_argument("front_nneighbors() is only implemented for d=2!");
+        throw std::invalid_argument("left_of() is only implemented for d=2!");
 
     if(m_coordinates[0])
     {
@@ -239,7 +237,7 @@ template <>
 inline bool Step<int>::right_of(const Step<int> &direction) const
 {
     if(m_d != 2)
-        throw std::invalid_argument("front_nneighbors() is only implemented for d=2!");
+        throw std::invalid_argument("right_of() is only implemented for d=2!");
 
     if(m_coordinates[0])
     {
@@ -272,7 +270,7 @@ inline int Step<int>::winding_angle(const Step<int> &next) const
     if(next.right_of(*this))
         return 1;
     return 0;
-    // 
+    //
     // throw std::invalid_argument("you use the winding_angle function wrong!");
 }
 
