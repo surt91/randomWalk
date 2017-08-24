@@ -212,11 +212,11 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
             if(occupied.count(i))
                 ++ctr2;
 
-        // in d = 3 wee need to pass through a compact ring of 8 occupied sites
+        // in d = 3 wee need to pass through a compact ring of 4 occupied sites
         // plus one neighbor of the site we came from
         // d > 3 needs even more occupied sites
         // this will only happen very rarely -> no need to optimize it
-        if(ctr2 < 9)
+        if(ctr2 < 5)
             return true;
     }
 
@@ -301,6 +301,7 @@ void EscapeWalker::updateSteps()
             ++j;
 
             next.fillFromRN(rn);
+
             tmp = head + next;
 
             if(i)
