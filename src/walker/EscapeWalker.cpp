@@ -278,7 +278,12 @@ void EscapeWalker::updateSteps()
         Step<int> tmp(d);
         Step<int> prev(d);
 
-        double rn = random_numbers[i];
+        double rn;
+        if(!amnesia)
+            rn = random_numbers[i];
+        else
+            rn = rng();
+
         while(true)
         {
             next.fillFromRN(rn);
@@ -294,7 +299,8 @@ void EscapeWalker::updateSteps()
             else
                 break;
         }
-        random_numbers[i] = rn;
+        if(!amnesia)
+            random_numbers[i] = rn;
 
         head += next;
 
