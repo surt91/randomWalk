@@ -270,11 +270,11 @@ void EscapeWalker::updateSteps()
     occupied.emplace(Step<int>(d), 0);
 
     Step<int> head(d);
+    Step<int> next(d);
+    Step<int> tmp(d);
 
     for(int i=0; i<numSteps; ++i)
     {
-        Step<int> next(d);
-        Step<int> tmp(d);
         Step<int> prev(d);
 
         double rn;
@@ -294,12 +294,15 @@ void EscapeWalker::updateSteps()
                 prev = Step<int>(d);
 
             if(occupied.count(tmp) || !escapable(tmp, head, prev, next))
-                rn = rng();
+            {
+                // if the wanted site is not available, we will test
+                // another site in a deterministic fashion
+                double next_rn = rn +  1. / (d*2.);
+                next.fillFromRN(next_rn - floor(next_rn));
+            }
             else
                 break;
         }
-        if(!amnesia)
-            random_numbers[i] = rn;
 
         head += next;
 
