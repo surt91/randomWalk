@@ -7,6 +7,10 @@ Xorshift::Xorshift(uint64_t s)
 
 void Xorshift::seed(uint64_t s) {
     state = s;
+
+    // warm up the generator -- a bit
+    for(int i=0; i<10; ++i)
+        raw();
 }
 
 double Xorshift::operator()() {
