@@ -214,10 +214,9 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
                 ++ctr2;
 
         // in d = 3 wee need to pass through a compact ring of 4 occupied sites
-        // plus one neighbor of the site we came from
         // d > 3 needs even more occupied sites
         // this will only happen very rarely -> no need to optimize it
-        if(ctr2 < 5)
+        if(ctr2 < 3) // there are instances where i get trapped with < 4 // TODO: investigate
             return true;
     }
 
