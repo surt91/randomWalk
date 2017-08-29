@@ -291,8 +291,8 @@ void EscapeWalker::updateSteps()
 
         next.fillFromRN(rn);
         double next_rn = rn;
-        xorshift.seed(i);
 
+        // TODO: get a array of allowed steps and choose one
         while(true)
         {
             tmp = head + next;
@@ -301,10 +301,18 @@ void EscapeWalker::updateSteps()
             {
                 // if the wanted site is not available, we will test
                 // another site in a deterministic fashion
-                // FIXME: But this deterministic rule will likely lead to correlations
-                next_rn += xorshift();
-                next_rn -= floor(next_rn);
-                next.fillFromRN(next_rn);
+
+                // only seed the generator if we need it
+                if(next_rn == rn) {
+                    // use as much entropy from the double as possible
+                    xorshift.seed((uint64_t) (rn * std::pow(2, 52)));
+                }
+
+                do {
+                    next_rn += xorshift();
+                    next_rn -= floor(next_rn);
+                    next.fillFromRN(next_rn);
+                } while(next == -prev); // do not step back
             }
             else
                 break;
