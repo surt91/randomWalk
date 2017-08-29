@@ -14,6 +14,7 @@ CPP	 := main.cpp \
         Cmd.cpp \
         Logging.cpp \
         RNG.cpp \
+        Xorshift.cpp \
         io.cpp \
         stat/runtime.cpp \
         stat/RollingMean.cpp \

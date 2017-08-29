@@ -272,6 +272,7 @@ void EscapeWalker::updateSteps()
     Step<int> head(d);
     Step<int> next(d);
     Step<int> tmp(d);
+    Xorshift xorshift(0);
 
     for(int i=0; i<numSteps; ++i)
     {
@@ -283,9 +284,12 @@ void EscapeWalker::updateSteps()
         else
             rn = rng();
 
+        next.fillFromRN(rn);
+        double next_rn = rn;
+        xorshift.seed(i);
+
         while(true)
         {
-            next.fillFromRN(rn);
             tmp = head + next;
 
             if(i)
@@ -297,8 +301,10 @@ void EscapeWalker::updateSteps()
             {
                 // if the wanted site is not available, we will test
                 // another site in a deterministic fashion
-                double next_rn = rn +  1. / (d*2.);
-                next.fillFromRN(next_rn - floor(next_rn));
+                // FIXME: But this deterministic rule will likely lead to correlations
+                next_rn += xorshift();
+                next_rn -= floor(next_rn);
+                next.fillFromRN(next_rn);
             }
             else
                 break;
@@ -316,6 +322,11 @@ void EscapeWalker::updateSteps()
 
 void EscapeWalker::change(UniformRNG &rng, bool update)
 {
+    // we need local changes, e.g., crankshaft
+    // the global changes used in other walks, will result in many
+    // new random numbers after the change, since the self avoing property
+    // will force new turns -- this way equilibration is not possible
+
     int idx = rng() * nRN();
     undo_index = idx;
     undo_value = random_numbers[idx];
