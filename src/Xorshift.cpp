@@ -6,7 +6,7 @@ Xorshift::Xorshift(uint64_t s)
 }
 
 void Xorshift::seed(uint64_t s) {
-    state = s;
+    state = s ^ 0xa907c6d4a766cd5c;
 
     // warm up the generator -- a bit
     for(int i=0; i<10; ++i)
