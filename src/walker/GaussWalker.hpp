@@ -6,6 +6,8 @@
 /** A walk with displacements drawn from a gaussian distribution (model for brownian motion).
  *
  * Draw the x, y, z, ... displacements from Gaussian distributions at each step.
+ *
+ * \image html GRW.svg "example of a gaussian random walk"
  */
 class GaussWalker final : public SpecWalker<double>
 {

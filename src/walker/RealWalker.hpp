@@ -7,6 +7,8 @@
  *
  * Random walk, which chooses at each step a random direction from
  * a uniform distribution and a constant distance 1.
+ *
+ * \image html real.svg "example of a random walk with fixed step length"
  */
 class RealWalker final : public SpecWalker<double>
 {

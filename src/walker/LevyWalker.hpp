@@ -8,6 +8,8 @@
  * Random walk, which chooses at each step a random direction from
  * a uniform distribution and a step distance from a heavy tailed Levy
  * distribution.
+ *
+ * \image html levy.svg "example of a levy flight"
  */
 class LevyWalker final : public SpecWalker<double>
 {

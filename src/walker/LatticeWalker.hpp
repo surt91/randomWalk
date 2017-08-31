@@ -7,6 +7,8 @@
  *
  * Standard lattice random walk, with immediate reversals.
  * Th lattice constant is unity.
+ *
+ * \image html LRW.svg "example of a random walk on a square lattice"
  */
 class LatticeWalker final : public SpecWalker<int>
 {

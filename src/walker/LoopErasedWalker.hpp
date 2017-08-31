@@ -12,6 +12,8 @@
  * See also:
  * doi: 10.1.1.56.2276
  * [wiki](https://en.wikipedia.org/wiki/Loop-erased_random_walk)
+ *
+ * \image html LERW.svg "example of a loop erased random walk"
  */
 class LoopErasedWalker final : public SpecWalker<int>
 {

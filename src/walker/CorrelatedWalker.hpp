@@ -13,6 +13,8 @@
  * this is not a Markov Process, ::m_steps does not contain steps, but
  * a stepsize and \f$d-1\f$ angles which are converted to proper points in the
  * updatePoints() function.
+ *
+ * \image html correlated.svg "example of a correlated random walk"
  */
 class CorrelatedWalker final : public SpecWalker<double>
 {

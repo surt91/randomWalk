@@ -27,6 +27,8 @@
  *
  * The exponent nu is expected to be 4/7.
  * 10.1103/PhysRevLett.59.539
+ *
+ * \image html SKSAW.svg "example of a smart kinetic random walk"
  */
 class EscapeWalker final : public SpecWalker<int>
 {

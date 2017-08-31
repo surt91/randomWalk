@@ -14,6 +14,8 @@
  * See also:
  * doi: 10.1007/978-1-4614-6025-1_9
  * [wiki](https://en.wikipedia.org/wiki/Self-avoiding_walk)
+ *
+ * \image html SAW.svg "example of a self-avoiding walk"
  */
 class SelfAvoidingWalker final : public SpecWalker<int>
 {
