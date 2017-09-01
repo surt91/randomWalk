@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 from math import exp, log, ceil
 import logging
@@ -174,21 +175,40 @@ def getDistribution(data, bins=None):
     return counts
 
 
+def cat(out, in_list):
+    with gzip.open(out+".gz", 'w') as outfile:
+        for fname in in_list:
+            with gzip.open(fname+".gz") as infile:
+                for line in infile:
+                    outfile.write(line)
+
+
 def run(parallelness=1):
     steps = param.parameters["number_of_steps"]
-    d = param.parameters["rawData"]
     out = param.parameters["directory"]
-    sampling = param.parameters["sampling"]
-
-    outfiles = []
+    num_batches = param.parameters["batches"]
+    iterations = param.parameters["iterations"]
+    del param.parameters["iterations"]
 
     # prepare file
     eval_simplesampling(None, out, parallelness=parallelness)
 
-    # find names of needed files
-    filenames = {N: SimulationInstance(steps=N, theta=float("inf"), **param.parameters).basename for N in steps}
-
-    #~ asymptoticMeans(steps, filenames)
+    # merge batches and collect files to evaluate
+    filenames = {}
+    for N in steps:
+        to_merge = []
+        tmp = SimulationInstance(steps=N, batch_id=-1, iterations=iterations, **param.parameters).basename
+        # if the output does not already exist, generate it from the batches
+        if not os.path.isfile("rawData/" + tmp + ".dat.gz"):
+            logging.info("merge for N = {}".format(N))
+            for i in range(num_batches):
+                batch_iterations = iterations / num_batches
+                if i == num_batches - 1:
+                    batch_iterations += iterations % num_batches
+                name = SimulationInstance(steps=N, batch_id=i, iterations=batch_iterations, **param.parameters).basename
+                to_merge.append("rawData/" + name + ".dat")
+            cat("rawData/" + tmp + ".dat", to_merge)
+        filenames.update({N: tmp})
 
     for N in steps:
         logging.info("N = {}".format(N))
