@@ -36,16 +36,16 @@ if __name__ == "__main__":
     run = read_parameters()
 
     if len(sys.argv) > 1:
-        if "hero" in sys.argv:
+        if "hpc" in sys.argv:
             run.hero()
-        elif "ihero" in sys.argv:
+        elif "ihpc" in sys.argv:
             run.ihero()
         elif "plot" in sys.argv:
             print("only plot")
             gnuplot.main()
         else:
             print("."+sys.argv[1]+".")
-            print("only known options: hero, plot")
+            print("only known options: hpc, plot")
     else:
         run()
         print("")

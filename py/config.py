@@ -175,9 +175,9 @@ class Simulation():
         return self.hero(True)
 
     def hero(self, incremental=False):
-        logging.info("Create .sge Files for Hero")
-        if not os.path.exists("HERO"):
-            os.makedirs("HERO")
+        logging.info("Create .sge and .slurm Files for HPC")
+        if not os.path.exists("HPC"):
+            os.makedirs("HPC")
 
         # on Hero None means single threaded
         if self.parallel is None:
@@ -234,17 +234,17 @@ class Simulation():
 
                 return t/self.parallel * 3 # factor 3 to be sure
 
+            return 86000*3  # 3 days default
+
         self.env = jinja2.Environment(trim_blocks=True,
                                       lstrip_blocks=True,
                                       loader=jinja2.FileSystemLoader("templates"))
-
-        template = self.env.get_template("jobarray.sge")
 
         # create .sge files for Hero
         for N in self.Ns:
             ctr = 0
             name = "RW{:d}".format(N)
-            with open(os.path.join("HERO", name+".lst"), "w") as f:
+            with open(os.path.join("HPC", name+".lst"), "w") as f:
                 for i in self.instances:
                     if i.N == N:
                         # for wang landau sampling, split the iterations into
@@ -266,7 +266,15 @@ class Simulation():
                             if not incremental or not os.path.exists(i.filename+".gz"):
                                 f.write(" ".join(i.get_cmd()) + "\n")
                                 ctr += 1
-            with open(os.path.join("HERO", name+".sge"), "w") as f:
+            with open(os.path.join("HPC", name+".sge"), "w") as f:
+                template = self.env.get_template("jobarray.sge")
+                f.write(template.render(name=name,
+                                        count=ctr,
+                                        hours=math.ceil(getSec(N)*self.n/3600*2),
+                                        mb=getMem(N),
+                                        parallel=self.parallel))
+            with open(os.path.join("HPC", name+".slurm"), "w") as f:
+                template = self.env.get_template("jobarray.slurm")
                 f.write(template.render(name=name,
                                         count=ctr,
                                         hours=math.ceil(getSec(N)*self.n/3600*2),
