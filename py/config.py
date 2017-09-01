@@ -135,6 +135,7 @@ class Simulation():
         self.Ns = number_of_steps
         self.n = iterations
         self.sampling = kwargs["sampling"]
+        self.num_batches = kwargs["batches"]
         self.parallel = kwargs["parallel"]
         if self.parallel is None:
             self.parallel = 1
@@ -148,10 +149,24 @@ class Simulation():
         if kwargs["observable"] != 3:
             passageTimeStart = (-1,)
 
+        if self.sampling == 0:
+            x = kwargs["seedMC"]
+            y = kwargs["seedR"]
+            del kwargs["seedMC"]
+            del kwargs["seedR"]
+
         self.instances = []
         for N in number_of_steps:
             for t1 in passageTimeStart:
-                if self.sampling == 1 or self.sampling == 0:
+                if self.sampling == 0:
+                    for i in range(self.num_batches):
+                        x += 1
+                        y += 1
+                        batch_iterations = iterations / self.num_batches
+                        if i == self.num_batches - 1:
+                            batch_iterations += iterations % self.num_batches
+                        self.instances.append(SimulationInstance(steps=N, iterations=batch_iterations, passageTimeStart=t1, batch_id=i, seedMC=x, seedR=y, **kwargs))
+                if self.sampling == 1:
                     for T in thetas[N]:
                         self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, passageTimeStart=t1, **kwargs))
                 if self.sampling == 4:
@@ -341,7 +356,8 @@ class SimulationInstance():
                        lnf, flatness, overlap_direction="left",
                        t_eq_max=None, theta=None, energy=None,
                        first=False, last=False, sweep=None,
-                       number_of_walkers=None, passageTimeStart=-1, **not_used):
+                       number_of_walkers=None, passageTimeStart=-1,
+                       batch_id=0, **not_used):
 
         self.N = steps
         self.number_of_walkers = number_of_walkers
@@ -416,7 +432,9 @@ class SimulationInstance():
         self.x = abs(self.x) % 1700000333
         self.y = abs(self.y) % 1700000339
 
-        if sampling == 1 or sampling == 0:
+        if sampling == 0:
+            self.basename = para.basesimple.format(typ=self.t, steps=self.N, seedR=self.y, batch=batch_id, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
+        elif sampling == 1:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
         elif sampling == 4:
             self.basename = []

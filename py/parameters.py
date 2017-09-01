@@ -2,6 +2,7 @@ import numpy as np
 
 basename = "m{sampling}_t{typ}_w{observable}_d{dimension}_N{steps}_n{iterations:.0f}"
 noNname = "m{sampling}_t{typ}_w{observable}_d{dimension}_n{iterations:.0f}"
+basesimple = basename + "_b{batch:.0f}"
 basetheta = basename + "_T{theta:.5f}"
 basee = basename + "_e{estart:.0f}-{eend:.0f}"
 
@@ -95,6 +96,9 @@ parameters = {
     # 3: fast Wang Landau and Entropic sampling
     # 4: parallel tempering
     "sampling": 3,
+
+    # number of parallel batches for simple sampl
+    "batches": 20,
 
     # how many cpus (only for wang landau), None means all
     # for HERO: 1 - 12
