@@ -417,6 +417,8 @@ Step<int> SelfAvoidingWalker::transform(const Step<int> &p, const int *m) const
  *  \param op The symmetry operation to be done (index of the transformation matrix)
  *  \param update Should the hull be updated after the transformation.
  *  \return Was the pivoting successful, or did it cross itself?
+ *
+ * \image html pivot.svg "example of a pivot move"
  */
 bool SelfAvoidingWalker::pivot(const int index, const int op, bool update)
 {

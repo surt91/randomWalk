@@ -26,6 +26,8 @@
  *      -> no performance regressions are possible
  *
  * \tparam T class of the Walk type that should be wrapped
+ *
+ * \image html multi.svg "two random walks and their joint convex hull"
  */
 template <class T>
 class MultipleWalker : public Walker

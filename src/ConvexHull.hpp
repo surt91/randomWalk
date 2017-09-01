@@ -283,6 +283,7 @@ void ConvexHull<T>::preprocessAklToussaint()
 }
 
 /// deletes points from interior points according to the Akl Toussaint heuristic
+/// \image html akl.svg "discarded points for 4 and 8 points"
 template <class T>
 void ConvexHull<T>::preprocessAklToussaintQHull()
 {

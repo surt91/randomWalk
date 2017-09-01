@@ -13,6 +13,8 @@
  *
  * See http://arxiv.org/pdf/1501.01041.pdf.
  * See also the Python scipts of this project.
+ *
+ * \image html temperatures.svg "SAWs at different 'temperatures'"
  */
 class Metropolis : public Simulation
 {

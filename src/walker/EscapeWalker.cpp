@@ -42,6 +42,8 @@ void EscapeWalker::reconstruct()
  *          1: a left
  *          2: b straight ahead
  *          3: c right
+ *
+ * \image html safeEscape.svg "names of the sites"
  */
 std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<int> &direction)
 {
