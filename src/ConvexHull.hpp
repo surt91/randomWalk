@@ -462,10 +462,15 @@ void ConvexHull<T>::updateHullPoints() const
 
     if(d==2) // for 2D we can order the points clockwise
     {
-        // FIXME: will not work for the point at (0, 0)
+        // determine interior point
+        Step<T> p(d);
+        for(auto &point : hullPoints_)
+            p += point;
+        p /= hullPoints_.size();
+
         std::sort(hullPoints_.begin(), hullPoints_.end(),
-            [](const Step<T> &a, const Step<T> &b) -> bool
-            { return a.angle() < b.angle(); } );
+            [&p](const Step<T> &a, const Step<T> &b) -> bool
+            { return (p-a).angle() < (p-b).angle(); } );
     }
 }
 
