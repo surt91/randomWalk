@@ -97,7 +97,10 @@ MultipleWalker<T>::MultipleWalker(int d, int numSteps, int numWalker, UniformRNG
 {
     m_walker.reserve(numWalker);
     for(int i=0; i<numWalker; ++i)
-        m_walker.emplace_back(d, numSteps, rng, hull_algo, amnesia);
+    {
+        auto rng_privat = UniformRNG(rng() * 2000000000);
+        m_walker.emplace_back(d, numSteps, rng_privat, hull_algo, amnesia);
+    }
 }
 
 /// Get new random numbers and reconstruct the walk
