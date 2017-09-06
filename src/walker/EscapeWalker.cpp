@@ -7,6 +7,7 @@ EscapeWalker::EscapeWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorit
     undoStep = Step<int>(d);
     winding_angle = std::vector<int>(numSteps, 0);
     m_steps = std::vector<Step<int>>(numSteps);
+
     if(!amnesia)
         random_numbers = rng.vector(numSteps);
 
@@ -265,7 +266,7 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
     return g.bestfs(next, target, occupied);
 }
 
-void EscapeWalker::updateSteps()
+void EscapeWalker::updateStepsFrom(int start)
 {
     occupied.clear();
     occupied.emplace(Step<int>(d), 0);
@@ -275,17 +276,12 @@ void EscapeWalker::updateSteps()
 
     Step<int> head(d);
     Step<int> next(d);
-
-    m_points[0] = Step<int>(d);
+    Step<int> prev(d);
 
     for(int i=0; i<numSteps; ++i)
     {
-        Step<int> prev(d);
-
         if(i)
             prev = m_steps[i-1];
-        else
-            prev = Step<int>(d);
 
         double rn;
         if(!amnesia)
@@ -316,6 +312,11 @@ void EscapeWalker::updatePoints(int /*start*/)
     // points are always fresh, because they are updated in ::updateSteps()
 }
 
+void EscapeWalker::updateSteps()
+{
+    updateStepsFrom(0);
+}
+
 void EscapeWalker::change(UniformRNG &rng, bool update)
 {
     int idx = rng() * nRN();
@@ -325,8 +326,7 @@ void EscapeWalker::change(UniformRNG &rng, bool update)
 
     newStep.fillFromRN(random_numbers[idx]);
 
-    updateSteps();
-    updatePoints();
+    updateStepsFrom(idx);
 
     if(update)
     {
@@ -339,7 +339,6 @@ void EscapeWalker::undoChange()
 {
     random_numbers[undo_index] = undo_value;
 
-    updateSteps();
-    updatePoints();
+    updateStepsFrom(undo_index);
     m_convex_hull = m_old_convex_hull;
 }
