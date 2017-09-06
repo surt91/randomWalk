@@ -273,6 +273,7 @@ void EscapeWalker::updateSteps()
     Step<int> head(d);
     Step<int> next(d);
     Step<int> tmp(d);
+    m_points[0] = Step<int>(d);
     Xorshift xorshift(0);
 
     for(int i=0; i<numSteps; ++i)
@@ -325,8 +326,14 @@ void EscapeWalker::updateSteps()
             winding_angle[i] = m_steps[i-1].winding_angle(next) + winding_angle[i-1];
 
         m_steps[i] = next;
+        m_points[i+1] = head;
         occupied.emplace(head, i);
     }
+}
+
+void EscapeWalker::updatePoints(int /*start*/)
+{
+    // points are always fresh, because they are updated in ::updateSteps()
 }
 
 void EscapeWalker::change(UniformRNG &rng, bool update)

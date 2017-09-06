@@ -38,6 +38,7 @@ class EscapeWalker final : public SpecWalker<int>
         void reconstruct() final;
 
         void updateSteps() final;
+        void updatePoints(int start=1) final;
 
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
