@@ -36,6 +36,8 @@ class ScentWalker final : public SpecWalker<int>
     public:
         ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
+        void reconstruct() final;
+
         void updateSteps() final;
         void updateField(Site &site, int time);
 

@@ -10,18 +10,24 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     // TODO: pass relax as parameter
     LOG(LOG_INFO) << "This type needs to relax first, " << relax << " additional steps will be simulated.";
 
-    if(!amnesia)
-        random_numbers = rng.vector((numSteps+relax)*numWalker);
+    m_steps.reserve(numSteps);
 
     histograms = std::vector<HistogramND>(numWalker, HistogramND(sideLength+1, d, 0, sideLength));
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
 
-    m_steps = std::vector<Step<int>>(numSteps, Step<int>(d));
-
     pos = std::vector<Step<int>>(numWalker, Step<int>(d));
     step = std::vector<Step<int>>(numWalker, Step<int>(d));
 
+    reconstruct();
+}
+
+void ScentWalker::reconstruct()
+{
+    if(!amnesia)
+        random_numbers = rng.vector((numSteps+relax)*numWalker);
+
+    m_steps.clear();
     for(auto &h : histograms)
         h.reset();
 
@@ -68,7 +74,7 @@ void ScentWalker::updateSteps()
     }
 
     // iterate the time, every agent does one move each timestep
-    for(int i=0; i<numSteps+relax-1; ++i)
+    for(int i=0; i<numSteps+relax; ++i)
         for(int j=0; j<numWalker; ++j)
         {
             auto &current = trail[pos[j]];
@@ -100,11 +106,12 @@ void ScentWalker::updateSteps()
             }
 
             // populate the histogram (for a figure as in the articel)
-            if(i > relax)
+            if(i >= relax)
             {
                 // TODO: maybe just the last relax many steps?
                 histograms[j].add(pos[j]);
-                m_steps.push_back(step[j]);
+                if(j == 0)
+                    m_steps.push_back(step[j]);
             }
         }
 }
