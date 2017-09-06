@@ -318,21 +318,12 @@ void EscapeWalker::updatePoints(int /*start*/)
 
 void EscapeWalker::change(UniformRNG &rng, bool update)
 {
-    // we need local changes, e.g., crankshaft
-    // the global changes used in other walks, will result in many
-    // new random numbers after the change, since the self avoing property
-    // will force new turns -- this way equilibration is not possible
-
     int idx = rng() * nRN();
     undo_index = idx;
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();
 
     newStep.fillFromRN(random_numbers[idx]);
-    // test if something changes
-    undoStep.fillFromRN(undo_value);
-    if(newStep == undoStep)
-        return;
 
     updateSteps();
     updatePoints();
@@ -342,15 +333,11 @@ void EscapeWalker::change(UniformRNG &rng, bool update)
         m_old_convex_hull = m_convex_hull;
         updateHull();
     }
-
 }
 
 void EscapeWalker::undoChange()
 {
     random_numbers[undo_index] = undo_value;
-    // test if something changed
-    if(newStep == undoStep)
-        return;
 
     updateSteps();
     updatePoints();

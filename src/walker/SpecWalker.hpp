@@ -70,7 +70,7 @@ class SpecWalker : public Walker
         ///\name get state
         const std::vector<Step<T>>& steps() const { return m_steps; };
         const std::vector<Step<T>>& points() const { return m_points; };
-        const std::vector<Step<T>>& hullPoints() const { return convexHull().hullPoints(); };
+        const std::vector<Step<T>>& hullPoints() const { return m_convex_hull.hullPoints(); };
 
         ///\name update state
         virtual void updateSteps() override = 0;

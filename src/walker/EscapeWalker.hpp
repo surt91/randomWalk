@@ -48,8 +48,6 @@ class EscapeWalker final : public SpecWalker<int>
 
         std::vector<int> winding_angle;
 
-        Step<int> undo_step;
-
         bool escapable(const Step<int> &next, const Step<int> &current, const Step<int> &direction, const Step<int> &next_direction);
         std::bitset<3> safeOptions(const Step<int> &current, const Step<int> &direction);
 
