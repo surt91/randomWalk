@@ -270,11 +270,13 @@ void EscapeWalker::updateSteps()
     occupied.clear();
     occupied.emplace(Step<int>(d), 0);
 
+    std::vector<Step<int>> candidates;
+    candidates.reserve(2*d);
+
     Step<int> head(d);
     Step<int> next(d);
-    Step<int> tmp(d);
+
     m_points[0] = Step<int>(d);
-    Xorshift xorshift(0);
 
     for(int i=0; i<numSteps; ++i)
     {
@@ -291,34 +293,12 @@ void EscapeWalker::updateSteps()
         else
             rn = rng();
 
-        next.fillFromRN(rn);
-        double next_rn = rn;
+        for(const auto &n : head.neighbors())
+            if(!occupied.count(n) && escapable(n, head, prev, n-head))
+                candidates.emplace_back(n-head);
 
-        // TODO: get a array of allowed steps and choose one
-        while(true)
-        {
-            tmp = head + next;
-
-            if(occupied.count(tmp) || !escapable(tmp, head, prev, next))
-            {
-                // if the wanted site is not available, we will test
-                // another site in a deterministic fashion
-
-                // only seed the generator if we need it
-                if(next_rn == rn) {
-                    // use as much entropy from the double as possible
-                    xorshift.seed((uint64_t) (rn * std::pow(2, 52)));
-                }
-
-                do {
-                    next_rn += xorshift();
-                    next_rn -= floor(next_rn);
-                    next.fillFromRN(next_rn);
-                } while(next == -prev); // do not step back
-            }
-            else
-                break;
-        }
+        next = std::move(candidates[rn * candidates.size()]);
+        candidates.clear();
 
         head += next;
 

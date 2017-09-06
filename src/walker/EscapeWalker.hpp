@@ -7,9 +7,7 @@
 
 #include "../Logging.hpp"
 #include "../Hypercube.hpp"
-// #include "../Graph.hpp"
 #include "SpecWalker.hpp"
-#include "../Xorshift.hpp"
 
 /** Escape Walk on a Hypercubic lattice.
  *

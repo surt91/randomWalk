@@ -187,10 +187,10 @@ bool benchmark()
                 o.steps = 30;
                 o.sweep = o.steps;
                 o.type = WT_ESCAPE_RANDOM_WALK;
-                expected_mean_L = 29.3634302301;
-                expected_mean_A = 42.598;
-                expected_mean_r = 9.01843070383;
-                expected_mean_r2 = 87.242;
+                expected_mean_L = 29.1164790309;
+                expected_mean_A = 42.632;
+                expected_mean_r = 8.88772438758;
+                expected_mean_r2 = 84.414;
                 break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
@@ -294,10 +294,10 @@ bool benchmark()
                 o.sweep = o.steps;
                 o.type = WT_ESCAPE_RANDOM_WALK;
                 o.iterations = 100;
-                expected_mean_L = 122.427236789;
-                expected_mean_A = 80.885;
-                expected_mean_r = 9.82684693302;
-                expected_mean_r2 = 104.22;
+                expected_mean_L = 123.291904737;
+                expected_mean_A = 84.0166666667;
+                expected_mean_r = 9.90756513942;
+                expected_mean_r2 = 105.94;
                 break;
         }
         LOG(LOG_INFO) << TYPE_LABEL[i];
@@ -364,8 +364,8 @@ bool benchmark()
             case WT_ESCAPE_RANDOM_WALK:
                 o.steps = 50000;
                 o.type = WT_ESCAPE_RANDOM_WALK;
-                o.benchmark_L = 1914.08857507;
-                o.benchmark_A = 222721;
+                o.benchmark_L = 2127.07888191;
+                o.benchmark_A = 272454.5;
                 break;
         }
 
@@ -432,8 +432,8 @@ bool benchmark()
             case WT_ESCAPE_RANDOM_WALK:
                 o.steps = 30000;
                 o.type = WT_ESCAPE_RANDOM_WALK;
-                o.benchmark_L = 116075.344204;
-                o.benchmark_A = 2738292.16667;
+                o.benchmark_L = 79791.5796476;
+                o.benchmark_A = 1364800.83333;
                 break;
         }
 
