@@ -59,10 +59,10 @@ endif
 
 VERSION := $(shell git describe --tags --always)
 
-release: CXXFLAGS += -O3 -flto -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing
+release: CXXFLAGS += -O3 -flto -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing -DNDEBUG
 release: VERSION += release
 release: all
-silent: CXXFLAGS += -DNLOG
+silent: CXXFLAGS += -DNLOG -DNDEBUG
 silent: VERSION += silent
 silent: release
 debug: CXXFLAGS += -g -Og

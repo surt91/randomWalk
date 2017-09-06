@@ -7,6 +7,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
+#include <cassert>
 
 template<class T>
 class Step;
@@ -209,8 +210,8 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
 template <>
 inline std::vector<Step<int>> Step<int>::front_nneighbors(const Step<int> &direction) const
 {
-    if(m_d != 2)
-        throw std::invalid_argument("front_nneighbors() is only implemented for d=2!");
+    // front_nneighbors() is only implemented for d=2
+    assert(m_d == 2);
 
     // build a step that steps to the right side
     Step<int> orthogonal(m_d);
@@ -235,8 +236,8 @@ inline std::vector<Step<int>> Step<int>::front_nneighbors(const Step<int> &direc
 template <>
 inline bool Step<int>::left_of(const Step<int> &direction) const
 {
-    if(m_d != 2)
-        throw std::invalid_argument("left_of() is only implemented for d=2!");
+    // left_of() is only implemented for d=2!
+    assert(m_d == 2);
 
     if(m_coordinates[0])
     {
@@ -256,8 +257,8 @@ inline bool Step<int>::left_of(const Step<int> &direction) const
 template <>
 inline bool Step<int>::right_of(const Step<int> &direction) const
 {
-    if(m_d != 2)
-        throw std::invalid_argument("right_of() is only implemented for d=2!");
+    // right_of() is only implemented for d=2!
+    assert(m_d == 2);
 
     if(m_coordinates[0])
     {
@@ -391,8 +392,8 @@ bool operator!=(const Step<T> &lhs, const Step<T> &rhs)
 template <class T>
 Step<T> Step<T>::operator+(const Step<T> &other) const
 {
-    if(m_d != other.d())
-        throw std::invalid_argument("dimensions do not agree");
+    // dimensions do not agree
+    assert(m_d == other.d());
 
     Step<T> new_step(other);
     for(int i=0; i<m_d; ++i)
@@ -404,8 +405,8 @@ Step<T> Step<T>::operator+(const Step<T> &other) const
 template <class T>
 Step<T> Step<T>::operator-(const Step<T> &other) const
 {
-    if(m_d != other.d())
-        throw std::invalid_argument("dimensions do not agree");
+    // dimensions do not agree
+    assert(m_d == other.d());
 
     Step<T> new_step(*this);
     for(int i=0; i<m_d; ++i)
@@ -437,9 +438,8 @@ Step<T> Step<T>::operator/(const double d) const
 template <class T>
 Step<T>& Step<T>::operator+=(const Step<T> &other)
 {
-    // TODO: replace by assert
-    if(m_d != other.m_d)
-        throw std::invalid_argument("dimensions do not agree");
+    // dimensions do not agree
+    assert(m_d == other.m_d);
 
     for(int i=0; i<m_d; ++i)
         m_coordinates[i] += other.m_coordinates[i];
@@ -450,8 +450,8 @@ Step<T>& Step<T>::operator+=(const Step<T> &other)
 template <class T>
 Step<T>& Step<T>::operator-=(const Step<T> &other)
 {
-    if(m_d != other.d())
-        throw std::invalid_argument("dimensions do not agree");
+    // dimensions do not agree
+    assert(m_d == other.m_d);
 
     for(int i=0; i<m_d; ++i)
         m_coordinates[i] -= other.m_coordinates[i];
@@ -482,10 +482,10 @@ bool Step<T>::operator<(const Step<T> &other) const
 template <class T>
 Step<T> cross(const Step<T> &a, const Step<T> &b)
 {
-    if(a.m_d != b.m_d)
-        throw std::invalid_argument("dimensions do not agree");
-    if(a.m_d != 3)
-        throw std::invalid_argument("cross product only defined for d=3");
+    // dimensions do not agree
+    assert(a.m_d == b.m_d);
+    // cross product only defined for d=3
+    assert(a.m_d == 3);
 
     Step<T> ret(3);
     ret[0] = a.y()*b.z() - a.z()*b.y();
@@ -497,8 +497,8 @@ Step<T> cross(const Step<T> &a, const Step<T> &b)
 template <class T>
 double dot(const Step<T> &a, const Step<T> &b)
 {
-    if(a.m_d != b.m_d)
-        throw std::invalid_argument("dimensions do not agree");
+    // dimensions do not agree
+    assert(a.m_d == b.m_d);
 
     double p = 0;
 
@@ -512,8 +512,8 @@ double dot(const Step<T> &a, const Step<T> &b)
 template<>
 inline int Step<int>::dist(const Step<int> &other) const
 {
-    if(m_d != other.m_d)
-        throw std::invalid_argument("dimensions do not agree");
+    // dimensions do not agree
+    assert(m_d == other.m_d);
 
     int d = 0;
     for(int i=0; i<m_d; ++i)
@@ -526,8 +526,8 @@ inline int Step<int>::dist(const Step<int> &other) const
 template<>
 inline double Step<double>::dist(const Step<double> &other) const
 {
-    if(m_d != other.m_d)
-        throw std::invalid_argument("dimensions do not agree");
+    // dimensions do not agree
+    assert(m_d == other.m_d);
 
     double d = 0;
 

@@ -7,11 +7,15 @@ randomWalk: $(shell find src | sed 's/ /\\ /g')
 	$(MAKE) -C src
 	cp -p src/$@ $@
 
+randomWalkD: $(shell find src | sed 's/ /\\ /g')
+	$(MAKE) debug -C src
+	cp -p src/randomWalk $@
+
 doc: randomWalk
 	$(MAKE) doc -C src
 	cp -r src/doc .
 
-test: randomWalk
+test: randomWalkD
 	touch test
 	./$< -b
 
