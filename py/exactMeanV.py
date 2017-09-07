@@ -3,29 +3,30 @@ from itertools import product
 from time import clock
 
 
-def candidateCombinations(T, d):
+def sumOfCombinations(T, d):
+    s = 0
     if d == 2:
         for i in range(1, T + 1):
             for j in range(1, T + 1 - i):
-                yield (i, j)
+                s += (i*j)**-0.5
     elif d == 3:
         for i in range(1, T + 1):
             for j in range(1, T + 1 - i):
                 for k in range(1, T + 1 - i - j):
-                    yield (i, j, k)
+                    s += (i*j*k)**-0.5
     elif d == 4:
         for i in range(1, T + 1):
             for j in range(1, T + 1 - i):
                 for k in range(1, T + 1 - i - j):
                     for l in range(1, T + 1 - i - j - k):
-                        yield (i, j, k, l)
+                        s += (i*j*k*l)**-0.5
     elif d == 5:
         for i in range(1, T + 1):
             for j in range(1, T + 1 - i):
                 for k in range(1, T + 1 - i - j):
                     for l in range(1, T + 1 - i - j - k):
                         for m in range(1, T + 1 - i - j - k - l):
-                            yield (i, j, k, l, m)
+                            s += (i*j*k*l*m)**-0.5
     elif d == 6:
         for i in range(1, T + 1):
             for j in range(1, T + 1 - i):
@@ -33,23 +34,16 @@ def candidateCombinations(T, d):
                     for l in range(1, T + 1 - i - j - k):
                         for m in range(1, T + 1 - i - j - k - l):
                             for n in range(1, T + 1 - i - j - k - l - m):
-                                yield (i, j, k, l, m, n)
+                                s += (i*j*k*l*m*n)**-0.5
     else:
         for c in product(range(1, T + 1), repeat=d):
-            yield c
+            if sum(c) <= T:
+                p = 1
+                for i in c:
+                    p *= i
 
-
-def sumOfCombinations(T, d):
-    return sum(productOfCombinations(c, T) for c in candidateCombinations(T, d))
-
-
-def productOfCombinations(combination, bound):
-    p = 1
-    if sum(combination) > bound:
-        return 0
-    for j in combination:
-        p *= j
-    return 1 / p**0.5
+                s += p**-0.5
+    return s
 
 
 def meanV(T, d):
