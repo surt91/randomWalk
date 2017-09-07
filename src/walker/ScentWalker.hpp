@@ -31,7 +31,7 @@ typedef std::unordered_map<Step<int>, Site> Field;
  *
  * See also: https://doi.org/10.1371/journal.pcbi.1002008
  *
- * \image html scent.png "example of a self-avoiding walk"
+ * \image html scent.png "histogram where different agents spend time"
  */
 class ScentWalker final : public SpecWalker<int>
 {
