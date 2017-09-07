@@ -30,6 +30,8 @@ typedef std::unordered_map<Step<int>, Site> Field;
  * will in the next step step on a site without that scent.
  *
  * See also: https://doi.org/10.1371/journal.pcbi.1002008
+ *
+ * \image html scent.png "example of a self-avoiding walk"
  */
 class ScentWalker final : public SpecWalker<int>
 {
