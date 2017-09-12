@@ -192,7 +192,15 @@ bool EscapeWalker::escapable(const Step<int> &next, const int index)
         LOG(LOG_WARNING) << "consider use of winding angle method for d=2 because it is faster";
     }
 
-    // higher dimensions: do a brute force search, if it is possible that
+    // fast filter: we can only get trapped, if we have 4 nearest neigbors
+    // blocking an exit, if we have less, everything is safe.
+    int ctr = 0;
+    for(const auto &n : next.neighbors())
+        ctr += occupied.count(n);
+    if(ctr < 4)
+        return true;
+
+    // otherwise do a brute force search, if it is possible that
     // we get trapped
 
     // get a bounding box, such that we dont explore the whole possible lattice
