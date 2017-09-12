@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
@@ -664,6 +665,16 @@ std::ostream& operator<<(std::ostream& os, const std::list<Step<T>> &obj)
     for(const auto &i : obj)
         os << i << " ";
     os << "]";
+    return os;
+}
+
+template <class T, class U>
+std::ostream& operator<<(std::ostream& os, const std::unordered_map<Step<T>, U> &obj)
+{
+    os << "{";
+    for(const auto &i : obj)
+        os << i.first << ": " << i.second << ", ";
+    os << "}";
     return os;
 }
 
