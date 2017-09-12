@@ -1,8 +1,16 @@
 """This script visualizes the trend of the performance of the program.
 """
 
+import os
+import sys
+import time
+import binascii
+from multiprocessing import cpu_count
+
+import git
+
 # path to the repo that should be examined
-repo_path = "~/uni/Promotion/randomWalk"
+repo_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 # commit to start, empty string is the first commit
 start_commit = ""
 # commit to end, empty string is the last commit
@@ -12,12 +20,6 @@ tmp_path = "/tmp"
 # test command, this command will be timed
 cmd = "./randomWalk -t 1 -N 1000 -n 1000 -T -20 -a -c 2"
 
-import os
-import sys
-import time
-import binascii
-
-import git
 
 if __name__ == "__main__":
     cloned_path = os.path.join(tmp_path, 'tmp_benchmark')
@@ -35,6 +37,8 @@ if __name__ == "__main__":
     os.system("make clean")
     os.system("git pull origin master")
     os.chdir("src")
+    os.system("make -j1")
+    os.system("make clean")
 
     dates = []
     shas = []
@@ -50,27 +54,38 @@ if __name__ == "__main__":
         sha = binascii.hexlify(c.binsha).decode("ascii")
         print("git checkout {}".format(sha))
         os.system("git checkout {}".format(sha))
-        os.system("make")
-        start = time.time()
-        e = os.system(cmd)
-        duration = time.time() - start
+        os.system("make -j{}".format(cpu_count()))
+        durations = []
+        for i in range(10):
+            start = time.time()
+            e = os.system(cmd)
+            if e != 0:
+                break
+            durations.append(time.time() - start)
         os.system("make clean")
+
+        duration = sum(durations) / len(durations)
+        duration_err = sum((i - duration)**2 for i in durations)**0.5 / len(durations)
+
         # program exits with errorcode -> do not use the measured time
         if e != 0:
             duration = float("nan")
+
         print(duration)
         times.append(duration)
         dates.append(c.committed_date)
         shas.append(sha)
 
         with open(os.path.join(pwd, "gitBenchmark.dat"), "a") as f:
-            f.write('{} {} {} "{}"\n'.format(c.committed_date, sha, duration, c.message.split("\n")[0]))
+            f.write('{} {} {} {} "{}"\n'.format(c.committed_date, sha, duration, duration_err, c.message.split("\n")[0]))
 
     for i, j, k in zip(dates, shas, times):
         print("{} {} {}".format(i, j, k))
 
-    print("plot in gnuplot with: \n"
-          "set timefmt '%s'\n"
-          "set format x '%m/%d/%Y %H:%M:%S'\n"
-          "set xdata time\n"
-          "p 'gitBench.dat' u 1:3 w l t '{}', '' u 1:3:4 with labels rotate left offset 0,char 1".format(cmd))
+    print("plot in gnuplot with:")
+    print("set timefmt '%s'")
+    print("set format x '%m/%d/%Y %H:%M:%S'")
+    print("set xdata time")
+    print("p 'gitBench.dat' u 1:3:4 w yerrorlines t '{}', '' u 1:3:5 with labels rotate left offset 0,char 1\n".format(c))
+    print("or")
+    print("p 'gitBench.dat' u 0:3:4 w yerrorlines t '{}', '' u 0:3:5 with labels rotate left offset 0,char 1".format(cm))
