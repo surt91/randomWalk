@@ -5,7 +5,7 @@ EscapeWalker::EscapeWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorit
 {
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
-    winding_angle = std::vector<int>(numSteps, 0);
+    winding_angle = std::vector<int>(numSteps + 1, 0);
     m_steps = std::vector<Step<int>>(numSteps);
 
     if(!amnesia)
@@ -300,11 +300,11 @@ void EscapeWalker::updateStepsFrom(int start)
         head += next;
 
         if(d==2 && i > 0)
-            winding_angle[i] = m_steps[i-1].winding_angle(next) + winding_angle[i-1];
+            winding_angle[i+1] = m_steps[i-1].winding_angle(next) + winding_angle[i];
 
         m_steps[i] = next;
         m_points[i+1] = head;
-        occupied.emplace(head, i);
+        occupied.emplace(head, i+1);
     }
 }
 
