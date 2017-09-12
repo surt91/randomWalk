@@ -51,6 +51,8 @@ class Step
         std::vector<Step<int>> front_nneighbors(const Step<int> &direction) const { throw std::invalid_argument("front_nneighbors() only implemented for Step<int>"); };
         bool left_of(const Step<T> &direction) const { throw std::invalid_argument("left_of() only implemented for Step<int>"); };
         bool right_of(const Step<T> &direction) const { throw std::invalid_argument("right_of() only implemented for Step<int>"); };
+        Step<T> left_turn() const { throw std::invalid_argument("left_turn() only implemented for Step<int>"); };
+        Step<T> right_turn() const { throw std::invalid_argument("right_turn() only implemented for Step<int>"); };
         int winding_angle(const Step<T> &next) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); };
 
         // properties
@@ -272,6 +274,40 @@ inline bool Step<int>::right_of(const Step<int> &direction) const
     }
 
     return false;
+}
+
+/// return step which is a left turn from the point of view of `direction`
+template <>
+inline Step<int> Step<int>::left_turn() const
+{
+    // left_turn() is only implemented for d=2!
+    assert(m_d == 2);
+
+    Step<int> ret(m_d);
+
+    if(m_coordinates[0])
+        ret[1] = m_coordinates[0];
+    else
+        ret[0] = -m_coordinates[1];
+
+    return ret;
+}
+
+/// retrun step which is a right turn from the point of view of `direction`
+template <>
+inline Step<int> Step<int>::right_turn() const
+{
+    // right_turn() is only implemented for d=2!
+    assert(m_d == 2);
+
+    Step<int> ret(m_d);
+
+    if(m_coordinates[0])
+        ret[1] = -m_coordinates[0];
+    else
+        ret[0] = m_coordinates[1];
+
+    return ret;
 }
 
 /** winding angle between two steps

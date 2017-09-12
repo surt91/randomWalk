@@ -193,35 +193,13 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
  */
 bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, const Step<int> &direction, const Step<int> &next_direction)
 {
-    // we can not get trapped if the current step
-    // only has one neighbor (but with two, we can get trapped)
-    int ctr2 = 0;
-
-    if(d==2)
+    if(d == 2)
     {
-        // in d = 2 use winding angle method
-        auto opt = safeOptions(current, direction);
-        if(opt[0] && next_direction.left_of(direction))
-            return true;
-        if(opt[1] && next_direction == direction)
-            return true;
-        if(opt[2] && next_direction.right_of(direction))
-            return true;
+        LOG(LOG_WARNING) << "consider use of winding angle method for d=2 because it is faster";
     }
-    else
-    {
-        // higher dimensions: do a brute force search, if it is possible that
-        // we get trapped
-        for(const auto &i : current.neighbors(true))
-            if(occupied.count(i))
-                ++ctr2;
 
-        // in d = 3 wee need to pass through a compact ring of 4 occupied sites
-        // d > 3 needs even more occupied sites
-        // this will only happen very rarely -> no need to optimize it
-        if(ctr2 < 3) // there are instances where i get trapped with < 4 // TODO: investigate
-            return true;
-    }
+    // higher dimensions: do a brute force search, if it is possible that
+    // we get trapped
 
     // get a bounding box, such that we dont explore the whole possible lattice
     std::vector<int> min_b(d, 0);
@@ -263,6 +241,7 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
             dist = next.dist(target);
         }
     }
+
     return g.bestfs(next, target, occupied);
 }
 
@@ -289,9 +268,35 @@ void EscapeWalker::updateStepsFrom(int start)
         else
             rn = rng();
 
-        for(const auto &n : head.neighbors())
-            if(!occupied.count(n) && escapable(n, head, prev, n-head))
-                candidates.emplace_back(n-head);
+        if(d==2) // use winding angle method for d = 2
+        {
+            // the first step will have a (0,0) direction, then everything is safe
+            if(prev.length2() == 0)
+            {
+                for(const auto &n : head.neighbors())
+                    candidates.emplace_back(n);
+            }
+            else
+            {
+                auto opt = safeOptions(head, prev);
+                for(const auto &n : head.neighbors())
+                {
+                    auto next_direction = n-head;
+                    if(opt[0] && prev.right_of(next_direction))
+                        candidates.emplace_back(next_direction);
+                    if(opt[1] && next_direction == prev)
+                        candidates.emplace_back(next_direction);
+                    if(opt[2] && prev.left_of(next_direction))
+                        candidates.emplace_back(next_direction);
+                }
+            }
+        }
+        else // best first search for everything else
+        {
+            for(const auto &n : head.neighbors())
+                if(!occupied.count(n) && escapable(n, head, prev, n-head))
+                    candidates.emplace_back(n-head);
+        }
 
         next = std::move(candidates[rn * candidates.size()]);
         candidates.clear();
