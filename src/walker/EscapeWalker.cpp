@@ -243,15 +243,17 @@ void EscapeWalker::updateStepsFrom(int start)
 {
     occupied.clear();
     occupied.emplace(Step<int>(d), 0);
+    for(int i=0; i<=start; ++i)
+        occupied.emplace(m_points[i], i);
+
+    Step<int> head = m_points[start];
+    Step<int> next(d);
+    Step<int> prev(d);
 
     std::vector<Step<int>> candidates;
     candidates.reserve(2*d);
 
-    Step<int> head(d);
-    Step<int> next(d);
-    Step<int> prev(d);
-
-    for(int i=0; i<numSteps; ++i)
+    for(int i=start; i<numSteps; ++i)
     {
         if(i)
             prev = m_steps[i-1];
