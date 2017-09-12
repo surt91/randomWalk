@@ -279,16 +279,12 @@ void EscapeWalker::updateStepsFrom(int start)
             else
             {
                 auto opt = safeOptions(head, prev);
-                for(const auto &n : head.neighbors())
-                {
-                    auto next_direction = n-head;
-                    if(opt[0] && prev.right_of(next_direction))
-                        candidates.emplace_back(next_direction);
-                    if(opt[1] && next_direction == prev)
-                        candidates.emplace_back(next_direction);
-                    if(opt[2] && prev.left_of(next_direction))
-                        candidates.emplace_back(next_direction);
-                }
+                if(opt[0])
+                    candidates.emplace_back(prev.left_turn());
+                if(opt[1])
+                    candidates.emplace_back(prev);
+                if(opt[2])
+                    candidates.emplace_back(prev.right_turn());
             }
         }
         else // best first search for everything else
