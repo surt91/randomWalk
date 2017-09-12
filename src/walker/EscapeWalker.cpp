@@ -140,12 +140,12 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
     if(d)
     {
         int winding = winding_angle[occupied[current]] - winding_angle[occupied[neighbors[3]]];
-        if(winding < 0 || a)
+        if(winding < 0)
         {
             // left a will trap, c and b are safe
             safe.set(0, false);
         }
-        if(winding > 0 || c)
+        if(winding > 0)
         {
             // left a is safe, c and b will trap
             safe.set(2, false);
@@ -163,13 +163,13 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
     if(e)
     {
         int winding = winding_angle[occupied[current]] - winding_angle[occupied[neighbors[4]]];
-        if(winding < 0 || a)
+        if(winding < 0)
         {
             // left a and b will trap, c is safe
             safe.set(0, false);
             safe.set(1, false);
         }
-        if(winding > 0 || c)
+        if(winding > 0)
         {
             // left a and b are safe, c will trap
             safe.set(2, false);
