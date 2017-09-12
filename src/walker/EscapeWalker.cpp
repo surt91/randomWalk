@@ -46,9 +46,9 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
     std::bitset<3> safe;
     safe.set();
 
-    // if direction is zero -> this happens at the first step -> everything is safe
-    if(direction.length2() == 0)
-        return safe;
+    // direction needs to a unit length step. -> Does not work for initial step
+    // where it would be zero.
+    assert(direction.length2 == 1);
 
     auto neighbors = current.front_nneighbors(direction);
     bool a = occupied.count(neighbors[1]);
@@ -276,11 +276,9 @@ void EscapeWalker::updateStepsFrom(int start)
         if(d==2) // use winding angle method for d = 2
         {
             // the first step will have a (0,0) direction, then everything is safe
-            if(prev.length2() == 0)
-            {
+            if(i == 0)
                 for(const auto &n : head.neighbors())
                     candidates.emplace_back(n);
-            }
             else
             {
                 auto opt = safeOptions(head, prev);
