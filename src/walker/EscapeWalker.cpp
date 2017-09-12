@@ -18,12 +18,6 @@ void EscapeWalker::reconstruct()
 {
     if(!amnesia)
     {
-        // If the random number vector is far longer than what we actually need,
-        // truncate it, to save some memory bandwidth (-> computing time)
-        size_t expected_space_needed = std::max(5*numSteps, 2*random_numbers_used);
-        if(random_numbers.size() > expected_space_needed)
-            random_numbers.resize(expected_space_needed); // resize will not free memory
-
         // write new random numers into our state
         std::generate(random_numbers.begin(), random_numbers.end(), std::ref(rng));
     }
