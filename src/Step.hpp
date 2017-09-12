@@ -166,7 +166,16 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
 {
     // A d dimensional hypercube has 2*d direct neighbors, in positive
     // and negative direction for every dimension.
-    std::vector<Step<int>> ret(2*m_d + std::pow(2, m_d), *this);
+    int num_neighbors = 2*m_d;
+    if(diagonal)
+    {
+        if(m_d == 2)
+            num_neighbors += 4;
+        if(m_d == 3)
+            num_neighbors += 8 + 12;
+    }
+
+    std::vector<Step<int>> ret(num_neighbors, *this);
     for(int i=0; i<m_d; ++i)
     {
         ret[2*i][i] += 1;
@@ -175,6 +184,9 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
 
     if(diagonal)
     {
+        if(m_d > 3)
+            throw std::invalid_argument("not implemented for d > 3");
+
         Step<int> diff(m_d);
         // A d dimensional hypercube has 2^d diagonal elements
         // we can enumerate them with bitfiddling, i.e., to
@@ -191,10 +203,34 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
             }
             ret[2*m_d + i] += diff;
         }
-    }
-    else
-    {
-        ret.resize(2*m_d);
+
+        // in d = 3 there are also the sides
+        // for each direction, leave it at zero and generate all combinations
+        // of the remaining two directions
+        if(m_d == 3)
+        {
+            for(int i=0; i<std::pow(2, m_d-1); ++i)
+            {
+                // wrong!
+                for(int j=0; j<m_d; ++j)
+                {
+                    diff[j] = 0;
+                    for(int k=0, l=0; k<m_d; ++k)
+                    {
+                        if(k != j)
+                        {
+                            diff[k] = (i & (1 << l)) ? 1 : -1;
+                            ++l;
+                        }
+                    }
+                    ret[2*m_d + i*std::pow(2, m_d-1) + j] += diff;
+                }
+            }
+        }
+
+        // I can not imagine d > 3 easily. There should be one category more
+        // where two coordinates are the same and two change.
+        // I will implement it as soon as I need it.
     }
 
     return ret;
