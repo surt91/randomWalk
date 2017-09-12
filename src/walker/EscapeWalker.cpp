@@ -185,7 +185,7 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
 
 /* test if the walk can escape to infinity, if it did the step next
  */
-bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, const Step<int> &direction, const Step<int> &next_direction)
+bool EscapeWalker::escapable(const Step<int> &next, const int index)
 {
     if(d == 2)
     {
@@ -199,9 +199,10 @@ bool EscapeWalker::escapable(const Step<int> &next, const Step<int> &current, co
     std::vector<int> min_b(d, 0);
     std::vector<int> max_b(d, 0);
 
-    for(const auto &j : occupied)
+    // get the bounding box from all points up to the current
+    for(auto it = begin(m_points); it < begin(m_points) + index; ++it)
     {
-        const auto &i = j.first;
+        const auto &i = *it;
         for(int axis=0; axis<d; ++axis)
         {
             if(min_b[axis] > i[axis])
@@ -286,7 +287,7 @@ void EscapeWalker::updateStepsFrom(int start)
         else // best first search for everything else
         {
             for(const auto &n : head.neighbors())
-                if(!occupied.count(n) && escapable(n, head, prev, n-head))
+                if(!occupied.count(n) && escapable(n, i))
                     candidates.emplace_back(n-head);
         }
 

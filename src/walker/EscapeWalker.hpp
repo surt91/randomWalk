@@ -50,7 +50,7 @@ class EscapeWalker final : public SpecWalker<int>
 
         void updateStepsFrom(int start);
 
-        bool escapable(const Step<int> &next, const Step<int> &current, const Step<int> &direction, const Step<int> &next_direction);
+        bool escapable(const Step<int> &next, const int index);
         std::bitset<3> safeOptions(const Step<int> &current, const Step<int> &direction);
 
         mutable int random_numbers_used;
