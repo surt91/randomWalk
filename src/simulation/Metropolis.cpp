@@ -23,7 +23,7 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
     RollingMean rmean1(samples);
     RollingMean rmean2(samples);
-    //~ RollingMean rmean3(samples);
+    RollingMean rmean3(samples);
     //~ RollingMean rmean4(samples);
     //~ RollingMean rmean5(samples);
 
@@ -35,10 +35,19 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
     std::unique_ptr<Walker> w2;
     prepare(w2, o);
-    w2->degenerateMaxVolume();
+    if(o.wantedObservable == WO_VOLUME)
+        w2->degenerateMaxVolume();
+    else
+        w2->degenerateMaxSurface();
+
+    std::unique_ptr<Walker> w3;
+    prepare(w3, o);
+    if(o.wantedObservable == WO_VOLUME)
+        w3->degenerateMinVolume();
+    else
+        w3->degenerateMinSurface();
 
     //~ std::unique_ptr<Walker> w3;
-    //~ prepare(w3);
     //~ w3->degenerateMaxSurface();
 
     //~ std::unique_ptr<Walker> w4;
@@ -59,12 +68,12 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
             // save the random number before the change
             double oldS1 = S(w1);
             double oldS2 = S(w2);
-            //~ double oldS3 = S(w3);
+            double oldS3 = S(w3);
             //~ double oldS4 = S(w4);
             //~ double oldS5 = S(w5);
             w1->change(rngMC1);
             w2->change(rngMC);
-            //~ w3->change(rngMC);
+            w3->change(rngMC);
             //~ w4->change(rngMC);
             //~ w5->change(rngMC);
 
@@ -73,15 +82,15 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
                 // Metropolis rejection
                 double p_acc1 = std::min({1.0, exp(-(S(w1) - oldS1)/o.theta)});
                 double p_acc2 = std::min({1.0, exp(-(S(w2) - oldS2)/o.theta)});
-                //~ double p_acc3 = std::min({1.0, exp(-(S(w3) - oldS3)/o.theta)});
+                double p_acc3 = std::min({1.0, exp(-(S(w3) - oldS3)/o.theta)});
                 //~ double p_acc4 = std::min({1.0, exp(-(S(w4) - oldS4)/o.theta)});
                 //~ double p_acc5 = std::min({1.0, exp(-(S(w5) - oldS5)/o.theta)});
                 if(p_acc1 < 1 - rngMC1())
                     w1->undoChange();
                 if(p_acc2 < 1 - rngMC())
                     w2->undoChange();
-                //~ if(p_acc3 < 1 - rngMC())
-                    //~ w3->undoChange();
+                if(p_acc3 < 1 - rngMC())
+                    w3->undoChange();
                 //~ if(p_acc4 < 1 - rngMC())
                     //~ w4->undoChange();
                 //~ if(p_acc5 < 1 - rngMC())
@@ -91,14 +100,14 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
         oss << t_eq << " " << w1->L() << " " << w1->A()
                     << " " << w2->L() << " " << w2->A()
-                    //~ << " " << w3->L() << " " << w3->A()
+                    << " " << w3->L() << " " << w3->A()
                     //~ << " " << w4->L() << " " << w4->A()
                     //~ << " " << w5->L() << " " << w5->A()
                     << std::endl;
 
         rmean1.add(S(w1));
         rmean2.add(S(w2));
-        //~ rmean3.add(S(w3));
+        rmean3.add(S(w3));
         //~ rmean4.add(S(w4));
         //~ rmean5.add(S(w5));
 
@@ -111,14 +120,14 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
 
         LOG(LOG_TOO_MUCH) << t_eq << " " << start << " "
                           << (std::abs(rmean1.mean() - rmean2.mean()) < sdev)
-                          //~ << " " << (std::abs(rmean1.mean() - rmean3.mean()) < sdev)
+                          << " " << (std::abs(rmean1.mean() - rmean3.mean()) < sdev)
                           //~ << " " << (std::abs(rmean1.mean() - rmean4.mean()) < sdev)
                           //~ << " " << (std::abs(rmean1.mean() - rmean5.mean()) < sdev)
                           ;
 
         if(start
           && std::abs(rmean1.mean() - rmean2.mean()) < sdev
-          //~ && std::abs(rmean1.mean() - rmean3.mean()) < sdev
+          && std::abs(rmean1.mean() - rmean3.mean()) < sdev
           //~ && std::abs(rmean1.mean() - rmean4.mean()) < sdev
           //~ && std::abs(rmean1.mean() - rmean5.mean()) < sdev
           )
