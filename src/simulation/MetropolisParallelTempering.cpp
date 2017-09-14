@@ -7,6 +7,9 @@ MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o)
 
 void MetropolisParallelTempering::run()
 {
+#ifndef _OPENMP
+    LOG(LOG_WARNING) << "This executable was compiled without OpenMP: This method will run single threaded.";
+#endif
     // every how many sweeps per swap trial
     const auto estimated_corr = std::max(o.steps / o.sweep, 1);
 
