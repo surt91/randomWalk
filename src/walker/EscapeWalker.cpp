@@ -1,6 +1,6 @@
 #include "EscapeWalker.hpp"
 
-EscapeWalker::EscapeWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+EscapeWalker::EscapeWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia)
 {
     newStep = Step<int>(d);

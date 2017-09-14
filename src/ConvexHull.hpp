@@ -6,11 +6,18 @@
 #include <algorithm>
 #include <unordered_set>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+#pragma clang diagnostic ignored "-Wextra-semi"
+#pragma clang diagnostic ignored "-Wfloat-equal"
+#pragma clang diagnostic ignored "-Wdeprecated-dynamic-exception-spec"
+#pragma clang diagnostic ignored "-Wdeprecated"
 #include <Qhull.h>
 #include <QhullVertex.h>
 #include <QhullFacetList.h>
 #include <QhullVertexSet.h>
 #include <QhullError.h>
+#pragma clang diagnostic pop
 
 #include "Logging.hpp"
 #include "Step.hpp"
@@ -551,12 +558,12 @@ std::vector<std::vector<Step<T>>> ConvexHull<T>::hullFacets() const
 
             // finally splitting the facet into triangles
             LOG(LOG_TOO_MUCH) << "subdivide to: ";
-            for(size_t i=0; i<=facet.size() - d; i+=d)
+            for(size_t k=0; k<=facet.size() - d; k+=d)
             {
-                std::vector<Step<T>> simplex(facet.begin()+i, facet.begin()+i+d);
+                std::vector<Step<T>> simplex(facet.begin()+k, facet.begin()+k+d);
                 LOG(LOG_TOO_MUCH) << simplex;
-                facet.push_back(facet[i]);
-                facet.push_back(facet[i+d-1]); // not sure for d>3
+                facet.push_back(facet[k]);
+                facet.push_back(facet[k+d-1]); // not sure for d>3
                 facets.push_back(simplex);
             }
         }

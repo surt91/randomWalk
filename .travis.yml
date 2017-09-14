@@ -6,7 +6,7 @@ script:
 
 compiler:
   - gcc
-#  - clang
+  - clang
 
 dist: trusty
 

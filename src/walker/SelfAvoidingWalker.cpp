@@ -277,7 +277,7 @@ static const int iMatrix4[] =
     19
 };
 
-SelfAvoidingWalker::SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+SelfAvoidingWalker::SelfAvoidingWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia)
 {
     overlap_test.reserve(numSteps);

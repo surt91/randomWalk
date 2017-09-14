@@ -1,6 +1,6 @@
 #include "CorrelatedWalker.hpp"
 
-CorrelatedWalker::CorrelatedWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+CorrelatedWalker::CorrelatedWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<double>(d, numSteps, rng_in, hull_algo, amnesia),
       mu(0.0),
       sigma(1.0)

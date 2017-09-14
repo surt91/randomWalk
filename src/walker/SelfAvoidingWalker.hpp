@@ -20,7 +20,7 @@
 class SelfAvoidingWalker final : public SpecWalker<int>
 {
     public:
-        SelfAvoidingWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
+        SelfAvoidingWalker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void reconstruct() final;
         void generate_from_MCMC();

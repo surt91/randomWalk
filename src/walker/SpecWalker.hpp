@@ -37,13 +37,14 @@ template <class T>
 class SpecWalker : public Walker
 {
     public:
-        SpecWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false)
+        SpecWalker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false)
             : Walker(d, numSteps, rng, hull_algo, amnesia),
               m_points(numSteps+1, Step<T>(d))
         {
         }
 
-        virtual ~SpecWalker() {}
+        SpecWalker(const SpecWalker &) = default;
+        virtual ~SpecWalker() = default;
 
         void init();
         virtual void reconstruct() override;
@@ -53,11 +54,11 @@ class SpecWalker : public Walker
         virtual void setHullAlgo(hull_algorithm_t a) override final;
 
         /// function to make the type of T accessable outside (e.g. per decltype)
-        static T T_type() { return T(); };
+        static T T_type() { return T(); }
 
         ///\name observables
-        double A() const final { return convexHull().A(); };
-        double L() const final { return convexHull().L(); };
+        double A() const final { return convexHull().A(); }
+        double L() const final { return convexHull().L(); }
         std::vector<double> maxExtent() const final;
         double maxDiameter() const final;
         double r() const final;
@@ -68,9 +69,9 @@ class SpecWalker : public Walker
         std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
         ///\name get state
-        const std::vector<Step<T>>& steps() const { return m_steps; };
-        const std::vector<Step<T>>& points() const { return m_points; };
-        const std::vector<Step<T>>& hullPoints() const { return m_convex_hull.hullPoints(); };
+        const std::vector<Step<T>>& steps() const { return m_steps; }
+        const std::vector<Step<T>>& points() const { return m_points; }
+        const std::vector<Step<T>>& hullPoints() const { return m_convex_hull.hullPoints(); }
 
         ///\name update state
         virtual void updateSteps() override = 0;
@@ -282,16 +283,16 @@ void SpecWalker<T>::threejs(const std::string filename, const bool with_hull) co
         const std::vector<std::vector<Step<T>>> h = convexHull().hullFacets();
 
         double mx = 0, my = 0, mz = 0;
-        auto &points = convexHull().hullPoints();
-        for(auto &i : points)
+        auto &hullPoints = convexHull().hullPoints();
+        for(auto &i : hullPoints)
         {
             mx += i[0];
             my += i[1];
             mz += i[2];
         }
-        mx /= points.size();
-        my /= points.size();
-        mz /= points.size();
+        mx /= hullPoints.size();
+        my /= hullPoints.size();
+        mz /= hullPoints.size();
         const Step<T> origin(std::vector<T>({(T) mx, (T) my, (T) mz}));
 
 

@@ -24,8 +24,9 @@
 class Walker
 {
     public:
-        Walker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
-        virtual ~Walker() {}
+        Walker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
+        Walker(const Walker &) = default;
+        virtual ~Walker() = default;
 
         const int numSteps;  ///< Number of steps the Walk should have
         const int d;         ///< Dimension in which the Walker walks
@@ -35,8 +36,8 @@ class Walker
 
         virtual void setHullAlgo(hull_algorithm_t a) = 0;
 
-        virtual void setP1(double /*p1*/) { LOG(LOG_WARNING) << "P1 not used for this type of random walk"; };
-        virtual void setP2(double /*p2*/) { LOG(LOG_WARNING) << "P2 not used for this type of random walk"; };
+        virtual void setP1(double /*p1*/) { LOG(LOG_WARNING) << "P1 not used for this type of random walk"; }
+        virtual void setP2(double /*p2*/) { LOG(LOG_WARNING) << "P2 not used for this type of random walk"; }
 
         // convenience functions
         virtual double A() const = 0;   ///< Returns the Volume of the convex hull
@@ -88,7 +89,7 @@ class Walker
         UniformRNG rng;
         mutable std::vector<double> random_numbers;
         hull_algorithm_t hull_algo;
-        bool amnesia; //< if true, will not remember used random numbers, useful for non memory intensive simple sampling
+        bool amnesia; ///< if true, will not remember used random numbers, useful for non memory intensive simple sampling
 
         int undo_index;
         double undo_value;

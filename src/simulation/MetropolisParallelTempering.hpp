@@ -7,7 +7,7 @@
 class MetropolisParallelTempering : public Simulation
 {
     public:
-        virtual ~MetropolisParallelTempering() {};
+        virtual ~MetropolisParallelTempering() {}
         MetropolisParallelTempering(const Cmd &o);
         virtual void run();
 

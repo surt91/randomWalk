@@ -33,7 +33,7 @@ template <class T>
 class MultipleWalker : public Walker
 {
     public:
-        MultipleWalker(int d, int numSteps, int numWalkers, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
+        MultipleWalker(int d, int numSteps, int numWalkers, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
         virtual ~MultipleWalker() {}
 
         int numWalker;
@@ -80,7 +80,7 @@ class MultipleWalker : public Walker
         virtual void gp(const std::string filename, const bool with_hull=false) const;
         virtual void threejs(const std::string filename, const bool with_hull=false) const;
 
-        void goDownhill(const bool, const wanted_observable_t, const int ) {LOG(LOG_ERROR) << "not implemented";};
+        void goDownhill(const bool, const wanted_observable_t, const int ) {LOG(LOG_ERROR) << "not implemented";}
 
     protected:
         std::vector<T> m_walker;
@@ -91,8 +91,8 @@ class MultipleWalker : public Walker
 };
 
 template <class T>
-MultipleWalker<T>::MultipleWalker(int d, int numSteps, int numWalker, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
-    : Walker(d, numSteps, rng, hull_algo, amnesia),
+MultipleWalker<T>::MultipleWalker(int d, int numSteps, int numWalker, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+    : Walker(d, numSteps, rng_in, hull_algo, amnesia),
       numWalker(numWalker)
 {
     m_walker.reserve(numWalker);
@@ -206,7 +206,7 @@ void MultipleWalker<T>::updateHull()
     std::vector<Step<decltype(T::T_type())>> all_points;
     all_points.reserve(numSteps*numWalker);
 
-    for(auto w : m_walker)
+    for(auto &w : m_walker)
     {
         auto &p = w.hullPoints();
         all_points.insert(all_points.end(), p.begin(), p.end());
@@ -379,7 +379,7 @@ void MultipleWalker<T>::gp(const std::string filename, const bool with_hull) con
     {
         Gnuplot3D pic(filename);
         int idx = 0;
-        for(auto w : m_walker)
+        for(const auto &w : m_walker)
         {
             ++idx;
             auto p = w.points();

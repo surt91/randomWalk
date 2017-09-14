@@ -48,7 +48,7 @@ class Simulation
         static double getReasonalbleUpperBound(Cmd &o);
         static double getReasonalbleLowerBound(Cmd &o);
 
-        void mute() {muted=true;};
+        void mute() {muted=true;}
 
         double sum_L;
         double sum_A;

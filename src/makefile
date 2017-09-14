@@ -13,7 +13,7 @@ MPI ?= 0
 # enable or disable OpenMP
 OMP ?= 0
 
-CXXFLAGS = -std=c++11 -fexceptions -fomit-frame-pointer -pipe
+CXXFLAGS = -std=c++11 -fexceptions -pipe
 
 CPP	 := main.cpp \
         Cmd.cpp \
@@ -79,29 +79,33 @@ endif
 
 VERSION := $(shell git describe --tags --always)
 
-release: CXXFLAGS += -O3 -flto -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing -DNDEBUG
+release: CXXFLAGS += -O3 -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing -fomit-frame-pointer -DNDEBUG
+
 release: VERSION += release
 release: all
 silent: CXXFLAGS += -DNLOG -DNDEBUG
 silent: VERSION += silent
 silent: release
-debug: CXXFLAGS += -g -Og
+debug: CXXFLAGS += -g
 debug: VERSION += debug
 debug: all
+
+# add some gcc specific flags (at least clang does not understand them or they caused issues (in the last tested version on arch respectively travis ubuntu trusty))
+ifeq "$(CXX)" "g++"
+release: CXXFLAGS += -flto
+debug: CXXFLAGS += -Og
+endif
 
 CXXFLAGS += -DVERSION="\"$(VERSION)\""
 CXXFLAGS += -DD_MAX=$(D_MAX)
 
-# for clang sanitizers
-#CXX = clang++
-#CXXFLAGS = -O1 -g -fsanitize=address -fno-omit-frame-pointer
-#CXXFLAGS = -fsanitize=memory -fno-omit-frame-pointer -g -O2 -fsanitize-memory-track-origins
-#CXXFLAGS = -fsanitize=undefined -O2
-
+# enable strict warnings
 WARNLEVEL = -Wall -Wextra -Wpedantic -Werror
-WARNLEVEL += -Wno-unknown-pragmas -Wno-unused-result -Wno-unused-parameter
-#WARNLEVEL += -Wfloat-equal -Wshadow -Wextra-semi -Wdocumentation -Wdeprecated
-#WANRLEVEL += -Weverything -Wno-c++98-compat -Wno-c++98-compat-bind-to-temporary-copy -Wno-padded
+ifeq "$(CXX)" "clang++"
+WARNLEVEL += -Wextra-semi -Wdocumentation -Wdeprecated
+endif
+# relax strictness for OpenMP pragmas
+WARNLEVEL += -Wno-unknown-pragmas -Wno-unused-result
 
 LNDIRS  = -Lqhull/lib
 

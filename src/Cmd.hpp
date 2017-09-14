@@ -3,7 +3,11 @@
 #include <string>
 #include <sstream>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+#pragma clang diagnostic ignored "-Wdeprecated-dynamic-exception-spec"
 #include <tclap/CmdLine.h>
+#pragma clang diagnostic pop
 
 #include "Logging.hpp"
 
@@ -16,17 +20,17 @@
 #endif
 
 enum hull_algorithm_t {
-    CH_NOP = 0,     //< do not calculate the hull, just return 0
-    CH_QHULL = 1,   //< use the quick hull implementation Qhull
-    CH_QHULL_AKL,   //< use the quick hull implementation Qhull with Akl's heuristic
-    CH_ANDREWS,     //< use Andrews monotone chain algorithm
-    CH_ANDREWS_AKL, //< use Andrews monotone chain algorithm with Akl's heuristic
-    CH_GRAHAM,      //< [not implemented]
-    CH_GRAHAM_AKL,  //< [not implemented]
-    CH_JARVIS,      //< [not implemented]
-    CH_JARVIS_AKL,  //< [not implemented]
-    CH_CHAN,        //< [not implemented]
-    CH_CHAN_AKL     //< [not implemented]
+    CH_NOP = 0,     ///< do not calculate the hull, just return 0
+    CH_QHULL = 1,   ///< use the quick hull implementation Qhull
+    CH_QHULL_AKL,   ///< use the quick hull implementation Qhull with Akl's heuristic
+    CH_ANDREWS,     ///< use Andrews monotone chain algorithm
+    CH_ANDREWS_AKL, ///< use Andrews monotone chain algorithm with Akl's heuristic
+    CH_GRAHAM,      ///< [not implemented]
+    CH_GRAHAM_AKL,  ///< [not implemented]
+    CH_JARVIS,      ///< use Jarvi's march (gift wrapping)
+    CH_JARVIS_AKL,  ///< use Jarvi's march (gift wrapping) with Akl's heuristic
+    CH_CHAN,        ///< [not implemented]
+    CH_CHAN_AKL     ///< [not implemented]
 };
 
 const std::vector<std::string> CH_LABEL = {
@@ -44,15 +48,15 @@ const std::vector<std::string> CH_LABEL = {
 };
 
 enum walk_type_t {
-    WT_RANDOM_WALK = 1,             //< Lattice random walk on hypercubic lattice with steplength = 1
-    WT_LOOP_ERASED_RANDOM_WALK,     //< Loop Erased random walk on hypercubic lattice
-    WT_SELF_AVOIDING_RANDOM_WALK,   //< Self-Avoiding random walk on hypercubic lattice
-    WT_REAL_RANDOM_WALK,            //< Random direction, steplength = 1
-    WT_GAUSSIAN_RANDOM_WALK,        //< Gaussian random walk
-    WT_LEVY_FLIGHT,                 //< Levy flight
-    WT_CORRELATED_RANDOM_WALK,      //< Correlated random walk
-    WT_ESCAPE_RANDOM_WALK,          //< Escape random walk
-    WT_SCENT_RANDOM_WALK,           //< Scent random walk
+    WT_RANDOM_WALK = 1,             ///< Lattice random walk on hypercubic lattice with steplength = 1
+    WT_LOOP_ERASED_RANDOM_WALK,     ///< Loop Erased random walk on hypercubic lattice
+    WT_SELF_AVOIDING_RANDOM_WALK,   ///< Self-Avoiding random walk on hypercubic lattice
+    WT_REAL_RANDOM_WALK,            ///< Random direction, steplength = 1
+    WT_GAUSSIAN_RANDOM_WALK,        ///< Gaussian random walk
+    WT_LEVY_FLIGHT,                 ///< Levy flight
+    WT_CORRELATED_RANDOM_WALK,      ///< Correlated random walk
+    WT_ESCAPE_RANDOM_WALK,          ///< Escape random walk
+    WT_SCENT_RANDOM_WALK,           ///< Scent random walk
 };
 
 const std::vector<std::string> TYPE_LABEL = {

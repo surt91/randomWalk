@@ -1,6 +1,6 @@
 #include "ScentWalker.hpp"
 
-ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
+ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia),
       numWalker(numWalker_in),
       sideLength(sideLength_in),
@@ -199,7 +199,7 @@ void ScentWalker::svg_histogram(const std::string filename) const
     pic.save();
 }
 
-void ScentWalker::gp(const std::string filename, const bool with_hull) const
+void ScentWalker::gp(const std::string filename, const bool /*with_hull*/) const
 {
     GnuplotContour pic(filename);
 

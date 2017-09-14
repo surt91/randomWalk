@@ -1,6 +1,6 @@
 #include "GaussWalker.hpp"
 
-GaussWalker::GaussWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+GaussWalker::GaussWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<double>(d, numSteps, rng_in, hull_algo, amnesia)
 {
     // we need d gaussian random numbers per step, for each direction

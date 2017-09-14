@@ -33,3 +33,9 @@ Doxygen documentation of the latest version is at [surt91.github.io/randomWalk](
    This will create the "rawData".
 4. `python3 evaluate.py` will evaluate the results to intermediate "data".
     And `python3 gnuplot.py` will visualize this data with plots in `py/plots`.
+
+## Misc
+
+To compile with clang use:
+
+    CC=clang CXX=clang++ make -j1

@@ -36,7 +36,7 @@ typedef std::unordered_map<Step<int>, Site> Field;
 class ScentWalker final : public SpecWalker<int>
 {
     public:
-        ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
+        ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void reconstruct() final;
 
@@ -53,7 +53,7 @@ class ScentWalker final : public SpecWalker<int>
         const int numWalker;
         const int sideLength;
         const int Tas;
-        const int relax;    //< number of steps to relax the walk before measurements are taken
+        const int relax;    ///< number of steps to relax the walk before measurements are taken
 
     protected:
         std::vector<Step<int>> starts;

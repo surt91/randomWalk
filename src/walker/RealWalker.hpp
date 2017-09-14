@@ -13,7 +13,7 @@
 class RealWalker final : public SpecWalker<double>
 {
     public:
-        RealWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
+        RealWalker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void updateSteps() final;
 

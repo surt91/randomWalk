@@ -21,13 +21,13 @@ class Hypercube
 };
 
 struct thingy {
-    thingy(Step<int> v, int k) : key(k), value(v) {};
+    thingy(Step<int> v, int k) : key(k), value(v) {}
     int key;
     Step<int> value;
     bool operator<(const thingy &other) const
     {
         return key > other.key;
-    };
+    }
 };
 
 template<class T>

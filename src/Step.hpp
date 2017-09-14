@@ -37,24 +37,24 @@ class Step
 
     public:
         /// Default constructor, init an d=0 empty step
-        Step(){};
+        Step(){}
 
         /// Construct a d dimensional random Step from a random number.
-        Step(int /*d*/, double /*rn*/){ throw std::invalid_argument("Step(int d, double rn) only implemented for Step<int>"); };
+        Step(int /*d*/, double /*rn*/){ throw std::invalid_argument("Step(int d, double rn) only implemented for Step<int>"); }
         /// Construct a d dimensional zero Step.
         explicit Step(int d);
         /// Construct a Step from a coordinate vector.
         explicit Step(const std::vector<T> &coord);
 
-        void fillFromRN(double /*rn*/, bool clean=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); };
-        double readToRN(){ throw std::invalid_argument("readToRN() only implemented for Step<int>"); };
-        std::vector<Step<int>> neighbors(bool diagonal=false) const { throw std::invalid_argument("neighbors() only implemented for Step<int>"); };
-        std::vector<Step<int>> front_nneighbors(const Step<int> &direction) const { throw std::invalid_argument("front_nneighbors() only implemented for Step<int>"); };
-        bool left_of(const Step<T> &direction) const { throw std::invalid_argument("left_of() only implemented for Step<int>"); };
-        bool right_of(const Step<T> &direction) const { throw std::invalid_argument("right_of() only implemented for Step<int>"); };
-        Step<T> left_turn() const { throw std::invalid_argument("left_turn() only implemented for Step<int>"); };
-        Step<T> right_turn() const { throw std::invalid_argument("right_turn() only implemented for Step<int>"); };
-        int winding_angle(const Step<T> &next) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); };
+        void fillFromRN(double /*rn*/, bool /*clean*/=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); }
+        double readToRN(){ throw std::invalid_argument("readToRN() only implemented for Step<int>"); }
+        std::vector<Step<int>> neighbors(bool /*diagonal*/=false) const { throw std::invalid_argument("neighbors() only implemented for Step<int>"); }
+        std::vector<Step<int>> front_nneighbors(const Step<int> & /*direction*/) const { throw std::invalid_argument("front_nneighbors() only implemented for Step<int>"); }
+        bool left_of(const Step<T> & /*direction*/) const { throw std::invalid_argument("left_of() only implemented for Step<int>"); }
+        bool right_of(const Step<T> & /*direction*/) const { throw std::invalid_argument("right_of() only implemented for Step<int>"); }
+        Step<T> left_turn() const { throw std::invalid_argument("left_turn() only implemented for Step<int>"); }
+        Step<T> right_turn() const { throw std::invalid_argument("right_turn() only implemented for Step<int>"); }
+        int winding_angle(const Step<T> & /*next*/) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); }
 
         // properties
         double length() const;
@@ -103,20 +103,20 @@ class Step
         friend std::ostream& operator<<(std::ostream& os, const std::list<Step<U>> &obj);
 
         // access operators
-        T operator[](std::size_t idx) const { return m_coordinates[idx]; };
-        T& operator[](std::size_t idx) { return m_coordinates[idx]; };
+        T operator[](std::size_t idx) const { return m_coordinates[idx]; }
+        T& operator[](std::size_t idx) { return m_coordinates[idx]; }
 
-        size_t size() { return m_d; };
+        size_t size() { return m_d; }
 
-        void swap(Step<T>&) throw();
+        void swap(Step<T>&) noexcept;
 
         // getter
-        int d() const { return m_d; };
-        T x(const int n=0) const { return m_coordinates[n]; };
-        T y() const { return m_coordinates[1]; }; // specialisation for 2d
-        T z() const { return m_coordinates[2]; }; // specialisation for 3d
+        int d() const { return m_d; }
+        T x(const int n=0) const { return m_coordinates[n]; }
+        T y() const { return m_coordinates[1]; } // specialisation for 2d
+        T z() const { return m_coordinates[2]; } // specialisation for 3d
 
-        T max_coordinate() const { return std::max(m_coordinates.begin(), m_coordinates.end()); };
+        T max_coordinate() const { return std::max(m_coordinates.begin(), m_coordinates.end()); }
 
     private:
         friend struct std::hash<Step<T>>;
@@ -679,7 +679,7 @@ std::ostream& operator<<(std::ostream& os, const std::unordered_map<Step<T>, U> 
 }
 
 template <class T>
-void Step<T>::swap(Step<T>& other) throw()
+void Step<T>::swap(Step<T>& other) noexcept
 {
     int tmp = m_d;
     m_d = other.m_d;

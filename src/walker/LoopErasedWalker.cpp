@@ -1,6 +1,6 @@
 #include "LoopErasedWalker.hpp"
 
-LoopErasedWalker::LoopErasedWalker(int d, int numSteps, UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+LoopErasedWalker::LoopErasedWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia)
 {
     newStep = Step<int>(d);
@@ -177,9 +177,9 @@ void LoopErasedWalker::svgOfErasedLoops(std::string filename)
     }
     pic.polyline(points, false, "grey");
     points.clear();
-    for(auto i : p)
+    for(auto k : p)
     {
-        int x1 = i[0], y1 = i[1];
+        int x1 = k[0], y1 = k[1];
         std::vector<double> point {(double) x1, (double) y1};
 
         pic.circle(x1, y1, true);

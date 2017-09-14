@@ -9,7 +9,6 @@
 class MetropolisParallelTemperingMPI : public MetropolisParallelTempering
 {
     public:
-        virtual ~MetropolisParallelTemperingMPI() {};
         MetropolisParallelTemperingMPI(const Cmd &o);
         virtual void run();
 };

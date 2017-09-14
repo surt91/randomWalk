@@ -14,7 +14,7 @@
 class LevyWalker final : public SpecWalker<double>
 {
     public:
-        LevyWalker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
+        LevyWalker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void reconstruct();
 

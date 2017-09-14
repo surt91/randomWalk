@@ -1,6 +1,6 @@
 #include "Walker.hpp"
 
-Walker::Walker(int d, int numSteps, UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
+Walker::Walker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
     : numSteps(numSteps),
       d(d),
       rng(rng),
