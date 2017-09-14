@@ -169,10 +169,10 @@ bool benchmark()
                 o.steps = 130;
                 o.sweep = o.steps;
                 o.type = WT_LEVY_FLIGHT;
-                expected_mean_L = 1721.50;
-                expected_mean_A = 96667.18;
-                expected_mean_r = 759.03;
-                expected_mean_r2 = 7875699.19;
+                expected_mean_L = 1683.02438905;
+                expected_mean_A = 95000.2035713;
+                expected_mean_r = 742.308793555;
+                expected_mean_r2 = 7833275.89599;
                 break;
             case WT_CORRELATED_RANDOM_WALK:
                 o.steps = 80;
