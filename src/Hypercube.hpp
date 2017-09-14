@@ -10,6 +10,7 @@
 
 #include "Step.hpp"
 
+/// class implementing a best first search assuming a hypercubic graph
 class Hypercube
 {
     public:
@@ -20,11 +21,13 @@ class Hypercube
 
 };
 
-struct thingy {
-    thingy(Step<int> v, int k) : key(k), value(v) {}
+/// helper structure for the best first search
+/// elements on the heap will have this type
+struct CandidateStep {
+    CandidateStep(Step<int> v, int k) : key(k), value(v) {}
     int key;
     Step<int> value;
-    bool operator<(const thingy &other) const
+    bool operator<(const CandidateStep &other) const
     {
         return key > other.key;
     }
@@ -33,7 +36,7 @@ struct thingy {
 template<class T>
 bool Hypercube::bestfs(Step<int> source, Step<int> target, T& occupied)
 {
-    std::priority_queue<thingy> q;
+    std::priority_queue<CandidateStep> q;
     std::unordered_set<Step<int>> visited;
 
     q.emplace(source, target.dist(source));

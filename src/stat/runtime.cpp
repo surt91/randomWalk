@@ -4,7 +4,8 @@
  *
  * \param start is the timestamp at the beginning
  * \param end is the timestamp at the end
- * \return human readable time
+ * \param op is the number of operations to divide through
+ * \return human readable time (per operation)
  */
 std::string time_diff(clock_t start, clock_t end, int op)
 {

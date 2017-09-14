@@ -19,6 +19,7 @@ SVG::SVG(const std::string &filename, const double scale)
  * \param x       x-coordinate of the center of the circle
  * \param y       y-coordinate of the center of the circle
  * \param filled  fill the circle if 1, don't if 0
+ * \param color   which color the fill is
 */
 void SVG::circle(const double x, const double y, const int filled, const std::string color)
 {
@@ -39,12 +40,13 @@ void SVG::circle(const double x, const double y, const int filled, const std::st
  * \param y       y-coordinate of the center of the square
  * \param w       sidelength of the square
  * \param color   color to fill the square
+ * \param alpha   alpha (transparency) of the color
 */
 void SVG::square(const double x, const double y, const double w, const std::string color, const double alpha)
 {
     buffer << "<rect width='" << w << "' height='" << w <<
         "' x='" << x + w/2. << "' y='" << y + w/2. <<
-        "' opacity='" << alpha << 
+        "' opacity='" << alpha <<
         "' stroke='black' stroke-width='0'";
     buffer << " fill='" + color + "'";
     buffer << "/>\n";
