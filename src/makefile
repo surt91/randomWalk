@@ -10,8 +10,10 @@ D_MAX = 4
 # enable or disable MPI
 MPI = 0
 
-CXXFLAGS = -std=c++11 -fexceptions -pipe
-#CXXFLAGS += -fopenmp
+# enable or disable OpenMP
+OMP = 0
+
+CXXFLAGS = -std=c++11 -fexceptions -fomit-frame-pointer -pipe
 
 CPP	 := main.cpp \
         Cmd.cpp \
@@ -53,6 +55,14 @@ CPP += simulation/MetropolisParallelTemperingMPI.cpp
 MPICXX ?= mpic++
 CXX = $(MPICXX)
 CXXFLAGS += -D_MPI
+endif
+
+ifeq "$(OMP)" "1"
+ifeq "$(CXX)" "clang++"
+CXXFLAGS += -fopenmp=libomp
+else
+CXXFLAGS += -fopenmp
+endif
 endif
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
