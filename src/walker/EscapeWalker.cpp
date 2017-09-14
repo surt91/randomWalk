@@ -48,7 +48,7 @@ std::bitset<3> EscapeWalker::safeOptions(const Step<int> &current, const Step<in
 
     // direction needs to a unit length step. -> Does not work for initial step
     // where it would be zero.
-    assert(direction.length2 == 1);
+    assert(direction.length2() == 1);
 
     auto neighbors = current.front_nneighbors(direction);
     bool a = occupied.count(neighbors[1]);
