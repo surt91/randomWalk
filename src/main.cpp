@@ -10,6 +10,9 @@
 #include "simulation/SimpleSampling.hpp"
 #include "simulation/Metropolis.hpp"
 #include "simulation/MetropolisParallelTempering.hpp"
+#ifdef _MPI
+#include "simulation/MetropolisParallelTemperingMPI.hpp"
+#endif
 #include "simulation/WangLandau.hpp"
 #include "simulation/FastWLEntropic.hpp"
 #include "Benchmark.hpp"
@@ -80,6 +83,13 @@ int main(int argc, char** argv)
         MetropolisParallelTempering sim(o);
         sim.run();
     }
+#ifdef _MPI
+    else if(o.sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
+    {
+        MetropolisParallelTemperingMPI sim(o);
+        sim.run();
+    }
+#endif
     else if(o.sampling_method == SM_WANG_LANDAU)
     {
         WangLandau sim(o);

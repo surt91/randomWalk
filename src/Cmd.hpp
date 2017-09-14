@@ -86,7 +86,8 @@ enum sampling_method_t {
     SM_METROPOLIS = 1,    ///< Metropolis sampling with a artificial temp
     SM_WANG_LANDAU,       ///< Direct WangLandau sampling of the distribution
     SM_FAST_WANG_LANDAU,  ///< Direct 1/t FastWLEntropic sampling of the distribution
-    SM_METROPOLIS_PARALLEL_TEMPERING  ///< Metropolis sampling enhanced with parallel tempering
+    SM_METROPOLIS_PARALLEL_TEMPERING,     ///< Metropolis sampling enhanced with parallel tempering
+    SM_METROPOLIS_PARALLEL_TEMPERING_MPI  ///< Metropolis sampling enhanced with parallel tempering using MPI
 };
 
 const std::vector<std::string> SAMPLING_METHOD_LABEL = {
@@ -95,6 +96,7 @@ const std::vector<std::string> SAMPLING_METHOD_LABEL = {
     "Wang Landau",
     "Fast 1/t Wang Landau",
     "Metropolis and Parallel Tempering",
+    "Metropolis and Parallel Tempering MPI",
 };
 
 /** Command line parser.

@@ -88,14 +88,15 @@ Cmd::Cmd(int argc, char** argv)
                                                                           "\tpassage time (t)    : 3",
                                                  false, 1, &allowedWO);
 
-        std::vector<int> sm({0, 1, 2, 3, 4});
+        std::vector<int> sm({0, 1, 2, 3, 4, 5});
         TCLAP::ValuesConstraint<int> allowedSM(sm);
         TCLAP::ValueArg<int> samplingMethodArg("m", "samplingMethod", "Sampling Method to use:\n"
                                                                       "\tSimple Sampling     : 0\n"
                                                                       "\tMetropolis          : 1 (default)\n"
                                                                       "\tWang Landau         : 2\n"
                                                                       "\tFast Wang Landau    : 3\n"
-                                                                      "\tParallel Tempering  : 4",
+                                                                      "\tParallel Tempering  : 4\n"
+                                                                      "\tPT using MPI        : 5",
                                                  false, 1, &allowedSM);
 
         TCLAP::MultiArg<double> wangLandauBordersMArg("e", "energyBorder", "specifies inside which energy ranges, i.e., "
@@ -322,6 +323,14 @@ Cmd::Cmd(int argc, char** argv)
         svg_path = svgArg.getValue();
         sampling_method = (sampling_method_t) samplingMethodArg.getValue();
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
+
+        #ifndef _MPI
+        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
+        {
+            LOG(LOG_ERROR) << "You need to set MPI to 1 in the makefile for this method";
+            exit(1);
+        }
+        #endif
 
         sweep = sweepArg.getValue();
         if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)

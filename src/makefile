@@ -7,6 +7,9 @@ DOC 	= manual.pdf
 # do a "make clean" after changing this
 D_MAX = 4
 
+# enable or disable MPI
+MPI = 0
+
 CXXFLAGS = -std=c++11 -fexceptions -pipe
 #CXXFLAGS += -fopenmp
 
@@ -44,6 +47,13 @@ CPP	 := main.cpp \
         visualization/Gnuplot3D.cpp \
         visualization/GnuplotContour.cpp \
         visualization/Threejs.cpp \
+
+ifeq "$(MPI)" "1"
+CPP += simulation/MetropolisParallelTemperingMPI.cpp
+MPICXX ?= mpic++
+CXX = $(MPICXX)
+CXXFLAGS += -D_MPI
+endif
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 DEP	 = $(CPP:%.cpp=dep/%.d)
