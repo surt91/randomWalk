@@ -8,10 +8,10 @@ DOC 	= manual.pdf
 D_MAX = 4
 
 # enable or disable MPI
-MPI = 0
+MPI ?= 0
 
 # enable or disable OpenMP
-OMP = 0
+OMP ?= 0
 
 CXXFLAGS = -std=c++11 -fexceptions -fomit-frame-pointer -pipe
 
