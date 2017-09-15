@@ -20,7 +20,7 @@ class Metropolis : public Simulation
 {
     public:
         Metropolis(const Cmd &o);
-        virtual void run();
+        virtual void run() override;
 
     protected:
         int equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1);

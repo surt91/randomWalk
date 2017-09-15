@@ -135,6 +135,16 @@ void WangLandau::run()
             {
                 oss << g.centers() << "\n";
                 oss << g.get_data() << std::endl;
+
+                // calculate a checksum (similar to a not-normalized mean)
+                if(n == 0 && i == 0)
+                {
+                    auto centers = g.centers();
+                    auto data = g.get_data();
+                    auto maximum = *std::max_element(begin(data), end(data));
+                    for(int k = 0; k<o.wangLandauBins; ++k)
+                        checksum += centers[k] * std::exp(data[k] - maximum);
+                }
             }
         }
     }

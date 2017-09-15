@@ -284,8 +284,11 @@ void Metropolis::run()
             sum_A += w->A();
             sum_r += w->r();
             sum_r2 += w->r2();
+            checksum += S(w);
         }
     }
+
+    checksum /= o.iterations;
 
     // save visualizations
     if(!o.svg_path.empty())

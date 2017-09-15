@@ -57,7 +57,11 @@ void SimpleSampling::run()
 
         // flush after every iteration
         oss << std::endl;
+
+        checksum += S(w);
     }
+
+    checksum /= o.iterations;
 
     // save visualizations
     if(!o.svg_path.empty())

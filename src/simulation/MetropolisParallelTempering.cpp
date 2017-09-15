@@ -129,6 +129,8 @@ void MetropolisParallelTempering::run()
                         acceptance[j-1] += 1;
                     }
                     swapTrial[j-1] += 1;
+
+                    checksum += S(allWalkers[k]);
                 }
 
                 // detailed data about the swaps

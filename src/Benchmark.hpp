@@ -18,7 +18,14 @@
 #include "walker/LevyWalker.hpp"
 #include "walker/CorrelatedWalker.hpp"
 #include "simulation/Simulation.hpp"
+#include "simulation/SimpleSampling.hpp"
 #include "simulation/Metropolis.hpp"
+#include "simulation/WangLandau.hpp"
+#include "simulation/FastWLEntropic.hpp"
+#include "simulation/MetropolisParallelTempering.hpp"
+#ifdef _MPI
+#include "simulation/MetropolisParallelTemperingMPI.hpp"
+#endif
 
 
 bool benchmark();

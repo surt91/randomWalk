@@ -155,6 +155,8 @@ void MetropolisParallelTemperingMPI::run()
                     acceptance[j-1] += 1;
                 }
                 swapTrial[j-1] += 1;
+
+                checksum += observables[k];
             }
 
             // detailed data about the swaps

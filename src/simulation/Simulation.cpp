@@ -6,7 +6,7 @@ Simulation::Simulation(const Cmd &o, const bool fileOutput)
       muted(false),
       fileOutput(fileOutput)
 {
-    begin = clock();
+    start = clock();
     fails = 0;
     tries = 0;
     sum_L = 0.;
@@ -33,7 +33,7 @@ Simulation::~Simulation()
         LOG(LOG_INFO) << "# mean A: " << (sum_A / o.iterations);
         LOG(LOG_INFO) << "# mean r: " << (sum_r / o.iterations);
         LOG(LOG_INFO) << "# mean r2: " << (sum_r2 / o.iterations);
-        LOG(LOG_INFO) << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations);
+        LOG(LOG_INFO) << "# time/sweep in seconds: " << time_diff(start, clock(), o.iterations);
         LOG(LOG_INFO) << "# max vmem: " << vmPeak();
     }
 
@@ -256,7 +256,7 @@ void Simulation::footer(std::ofstream &oss)
         time_t _tm = time(NULL);
         struct tm *curtime = localtime(&_tm);
         oss << "# Ended: " << asctime(curtime) << "\n";
-        oss << "# time/sweep in seconds: " << time_diff(begin, clock(), o.iterations) << "\n";
+        oss << "# time/sweep in seconds: " << time_diff(start, clock(), o.iterations) << "\n";
         oss << "# max vmem: " << vmPeak() << "\n";
     }
     oss.close();

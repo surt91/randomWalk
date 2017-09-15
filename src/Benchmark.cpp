@@ -86,6 +86,26 @@ bool run_simulation(const Cmd &o, double expected_mean_A,
     return fail;
 }
 
+bool check_simulation(Simulation* s, double checksum)
+{
+    bool fail = false;
+    clock_t before_mc = clock();
+
+    s->mute();
+    s->run();
+    const double threshold = 1e-5;
+    if(std::abs(s->check() - checksum) > threshold)
+    {
+        LOG(LOG_ERROR) << "Wrong checksum  " << s->check();
+        LOG(LOG_ERROR) << "expected " << checksum;
+        fail = true;
+    }
+
+    LOG(LOG_TIMING) << "    " << time_diff(before_mc, clock());
+
+    return fail;
+}
+
 bool benchmark()
 {
     bool fail = false;
@@ -452,6 +472,65 @@ bool benchmark()
                 continue;
             }
         }
+    }
+
+    clock_t mid3 = clock();
+    LOG(LOG_TIMING) << "Total : " << time_diff(mid2, mid3);
+    LOG(LOG_TIMING) << "Mem: " << vmPeak();
+
+    LOG(LOG_INFO) << "Starting Sampling Tests";
+    int numSampling = 5;
+
+    for(int i=0; i<numSampling; ++i)
+    {
+        double checksum;
+        o.d = 2;
+        o.wantedObservable = WO_VOLUME;
+        o.iterations = 100;
+        o.wangLandauBorders = std::vector<double>({65, 67.5, 70});
+        o.wangLandauOverlap = 0.2;
+        o.wangLandauBins = 3;
+        o.lnf_min = 10e-3;
+        o.flatness_criterion = 0.6;
+        o.parallelTemperatures = std::vector<double>({40, 50, 60});
+        o.data_path_vector = std::vector<std::string>({"bench1.tmp", "bench2.tmp", "bench3.tmp"});
+        o.type = WT_RANDOM_WALK;
+        std::unique_ptr<Simulation> s;
+        switch(i)
+        {
+            case SM_SIMPLESAMPLING:
+                o.steps = 10000;
+                checksum = 7471.585;
+                s = std::unique_ptr<SimpleSampling>(new SimpleSampling(o));
+                break;
+            case SM_METROPOLIS:
+                o.steps = 1000;
+                checksum = 36200.945;
+                s = std::unique_ptr<Metropolis>(new Metropolis(o));
+                break;
+            case SM_WANG_LANDAU:
+                o.iterations = 1;
+                o.steps = 100;
+                checksum = 142.232953337;
+                s = std::unique_ptr<WangLandau>(new WangLandau(o));
+                break;
+            case SM_FAST_WANG_LANDAU:
+                continue; // takes too much time :(
+                o.iterations = 1;
+                o.steps = 100;
+                checksum = 306.147369176;
+                s = std::unique_ptr<FastWLEntropic>(new FastWLEntropic(o));
+                break;
+            case SM_METROPOLIS_PARALLEL_TEMPERING:
+                o.steps = 1000;
+                checksum = 2424.73295334;
+                // FIXME: different result using OpenMP
+                s = std::unique_ptr<MetropolisParallelTempering>(new MetropolisParallelTempering(o));
+                break;
+        }
+
+        LOG(LOG_INFO) << SAMPLING_METHOD_LABEL[i];
+        fail |= check_simulation(s.get(), checksum);
     }
 
     LOG(LOG_TIMING) << "Total : " << time_diff(mid2, clock());

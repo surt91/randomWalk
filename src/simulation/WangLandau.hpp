@@ -26,7 +26,7 @@ class WangLandau : public Simulation
 {
     public:
         WangLandau(const Cmd &o);
-        virtual void run();
+        virtual void run() override;
 
         static std::vector<std::vector<double>> generateBins(const Cmd &o);
         static void printCenters(const Cmd &o);
