@@ -169,7 +169,7 @@ class Simulation():
                 if self.sampling == 1:
                     for T in thetas[N]:
                         self.instances.append(SimulationInstance(steps=N, theta=T, iterations=iterations, passageTimeStart=t1, **kwargs))
-                if self.sampling == 4:
+                if self.sampling == 4 or self.sampling == 5:
                     self.instances.append(SimulationInstance(steps=N, theta=thetas[N], iterations=iterations, passageTimeStart=t1, **kwargs))
                 if self.sampling == 2 or self.sampling == 3:
                     num = len(energies[N])-1
@@ -301,8 +301,8 @@ class Simulation():
         logging.info("Executing {} jobs".format(len(self.instances)))
 
         # 0 means: use all cores
-        if self.parallel > 1 or self.parallel == 0:
-            # program is multithreaded, start only one
+        if self.parallel > 1 or self.parallel == 0 or self.sampling == 5:
+            # program is multithreaded or multiprocess, start only one
             for i in self.instances:
                 run_instance(i)
         else:
@@ -421,7 +421,7 @@ class SimulationInstance():
                 t = self.T
             self.x += int(1e5*t)
             self.y += int(1e5*t)
-        elif sampling == 4:
+        elif sampling == 4 or sampling == 5:
             pass # we only have one process and do not need to change the seeds
         elif sampling == 2 or sampling == 3:
             self.x += int(self.energy[0])
@@ -436,14 +436,14 @@ class SimulationInstance():
             self.basename = para.basesimple.format(typ=self.t, steps=self.N, seedR=self.y, batch=batch_id, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
         elif sampling == 1:
             self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
-        elif sampling == 4:
+        elif sampling == 4 or sampling == 5:
             self.basename = []
             for T in self.T:
                 self.basename.append(para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart))
         elif sampling == 2 or sampling == 3:
             self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
 
-        if sampling == 4:
+        if sampling == 4 or sampling == 5:
             self.filename = []
             self.logname = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart) + ".log"
             for bn in self.basename:
@@ -517,11 +517,14 @@ class SimulationInstance():
                 "-m {}".format(self.m),
                ]
 
-        if self.m == 4:
+        if self.m == 4 or self.m == 5:
             for f in self.filename:
                 opts.append("-o {}".format(f))
         else:
             opts.append("-o {}".format(self.filename))
+
+        if self.m == 5:
+            opts = ["mpirun", "-n", "{}".format(len(self.T))] + opts
 
         if logging:
             opts.append("-L {}".format(self.logname))
@@ -558,7 +561,7 @@ class SimulationInstance():
         except TypeError:
             pass
 
-        if self.m == 1 or self.m == 4:
+        if self.m == 1 or self.m == 4 or self.m == 5:
             if self.sweep[self.N]:
                 opts.append("-k {:.0f}".format(self.sweep[self.N]))
 
@@ -567,7 +570,7 @@ class SimulationInstance():
                 opts.append("-T {0:.5f}".format(self.T))
             else:
                 opts.append("--simplesampling")
-        elif self.m == 4:
+        elif self.m == 4 or self.m == 5:
             for T in self.T:
                 if T != float("inf"):
                     opts.append("-T {0:.5f}".format(T))
@@ -593,7 +596,7 @@ class SimulationInstance():
 
     def __call__(self):
         unfinished = True
-        if self.m == 4:
+        if self.m == 4 or self.m == 5:
             # parallel tempering: ensure that all output files exist
             if all(os.path.exists(f+".gz") for f in self.filename):
                 unfinished = False
