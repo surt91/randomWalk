@@ -15,7 +15,7 @@ void MetropolisParallelTemperingMPI::run()
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    MPI_Request r1, r2;
+    MPI_Request r1, r2, r3;
 
     // every how many sweeps per swap trial
     const auto estimated_corr = std::max(o.steps / o.sweep, 1);
@@ -65,7 +65,6 @@ void MetropolisParallelTemperingMPI::run()
 
     double theta;
     MPI_Recv(&theta, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
     if(rank == 0)
     {
         MPI_Wait(&r1, MPI_STATUS_IGNORE);
@@ -129,13 +128,11 @@ void MetropolisParallelTemperingMPI::run()
 
         // non-blocking send to send observables
         double observable = S(walker);
-        MPI_Isend(&observable, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, &r1);
+        std::vector<double> observables(numTemperatures); // buffer to collect observables (only rank == 0)
+        MPI_Gather(&observable, 1, MPI_DOUBLE, &observables[0], 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
         if(rank == 0)
         {
-            std::vector<double> observables(numTemperatures);
-            MPI_Gather(&observable, 1, MPI_DOUBLE, &observables[0], 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
             // attempt n-1 swaps of neighboring temperatures
             for(int k=0; k<numTemperatures-1; ++k)
             {
@@ -166,19 +163,18 @@ void MetropolisParallelTemperingMPI::run()
                 swapGraph << thetaMap[j] << " ";
             swapGraph << "\n";
 
-            // scatter temperatures
-            MPI_Iscatter(&thetaMap[0], 1, MPI_DOUBLE, &theta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD, &r2);
             // scatter filenames
             for(int i=0; i<numTemperatures; ++i)
             {
                 auto tmp = o.data_path_vector[thetaMap[i]].c_str();
-                MPI_Isend(tmp, max_filename_len, MPI_BYTE, i, 0, MPI_COMM_WORLD, &r1);
+                MPI_Isend(tmp, max_filename_len, MPI_BYTE, i, 0, MPI_COMM_WORLD, &r3);
             }
         }
-        MPI_Wait(&r1, MPI_STATUS_IGNORE);
-        // TODO blocking receive to get new temperatures and filenames
-        MPI_Recv(&theta, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Wait(&r2, MPI_STATUS_IGNORE);
+        // scatter temperatures (scatter will also read them in the receiving ranks)
+        MPI_Scatter(&thetaMap[0], 1, MPI_DOUBLE, &theta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        if(rank == 0)
+            MPI_Wait(&r3, MPI_STATUS_IGNORE);
     }
 
     // critical region for statistics
