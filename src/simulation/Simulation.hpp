@@ -55,7 +55,7 @@ class Simulation
         double sum_r;
         double sum_r2;
 
-        virtual double check() {return checksum;}; ///< A value which can be checked against a known value in tests to find regressions
+        virtual double check() {return checksum;} ///< A value which can be checked against a known value in tests to find regressions
 
     protected:
         Cmd o;

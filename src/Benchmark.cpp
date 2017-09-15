@@ -483,13 +483,13 @@ bool benchmark()
 
     for(int i=0; i<numSampling; ++i)
     {
-        double checksum;
+        double checksum = 0;
         o.d = 2;
         o.wantedObservable = WO_VOLUME;
         o.iterations = 100;
         o.wangLandauBorders = std::vector<double>({65, 67.5, 70});
-        o.wangLandauOverlap = 0.2;
-        o.wangLandauBins = 3;
+        o.wangLandauOverlap = 2;
+        o.wangLandauBins = 4;
         o.lnf_min = 10e-3;
         o.flatness_criterion = 0.6;
         o.parallelTemperatures = std::vector<double>({40, 50, 60});
@@ -511,7 +511,7 @@ bool benchmark()
             case SM_WANG_LANDAU:
                 o.iterations = 1;
                 o.steps = 100;
-                checksum = 142.232953337;
+                checksum = 223.535680713;
                 s = std::unique_ptr<WangLandau>(new WangLandau(o));
                 break;
             case SM_FAST_WANG_LANDAU:
@@ -523,8 +523,7 @@ bool benchmark()
                 break;
             case SM_METROPOLIS_PARALLEL_TEMPERING:
                 o.steps = 1000;
-                checksum = 2424.73295334;
-                // FIXME: different result using OpenMP
+                checksum = 3096.5;
                 s = std::unique_ptr<MetropolisParallelTempering>(new MetropolisParallelTempering(o));
                 break;
         }

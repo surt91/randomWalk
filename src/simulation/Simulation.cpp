@@ -13,6 +13,7 @@ Simulation::Simulation(const Cmd &o, const bool fileOutput)
     sum_A = 0.;
     sum_r = 0.;
     sum_r2 = 0.;
+    checksum = 0.;
 
     if(fileOutput)
         header(oss);

@@ -46,14 +46,17 @@ void MetropolisParallelTempering::run()
     // thread calculating all lowest temperatures -> all threads should
     // need roughly equal time
 
+    std::vector<UniformRNG> rngs;
+    for(int n=0; n<numTemperatures; ++n)
+    {
+        // give every temperature a different rng for thread safeness
+        // ensure that seeds do not overflow
+        const int seedMC = ((long long)(o.seedMC+n) * (n+1)) % 1800000113;
+        rngs.emplace_back(seedMC);
+    }
+
     #pragma omp parallel
     {
-        // give every Thread a different seed
-        // ensure that they do not overflow
-        // FIXME: think about a better seed
-        const int seedMC = ((long long)(o.seedMC+omp_get_thread_num()) * (omp_get_thread_num()+1)) % 1800000113;
-        UniformRNG rngMC(seedMC);
-
         // init the walks in parallel -> crucial for NUMA memory locality
         #pragma omp for schedule(static, 1)
         for(int n=0; n<numTemperatures; ++n)
@@ -74,7 +77,7 @@ void MetropolisParallelTempering::run()
                 const auto theta = o.parallelTemperatures[thetaMap[n]];
                 for(int j=0; j<estimated_corr; ++j)
                 {
-                    sweep(allWalkers[n], theta, rngMC);
+                    sweep(allWalkers[n], theta, rngs[n]);
 
                     // save to file (not critical, since every thread has its own file)
                     if(i >= 2*o.t_eq)
@@ -111,7 +114,7 @@ void MetropolisParallelTempering::run()
                 for(int k=0; k<numTemperatures-1; ++k)
                 {
                     // determine which pair to swap, can appear multiple times
-                    const int j = rngMC() * (numTemperatures-1) + 1;
+                    const int j = rngs[0]() * (numTemperatures-1) + 1;
 
                     auto &w_1 = allWalkers[j-1];
                     const auto T_1 = o.parallelTemperatures[thetaMap[j-1]];
@@ -119,7 +122,7 @@ void MetropolisParallelTempering::run()
                     const auto T_2 = o.parallelTemperatures[thetaMap[j]];
                     const double p_acc = std::exp((1./T_2 - 1./T_1) * (S(w_2) - S(w_1)));
 
-                    if(p_acc > rngMC())
+                    if(p_acc > rngs[0]())
                     {
                         LOG(LOG_TOO_MUCH) << "(" << i << ") swap: " << thetaMap[j-1] << " = " <<  T_1 << " <-> " <<  thetaMap[j] << " = " <<  T_2;
 
