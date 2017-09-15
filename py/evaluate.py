@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     if not "--fast" in sys.argv:
         sampling = param.parameters["sampling"]
-        if sampling == 1 or sampling == 4:
+        if sampling == 1 or sampling == 4 or sampling == 5:
             if "--lin" in sys.argv:
                 ht = 1
                 logging.info("Using equi-spaced histogram")

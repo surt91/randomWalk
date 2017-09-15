@@ -457,7 +457,7 @@ def run(histogram_type=1, parallelness=1):
             for T in theta_for_N:
                 i = SimulationInstance(steps=N, theta=T, **param.parameters)
                 nameDict.update({T: i.basename})
-        elif sampling == 4:
+        elif sampling == 4 or sampling == 5:
             i = SimulationInstance(steps=N, theta=theta_for_N, **param.parameters)
             for T, bn in zip(i.T, i.basename):
                 nameDict.update({T: bn})
