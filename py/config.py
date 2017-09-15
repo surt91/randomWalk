@@ -281,20 +281,21 @@ class Simulation():
                             if not incremental or not os.path.exists(i.filename+".gz"):
                                 f.write(" ".join(i.get_cmd()) + "\n")
                                 ctr += 1
-            with open(os.path.join("HPC", name+".sge"), "w") as f:
-                template = self.env.get_template("jobarray.sge")
-                f.write(template.render(name=name,
-                                        count=ctr,
-                                        hours=math.ceil(getSec(N)*self.n/3600*2),
-                                        mb=getMem(N),
-                                        parallel=self.parallel))
-            with open(os.path.join("HPC", name+".slurm"), "w") as f:
-                template = self.env.get_template("jobarray.slurm")
-                f.write(template.render(name=name,
-                                        count=ctr,
-                                        hours=math.ceil(getSec(N)*self.n/3600*2),
-                                        mb=getMem(N),
-                                        parallel=self.parallel))
+            if self.sampling == 5:
+                with open(os.path.join("HPC", name+".slurm"), "w") as f:
+                    template = self.env.get_template("jobarray_mpi.slurm")
+                    f.write(template.render(name=name,
+                                            numTemperatures=len(self.temperatures),
+                                            hours=math.ceil(getSec(N)*self.n/3600*2),
+                                            mb=getMem(N)))
+            else:
+                with open(os.path.join("HPC", name+".slurm"), "w") as f:
+                    template = self.env.get_template("jobarray.slurm")
+                    f.write(template.render(name=name,
+                                            count=ctr,
+                                            hours=math.ceil(getSec(N)*self.n/3600*2),
+                                            mb=getMem(N),
+                                            parallel=self.parallel))
 
     # start the calculation
     def __call__(self):
