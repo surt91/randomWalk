@@ -5,6 +5,11 @@
 #else
 #define OMP_P 0
 #endif
+#ifdef _MPI
+#define MPI_P 1
+#else
+#define MPI_P 0
+#endif
 
 /** Constructs the command line parser, given argc and argv.
  */
@@ -18,7 +23,7 @@ Cmd::Cmd(int argc, char** argv)
 
     std::string version = VERSION " (Compiled: " __DATE__ " " __TIME__ ","
                                      "D_MAX=" + std::to_string(D_MAX) + ","
-                                     "MPI=" + std::to_string(_MPI) + ","
+                                     "MPI=" + std::to_string(MPI_P) + ","
                                      "OMP=" + std::to_string(OMP_P) + ")";
 
     // TCLAP throws exceptions
