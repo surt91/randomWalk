@@ -195,7 +195,7 @@ void MetropolisParallelTemperingMPI::run()
 
         for(int i=0; i<numTemperatures; ++i)
         {
-            std::ofstream oss(o.data_path_vector[i], std::ofstream::out);
+            std::ofstream oss(o.data_path_vector[i], std::ofstream::app);
             oss << ss.str();
             footer(oss);
 
