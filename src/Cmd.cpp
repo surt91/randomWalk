@@ -190,6 +190,7 @@ Cmd::Cmd(int argc, char** argv)
         benchmark = benchmarkSwitch.getValue();
         if(benchmark)
         {
+            Logger::verbosity = std::max(4, verboseArg.getValue());
             LOG(LOG_INFO) << "Benchmark Mode";
             return;
         }
