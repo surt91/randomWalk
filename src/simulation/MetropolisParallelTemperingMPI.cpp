@@ -15,8 +15,6 @@ void MetropolisParallelTemperingMPI::run()
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    MPI_Request r1, r2, r3;
-
     // every how many sweeps per swap trial
     const auto estimated_corr = std::max(o.steps / o.sweep, 1);
 
@@ -37,56 +35,62 @@ void MetropolisParallelTemperingMPI::run()
     // since we will swap temperatures, we need to keep track
     // where we swapped them, we need to know, which are neighbors
     std::vector<int> thetaMap(numTemperatures);
-    for(int i=0; i<numTemperatures; ++i)
-        thetaMap[i] = i;
+    if(rank == 0)
+        for(int i=0; i<numTemperatures; ++i)
+            thetaMap[i] = i;
 
+    // initialize output files
+    if(rank == 0)
+        for(int i=0; i<numTemperatures; ++i)
+        {
+            std::ofstream oss(o.data_path_vector[i], std::ofstream::out);
+            header(oss);
+        }
+
+    // find length of longest outputfilename
+    // we will need it for efficient scattering to the processes
     size_t max_filename_len = 0;
     for(size_t i=0; i<o.data_path_vector.size(); ++i)
         if(o.data_path_vector[i].size() > max_filename_len)
             max_filename_len = o.data_path_vector[i].size();
 
-    if(rank == 0)
-    {
-        for(int i=0; i<numTemperatures; ++i)
-        {
-            // this will send to self, and must be non-blocking
-            // send filenames to all processes
-            auto tmp = o.data_path_vector[thetaMap[i]].c_str();
-            MPI_Isend(tmp, max_filename_len, MPI_BYTE, i, 0, MPI_COMM_WORLD, &r1);
-            // send temperatures to all processes
-            auto theta = o.parallelTemperatures[thetaMap[i]];
-            MPI_Isend(&theta, 1, MPI_DOUBLE, i, 0, MPI_COMM_WORLD, &r2);
-        }
-    }
+    // allocate resources to scatter...
+    std::vector<char> filename_array(max_filename_len * numTemperatures, '\0');
+    std::vector<double> sorted_temperatures(numTemperatures, 0);
 
-    char *filename = new char[max_filename_len];
-    MPI_Recv(filename, max_filename_len, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    std::ofstream current_stream(filename, std::ofstream::out);
-
+    // ... and where they are scattered to
     double theta;
-    MPI_Recv(&theta, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    if(rank == 0)
-    {
-        MPI_Wait(&r1, MPI_STATUS_IGNORE);
-        MPI_Wait(&r2, MPI_STATUS_IGNORE);
-    }
+    char *filename = new char[max_filename_len];
 
     // give every Thread a different seed
     // ensure that they do not overflow
-    // FIXME: think about a better seed
-    const int seedMC = ((long long)(o.seedMC+omp_get_thread_num()) * (omp_get_thread_num()+1)) % 1800000113;
+    // rank is deterministic
+    const int seedMC = ((uint64_t)(o.seedMC+rank) * (rank+1)) % 1800000113;
     UniformRNG rngMC(seedMC);
     std::unique_ptr<Walker> walker;
 
-    for(int n=0; n<numTemperatures; ++n)
-    {
-        Cmd tmp(o);
-        tmp.seedRealization = ((long long)(tmp.seedRealization + n) * (n+1)) % 1800000121;
-        prepare(walker, tmp);
-    }
+    o.seedRealization = ((uint64_t)(o.seedRealization + rank) * (rank+1)) % 1800000121;
+    prepare(walker, o);
 
     for(int i=0; i<o.iterations+2*o.t_eq; )
     {
+        // prepare the information for the next sweep:
+        // which temperature will be assigned to which process
+        if(rank == 0)
+            for(int i=0; i<numTemperatures; ++i)
+            {
+                auto tmp = o.data_path_vector[thetaMap[i]].c_str();
+                std::strcpy(&filename_array[i*max_filename_len], tmp);
+                auto theta = o.parallelTemperatures[thetaMap[i]];
+                sorted_temperatures[i] = theta;
+            }
+
+        // scatter the specifications to the processes
+        MPI_Scatter(&sorted_temperatures[0], 1, MPI_DOUBLE, &theta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        MPI_Scatter(&filename_array[0], max_filename_len, MPI_BYTE, filename, max_filename_len, MPI_CHAR, 0, MPI_COMM_WORLD);
+
+        std::ofstream current_stream(filename, std::ofstream::app);
+
         // do some sweeps (~fasted autocorrelation time) before swapping
         // the higher this value, the lower the multithreading overhead
         // the lower, the more swaps can be performed
@@ -98,8 +102,8 @@ void MetropolisParallelTemperingMPI::run()
             if(i >= 2*o.t_eq)
             {
                 current_stream << i+j << " "
-                                    << walker->L() << " "
-                                    << walker->A() << " ";
+                               << walker->L() << " "
+                               << walker->A() << " ";
 
                 // simple sampling: signaled by the Planck temperature
                 // inf or nan do not work with gcc's -ffast-math
@@ -120,17 +124,12 @@ void MetropolisParallelTemperingMPI::run()
         }
         i += estimated_corr;
 
-        // critical region:
-        //  * blocking receive to wait for all processes
-        //  * save data
-        //  * swap temperatures
-        //  * send new temperatures and filenames to all processes
-
-        // non-blocking send to send observables
+        // gather will synchronize, pass observables to master
         double observable = S(walker);
         std::vector<double> observables(numTemperatures); // buffer to collect observables (only rank == 0)
         MPI_Gather(&observable, 1, MPI_DOUBLE, &observables[0], 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
+        // master decides which temperatures to swap
         if(rank == 0)
         {
             // attempt n-1 swaps of neighboring temperatures
@@ -164,25 +163,7 @@ void MetropolisParallelTemperingMPI::run()
             for(int j=1; j<numTemperatures; ++j)
                 swapGraph << thetaMap[j] << " ";
             swapGraph << "\n";
-
-            // scatter filenames
-            for(int i=0; i<numTemperatures; ++i)
-            {
-                auto tmp = o.data_path_vector[thetaMap[i]].c_str();
-                MPI_Isend(tmp, max_filename_len, MPI_BYTE, i, 0, MPI_COMM_WORLD, &r3);
-            }
         }
-        // scatter temperatures (scatter will also read them in the receiving ranks)
-        MPI_Scatter(&thetaMap[0], 1, MPI_DOUBLE, &theta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-        MPI_Recv(filename, max_filename_len, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        current_stream.close()
-
-        // FIXME does only wait for the last and not for all (maybe even a memory leak)
-        if(rank == 0)
-            MPI_Wait(&r3, MPI_STATUS_IGNORE);
-
-        current_stream = std::ofstream(filename, std::ofstream::app);
     }
 
     // critical region for statistics
@@ -193,7 +174,7 @@ void MetropolisParallelTemperingMPI::run()
         std::stringstream ss;
         ss << "# swap success rates:\n";
         for(int j=0; j<numTemperatures-1; ++j)
-            ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "%" << " : " << o.parallelTemperatures[j] << " <-> " << o.parallelTemperatures[j+1] << "\n";
+            ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "% (" << acceptance[j] << "/" << swapTrial[j] << ")" << " : " << o.parallelTemperatures[j] << " <-> " << o.parallelTemperatures[j+1] << "\n";
         LOG(LOG_INFO) << ss.str();
 
         swapGraph.close();

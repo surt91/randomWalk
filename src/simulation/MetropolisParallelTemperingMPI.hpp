@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mpi.h>
+#include <cstring>
 
 #include "MetropolisParallelTempering.hpp"
 
