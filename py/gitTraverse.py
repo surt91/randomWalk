@@ -60,6 +60,7 @@ if __name__ == "__main__":
             start = time.time()
             e = os.system(cmd)
             if e != 0:
+                durations.append(float("nan"))
                 break
             durations.append(time.time() - start)
         os.system("make clean")
