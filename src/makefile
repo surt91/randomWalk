@@ -68,7 +68,8 @@ endif
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 DEP	 = $(CPP:%.cpp=dep/%.d)
 
-QHULL = qhull/lib/libqhullcpp.a qhull/lib/libqhullstatic_r.a
+QHULL_CPP = qhull/lib/libqhullcpp.a
+QHULL = qhull/lib/libqhullstatic_r.a
 
 # diagnostics color is introduced with gcc 4.9, test if our gcc knows it
 # http://stackoverflow.com/a/17947005/1698412
@@ -148,10 +149,14 @@ obj/%.o: %.cpp | obj
 	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
 
 $(QHULL):
-	$(MAKE) -C qhull cleanall
-	$(MAKE) -C qhull
+	@echo "Building $@"
+	@$(MAKE) -C qhull $(@:qhull/%=%) > /dev/null 2>&1
 
-$(TARGET): $(OBJ) $(QHULL)
+$(QHULL_CPP): $(QHULL)
+	@echo "Building $@"
+	@$(MAKE) -C qhull $(@:qhull/%=%) > /dev/null 2>&1
+
+$(TARGET): $(QHULL_CPP) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
 manual.pdf: doc
