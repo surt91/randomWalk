@@ -175,8 +175,14 @@ void MetropolisParallelTemperingMPI::run()
         // scatter temperatures (scatter will also read them in the receiving ranks)
         MPI_Scatter(&thetaMap[0], 1, MPI_DOUBLE, &theta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
+        MPI_Recv(filename, max_filename_len, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        current_stream.close()
+
+        // FIXME does only wait for the last and not for all (maybe even a memory leak)
         if(rank == 0)
             MPI_Wait(&r3, MPI_STATUS_IGNORE);
+
+        current_stream = std::ofstream(filename, std::ofstream::app);
     }
 
     // critical region for statistics
