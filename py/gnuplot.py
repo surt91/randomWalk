@@ -47,7 +47,7 @@ class Gnuplot():
             self.create("simpleVarV", "{/Italic T}", "{/Italic V}")
             self.create("simpleR", "{/Italic T}", "{/Italic r}")
         else:
-            if self.kwargs["sampling"] == 1 or self.kwargs["sampling"] == 4:
+            if self.kwargs["sampling"] == 1 or self.kwargs["sampling"] == 4  or self.kwargs["sampling"] == 5:
                 self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
                 self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
                 self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")
@@ -60,6 +60,7 @@ class Gnuplot():
                 self.create("rate_function", "{/Symbol %s}" % self.observable, "{/Symbol F}")
                 self.create("simpleMeansL", "{/Italic N}", "{/Italic L}")
                 self.create("simpleMeansA", "{/Italic N}", "{/Italic A}")
+                self.create("swapGraph", "{/Italic t}", "{/Italic # T}")
             elif self.kwargs["sampling"] == 2 or self.kwargs["sampling"] == 3:
                 self.create("wl", "{/Symbol %s}" % self.observable, "{/Italic p}")
                 self.create("wl_scaled", "{/Symbol %s} {/Italic T^{%s}}" % (self.observable, exponent), "{/Italic T^{%s} p}" % exponent)
