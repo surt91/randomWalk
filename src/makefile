@@ -94,6 +94,8 @@ debug: all
 ifeq "$(CXX)" "g++"
 release: CXXFLAGS += -flto
 debug: CXXFLAGS += -Og
+else
+debug: CXXFLAGS += -O1
 endif
 
 CXXFLAGS += -DVERSION="\"$(VERSION)\""
