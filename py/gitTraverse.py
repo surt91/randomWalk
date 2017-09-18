@@ -2,10 +2,10 @@
 """
 
 import os
-import sys
 import time
 import binascii
 from multiprocessing import cpu_count
+from subprocess import STDOUT, check_call, CalledProcessError
 
 import git
 
@@ -58,9 +58,10 @@ if __name__ == "__main__":
         durations = []
         for i in range(10):
             start = time.time()
-            e = os.system(cmd)
-            if e != 0:
-                durations.append(float("nan"))
+            try:
+                check_call(cmd, stderr=STDOUT, timeout=60)  # abort after 1 minute
+            except CalledProcessError:
+                durations.append(60)
                 break
             durations.append(time.time() - start)
         os.system("make clean")
@@ -68,17 +69,19 @@ if __name__ == "__main__":
         duration = sum(durations) / len(durations)
         duration_err = sum((i - duration)**2 for i in durations)**0.5 / len(durations)
 
-        # program exits with errorcode -> do not use the measured time
-        if e != 0:
-            duration = float("nan")
-
         print(duration)
         times.append(duration)
         dates.append(c.committed_date)
         shas.append(sha)
 
         with open(os.path.join(pwd, "gitBenchmark.dat"), "a") as f:
-            f.write('{} {} {} {} "{}"\n'.format(c.committed_date, sha, duration, duration_err, c.message.split("\n")[0]))
+            f.write('{} {} {} {} "{}"\n'.format(
+                                                c.committed_date,
+                                                sha,
+                                                duration,
+                                                duration_err,
+                                                c.message.split("\n")[0])
+                                               )
 
     for i, j, k in zip(dates, shas, times):
         print("{} {} {}".format(i, j, k))
