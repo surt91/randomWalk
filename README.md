@@ -7,8 +7,7 @@ randomWalk
 
 To clone the needed libraries, like qhull and tclap run:
 
-    git submodule init
-    git submodule update
+    git submodule update --init --recursive
 
 
 ## Documentatation
@@ -38,4 +37,13 @@ Doxygen documentation of the latest version is at [surt91.github.io/randomWalk](
 
 To compile with clang use:
 
-    CC=clang CXX=clang++ make -j1
+    CC=clang CXX=clang++ make
+
+Activate multithreading for Wang Landau and Parallel Tempering with
+
+    OMP=1 make
+
+To enable a MPI based Parallel Tempering method (m=5) (Tested with OpenMPI),
+compile with
+
+    MPI=1 make
