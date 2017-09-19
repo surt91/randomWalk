@@ -83,9 +83,9 @@ WARNLEVEL += -Wno-unknown-pragmas -Wno-unused-result
 
 LNDIRS  = -Lqhull/lib
 
-INCLUDES = -Itclap/include \
-           -Iqhull/src \
-           -Iqhull/src/libqhullcpp
+INCLUDES = -isystem tclap/include \
+           -isystem qhull/src \
+           -isystem qhull/src/libqhullcpp
 
 CXXFLAGS += $(INCLUDES)
 

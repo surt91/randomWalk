@@ -7,18 +7,11 @@
 #include <algorithm>
 #include <unordered_set>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdocumentation"
-#pragma clang diagnostic ignored "-Wextra-semi"
-#pragma clang diagnostic ignored "-Wfloat-equal"
-#pragma clang diagnostic ignored "-Wdeprecated-dynamic-exception-spec"
-#pragma clang diagnostic ignored "-Wdeprecated"
 #include <Qhull.h>
 #include <QhullVertex.h>
 #include <QhullFacetList.h>
 #include <QhullVertexSet.h>
 #include <QhullError.h>
-#pragma clang diagnostic pop
 
 #include "Cmd.hpp"
 #include "Logging.hpp"

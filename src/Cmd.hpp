@@ -4,11 +4,7 @@
 #include <string>
 #include <sstream>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-#pragma clang diagnostic ignored "-Wdeprecated-dynamic-exception-spec"
 #include <tclap/CmdLine.h>
-#pragma clang diagnostic pop
 
 #include "Logging.hpp"
 
