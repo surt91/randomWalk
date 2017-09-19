@@ -24,8 +24,8 @@ enum hull_algorithm_t {
     CH_ANDREWS_AKL, ///< use Andrews monotone chain algorithm with Akl's heuristic
     CH_GRAHAM,      ///< [not implemented]
     CH_GRAHAM_AKL,  ///< [not implemented]
-    CH_JARVIS,      ///< use Jarvi's march (gift wrapping)
-    CH_JARVIS_AKL,  ///< use Jarvi's march (gift wrapping) with Akl's heuristic
+    CH_JARVIS,      ///< use Jarvis' march (gift wrapping)
+    CH_JARVIS_AKL,  ///< use Jarvis' march (gift wrapping) with Akl's heuristic
     CH_CHAN,        ///< [not implemented]
     CH_CHAN_AKL     ///< [not implemented]
 };
