@@ -45,6 +45,7 @@ void MetropolisParallelTemperingMPI::run()
         {
             std::ofstream oss(o.data_path_vector[i], std::ofstream::out);
             header(oss);
+            oss << "# attempt N-1 = " << numTemperatures-1 << " swap attemps all " << estimated_corr << " sweeps\n";
         }
 
     // find length of longest outputfilename
@@ -77,12 +78,12 @@ void MetropolisParallelTemperingMPI::run()
         // prepare the information for the next sweep:
         // which temperature will be assigned to which process
         if(rank == 0)
-            for(int i=0; i<numTemperatures; ++i)
+            for(int n=0; n<numTemperatures; ++n)
             {
-                auto tmp = o.data_path_vector[thetaMap[i]].c_str();
-                std::strcpy(&filename_array[i*max_filename_len], tmp);
-                auto theta = o.parallelTemperatures[thetaMap[i]];
-                sorted_temperatures[i] = theta;
+                auto tmp = o.data_path_vector[thetaMap[n]].c_str();
+                std::strcpy(&filename_array[n*max_filename_len], tmp);
+                auto theta = o.parallelTemperatures[thetaMap[n]];
+                sorted_temperatures[n] = theta;
             }
 
         // scatter the specifications to the processes
@@ -90,6 +91,7 @@ void MetropolisParallelTemperingMPI::run()
         MPI_Scatter(&filename_array[0], max_filename_len, MPI_BYTE, filename, max_filename_len, MPI_CHAR, 0, MPI_COMM_WORLD);
 
         std::ofstream current_stream(filename, std::ofstream::app);
+        current_stream << std::setprecision(12);
 
         // do some sweeps (~fasted autocorrelation time) before swapping
         // the higher this value, the lower the multithreading overhead

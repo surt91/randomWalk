@@ -47,7 +47,7 @@ class Gnuplot():
             self.create("simpleVarV", "{/Italic T}", "{/Italic V}")
             self.create("simpleR", "{/Italic T}", "{/Italic r}")
         else:
-            if self.kwargs["sampling"] == 1 or self.kwargs["sampling"] == 4  or self.kwargs["sampling"] == 5:
+            if self.kwargs["sampling"] == 1 or self.kwargs["sampling"] == 4 or self.kwargs["sampling"] == 5:
                 self.create("rawData", "{/Italic t}", "{/Symbol %s}" % self.observable)
                 self.create("rawHisto", "{/Symbol %s}" % self.observable, "{/Italic count}")
                 self.create("unstiched", "{/Symbol %s}" % self.observable, "{/Italic count}")

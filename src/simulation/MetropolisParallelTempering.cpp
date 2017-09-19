@@ -32,6 +32,7 @@ void MetropolisParallelTempering::run()
         files.emplace_back(new std::ofstream(o.data_path_vector[i], std::ofstream::out));
         header(*files[i]);
         *files[i] << "# attempt N-1 = " << numTemperatures-1 << " swap attemps all " << estimated_corr << " sweeps\n";
+        *files[i] << std::setprecision(12);
     }
 
     // create all walkers, with corresponding temperatures
@@ -51,7 +52,7 @@ void MetropolisParallelTempering::run()
     {
         // give every temperature a different rng for thread safeness
         // ensure that seeds do not overflow
-        const int seedMC = ((long long)(o.seedMC+n) * (n+1)) % 1800000113;
+        const int seedMC = ((uint64_t)(o.seedMC+n) * (n+1)) % 1800000113;
         rngs.emplace_back(seedMC);
     }
 
@@ -62,7 +63,7 @@ void MetropolisParallelTempering::run()
         for(int n=0; n<numTemperatures; ++n)
         {
             Cmd tmp(o);
-            tmp.seedRealization = ((long long)(tmp.seedRealization + n) * (n+1)) % 1800000121;
+            tmp.seedRealization = ((uint64_t)(tmp.seedRealization + n) * (n+1)) % 1800000121;
             prepare(allWalkers[n], tmp);
         }
 
@@ -151,7 +152,7 @@ void MetropolisParallelTempering::run()
     std::stringstream ss;
     ss << "# swap success rates:\n";
     for(int j=0; j<numTemperatures-1; ++j)
-        ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "%" << " : " << o.parallelTemperatures[j] << " <-> " << o.parallelTemperatures[j+1] << "\n";
+        ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "% (" << acceptance[j] << "/" << swapTrial[j] << ")" << " : " << o.parallelTemperatures[j] << " <-> " << o.parallelTemperatures[j+1] << "\n";
     LOG(LOG_INFO) << ss.str();
 
     swapGraph.close();

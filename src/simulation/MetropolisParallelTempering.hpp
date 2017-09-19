@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iomanip>
+
 #include "Simulation.hpp"
 
 /** Metropolis Monte Carlo sampling enhanced with parallel tempering.
