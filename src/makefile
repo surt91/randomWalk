@@ -15,46 +15,15 @@ OMP ?= 0
 
 CXXFLAGS = -std=c++11 -fexceptions -pipe
 
-CPP	 := main.cpp \
-        Cmd.cpp \
-        Logging.cpp \
-        RNG.cpp \
-        Xorshift.cpp \
-        io.cpp \
-        stat/runtime.cpp \
-        stat/RollingMean.cpp \
-        stat/HistogramND.cpp \
-        Benchmark.cpp \
-        walker/Walker.cpp \
-        walker/SpecWalker.cpp \
-        walker/LatticeWalker.cpp \
-        walker/LoopErasedWalker.cpp \
-        walker/SelfAvoidingWalker.cpp \
-        walker/RealWalker.cpp \
-        walker/GaussWalker.cpp \
-        walker/LevyWalker.cpp \
-        walker/CorrelatedWalker.cpp \
-        walker/EscapeWalker.cpp \
-        walker/ScentWalker.cpp \
-        simulation/Simulation.cpp \
-        simulation/SimpleSampling.cpp \
-        simulation/Metropolis.cpp \
-        simulation/MetropolisParallelTempering.cpp \
-        simulation/WangLandau.cpp \
-        simulation/FastWLEntropic.cpp \
-        simulation/Histogram.cpp \
-        visualization/Svg.cpp \
-        visualization/Povray.cpp \
-        visualization/Gnuplot2D.cpp \
-        visualization/Gnuplot3D.cpp \
-        visualization/GnuplotContour.cpp \
-        visualization/Threejs.cpp \
+CPP	 := $(wildcard *.cpp) $(wildcard **/*.cpp)
 
 ifeq "$(MPI)" "1"
 CPP += simulation/MetropolisParallelTemperingMPI.cpp
 MPICXX ?= mpic++
 CXX = $(MPICXX)
 CXXFLAGS += -D_MPI
+else
+CPP := $(filter-out simulation/MetropolisParallelTemperingMPI.cpp, $(CPP))
 endif
 
 ifeq "$(OMP)" "1"
