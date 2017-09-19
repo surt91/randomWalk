@@ -8,7 +8,7 @@
     # TODO: use a stepwise function to convert the indices to temperates
     plot \
     {% for theta in thetas[N] %}
-        "< zcat swapGraph{{ N }}.dat.gz" u 1:{{ loop.index }} w l t "{{ loop.index }}", \
+        "< zcat ../swapGraph{{ N }}.dat.gz" u 1:{{ loop.index + 1 }} w l t "{{ loop.index }}", \
     {% endfor %}
 {% endfor %}
 
