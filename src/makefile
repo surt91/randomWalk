@@ -97,7 +97,7 @@ all: $(DEP) $(TARGET)
 .DELETE_ON_ERROR:
 .PHONY: clean proper
 
-MAKEFILE_TARGETS_WITHOUT_INCLUDE := clean proper
+MAKEFILE_TARGETS_WITHOUT_INCLUDE := clean proper cleanall
 ifeq ($(filter $(MAKECMDGOALS),$(MAKEFILE_TARGETS_WITHOUT_INCLUDE)),)
 -include $(DEP)
 endif
