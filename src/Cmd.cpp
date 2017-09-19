@@ -347,7 +347,7 @@ Cmd::Cmd(int argc, char** argv)
         #endif
 
         sweep = sweepArg.getValue();
-        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
         {
             if(sweep == -1)
                 sweep = steps;
@@ -373,14 +373,14 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         t_eq = t_eqArg.getValue();
-        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
             if(t_eq >= 0)
             {
                 LOG(LOG_INFO) << "Set equilibration time to  " << t_eq;
             }
 
         t_eqMax = t_eqMaxArg.getValue();
-        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        if(sampling_method == SM_METROPOLIS || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
         {
             LOG(LOG_INFO) << "Abort simulation if t_eq > " << t_eqMax;
         }
@@ -399,7 +399,7 @@ Cmd::Cmd(int argc, char** argv)
             }
             LOG(LOG_INFO) << "Theta                      " << theta;
         }
-        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
         {
             if(parallelTemperatures.empty())
             {
@@ -475,7 +475,7 @@ Cmd::Cmd(int argc, char** argv)
         {
             data_path = "out.dat";
         }
-        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING  || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
         {
             data_path = "";
             if(parallelTemperatures.size() != data_path_vector.size())
@@ -502,7 +502,7 @@ Cmd::Cmd(int argc, char** argv)
         {
             conf_path = "";
         }
-        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING)
+        if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
         {
             if(conf_path_vector.size() && parallelTemperatures.size() != conf_path_vector.size())
             {
