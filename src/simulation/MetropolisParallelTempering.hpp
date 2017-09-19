@@ -1,4 +1,5 @@
-#pragma once
+#ifndef METROPOLISPARALLELTEMPERING_H
+#define METROPOLISPARALLELTEMPERING_H
 
 #include <iomanip>
 
@@ -16,3 +17,5 @@ class MetropolisParallelTempering : public Simulation
     protected:
         void sweep(std::unique_ptr<Walker> &w, double theta, UniformRNG &rngMC);
 };
+
+#endif

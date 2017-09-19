@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HYPERCUBE_H
+#define HYPERCUBE_H
 
 #include <vector>
 #include <cmath>
@@ -72,3 +73,5 @@ bool Hypercube::bestfs(Step<int> source, Step<int> target, T& occupied)
     }
     return false;
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ESCAPEWALKER_H
+#define ESCAPEWALKER_H
 
 #include <unordered_map>
 #include <unordered_set>
@@ -57,3 +58,5 @@ class EscapeWalker final : public SpecWalker<int>
 
         Hypercube g;
 };
+
+#endif

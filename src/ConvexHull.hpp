@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CONVEXHULL_H
+#define CONVEXHULL_H
 
 #include <set>
 #include <memory>
@@ -19,6 +20,7 @@
 #include <QhullError.h>
 #pragma clang diagnostic pop
 
+#include "Cmd.hpp"
 #include "Logging.hpp"
 #include "Step.hpp"
 #include "geometry.hpp"
@@ -804,3 +806,5 @@ void ConvexHull<T>::runJarvis()
     } while(p!=p1); // if we reach the first, we have finished
     // mind that first and last entry of hullPoints_ are the same
 }
+
+#endif

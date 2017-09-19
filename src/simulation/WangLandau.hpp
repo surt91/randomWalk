@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WANGLANDAU_H
+#define WANGLANDAU_H
 
 #include "Simulation.hpp"
 #include "Histogram.hpp"
@@ -40,3 +41,5 @@ class WangLandau : public Simulation
         int num_ranges;
         std::vector<std::vector<double>> bins;
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SIMULATION_H
+#define SIMULATION_H
 
 #include <cmath>
 #include <ctime>
@@ -74,3 +75,5 @@ class Simulation
     private:
         clock_t start;
 };
+
+#endif

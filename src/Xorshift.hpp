@@ -1,3 +1,6 @@
+#ifndef XORSHIFT_H
+#define XORSHIFT_H
+
 #include <cstdint>
 
 /** simple xorshift* generator
@@ -16,3 +19,5 @@ class Xorshift {
     private:
         uint64_t state;
 };
+
+#endif

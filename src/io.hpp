@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IO_H
+#define IO_H
 
 #include <iostream>
 #include <fstream>
@@ -23,3 +24,5 @@ std::ostream& binary_write_string(std::ofstream& stream, const std::string& valu
 
 bool file_exist(const char *fileName);
 void gzip(const std::string filename);
+
+#endif

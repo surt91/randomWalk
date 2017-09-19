@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RUNTIME_H
+#define RUNTIME_H
 
 #include <ctime>
 #include <string>
@@ -14,3 +15,5 @@
 std::string vmPeak();
 
 std::string time_diff(clock_t start, clock_t end, int op=1);
+
+#endif

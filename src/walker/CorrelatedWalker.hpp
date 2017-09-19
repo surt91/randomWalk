@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CORRELATEDWALKER_H
+#define CORRELATEDWALKER_H
 
 #include "../Logging.hpp"
 #include "SpecWalker.hpp"
@@ -40,3 +41,5 @@ class CorrelatedWalker final : public SpecWalker<double>
 
         std::vector<double> undo_values;
 };
+
+#endif

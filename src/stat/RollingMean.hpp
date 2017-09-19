@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ROLLINGMEAN_H
+#define ROLLINGMEAN_H
 
 #include <deque>
 
@@ -30,3 +31,5 @@ class RollingMean
         size_t count;
         std::deque<double> state;
 };
+
+#endif

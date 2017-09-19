@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FASTWLENTROPIC_H
+#define FASTWLENTROPIC_H
 
 #include "WangLandau.hpp"
 
@@ -16,3 +17,5 @@ class FastWLEntropic : public WangLandau
         FastWLEntropic(const Cmd &o);
         virtual void run();
 };
+
+#endif

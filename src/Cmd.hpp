@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CMD_H
+#define CMD_H
 
 #include <string>
 #include <sstream>
@@ -168,3 +169,5 @@ class Cmd
 
         std::string text;           ///< the full command used to start this program
 };
+
+#endif

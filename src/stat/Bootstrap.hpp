@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BOOTSTRAP_H
+#define BOOTSTRAP_H
 
 #include <cmath>
 #include <random>
@@ -67,3 +68,5 @@ Bootstrap::operator()(const std::vector<T> data, double *mean, double *stderr)
     mean = mean(sample);
     stderr = sdev(sample, *mean);
 }
+
+#endif

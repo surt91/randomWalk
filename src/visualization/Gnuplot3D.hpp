@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GNUPLOT3D_H
+#define GNUPLOT3D_H
 
 #include <iostream>
 #include <sstream>
@@ -36,3 +37,5 @@ class Gnuplot3D
 
         int numLines;
 };
+
+#endif

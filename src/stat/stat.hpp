@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STAT_H
+#define STAT_H
 
 #include <algorithm>
 #include <numeric>
@@ -25,3 +26,5 @@ T sdev(std::vector<T> a, T m=T(0))
 {
     return sqrt(variance(a, m));
 }
+
+#endif

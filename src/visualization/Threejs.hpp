@@ -1,4 +1,5 @@
-#pragma once
+#ifndef THREEJS_H
+#define THREEJS_H
 
 #include <iostream>
 #include <sstream>
@@ -35,3 +36,5 @@ class Threejs
         std::string header;
         std::string footer;
 };
+
+#endif

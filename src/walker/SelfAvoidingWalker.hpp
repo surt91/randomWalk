@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SELFAVOIDINGWALKER_H
+#define SELFAVOIDINGWALKER_H
 
 #include <list>
 #include <iterator>
@@ -56,3 +57,5 @@ class SelfAvoidingWalker final : public SpecWalker<int>
         bool checkOverlapFree(const std::list<double> &l) const;
         bool checkOverlapFree(const std::vector<Step<int>> &l) const;
 };
+
+#endif

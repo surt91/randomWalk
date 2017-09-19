@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SIMPLESAMPLING_H
+#define SIMPLESAMPLING_H
 
 #include "Simulation.hpp"
 
@@ -14,3 +15,5 @@ class SimpleSampling : public Simulation
         SimpleSampling(const Cmd &o);
         virtual void run() override;
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GNUPLOT2D_H
+#define GNUPLOT2D_H
 
 #include <iostream>
 #include <sstream>
@@ -31,3 +32,5 @@ class Gnuplot2D
         std::stringstream buffer_points;
         std::stringstream buffer_hull;
 };
+
+#endif

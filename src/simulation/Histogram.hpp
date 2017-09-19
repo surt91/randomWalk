@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HISTOGRAM_H
+#define HISTOGRAM_H
 
 #include <vector>
 #include <algorithm>
@@ -54,3 +55,5 @@ class Histogram
 
         friend std::ostream& operator<<(std::ostream& os, const Histogram &obj);
 };
+
+#endif

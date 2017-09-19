@@ -1,4 +1,5 @@
-#pragma once
+#ifndef REALWALKER_H
+#define REALWALKER_H
 
 #include "../Logging.hpp"
 #include "SpecWalker.hpp"
@@ -25,3 +26,5 @@ class RealWalker final : public SpecWalker<double>
 
         std::vector<double> undo_values;
 };
+
+#endif

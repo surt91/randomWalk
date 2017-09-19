@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LATTICEWALKER_H
+#define LATTICEWALKER_H
 
 #include "../Logging.hpp"
 #include "SpecWalker.hpp"
@@ -23,3 +24,5 @@ class LatticeWalker final : public SpecWalker<int>
     private:
         Step<int> newStep;
 };
+
+#endif

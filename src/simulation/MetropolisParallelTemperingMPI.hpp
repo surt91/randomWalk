@@ -1,4 +1,5 @@
-#pragma once
+#ifndef METROPOLISPARALLELTEMPERINGMPI_H
+#define METROPOLISPARALLELTEMPERINGMPI_H
 
 #include <mpi.h>
 #include <cstring>
@@ -13,3 +14,5 @@ class MetropolisParallelTemperingMPI : public MetropolisParallelTempering
         MetropolisParallelTemperingMPI(const Cmd &o);
         virtual void run();
 };
+
+#endif

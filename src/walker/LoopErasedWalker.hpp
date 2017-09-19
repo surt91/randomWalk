@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LOOPERASEDWALKER_H
+#define LOOPERASEDWALKER_H
 
 #include <unordered_map>
 
@@ -36,3 +37,5 @@ class LoopErasedWalker final : public SpecWalker<int>
         Step<int> newStep;
         Step<int> undoStep;
 };
+
+#endif

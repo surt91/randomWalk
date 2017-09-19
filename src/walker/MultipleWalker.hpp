@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MULTIPLEWALKER_H
+#define MULTIPLEWALKER_H
 
 #include <memory>
 
@@ -412,3 +413,5 @@ void MultipleWalker<T>::gp(const std::string filename, const bool with_hull) con
         LOG(LOG_WARNING) << "Gnuplot output only implemented for d = 2 and d = 3";
     }
 }
+
+#endif

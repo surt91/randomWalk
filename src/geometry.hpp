@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GEOMETRY_H
+#define GEOMETRY_H
 
 #include <array>
 
@@ -240,3 +241,5 @@ T side(orgQhull::QhullFacet& f, const Step<T>& p)
            + (v[2]-p.z()) * normal[2];
     return s < 0 ? -1 : 1;
 }
+
+#endif

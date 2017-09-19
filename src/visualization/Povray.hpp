@@ -1,4 +1,5 @@
-#pragma once
+#ifndef POVRAY_H
+#define POVRAY_H
 
 #include <iostream>
 #include <sstream>
@@ -32,3 +33,5 @@ class Povray
         std::stringstream buffer;
         std::string header;
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WALKER_H
+#define WALKER_H
 
 #include <iostream>
 #include <fstream>
@@ -94,3 +95,5 @@ class Walker
         int undo_index;
         double undo_value;
 };
+
+#endif

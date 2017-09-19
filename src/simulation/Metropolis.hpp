@@ -1,4 +1,5 @@
-#pragma once
+#ifndef METROPOLIS_H
+#define METROPOLIS_H
 
 #include "Simulation.hpp"
 #include "../stat/RollingMean.hpp"
@@ -25,3 +26,5 @@ class Metropolis : public Simulation
     protected:
         int equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1);
 };
+
+#endif

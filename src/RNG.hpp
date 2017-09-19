@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RNG_H
+#define RNG_H
 
 #include <cmath>
 #include <vector>
@@ -46,3 +47,5 @@ class UniformRNG
 
         std::mt19937& engine();
 };
+
+#endif

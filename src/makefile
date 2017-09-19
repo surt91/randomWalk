@@ -16,7 +16,9 @@ OMP ?= 0
 CXXFLAGS = -std=c++11 -fexceptions -pipe
 
 CPP	 := $(wildcard *.cpp) $(wildcard **/*.cpp)
+HPP	 := $(wildcard *.hpp) $(wildcard **/*.hpp)
 
+# handle MPI
 ifeq "$(MPI)" "1"
 CPP += simulation/MetropolisParallelTemperingMPI.cpp
 MPICXX ?= mpic++
@@ -24,6 +26,7 @@ CXX = $(MPICXX)
 CXXFLAGS += -D_MPI
 else
 CPP := $(filter-out simulation/MetropolisParallelTemperingMPI.cpp, $(CPP))
+HPP := $(filter-out simulation/MetropolisParallelTemperingMPI.hpp, $(HPP))
 endif
 
 ifeq "$(OMP)" "1"
@@ -35,6 +38,7 @@ endif
 endif
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
+GCH	 = $(HPP:%.hpp=%.hpp.gch)
 DEP	 = $(CPP:%.cpp=dep/%.d)
 
 QHULL_CPP = qhull/lib/libqhullcpp.a
@@ -112,11 +116,14 @@ dep/%.d: %.cpp | dep
 	@mkdir -p $(@D)
 	@set -e; rm -f $@; \
 	$(CXX) $(WARNLEVEL) $(CXXFLAGS) -MM $< > $@.$$$$; \
-	sed 's,\($(*F)\)\.o[ :]*,obj/$*.o $@: ,g' < $@.$$$$ > $@; \
+	sed 's,\($(*F)\)\.o[ :]*,obj/$*.o $@: ,g ; s,.hpp,.hpp.gch,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 obj/%.o: %.cpp | obj
 	@mkdir -p $(@D)
+	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
+
+%.hpp.gch: %.hpp
 	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
 
 $(QHULL):
@@ -154,7 +161,7 @@ cli.md: $(TARGET) ../README.md makefile
 	@echo '~~~' >> cli.md
 
 proper:
-	rm -rf $(OBJ)
+	rm -rf $(OBJ) $(GCH)
 
 clean: proper
 	rm -rf dep

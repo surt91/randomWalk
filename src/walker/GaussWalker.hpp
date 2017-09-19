@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GAUSSWALKER_H
+#define GAUSSWALKER_H
 
 #include "../Logging.hpp"
 #include "SpecWalker.hpp"
@@ -31,3 +32,5 @@ class GaussWalker final : public SpecWalker<double>
 
         std::vector<double> undo_values;
 };
+
+#endif

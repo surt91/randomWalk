@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LEVYWALKER_H
+#define LEVYWALKER_H
 
 #include "../Logging.hpp"
 #include "SpecWalker.hpp"
@@ -28,3 +29,5 @@ class LevyWalker final : public SpecWalker<double>
 
         std::vector<double> undo_values;
 };
+
+#endif

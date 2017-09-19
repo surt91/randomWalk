@@ -1,5 +1,6 @@
- /*! \file */
-#pragma once
+/*! \file */
+#ifndef LOGGING_H
+#define LOGGING_H
 
 #ifdef __unix__
 #include <cstdio>
@@ -119,3 +120,5 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T> &v)
         os << i << " ";
     return os;
 }
+
+#endif

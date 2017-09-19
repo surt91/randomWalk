@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HISTOGRAMND_H
+#define HISTOGRAMND_H
 
 #include <vector>
 #include <algorithm>
@@ -88,3 +89,5 @@ void HistogramND::add(T &coordinate)
 
     ++data[idx];
 }
+
+#endif

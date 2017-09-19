@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SCENTWALKER_H
+#define SCENTWALKER_H
 
 #include <unordered_map>
 #include <map>
@@ -65,3 +66,5 @@ class ScentWalker final : public SpecWalker<int>
         Step<int> newStep;
         Step<int> undoStep;
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GNUPLOTCONTOUR_H
+#define GNUPLOTCONTOUR_H
 
 #include <iostream>
 #include <sstream>
@@ -29,3 +30,5 @@ class GnuplotContour
         std::stringstream buffer;
         std::stringstream buffer_points;
 };
+
+#endif

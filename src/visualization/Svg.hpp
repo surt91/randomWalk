@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SVG_H
+#define SVG_H
 
 #include <iostream>
 #include <sstream>
@@ -52,3 +53,5 @@ class SVG
         std::stringstream buffer;
         std::string header;
 };
+
+#endif

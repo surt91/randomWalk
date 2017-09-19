@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STEP_H
+#define STEP_H
 
 #include <cmath>
 #include <list>
@@ -735,3 +736,5 @@ namespace std {
     template <class T>
     void swap(Step<T>& lhs, Step<T>& rhs) { lhs.swap(rhs); }
 }
+
+#endif

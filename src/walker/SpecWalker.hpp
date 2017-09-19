@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SPECWALKER_H
+#define SPECWALKER_H
 
 #include <iostream>
 #include <fstream>
@@ -564,3 +565,5 @@ void SpecWalker<T>::goDownhill(const bool maximize, const wanted_observable_t ob
         veryOldS = S();
     }
 }
+
+#endif
