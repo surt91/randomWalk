@@ -125,13 +125,10 @@ obj/%.o: %.cpp | obj
 %.hpp.gch: %.hpp
 	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
 
-$(QHULL):
-	@echo "Building $@"
-	@$(MAKE) -C qhull $(@:qhull/%=%) > /dev/null 2>&1
-
 $(QHULL_CPP): $(QHULL)
+$(QHULL) $(QHULL_CPP):
 	@echo "Building $@"
-	@$(MAKE) -C qhull $(@:qhull/%=%) > /dev/null 2>&1
+	@$(MAKE) -C qhull $(@:qhull/%=%)
 
 $(TARGET): $(QHULL_CPP) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
