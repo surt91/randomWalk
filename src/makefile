@@ -20,7 +20,6 @@ HPP	 := $(wildcard *.hpp) $(wildcard **/*.hpp)
 
 # handle MPI
 ifeq "$(MPI)" "1"
-CPP += simulation/MetropolisParallelTemperingMPI.cpp
 MPICXX ?= mpic++
 CXX = $(MPICXX)
 CXXFLAGS += -D_MPI
