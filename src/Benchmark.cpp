@@ -511,7 +511,7 @@ bool benchmark()
             case SM_WANG_LANDAU:
                 o.iterations = 1;
                 o.steps = 100;
-                checksum = 223.535680713;
+                checksum = 199.807682755;
                 s = std::unique_ptr<WangLandau>(new WangLandau(o));
                 break;
             case SM_FAST_WANG_LANDAU:
