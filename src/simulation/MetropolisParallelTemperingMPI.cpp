@@ -52,7 +52,7 @@ void MetropolisParallelTemperingMPI::run()
     size_t max_filename_len = 0;
     for(size_t i=0; i<o.data_path_vector.size(); ++i)
         if(o.data_path_vector[i].size() > max_filename_len)
-            max_filename_len = o.data_path_vector[i].size();
+            max_filename_len = o.data_path_vector[i].size() + 1; // +1 for \0
 
     // allocate resources to scatter...
     std::vector<char> filename_array(max_filename_len * numTemperatures, '\0');
