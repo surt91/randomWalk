@@ -131,6 +131,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::SwitchArg onlyCentersSwitch("", "onlyCenters", "just output the centers of the WL bins and exit", false);
         TCLAP::SwitchArg onlyLERWExampleSwitch("", "onlyLERWExample", "just output a picture of erased loops", false);
         TCLAP::SwitchArg onlyPivotExampleSwitch("", "onlyPivotExample", "just output a picture of a pivot step", false);
+        TCLAP::SwitchArg onlyPTTemperaturesSwitch("", "onlyPTTemperatures", "just estimate reasonalbe temperatures for parallel tempering. will start from the supplied temperatures. specify at least two as boundaries.", false);
         TCLAP::SwitchArg benchmarkSwitch("b", "benchmark", "perform benchmark", false);
         TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode, log only to file (if specified) and not to stdout", false);
 
@@ -175,6 +176,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(onlyCentersSwitch);
         cmd.add(onlyLERWExampleSwitch);
         cmd.add(onlyPivotExampleSwitch);
+        cmd.add(onlyPTTemperaturesSwitch);
 
         cmd.add(benchmarkSwitch);
 
@@ -199,7 +201,8 @@ Cmd::Cmd(int argc, char** argv)
         onlyCenters = onlyCentersSwitch.getValue();
         onlyLERWExample = onlyLERWExampleSwitch.getValue();
         onlyPivotExample = onlyPivotExampleSwitch.getValue();
-        if(onlyBounds + onlyCenters + onlyLERWExample + onlyPivotExample > 1)
+        onlyPTTemperatures = onlyPTTemperaturesSwitch.getValue();
+        if(onlyBounds + onlyCenters + onlyLERWExample + onlyPivotExample + onlyPTTemperatures > 1)
         {
             LOG(LOG_ERROR) << "--only* are mutually exclusive";
             std::string list;
@@ -211,6 +214,8 @@ Cmd::Cmd(int argc, char** argv)
                 list += "--onlyLERWExample ";
             if(onlyPivotExample)
                 list += "--onlyPivotExample ";
+            if(onlyPTTemperatures)
+                list += "--onlyPTTemperatures ";
             LOG(LOG_ERROR) << "you activated: " << list;
             exit(1);
         }
@@ -223,6 +228,11 @@ Cmd::Cmd(int argc, char** argv)
         if(onlyCenters)
         {
             LOG(LOG_INFO) << "onlyCenters Mode";
+        }
+
+        if(onlyPTTemperatures)
+        {
+            LOG(LOG_INFO) << "onlyPTTemperatures Mode";
         }
 
         if(onlyLERWExample)
@@ -336,7 +346,10 @@ Cmd::Cmd(int argc, char** argv)
 
         svg_path = svgArg.getValue();
         sampling_method = (sampling_method_t) samplingMethodArg.getValue();
+        if(onlyPTTemperatures)
+            sampling_method = SM_METROPOLIS_PARALLEL_TEMPERING;
         LOG(LOG_INFO) << "Sampling Method            " << SAMPLING_METHOD_LABEL[sampling_method];
+
 
         #ifndef _MPI
         if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
@@ -478,7 +491,11 @@ Cmd::Cmd(int argc, char** argv)
         if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING  || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
         {
             data_path = "";
-            if(parallelTemperatures.size() != data_path_vector.size())
+            if(onlyPTTemperatures && !data_path_vector.size())
+            {
+                LOG(LOG_INFO) << "no output for this temperature estimate run";
+            }
+            else if(parallelTemperatures.size() != data_path_vector.size())
             {
                 LOG(LOG_ERROR) << "You need " << parallelTemperatures.size() << " paths, one for every -T / --theta, you have: " << data_path_vector.size();\
                 exit(1);

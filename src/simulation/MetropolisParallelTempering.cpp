@@ -1,7 +1,8 @@
 #include "MetropolisParallelTempering.hpp"
 
-MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o)
-    : Simulation(o, false)
+MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o, const bool fileOutput)
+    : Simulation(o, false),
+      noFileOutput(fileOutput)
 {
 }
 
@@ -26,14 +27,15 @@ void MetropolisParallelTempering::run()
         thetaMap[i] = i;
 
     std::vector<std::unique_ptr<std::ofstream>> files;
-    for(int i=0; i<numTemperatures; ++i)
-    {
-        // this looks like a leak, but unique pointer saves the day
-        files.emplace_back(new std::ofstream(o.data_path_vector[i], std::ofstream::out));
-        header(*files[i]);
-        *files[i] << "# attempt N-1 = " << numTemperatures-1 << " swap attemps all " << estimated_corr << " sweeps\n";
-        *files[i] << std::setprecision(12);
-    }
+    if(fileOutput)
+        for(int i=0; i<numTemperatures; ++i)
+        {
+            // this looks like a leak, but unique pointer saves the day
+            files.emplace_back(new std::ofstream(o.data_path_vector[i], std::ofstream::out));
+            header(*files[i]);
+            *files[i] << "# attempt N-1 = " << numTemperatures-1 << " swap attemps all " << estimated_corr << " sweeps\n";
+            *files[i] << std::setprecision(12);
+        }
 
     // create all walkers, with corresponding temperatures
     // can this be done in parallel? (dimerization can take some time)
@@ -81,7 +83,7 @@ void MetropolisParallelTempering::run()
                     sweep(allWalkers[n], theta, rngs[n]);
 
                     // save to file (not critical, since every thread has its own file)
-                    if(i >= 2*o.t_eq)
+                    if(i >= 2*o.t_eq && fileOutput)
                     {
                         *files[thetaMap[n]] << i+j << " "
                                             << allWalkers[n]->L() << " "
@@ -130,9 +132,11 @@ void MetropolisParallelTempering::run()
                         // accepted -> update the map of the temperatures
                         std::swap(thetaMap[j-1], thetaMap[j]);
 
-                        acceptance[j-1] += 1;
+                        if(i > 2*o.t_eq)
+                            acceptance[j-1] += 1;
                     }
-                    swapTrial[j-1] += 1;
+                    if(i > 2*o.t_eq)
+                        swapTrial[j-1] += 1;
 
                     checksum += S(allWalkers[k]);
                 }
@@ -152,19 +156,26 @@ void MetropolisParallelTempering::run()
     std::stringstream ss;
     ss << "# swap success rates:\n";
     for(int j=0; j<numTemperatures-1; ++j)
-        ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "% (" << acceptance[j] << "/" << swapTrial[j] << ")" << " : " << o.parallelTemperatures[j] << " <-> " << o.parallelTemperatures[j+1] << "\n";
+        ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0)
+           << "% (" << acceptance[j] << "/" << swapTrial[j] << ")" << " : "
+           << o.parallelTemperatures[j] << " <-> "
+           << o.parallelTemperatures[j+1] << "\n";
     LOG(LOG_INFO) << ss.str();
+
+    for(int j=0; j<numTemperatures-1; ++j)
+        swapStats.emplace_back(o.parallelTemperatures[j], o.parallelTemperatures[j+1], (double)acceptance[j]/swapTrial[j]);
 
     swapGraph.close();
     gzip(swapGraphName);
 
-    for(int i=0; i<numTemperatures; ++i)
-    {
-        *files[i] << ss.str();
-        footer(*files[i]);
+    if(fileOutput)
+        for(int i=0; i<numTemperatures; ++i)
+        {
+            *files[i] << ss.str();
+            footer(*files[i]);
 
-        gzip(o.data_path_vector[i]);
-    }
+            gzip(o.data_path_vector[i]);
+        }
 }
 
 void MetropolisParallelTempering::sweep(std::unique_ptr<Walker> &w, double theta, UniformRNG &rngMC)
@@ -181,4 +192,31 @@ void MetropolisParallelTempering::sweep(std::unique_ptr<Walker> &w, double theta
         if(p_acc < rngMC())
             w->undoChange();
     }
+}
+
+std::vector<double> MetropolisParallelTempering::proposeBetterTemperatures()
+{
+    std::vector<double> out;
+    for(const auto &item : swapStats)
+    {
+        auto &T1 = item.T1;
+        auto &T2 = item.T2;
+        auto &rate = item.rate;
+
+        out.push_back(T1);
+
+        if(rate < 0.4)
+        {
+            // handle "infinity"
+            if(T1 > 1e32)
+                out.push_back(2*T2);
+            else if(T2 > 1e32)
+                out.push_back(2*T1);
+            else
+                out.push_back((T1 + T2) / 2.);
+        }
+    }
+    out.push_back(swapStats.back().T2);
+
+    return out;
 }

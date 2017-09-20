@@ -158,6 +158,7 @@ class Cmd
         bool onlyCenters;           ///< output only the centers of the Wang Landau bins and exit
         bool onlyLERWExample;       ///< save a LERW with visualized erased loops and exit
         bool onlyPivotExample;      ///< save a picture of a pivot step and exit
+        bool onlyPTTemperatures;    ///< estimate good temperatures for parallel tempering and exit
 
         bool benchmark;             ///< perform benchmarks and exit
         double benchmark_A;         ///< helper to store expected value of the benchmark

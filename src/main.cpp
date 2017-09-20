@@ -57,6 +57,30 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    if(o.onlyPTTemperatures)
+    {
+        LOG(LOG_INFO) << "generate temperatures for parallel tempering and exit";
+        while(true)
+        {
+            // TODO determine a t_eq automatically
+            // use simple/OpenMP version
+            MetropolisParallelTempering sim(o, !o.data_path_vector.empty());
+            sim.run();
+            auto newTemperatures = sim.proposeBetterTemperatures();
+            LOG(LOG_INFO) << "new temperatures (#" << newTemperatures.size()
+                          << "): [" << newTemperatures << "]";
+            if(o.parallelTemperatures == newTemperatures)
+                break;
+            o.parallelTemperatures = std::move(newTemperatures);
+        }
+        // output as python dict entry, to copy into parameters.py
+        std::cout << o.steps << ": [";
+        for(const auto t : o.parallelTemperatures)
+            std::cout << t << ", ";
+        std::cout << "],";
+        return 0;
+    }
+
     // TODO
     // if(o.onlyScentHistogram)
     // {

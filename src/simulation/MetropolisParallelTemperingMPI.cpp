@@ -153,9 +153,11 @@ void MetropolisParallelTemperingMPI::run()
                     // accepted -> update the map of the temperatures
                     std::swap(thetaMap[j-1], thetaMap[j]);
 
-                    acceptance[j-1] += 1;
+                    if(i > 2*o.t_eq)
+                        acceptance[j-1] += 1;
                 }
-                swapTrial[j-1] += 1;
+                if(i > 2*o.t_eq)
+                    swapTrial[j-1] += 1;
 
                 checksum += observables[k];
             }
