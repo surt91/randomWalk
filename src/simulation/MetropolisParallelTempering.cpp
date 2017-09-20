@@ -130,9 +130,9 @@ void MetropolisParallelTempering::run()
                     if(p_acc > rngs[0]())
                     {
                         LOG(LOG_TOO_MUCH) << "(" << i << ") swap: "
-                                          << thetaMap[j-1] << " = " <<  T_1
+                                          << thetaMap[j-1] << " = " << T_1
                                           << " <-> " <<  thetaMap[j] << " = "
-                                          <<  T_2;
+                                          << T_2;
 
                         // accepted -> update the map of the temperatures
                         std::swap(thetaMap[j-1], thetaMap[j]);
@@ -212,7 +212,8 @@ std::vector<double> MetropolisParallelTempering::proposeBetterTemperatures()
 
         out.push_back(T1);
 
-        if(rate < 0.4)
+        // TODO: also look for > 70% to reduce the number of temperatures
+        if(rate < 0.3)
         {
             // handle "infinity"
             if(T1 > 1e32)
