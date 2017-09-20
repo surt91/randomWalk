@@ -12,7 +12,7 @@ struct SwapStatEntry
     public:
         SwapStatEntry(double T1, double T2, double rate)
             : T1(T1), T2(T2), rate(rate)
-        {};
+        {}
         double T1;
         double T2;
         double rate;
