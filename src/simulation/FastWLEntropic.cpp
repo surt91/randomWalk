@@ -46,7 +46,8 @@ void FastWLEntropic::run()
             double status = 1.;
 
             findStart(w, lb, ub, rngMC);
-            LOG(LOG_DEBUG) << "found configuration: " << lb << " < " << S(w) << " < " << ub << " -> start!";
+            LOG(LOG_DEBUG) << "found configuration: " << lb << " < " << S(w)
+                           << " < " << ub << " -> start!";
             LOG(LOG_INFO) << "begin phase 1 (exponential decrease)";
             // start first phase
             double lnf = 1;
@@ -95,7 +96,8 @@ void FastWLEntropic::run()
             if(lnf_min > 1./t)
             {
                 lnf_min = 1./(t+1./lnf_min);
-                LOG(LOG_INFO) << "this seems to take too much time, reduce target, do more iterations until t=" << 1./lnf_min;
+                LOG(LOG_INFO) << "this seems to take too much time, "
+                    "reduce target, do more iterations until t=" << 1./lnf_min;
             }
 
             while(lnf > lnf_min)

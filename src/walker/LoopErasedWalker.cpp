@@ -59,7 +59,8 @@ void LoopErasedWalker::updateSteps()
                 N *= 2;
                 random_numbers.resize(N);
 
-                std::generate(random_numbers.begin() + i, random_numbers.end(), std::ref(rng));
+                std::generate(random_numbers.begin() + i, random_numbers.end(),
+                              std::ref(rng));
             }
             s.fillFromRN(random_numbers[i]);
         }

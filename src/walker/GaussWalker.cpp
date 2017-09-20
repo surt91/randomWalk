@@ -12,7 +12,8 @@ GaussWalker::GaussWalker(int d, int numSteps, const UniformRNG &rng_in, hull_alg
 void GaussWalker::reconstruct()
 {
     // write new gaussian random numers into our state
-    std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng.gaussian(); });
+    std::generate(random_numbers.begin(), random_numbers.end(),
+                  [this]{ return this->rng.gaussian(); });
     init();
 }
 
@@ -44,7 +45,8 @@ void GaussWalker::change(UniformRNG &rng, bool update)
     int idx = rng() * numSteps;
     int rnidx = idx * d;
     undo_index = idx;
-    undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx + d);
+    undo_values = std::vector<double>(random_numbers.begin() + rnidx,
+                                      random_numbers.begin() + rnidx + d);
     for(int i=0; i<d; ++i)
         random_numbers[rnidx+i] = rng.gaussian();
 

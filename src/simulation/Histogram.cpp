@@ -224,7 +224,8 @@ std::ostream& operator<<(std::ostream& os, const Histogram &obj)
 {
     os << "[";
     for(int i=0; i<obj.num_bins; ++i)
-        os << "[" <<obj.bins[i] << " - " << obj.bins[i+1] << "] :" << obj.data[i] << std::endl;
+        os << "[" <<obj.bins[i] << " - " << obj.bins[i+1] << "] :"
+           << obj.data[i] << std::endl;
     os << "] ";
     return os;
 }

@@ -54,49 +54,63 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
         if(o.numWalker == 1)
             w = std::unique_ptr<Walker>(new LatticeWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
         else
-            w = std::unique_ptr<Walker>(new MultipleWalker<LatticeWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<LatticeWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
     }
     else if(o.type == WT_LOOP_ERASED_RANDOM_WALK)
     {
         if(o.numWalker == 1)
             w = std::unique_ptr<Walker>(new LoopErasedWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
         else
-            w = std::unique_ptr<Walker>(new MultipleWalker<LoopErasedWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<LoopErasedWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
     }
     else if(o.type == WT_SELF_AVOIDING_RANDOM_WALK)
     {
         if(o.numWalker == 1)
             w = std::unique_ptr<Walker>(new SelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
         else
-            w = std::unique_ptr<Walker>(new MultipleWalker<SelfAvoidingWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<SelfAvoidingWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
     }
     else if(o.type == WT_REAL_RANDOM_WALK)
     {
         if(o.numWalker == 1)
             w = std::unique_ptr<Walker>(new RealWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
         else
-            w = std::unique_ptr<Walker>(new MultipleWalker<RealWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<RealWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
     }
     else if(o.type == WT_GAUSSIAN_RANDOM_WALK)
     {
         if(o.numWalker == 1)
             w = std::unique_ptr<Walker>(new GaussWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
         else
-            w = std::unique_ptr<Walker>(new MultipleWalker<GaussWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<GaussWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
     }
     else if(o.type == WT_LEVY_FLIGHT)
     {
         if(o.numWalker == 1)
             w = std::unique_ptr<Walker>(new LevyWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
         else
-            w = std::unique_ptr<Walker>(new MultipleWalker<LevyWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<LevyWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
     }
     else if(o.type == WT_CORRELATED_RANDOM_WALK)
     {
         if(o.numWalker == 1)
             w = std::unique_ptr<Walker>(new CorrelatedWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
         else
-            w = std::unique_ptr<Walker>(new MultipleWalker<CorrelatedWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<CorrelatedWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
         w->setP1(o.mu);
         w->setP2(o.sigma);
     }
@@ -105,12 +119,16 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
         if(o.numWalker == 1)
             w = std::unique_ptr<Walker>(new EscapeWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
         else
-            w = std::unique_ptr<Walker>(new MultipleWalker<EscapeWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia));
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<EscapeWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
     }
     else if(o.type == WT_SCENT_RANDOM_WALK)
     {
         // TODO pass sidelength and Tas
-        w = std::unique_ptr<Walker>(new ScentWalker(o.d, o.steps, o.numWalker, o.width, o.tas, rngReal, o.chAlg, amnesia));
+        w = std::unique_ptr<Walker>(
+            new ScentWalker(o.d, o.steps, o.numWalker, o.width, o.tas, rngReal, o.chAlg, amnesia)
+        );
     }
     else
     {

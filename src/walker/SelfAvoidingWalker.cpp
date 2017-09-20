@@ -367,7 +367,8 @@ void SelfAvoidingWalker::change(UniformRNG &rng, bool update)
                 break;
             default:
                 symmetry = -1;
-                LOG(LOG_WARNING) << "Pivot algorithm only implemented for d<=3, will only use naive changes";
+                LOG(LOG_WARNING) << "Pivot algorithm only implemented for d<=3, "
+                                    "will only use naive changes";
         }
         pivot(idx, symmetry, update);
     }

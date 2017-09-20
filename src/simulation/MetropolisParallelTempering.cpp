@@ -9,7 +9,8 @@ MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o, const boo
 void MetropolisParallelTempering::run()
 {
 #ifndef _OPENMP
-    LOG(LOG_WARNING) << "This executable was compiled without OpenMP: This method will run single threaded.";
+    LOG(LOG_WARNING) << "This executable was compiled without OpenMP:";
+    LOG(LOG_WARNING) << "This method will run single threaded.";
 #endif
     // every how many sweeps per swap trial
     const auto estimated_corr = std::max(o.steps / o.sweep, 1);
@@ -33,7 +34,8 @@ void MetropolisParallelTempering::run()
             // this looks like a leak, but unique pointer saves the day
             files.emplace_back(new std::ofstream(o.data_path_vector[i], std::ofstream::out));
             header(*files[i]);
-            *files[i] << "# attempt N-1 = " << numTemperatures-1 << " swap attemps all " << estimated_corr << " sweeps\n";
+            *files[i] << "# attempt N-1 = " << numTemperatures-1
+                      << " swap attemps all " << estimated_corr << " sweeps\n";
             *files[i] << std::setprecision(12);
         }
 
@@ -127,7 +129,10 @@ void MetropolisParallelTempering::run()
 
                     if(p_acc > rngs[0]())
                     {
-                        LOG(LOG_TOO_MUCH) << "(" << i << ") swap: " << thetaMap[j-1] << " = " <<  T_1 << " <-> " <<  thetaMap[j] << " = " <<  T_2;
+                        LOG(LOG_TOO_MUCH) << "(" << i << ") swap: "
+                                          << thetaMap[j-1] << " = " <<  T_1
+                                          << " <-> " <<  thetaMap[j] << " = "
+                                          <<  T_2;
 
                         // accepted -> update the map of the temperatures
                         std::swap(thetaMap[j-1], thetaMap[j]);
@@ -163,7 +168,9 @@ void MetropolisParallelTempering::run()
     LOG(LOG_INFO) << ss.str();
 
     for(int j=0; j<numTemperatures-1; ++j)
-        swapStats.emplace_back(o.parallelTemperatures[j], o.parallelTemperatures[j+1], (double)acceptance[j]/swapTrial[j]);
+        swapStats.emplace_back(o.parallelTemperatures[j],
+                               o.parallelTemperatures[j+1],
+                               (double)acceptance[j]/swapTrial[j]);
 
     swapGraph.close();
     gzip(swapGraphName);

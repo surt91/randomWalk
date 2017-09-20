@@ -113,7 +113,8 @@ void ConvexHull<T>::run(std::vector<Step<T>> *points)
             runJarvis();
             break;
         default:
-            LOG(LOG_ERROR) << "Algorithm not implemented, yet: " << CH_LABEL[algorithm];
+            LOG(LOG_ERROR) << "Algorithm not implemented, yet: "
+                           << CH_LABEL[algorithm];
             throw std::invalid_argument("this is not implemented");
     }
 }
@@ -279,7 +280,8 @@ void ConvexHull<T>::preprocessAklToussaint()
 
     LOG(LOG_TOO_MUCH) << "Akl Toussaint killed: "
             << (n - pointSelection.size()) << "/" << n
-            << " ("  << std::setprecision(2) << ((double) (n - pointSelection.size()) / n * 100) << "%)";
+            << " ("  << std::setprecision(2)
+            << ((double) (n - pointSelection.size()) / n * 100) << "%)";
 
     n = pointSelection.size();
 }
@@ -430,7 +432,8 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
 
         // replace by something less overkill
         // a custom gift wrapping implementation?
-        auto q = std::make_shared<orgQhull::Qhull>("", d, (int) coords.size()/d, coords.data(), cmd.c_str());
+        auto q = std::make_shared<orgQhull::Qhull>("", d, (int) coords.size()/d,
+                                                   coords.data(), cmd.c_str());
 
         for(int i=0; i<n; ++i)
             if(!pointInFacets(q->facetList(), p[i]))
@@ -441,7 +444,8 @@ void ConvexHull<T>::preprocessAklToussaintQHull()
     int k = coords.size()/d;
     LOG(LOG_DEBUG) << "Akl Toussaint killed: "
             << (n - k) << "/" << n
-            << " ("  << std::setprecision(2) << ((double) (n - k) / n * 100) << "%)";
+            << " ("  << std::setprecision(2)
+            << ((double) (n - k) / n * 100) << "%)";
 
     n = k;
 }
@@ -454,7 +458,8 @@ void ConvexHull<T>::updateHullPoints() const
 
     for(const auto &v : vl)
     {
-        // FIXME: for d>=3, if the points are in a hyperplane, coord will have (d-1)*(n+1) entries instead of d*(n+1)
+        // FIXME: for d>=3, if the points are in a hyperplane, coord will have
+        // (d-1)*(n+1) entries instead of d*(n+1)
         // This leads to a invalid read
         // It must be determined which dimension was dropped and zeros
         // need to be written into hullPoints_

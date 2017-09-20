@@ -15,7 +15,8 @@ LevyWalker::LevyWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algor
 void LevyWalker::reconstruct()
 {
     // write new gaussian random numers into our state
-    std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng(); });
+    std::generate(random_numbers.begin(), random_numbers.end(),
+                  [this]{ return this->rng(); });
     for(int i=0; i<numSteps; ++i)
         random_numbers[i*d] = std::abs(rng.cauchy(1.));
     init();
@@ -72,7 +73,8 @@ void LevyWalker::change(UniformRNG &rng, bool update)
     int idx = rng() * numSteps;
     int rnidx = idx * d;
     undo_index = idx;
-    undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx + d);
+    undo_values = std::vector<double>(random_numbers.begin() + rnidx,
+                                      random_numbers.begin() + rnidx + d);
 
     random_numbers[rnidx] = std::abs(rng.cauchy(1.0));
     for(int i=1; i<d; ++i)

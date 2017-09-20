@@ -16,7 +16,9 @@
  * negative for clockwise turn, and zero if the points are collinear.
  */
 template <class T>
-T cross2d_z(const Step<T>& O, const Step<T>& A, const Step<T>& B)
+T cross2d_z(const Step<T>& O,
+            const Step<T>& A,
+            const Step<T>& B)
 {
     return (A.x() - O.x()) * (B.y() - O.y()) - (A.y() - O.y()) * (B.x() - O.x());
 }
@@ -26,7 +28,10 @@ T cross2d_z(const Step<T>& O, const Step<T>& A, const Step<T>& B)
  * Sequence of the points matters, must be counterclockwise.
  */
 template <class T>
-bool pointInTriangle(const Step<T>& p1, const Step<T>& p2, const Step<T>& p3, const Step<T>& p)
+bool pointInTriangle(const Step<T>& p1,
+                     const Step<T>& p2,
+                     const Step<T>& p3,
+                     const Step<T>& p)
 {
     bool checkSide1 = side(p1, p2, p) >= 0;
     bool checkSide2 = side(p2, p3, p) >= 0;
@@ -39,7 +44,11 @@ bool pointInTriangle(const Step<T>& p1, const Step<T>& p2, const Step<T>& p3, co
  * Sequence of the points matters, must be counterclockwise.
  */
 template <class T>
-bool pointInQuadrilateral(const Step<T>& p1, const Step<T>& p2, const Step<T>& p3, const Step<T>& p4, const Step<T>& p)
+bool pointInQuadrilateral(const Step<T>& p1,
+                          const Step<T>& p2,
+                          const Step<T>& p3,
+                          const Step<T>& p4,
+                          const Step<T>& p)
 {
     bool checkSide1 = side(p1, p2, p) >= 0;
     bool checkSide2 = side(p2, p3, p) >= 0;
@@ -186,7 +195,9 @@ bool pointInPolygon(const std::vector<Step<T>>& poly, const Step<T>& p)
  * This implementation does only work for d=2.
  */
 template <class T>
-T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p)
+T side(const Step<T>& p1,
+       const Step<T>& p2,
+       const Step<T>& p)
 {
     return (p2.y() - p1.y())*(p.x() - p1.x()) + (-p2.x() + p1.x())*(p.y() - p1.y());
 }
@@ -200,7 +211,10 @@ T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p)
  * This implementation does only work for d=3.
  */
 template <class T>
-T side(const Step<T>& p1, const Step<T>& p2, const Step<T>& p3, const Step<T>& p)
+T side(const Step<T>& p1,
+       const Step<T>& p2,
+       const Step<T>& p3,
+       const Step<T>& p)
 {
     // calculate dot product of
     //   1. vector from p to some point on the face

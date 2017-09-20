@@ -23,7 +23,8 @@ void CorrelatedWalker::reconstruct()
     // we need d random numbers per step, for each angle difference one and a distance
     // we generate d per step and overwrite unnecessary ones afterwards
     // TODO: replace Gaussian by wrapped normal
-    std::generate(random_numbers.begin(), random_numbers.end(), [this]{ return this->rng.gaussian(); });
+    std::generate(random_numbers.begin(), random_numbers.end(),
+                  [this]{ return this->rng.gaussian(); });
     // and for the distance a uniformly distributed one
     for(int i=0; i<numSteps; ++i)
         random_numbers[i*d] = rng.uniform();
@@ -118,7 +119,8 @@ void CorrelatedWalker::change(UniformRNG &rng, bool update)
     int idx = rng() * numSteps;
     int rnidx = idx * d;
     undo_index = idx;
-    undo_values = std::vector<double>(random_numbers.begin() + rnidx, random_numbers.begin() + rnidx + d);
+    undo_values = std::vector<double>(random_numbers.begin() + rnidx,
+                                      random_numbers.begin() + rnidx + d);
     random_numbers[rnidx] = rng.uniform();
     for(int i=1; i<d; ++i)
         random_numbers[rnidx + i] = rng.gaussian();

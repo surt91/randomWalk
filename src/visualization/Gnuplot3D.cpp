@@ -45,7 +45,8 @@ void Gnuplot3D::save()
               "set pm3d depthorder hidden3d 1\n"
               "set pm3d explicit\n"
               "unset hidden3d\n\n"
-              "splot for [IDX=1:" + std::to_string(numLines) + "] '" + filename_points + "'.IDX w lp ls 2 pt 7 lc IDX ps 0.5,\\\n"
+              "splot for [IDX=1:" + std::to_string(numLines) + "] '"
+                + filename_points + "'.IDX w lp ls 2 pt 7 lc IDX ps 0.5,\\\n"
               "      '" + filename_hull + "' u 1:2:3:(1) w pm3d ls 1\n\n"
               "pause mouse close\n";
 
@@ -68,7 +69,8 @@ void Gnuplot3D::save()
                       "do for [ii=0:360:1] {\n"
                       "    set output sprintf(\"animate%03d.png\", ii)\n"
                       "    set view 60,ii\n"
-                      "    splot for [IDX=1:" + std::to_string(numLines) + "] '" + filename_points + "'.IDX w lp ls 2 pt 7 lc IDX ps 0.5,\\\n"
+                      "    splot for [IDX=1:" + std::to_string(numLines) + "] '"
+                        + filename_points + "'.IDX w lp ls 2 pt 7 lc IDX ps 0.5,\\\n"
                       "          '" + filename_hull + "' u 1:2:3:(1) w pm3d ls 1\n"
                       "}\n"
                       "\n"

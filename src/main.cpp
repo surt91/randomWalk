@@ -33,7 +33,8 @@ int main(int argc, char** argv)
 
     if(o.onlyBounds)
     {
-        LOG(LOG_WARNING) << "mind that the following min/max values are ony rough estimates by a downhill algorithm";
+        LOG(LOG_WARNING) << "mind that the following min/max values are only "
+                            "rough estimates by a downhill algorithm";
         std::cout << "max: " << Simulation::getReasonalbleUpperBound(o) << std::endl;
         std::cout << "min: " << Simulation::getReasonalbleLowerBound(o) << std::endl;
         return 0;
@@ -77,7 +78,7 @@ int main(int argc, char** argv)
         std::cout << o.steps << ": [";
         for(const auto t : o.parallelTemperatures)
             std::cout << t << ", ";
-        std::cout << "],";
+        std::cout << "]," << std::endl;;
         return 0;
     }
 
@@ -130,5 +131,6 @@ int main(int argc, char** argv)
         sim.run();
     }
     else
-        LOG(LOG_ERROR) << "sampling method " << o.sampling_method << " is not known";
+        LOG(LOG_ERROR) << "sampling method " << o.sampling_method
+                       << " is not known";
 }

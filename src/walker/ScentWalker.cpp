@@ -8,11 +8,13 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       relax(2*Tas)
 {
     // TODO: pass relax as parameter
-    LOG(LOG_INFO) << "This type needs to relax first, " << relax << " additional steps will be simulated.";
+    LOG(LOG_INFO) << "This type needs to relax first, " << relax
+                  << " additional steps will be simulated.";
 
     m_steps.reserve(numSteps);
 
-    histograms = std::vector<HistogramND>(numWalker, HistogramND(sideLength+1, d, 0, sideLength));
+    histograms = std::vector<HistogramND>(numWalker,
+                                HistogramND(sideLength+1, d, 0, sideLength));
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
 
@@ -188,7 +190,8 @@ void ScentWalker::svg_histogram(const std::string filename) const
 
                 // color should scale with number of entries
                 std::string color = COLOR[i%COLOR.size()];
-                double opacity = std::max(0.1, std::log(data[x*sideLength + y]) / std::log(maximum));
+                double opacity = std::log(data[x*sideLength + y]) / std::log(maximum);
+                opacity = std::max(0.1, opacity);
                 pic.square(x, y, 1., color, opacity);
             }
 

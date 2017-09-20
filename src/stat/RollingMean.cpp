@@ -23,7 +23,6 @@ double RollingMean::mean() const
  */
 double RollingMean::var(size_t last) const
 {
-    //~ double tmp = std::accumulate(state.begin(), state.begin()+count, 0.0, [&](double part, double next){return part + (m_mean - next) * (m_mean - next);});
     if(last <= 0)
         last = count;
     last = std::min(last, count);

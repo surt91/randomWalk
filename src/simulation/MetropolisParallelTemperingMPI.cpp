@@ -45,7 +45,8 @@ void MetropolisParallelTemperingMPI::run()
         {
             std::ofstream oss(o.data_path_vector[i], std::ofstream::out);
             header(oss);
-            oss << "# attempt N-1 = " << numTemperatures-1 << " swap attemps all " << estimated_corr << " sweeps\n";
+            oss << "# attempt N-1 = " << numTemperatures-1
+                << " swap attemps all " << estimated_corr << " sweeps\n";
         }
 
     // find length of longest outputfilename
@@ -87,8 +88,12 @@ void MetropolisParallelTemperingMPI::run()
             }
 
         // scatter the specifications to the processes
-        MPI_Scatter(&sorted_temperatures[0], 1, MPI_DOUBLE, &theta, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-        MPI_Scatter(&filename_array[0], max_filename_len, MPI_BYTE, filename, max_filename_len, MPI_CHAR, 0, MPI_COMM_WORLD);
+        MPI_Scatter(&sorted_temperatures[0], 1, MPI_DOUBLE,
+                    &theta, 1, MPI_DOUBLE,
+                    0, MPI_COMM_WORLD);
+        MPI_Scatter(&filename_array[0], max_filename_len, MPI_BYTE,
+                    filename, max_filename_len, MPI_BYTE,
+                    0, MPI_COMM_WORLD);
 
         std::ofstream current_stream(filename, std::ofstream::app);
         current_stream << std::setprecision(12);
@@ -128,8 +133,11 @@ void MetropolisParallelTemperingMPI::run()
 
         // gather will synchronize, pass observables to master
         double observable = S(walker);
-        std::vector<double> observables(numTemperatures); // buffer to collect observables (only rank == 0)
-        MPI_Gather(&observable, 1, MPI_DOUBLE, &observables[0], 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        // buffer to collect observables (only rank == 0)
+        std::vector<double> observables(numTemperatures);
+        MPI_Gather(&observable, 1, MPI_DOUBLE,
+                   &observables[0], 1, MPI_DOUBLE,
+                   0, MPI_COMM_WORLD);
 
         // master decides which temperatures to swap
         if(rank == 0)
@@ -148,7 +156,9 @@ void MetropolisParallelTemperingMPI::run()
 
                 if(p_acc > rngMC())
                 {
-                    LOG(LOG_TOO_MUCH) << "(" << i << ") swap: " << thetaMap[j-1] << " = " <<  T_1 << " <-> " <<  thetaMap[j] << " = " <<  T_2;
+                    LOG(LOG_TOO_MUCH) << "(" << i << ") swap: " << thetaMap[j-1]
+                                      << " = " <<  T_1 << " <-> "
+                                      <<  thetaMap[j] << " = " <<  T_2;
 
                     // accepted -> update the map of the temperatures
                     std::swap(thetaMap[j-1], thetaMap[j]);
@@ -178,7 +188,10 @@ void MetropolisParallelTemperingMPI::run()
         std::stringstream ss;
         ss << "# swap success rates:\n";
         for(int j=0; j<numTemperatures-1; ++j)
-            ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0) << "% (" << acceptance[j] << "/" << swapTrial[j] << ")" << " : " << o.parallelTemperatures[j] << " <-> " << o.parallelTemperatures[j+1] << "\n";
+            ss << "#    " << (int)((double)acceptance[j]/swapTrial[j]*100.0)
+               << "% (" << acceptance[j] << "/" << swapTrial[j] << ")" << " : "
+               << o.parallelTemperatures[j] << " <-> "
+               << o.parallelTemperatures[j+1] << "\n";
         LOG(LOG_INFO) << ss.str();
 
         swapGraph.close();

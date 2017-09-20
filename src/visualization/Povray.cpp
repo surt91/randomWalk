@@ -76,7 +76,8 @@ Povray::Povray(const std::string &filename)
 
 void Povray::box(const double x, const double y, const double z, const double dx, const double dy, const double dz)
 {
-    buffer << "placeBox(<" << x << "," << y << "," << z << ">, <" << dx << "," << dy << "," << dz << ">)\n";
+    buffer << "placeBox(<" << x << "," << y << "," << z << ">, "
+          "<" << dx << "," << dy << "," << dz << ">)\n";
 }
 
 void Povray::polyline(const std::vector<std::vector<double>> &points)
@@ -116,7 +117,8 @@ void Povray::save()
     }
 
     LOG(LOG_INFO) << "Povray file: " << filename;
-    LOG(LOG_INFO) << "Render with " << "povray +O" << filename << ".png" << " +I" << filename << " +V +W1920 +H1080 +A";
+    LOG(LOG_INFO) << "Render with " << "povray +O" << filename << ".png"
+                  << " +I" << filename << " +V +W1920 +H1080 +A";
 
     oss << header;                  // header
     oss << buffer.str();            // content

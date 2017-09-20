@@ -23,7 +23,8 @@ SVG::SVG(const std::string &filename, const double scale)
 */
 void SVG::circle(const double x, const double y, const int filled, const std::string color)
 {
-    buffer << "<circle cx='" << x << "' cy='" << y << "' r='" << radius*scale << "' stroke='black' stroke-width='0'";
+    buffer << "<circle cx='" << x << "' cy='" << y << "' r='" << radius*scale
+           << "' stroke='black' stroke-width='0'";
     if(filled == 1)
         buffer << " fill='" + color + "'";
     else if(filled == -1)
@@ -62,7 +63,9 @@ void SVG::square(const double x, const double y, const double w, const std::stri
 */
 void SVG::line(const double x1, const double x2, const double y1, const double y2, const std::string color)
 {
-    buffer << "<line x1='" << x1 << "' x2='" << x2 << "' y1='" << y1 << "' y2='" << y2 << "' stroke='" << color << "' stroke-width='" << stroke*scale << "'/>\n";
+    buffer << "<line x1='" << x1 << "' x2='" << x2 << "' y1='" << y1
+           << "' y2='" << y2 << "' stroke='" << color
+           << "' stroke-width='" << stroke*scale << "'/>\n";
 }
 
 void SVG::polyline(const std::vector<std::vector<double>> points, const bool closed, const std::string color)
@@ -80,7 +83,8 @@ void SVG::polyline(const std::vector<std::vector<double>> points, const bool clo
 
 void SVG::text(const double x, const double y, const std::string &t, const std::string color)
 {
-    buffer << "<text x='" << x << "' y='" << y << "' fill='" << color << "'>" << t << "</text>";
+    buffer << "<text x='" << x << "' y='" << y
+           << "' fill='" << color << "'>" << t << "</text>";
 }
 
 void SVG::setGeometry(const double min, const double max, const bool border)
@@ -95,7 +99,9 @@ void SVG::setGeometry(const double min_x, const double min_y, const double max_x
     std::string area = ss.str();
 
     ss.str("");
-    ss << "<rect x='" << min_x << "' y='" << min_y << "' width='" << (max_x - min_x) << "' height='" << (max_y-min_y) << "' fill='white' />\n";
+    ss << "<rect x='" << min_x << "' y='" << min_y
+       << "' width='" << (max_x - min_x) << "' height='" << (max_y-min_y)
+       << "' fill='white' />\n";
 
     header.insert(header.find_last_of(">"), "viewBox='" + area + "'");
     header += ss.str();

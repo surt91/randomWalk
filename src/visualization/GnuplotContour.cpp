@@ -62,7 +62,8 @@ void GnuplotContour::data(const std::vector<HistogramND> &histograms)
     for(size_t i=0; i<histograms.size(); ++i)
     {
         std::string name = filename_matrix + std::to_string(i);
-        buffer << "  '" + name + ".lines" + "' w l lc '" << COLOR[i%COLOR.size()] << "',\\\n";
+        buffer << "  '" + name + ".lines" + "' w l lc '"
+               << COLOR[i%COLOR.size()] << "',\\\n";
     }
     buffer << "\n";
 }
