@@ -546,6 +546,8 @@ class SimulationInstance():
             opts.append("--t_eq {0:.0f}".format(self.t_eq[self.N][self.T]))
         except KeyError:
             pass
+        except TypeError:
+            opts.append("--t_eq {0:.0f}".format(self.t_eq[self.N]))
         if self.t_eq_max:
             opts.append("--t_eq_max {0:.0f}".format(self.t_eq_max))
 

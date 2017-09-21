@@ -442,6 +442,8 @@ def run(histogram_type=1, parallelness=1):
         # fill the undefined entries with None
         try:
             t_eq[N]
+            if isinstance(t_eq[N], int):
+                t_eq[N] = {T: t_eq[N] for T in theta_for_N}
         except KeyError:
             t_eq[N] = {T: None for T in theta_for_N}
         else:
@@ -450,6 +452,7 @@ def run(histogram_type=1, parallelness=1):
                     t_eq[N][T]
                 except KeyError:
                     t_eq[N][T] = None
+                
 
         # find names of needed files
         nameDict = {}
