@@ -1,6 +1,6 @@
 #include <catch.hpp>
 
-#include "Step.hpp"
+#include "../Step.hpp"
 
 TEST_CASE("Step is tested", "[step]" ) {
     Step<int> a({3, 4, 0});

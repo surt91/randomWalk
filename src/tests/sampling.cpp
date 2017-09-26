@@ -1,17 +1,13 @@
 #include <catch.hpp>
 
-#include "Cmd.hpp"
-#include "RNG.hpp"
-#include "stat/stat.hpp"
-#include "Logging.hpp"
-#include "walker/Walker.hpp"
-#include "walker/LatticeWalker.hpp"
-#include "simulation/Simulation.hpp"
-#include "simulation/SimpleSampling.hpp"
-#include "simulation/Metropolis.hpp"
-#include "simulation/WangLandau.hpp"
-#include "simulation/FastWLEntropic.hpp"
-#include "simulation/MetropolisParallelTempering.hpp"
+#include "../Cmd.hpp"
+#include "../walker/Walker.hpp"
+#include "../walker/LatticeWalker.hpp"
+#include "../simulation/Simulation.hpp"
+#include "../simulation/SimpleSampling.hpp"
+#include "../simulation/Metropolis.hpp"
+#include "../simulation/WangLandau.hpp"
+#include "../simulation/MetropolisParallelTempering.hpp"
 
 TEST_CASE( "sampling types", "[sampling]" ) {
     Cmd o;

@@ -1,12 +1,9 @@
 #include <catch.hpp>
 
-#include "Cmd.hpp"
-#include "RNG.hpp"
-#include "stat/stat.hpp"
-#include "Logging.hpp"
-#include "walker/Walker.hpp"
-#include "walker/LatticeWalker.hpp"
-#include "simulation/Simulation.hpp"
+#include "../Cmd.hpp"
+#include "../walker/Walker.hpp"
+#include "../walker/LatticeWalker.hpp"
+#include "../simulation/Simulation.hpp"
 
 TEST_CASE( "hull types", "[hull]" ) {
     Cmd o;
