@@ -1,8 +1,8 @@
 #include "MetropolisParallelTempering.hpp"
 
-MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o, const bool fileOutput)
+MetropolisParallelTempering::MetropolisParallelTempering(const Cmd &o, const bool fileOutputPT)
     : Simulation(o, false),
-      noFileOutput(fileOutput)
+      fileOutputPT(fileOutputPT)
 {
 }
 
@@ -28,7 +28,7 @@ void MetropolisParallelTempering::run()
         thetaMap[i] = i;
 
     std::vector<std::unique_ptr<std::ofstream>> files;
-    if(fileOutput)
+    if(fileOutputPT)
         for(int i=0; i<numTemperatures; ++i)
         {
             // this looks like a leak, but unique pointer saves the day
@@ -85,7 +85,7 @@ void MetropolisParallelTempering::run()
                     sweep(allWalkers[n], theta, rngs[n]);
 
                     // save to file (not critical, since every thread has its own file)
-                    if(i >= 2*o.t_eq && fileOutput)
+                    if(i >= 2*o.t_eq && fileOutputPT)
                     {
                         *files[thetaMap[n]] << i+j << " "
                                             << allWalkers[n]->L() << " "
@@ -175,7 +175,7 @@ void MetropolisParallelTempering::run()
     swapGraph.close();
     gzip(swapGraphName);
 
-    if(fileOutput)
+    if(fileOutputPT)
         for(int i=0; i<numTemperatures; ++i)
         {
             *files[i] << ss.str();

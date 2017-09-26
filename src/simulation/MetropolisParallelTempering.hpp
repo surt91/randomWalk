@@ -24,7 +24,7 @@ class MetropolisParallelTempering : public Simulation
 {
     public:
         virtual ~MetropolisParallelTempering() {}
-        MetropolisParallelTempering(const Cmd &o, const bool fileOutput=true);
+        MetropolisParallelTempering(const Cmd &o, const bool fileOutputPT=true);
         virtual void run();
 
         std::vector<double> proposeBetterTemperatures();
@@ -34,7 +34,7 @@ class MetropolisParallelTempering : public Simulation
 
         std::vector<SwapStatEntry> swapStats;
 
-        bool noFileOutput;
+        bool fileOutputPT;
 };
 
 #endif
