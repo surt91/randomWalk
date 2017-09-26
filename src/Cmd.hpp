@@ -160,10 +160,6 @@ class Cmd
         bool onlyPivotExample;      ///< save a picture of a pivot step and exit
         bool onlyPTTemperatures;    ///< estimate good temperatures for parallel tempering and exit
 
-        bool benchmark;             ///< perform benchmarks and exit
-        double benchmark_A;         ///< helper to store expected value of the benchmark
-        double benchmark_L;         ///< helper to store expected value of the benchmark
-
         std::string text;           ///< the full command used to start this program
 };
 

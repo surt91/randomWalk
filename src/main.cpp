@@ -15,7 +15,6 @@
 #endif
 #include "simulation/WangLandau.hpp"
 #include "simulation/FastWLEntropic.hpp"
-#include "Benchmark.hpp"
 
 /** randomWalk
  *
@@ -25,11 +24,6 @@
 int main(int argc, char** argv)
 {
     Cmd o(argc, argv);
-
-    if(o.benchmark)
-    {
-        return benchmark();
-    }
 
     if(o.onlyBounds)
     {

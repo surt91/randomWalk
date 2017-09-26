@@ -18,7 +18,6 @@ doc: randomWalk
 test: randomWalkD
 	cp src/test .
 	./test
-	./$< -b
 
 proper:
 	$(MAKE) proper -C src

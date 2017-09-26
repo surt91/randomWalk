@@ -10,7 +10,6 @@
 
 TEST_CASE( "hull types", "[hull]" ) {
     Cmd o;
-    o.benchmark = true;
     o.seedRealization = 13;
     o.seedMC = 42;
     o.wantedObservable = WO_VOLUME;

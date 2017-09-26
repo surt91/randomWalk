@@ -23,7 +23,6 @@ TEST_CASE( "sampling types", "[sampling]" ) {
     o.numWalker = 1;
     o.seedRealization = 13;
     o.seedMC = 42;
-    o.benchmark = true;
 
     o.t_eq = 0;
     o.t_eqMax = 1000;

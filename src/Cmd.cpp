@@ -132,7 +132,6 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::SwitchArg onlyLERWExampleSwitch("", "onlyLERWExample", "just output a picture of erased loops", false);
         TCLAP::SwitchArg onlyPivotExampleSwitch("", "onlyPivotExample", "just output a picture of a pivot step", false);
         TCLAP::SwitchArg onlyPTTemperaturesSwitch("", "onlyPTTemperatures", "just estimate reasonalbe temperatures for parallel tempering. will start from the supplied temperatures. specify at least two as boundaries.", false);
-        TCLAP::SwitchArg benchmarkSwitch("b", "benchmark", "perform benchmark", false);
         TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode, log only to file (if specified) and not to stdout", false);
 
         // Add to the parser
@@ -178,8 +177,6 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(onlyPivotExampleSwitch);
         cmd.add(onlyPTTemperaturesSwitch);
 
-        cmd.add(benchmarkSwitch);
-
         cmd.add(quietSwitch);
         cmd.add(logfileArg);
         cmd.add(verboseArg);
@@ -189,13 +186,6 @@ Cmd::Cmd(int argc, char** argv)
 
 
         Logger::verbosity = 4;
-        benchmark = benchmarkSwitch.getValue();
-        if(benchmark)
-        {
-            Logger::verbosity = std::max(4, verboseArg.getValue());
-            LOG(LOG_INFO) << "Benchmark Mode";
-            return;
-        }
 
         onlyBounds = onlyBoundsSwitch.getValue();
         onlyCenters = onlyCentersSwitch.getValue();

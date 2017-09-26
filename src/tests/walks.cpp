@@ -36,7 +36,6 @@ double MCMC_sampling(const Cmd o)
 
 TEST_CASE( "walk types", "[walk]" ) {
     Cmd o;
-    o.benchmark = true;
     o.seedRealization = 13;
     o.seedMC = 42;
     o.wantedObservable = WO_VOLUME;
