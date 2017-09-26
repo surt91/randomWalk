@@ -2,6 +2,7 @@ randomWalk
 ==========
 
 [![Build Status](https://travis-ci.com/surt91/randomWalk.svg?token=KcmDorpEqtSzJp2wyhgU&branch=master)](https://travis-ci.com/surt91/randomWalk)
+[![codecov](https://codecov.io/gh/surt91/randomWalk/branch/master/graph/badge.svg?token=EW5j2uy4vc)](https://codecov.io/gh/surt91/randomWalk)
 
 ## Initialization
 

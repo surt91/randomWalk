@@ -69,7 +69,7 @@ release: all
 silent: CXXFLAGS += -DNLOG
 silent: VERSION += silent
 silent: release
-debug: CXXFLAGS += -g
+debug: CXXFLAGS += -g -fprofile-arcs -ftest-coverage
 debug: VERSION += debug
 debug: all
 

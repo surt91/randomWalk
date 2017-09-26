@@ -3,6 +3,10 @@ language: cpp
 script:
   - make test
   - make doc
+  - if [ $CC = gcc ]; then ./get_code_cov.sh; fi
+
+after_success:
+  - if [ $CC = gcc ]; then bash <(curl -s https://codecov.io/bash); fi
 
 compiler:
   - gcc
