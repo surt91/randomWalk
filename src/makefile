@@ -44,6 +44,7 @@ DEP	 = $(CPP:%.cpp=dep/%.d)
 # for CATCH unit tests
 CPP := $(filter-out test.cpp, $(CPP))
 TEST_CPP := $(filter-out main.cpp, $(CPP))
+CPP := $(filter-out $(wildcard tests/*.cpp), $(CPP))
 TEST_CPP += test.cpp
 TEST_OBJ := $(TEST_CPP:%.cpp=obj/%.o)
 TEST_GCH := $(GCH)
@@ -96,7 +97,7 @@ LNDIRS  = -Lqhull/lib
 INCLUDES = -isystem tclap/include \
            -isystem qhull/src \
            -isystem qhull/src/libqhullcpp \
-		   -I Catch/single_include
+		   -isystem Catch/single_include
 
 CXXFLAGS += $(INCLUDES)
 
