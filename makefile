@@ -16,7 +16,8 @@ doc: randomWalk
 	cp -r src/doc .
 
 test: randomWalkD
-	touch test
+	cp src/test .
+	./test
 	./$< -b
 
 proper:

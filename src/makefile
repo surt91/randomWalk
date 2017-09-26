@@ -1,6 +1,7 @@
 TARGET	= randomWalk
 
 DOC 	= manual.pdf
+TEST	= test
 
 # max dimension
 # 0 for arbitrary (needs heap allocations, may be slower)
@@ -39,6 +40,15 @@ endif
 OBJ	 = $(CPP:%.cpp=obj/%.o)
 GCH	 = $(HPP:%.hpp=%.hpp.gch)
 DEP	 = $(CPP:%.cpp=dep/%.d)
+
+# for CATCH unit tests
+CPP := $(filter-out test.cpp, $(CPP))
+TEST_CPP := $(filter-out main.cpp, $(CPP))
+TEST_CPP += test.cpp
+TEST_OBJ := $(TEST_CPP:%.cpp=obj/%.o)
+TEST_GCH := $(GCH)
+TEST_GCH += Catch/single_include/catch.hpp
+TEST_DEP := $(TEST_CPP:%.cpp=dep/%.d)
 
 QHULL_CPP = qhull/lib/libqhullcpp.a
 QHULL = qhull/lib/libqhullstatic_r.a
@@ -85,14 +95,15 @@ LNDIRS  = -Lqhull/lib
 
 INCLUDES = -isystem tclap/include \
            -isystem qhull/src \
-           -isystem qhull/src/libqhullcpp
+           -isystem qhull/src/libqhullcpp \
+		   -I Catch/single_include
 
 CXXFLAGS += $(INCLUDES)
 
 LIBS = -lqhullcpp -lqhullstatic_r -lm
 LFLAGS	= $(LNDIRS) $(LIBS)
 
-all: $(DEP) $(TARGET)
+all: $(DEP) $(TARGET) $(TEST)
 
 .DELETE_ON_ERROR:
 .PHONY: clean proper
@@ -132,6 +143,9 @@ $(QHULL) $(QHULL_CPP):
 
 $(TARGET): $(QHULL_CPP) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
+
+$(TEST): $(QHULL_CPP) $(TEST_OBJ)
+	$(CXX) $(CXXFLAGS) -o $(TEST) $(TEST_OBJ) $(LFLAGS)
 
 manual.pdf: doc
 	$(MAKE) -C doc/latex clean

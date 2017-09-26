@@ -46,6 +46,7 @@ class Step
         explicit Step(int d);
         /// Construct a Step from a coordinate vector.
         explicit Step(const std::vector<T> &coord);
+        explicit Step(const std::initializer_list<T> &coord);
 
         void fillFromRN(double /*rn*/, bool /*clean*/=false){ throw std::invalid_argument("fillFromRN(double rn, bool clean) only implemented for Step<int>"); }
         double readToRN(){ throw std::invalid_argument("readToRN() only implemented for Step<int>"); }
@@ -397,6 +398,13 @@ Step<T>::Step(const std::vector<T> &coord)
 {
 
 }
+template <class T>
+Step<T>::Step(const std::initializer_list<T> &coord)
+    : m_d(coord.size()),
+      m_coordinates(begin(coord), end(coord))
+{
+
+}
 #else
 /// Construct a Step from a coordinate vector.
 template <class T>
@@ -405,6 +413,14 @@ Step<T>::Step(const std::vector<T> &coord)
 {
     for(int i=0; i<m_d; ++i)
         m_coordinates[i] = coord[i];
+}
+template <class T>
+Step<T>::Step(const std::initializer_list<T> &coord)
+    : m_d(coord.size())
+{
+    int j = 0;
+    for(auto i=begin(coord); i<begin(coord)+m_d; ++i)
+        m_coordinates[j++] = *i;
 }
 #endif
 
