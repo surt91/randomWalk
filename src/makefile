@@ -177,6 +177,7 @@ proper:
 clean: proper
 	rm -rf dep
 	rm -rf $(TARGET)
+	rm -rf $(TEST)
 	rm -rf doc
 
 cleanall: clean
