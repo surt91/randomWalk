@@ -169,6 +169,14 @@ TEST_CASE( "walk types", "[walk]" ) {
             mcmc = 13.3748261316;
         }
     }
+    SECTION( "Agent" ) {
+        o.type = WT_SCENT_RANDOM_WALK;
+        SECTION( "2D" ) {
+            o.d = 2;
+            simple = 17.42;
+            mcmc = 20.35;
+        }
+    }
 
     REQUIRE( simple_sampling(o) == Approx(simple) );
     REQUIRE( MCMC_sampling(o) == Approx(mcmc) );
