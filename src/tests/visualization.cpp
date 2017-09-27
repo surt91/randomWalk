@@ -35,10 +35,10 @@ TEST_CASE( "images", "[vis]" ) {
         LatticeWalker w(o.d, o.steps, rngReal, o.chAlg);
         SECTION( "SVG" ) {
             filename = "bench.svg";
-            w.svg(filename);
+            w.svg(filename, true);
         }
         SECTION( "GP" ) {
-            w.gp("bench2");
+            w.gp("bench2", true);
             filename = "bench2.gp";
         }
     }
@@ -48,15 +48,15 @@ TEST_CASE( "images", "[vis]" ) {
         LatticeWalker w(o.d, o.steps, rngReal, o.chAlg);
         SECTION( "POV" ) {
             filename = "bench.pov";
-            w.pov(filename);
+            w.pov(filename, true);
         }
         SECTION( "GP" ) {
-            w.gp("bench3");
+            w.gp("bench3", true);
             filename = "bench3.gp";
         }
         SECTION( "three.js" ) {
             filename = "bench.tjs";
-            w.threejs(filename);
+            w.threejs(filename, true);
         }
     }
 
