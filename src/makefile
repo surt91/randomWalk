@@ -1,7 +1,9 @@
 TARGET	= randomWalk
+DEBUG	= randomWalkD
 
 DOC 	= manual.pdf
 TEST	= test
+TESTD	= testD
 
 # max dimension
 # 0 for arbitrary (needs heap allocations, may be slower)
@@ -38,6 +40,7 @@ endif
 endif
 
 OBJ	 = $(CPP:%.cpp=obj/%.o)
+DBG	 = $(CPP:%.cpp=dbg/%.o)
 GCH	 = $(HPP:%.hpp=%.hpp.gch)
 DEP	 = $(CPP:%.cpp=dep/%.d)
 
@@ -47,6 +50,7 @@ TEST_CPP := $(filter-out main.cpp, $(CPP))
 CPP := $(filter-out $(wildcard tests/*.cpp), $(CPP))
 TEST_CPP += test.cpp
 TEST_OBJ := $(TEST_CPP:%.cpp=obj/%.o)
+TEST_DBG := $(TEST_CPP:%.cpp=dbg/%.o)
 TEST_GCH := $(GCH)
 TEST_GCH += Catch/single_include/catch.hpp
 TEST_DEP := $(TEST_CPP:%.cpp=dep/%.d)
@@ -65,13 +69,13 @@ VERSION := $(shell git describe --tags --always)
 
 release: CXXFLAGS += -O3 -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing -fomit-frame-pointer -DNDEBUG
 release: VERSION += release
-release: all
+release: all $(TARGET) $(TEST)
 silent: CXXFLAGS += -DNLOG
 silent: VERSION += silent
 silent: release
 debug: CXXFLAGS += -g -fprofile-arcs -ftest-coverage
 debug: VERSION += debug
-debug: all
+debug: all $(DEBUG) $(TESTD)
 
 # add some gcc specific flags (at least clang does not understand them or they caused issues (in the last tested version on arch respectively travis ubuntu trusty))
 ifeq "$(CXX)" "g++"
@@ -104,7 +108,7 @@ CXXFLAGS += $(INCLUDES)
 LIBS = -lqhullcpp -lqhullstatic_r -lm
 LFLAGS	= $(LNDIRS) $(LIBS)
 
-all: $(DEP) $(TARGET) $(TEST)
+all: $(DEP)
 
 .DELETE_ON_ERROR:
 .PHONY: clean proper
@@ -114,7 +118,7 @@ ifeq ($(filter $(MAKECMDGOALS),$(MAKEFILE_TARGETS_WITHOUT_INCLUDE)),)
 -include $(DEP)
 endif
 
-obj dep:
+obj dep dbg:
 	mkdir $@
 
 # compile the parts containing the version new, after changes to git
@@ -134,6 +138,10 @@ obj/%.o: %.cpp | obj
 	@mkdir -p $(@D)
 	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
 
+dbg/%.o: %.cpp | dbg
+	@mkdir -p $(@D)
+	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
+
 %.hpp.gch: %.hpp
 	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
 
@@ -145,8 +153,14 @@ $(QHULL) $(QHULL_CPP):
 $(TARGET): $(QHULL_CPP) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
+$(DEBUG): $(QHULL_CPP) $(DBG)
+	$(CXX) $(CXXFLAGS) -o $(DEBUG) $(DBG) $(LFLAGS)
+
 $(TEST): $(QHULL_CPP) $(TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TEST) $(TEST_OBJ) $(LFLAGS)
+
+$(TESTD): $(QHULL_CPP) $(TEST_DBG)
+	$(CXX) $(CXXFLAGS) -o $(TESTD) $(TEST_DBG) $(LFLAGS)
 
 manual.pdf: doc
 	$(MAKE) -C doc/latex clean
@@ -172,12 +186,12 @@ cli.md: $(TARGET) ../README.md makefile
 	@echo '~~~' >> cli.md
 
 proper:
-	rm -rf $(OBJ) $(GCH)
+	rm -rf $(OBJ) $(DBG) $(GCH)
 
 clean: proper
 	rm -rf dep
-	rm -rf $(TARGET)
-	rm -rf $(TEST)
+	rm -rf $(TARGET) $(DEBUG)
+	rm -rf $(TEST) $(TESTD)
 	rm -rf doc
 
 cleanall: clean

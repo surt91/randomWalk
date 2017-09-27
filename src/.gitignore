@@ -1,5 +1,6 @@
 dep/
 obj/
+dbg/
 *.gch
 callgrind.out*
 

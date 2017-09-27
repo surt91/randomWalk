@@ -2,6 +2,7 @@ language: cpp
 
 script:
   - make test
+  - make testD
   - make doc
   - if [ $CC = gcc ]; then ./get_code_cov.sh; fi
 
