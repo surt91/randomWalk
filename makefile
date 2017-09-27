@@ -3,21 +3,15 @@ all: randomWalk test
 .DELETE_ON_ERROR:
 .PHONY: clean proper cleanall test testD
 
-randomWalk: $(shell find src | sed 's/ /\\ /g')
-	$(MAKE) -C src
-	cp -p src/$@ $@
-
-randomWalkD: $(shell find src | sed 's/ /\\ /g')
-	$(MAKE) debug -C src
-	cp -p src/$@ $@
+randomWalk randomWalkD: $(shell find src | sed 's/ /\\ /g')
+	$(MAKE) $@ -C src
+	cp -p src/$@ .
 
 doc: randomWalk
 	$(MAKE) doc -C src
 	cp -r src/doc .
 
-test: $(shell find src | sed 's/ /\\ /g')
-testD: $(shell find src | sed 's/ /\\ /g')
-test testD:
+test testD: $(shell find src | sed 's/ /\\ /g')
 	$(MAKE) $@ -C src
 	cp src/$@ .
 	./$@

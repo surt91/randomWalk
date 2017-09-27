@@ -106,10 +106,10 @@ else
 DBGFLAGS += -O1
 endif
 
-all: $(DEP)
+all: $(DEP) $(TARGET)
 
 .DELETE_ON_ERROR:
-.PHONY: clean proper
+.PHONY: clean proper cleanall
 
 MAKEFILE_TARGETS_WITHOUT_INCLUDE := clean proper cleanall
 ifeq ($(filter $(MAKECMDGOALS),$(MAKEFILE_TARGETS_WITHOUT_INCLUDE)),)
