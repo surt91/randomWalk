@@ -65,29 +65,6 @@ ifeq "$(GCC_GTEQ_490)" "1"
     CXXFLAGS += -fdiagnostics-color=auto
 endif
 
-VERSION := $(shell git describe --tags --always)
-
-release: CXXFLAGS += -O3 -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing -fomit-frame-pointer -DNDEBUG
-release: VERSION += release
-release: all $(TARGET) $(TEST)
-silent: CXXFLAGS += -DNLOG
-silent: VERSION += silent
-silent: release
-debug: CXXFLAGS += -g -fprofile-arcs -ftest-coverage
-debug: VERSION += debug
-debug: all $(DEBUG) $(TESTD)
-
-# add some gcc specific flags (at least clang does not understand them or they caused issues (in the last tested version on arch respectively travis ubuntu trusty))
-ifeq "$(CXX)" "g++"
-release: CXXFLAGS += -flto
-debug: CXXFLAGS += -Og
-else
-debug: CXXFLAGS += -O1
-endif
-
-CXXFLAGS += -DVERSION="\"$(VERSION)\""
-CXXFLAGS += -DD_MAX=$(D_MAX)
-
 # enable strict warnings
 WARNLEVEL = -Wall -Wextra -Wpedantic -Werror
 ifeq "$(CXX)" "clang++"
@@ -107,6 +84,27 @@ CXXFLAGS += $(INCLUDES)
 
 LIBS = -lqhullcpp -lqhullstatic_r -lm
 LFLAGS	= $(LNDIRS) $(LIBS)
+
+VERSION := $(shell git describe --tags --always)
+VERSION := $(VERSION) release
+DBG_VERSION := $(VERSION) debug
+
+CXXFLAGS += -DD_MAX=$(D_MAX)
+
+DBGFLAGS := $(CXXFLAGS)
+CXXFLAGS += -DVERSION="\"$(VERSION)\""
+DBGFLAGS += -DVERSION="\"$(DBG_VERSION)\""
+
+CXXFLAGS += -O3 -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing -fomit-frame-pointer -DNDEBUG
+DBGFLAGS += -g -fprofile-arcs -ftest-coverage
+
+# add some gcc specific flags (at least clang does not understand them or they caused issues (in the last tested version on arch respectively travis ubuntu trusty))
+ifeq "$(CXX)" "g++"
+CXXFLAGS += -flto
+DBGFLAGS += -Og
+else
+DBGFLAGS += -O1
+endif
 
 all: $(DEP)
 
@@ -140,7 +138,7 @@ obj/%.o: %.cpp | obj
 
 dbg/%.o: %.cpp | dbg
 	@mkdir -p $(@D)
-	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
+	$(CXX) -c $(WARNLEVEL) $(DBGFLAGS) $< -o $@
 
 %.hpp.gch: %.hpp
 	$(CXX) -c $(WARNLEVEL) $(CXXFLAGS) $< -o $@
@@ -154,13 +152,13 @@ $(TARGET): $(QHULL_CPP) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
 $(DEBUG): $(QHULL_CPP) $(DBG)
-	$(CXX) $(CXXFLAGS) -o $(DEBUG) $(DBG) $(LFLAGS)
+	$(CXX) $(DBGFLAGS) -o $(DEBUG) $(DBG) $(LFLAGS)
 
 $(TEST): $(QHULL_CPP) $(TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TEST) $(TEST_OBJ) $(LFLAGS)
 
 $(TESTD): $(QHULL_CPP) $(TEST_DBG)
-	$(CXX) $(CXXFLAGS) -o $(TESTD) $(TEST_DBG) $(LFLAGS)
+	$(CXX) $(DBGFLAGS) -o $(TESTD) $(TEST_DBG) $(LFLAGS)
 
 manual.pdf: doc
 	$(MAKE) -C doc/latex clean

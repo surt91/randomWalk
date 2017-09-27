@@ -15,9 +15,10 @@ doc: randomWalk
 	$(MAKE) doc -C src
 	cp -r src/doc .
 
-test: randomWalk
-testD: randomWalkD
+test: $(shell find src | sed 's/ /\\ /g')
+testD: $(shell find src | sed 's/ /\\ /g')
 test testD:
+	$(MAKE) $@ -C src
 	cp src/$@ .
 	./$@
 
