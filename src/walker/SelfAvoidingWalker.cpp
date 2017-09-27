@@ -387,8 +387,6 @@ void SelfAvoidingWalker::undoChange()
     // which change was done
     if(undo_index == -1)
         naiveChangeUndo();
-    else if(undo_index == -2)
-        undo_slitheringSnake();
     else
         pivot(undo_index, undo_symmetry);
 }
@@ -532,74 +530,6 @@ bool SelfAvoidingWalker::naiveChange(const int idx, const double rn, bool update
     }
 
     return true;
-}
-
-/** Silthering Snake
- *
- * Slithering Snake appends one step at the one side and removes the last
- * step on the other side. Note that this is not ergodic, since the snake
- * can be trapped. This, however, is mitigated by also using pivoting,
- * which is ergodic.
- *
- * Madras2013, The Self-Avoiding Walk, p. 320 ff (doi 10.1007/978-1-4614-6025-1_9)
- *
- *  \param direction does sthe snake slither forwards or backwards
- *  \param rn random number to determine the direction of the slithering
- *  \return was it successful, or did the walk cross itself?
- */
-bool SelfAvoidingWalker::slitheringSnake(const bool direction, const double rn, bool update)
-{
-    undo_slither_direction = !direction;
-    Step<int> newStep(d, rn);
-    undo_step = slither(direction, newStep);
-
-    updatePoints();
-
-    if(!checkOverlapFree(points()))
-    {
-        slither(undo_slither_direction, undo_step);
-        updatePoints();
-        return false;
-    }
-
-    if(update)
-    {
-        m_old_convex_hull = m_convex_hull;
-        updateHull();
-    }
-
-    return true;
-}
-
-void SelfAvoidingWalker::undo_slitheringSnake()
-{
-    slither(undo_slither_direction, undo_step);
-    updatePoints();
-    m_convex_hull = m_old_convex_hull;
-    //~ std::cout << "undo details: " << undo_slither_direction << undo_step;
-}
-
-Step<int> SelfAvoidingWalker::slither(const bool direction, const Step<int> &newStep)
-{
-    const int N = numSteps;
-    Step<int> overwrite;
-    // copy the whole vector. This. is. slow.
-    // I should have used a deque
-    if(direction)
-    {
-        overwrite = m_steps[0];
-        for(int i=N-2; i>=0; --i)
-            m_steps[i+1] = m_steps[i];
-        m_steps[0] = newStep;
-    }
-    else
-    {
-        overwrite = m_steps[N-1];
-        for(int i=1; i<N; ++i)
-            m_steps[i-1] = m_steps[i];
-        m_steps[N-1] = newStep;
-    }
-    return overwrite;
 }
 
 bool SelfAvoidingWalker::checkOverlapFree(const std::vector<Step<int>> &l) const
