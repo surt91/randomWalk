@@ -78,6 +78,12 @@ TEST_CASE( "walk types", "[walk]" ) {
             simple = 47.9533333333;
             mcmc = 62.3283333333;
         }
+        SECTION( "4D" ) {
+            o.d = 4;
+            o.chAlg = CH_QHULL;
+            simple = 27.78875;
+            mcmc = 29.33875;
+        }
     }
     SECTION( "LERW" ) {
         o.type = WT_LOOP_ERASED_RANDOM_WALK;
