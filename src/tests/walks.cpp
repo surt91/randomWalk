@@ -177,6 +177,14 @@ TEST_CASE( "walk types", "[walk]" ) {
             mcmc = 20.35;
         }
     }
+    SECTION( "Multi" ) {
+        o.type = WT_RANDOM_WALK;
+        o.numWalker = 3;
+        o.d = 2;
+
+        simple = 58.125;
+        mcmc = 57.75;
+    }
 
     REQUIRE( simple_sampling(o) == Approx(simple) );
     REQUIRE( MCMC_sampling(o) == Approx(mcmc) );
