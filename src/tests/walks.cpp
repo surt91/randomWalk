@@ -181,3 +181,11 @@ TEST_CASE( "walk types", "[walk]" ) {
     REQUIRE( simple_sampling(o) == Approx(simple) );
     REQUIRE( MCMC_sampling(o) == Approx(mcmc) );
 }
+
+TEST_CASE( "misc", "[walk]" ) {
+    SECTION( "Dimerization" ) {
+        UniformRNG rngReal(42);
+        SelfAvoidingWalker w(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        REQUIRE( w.A() == 32 );
+    }
+}
