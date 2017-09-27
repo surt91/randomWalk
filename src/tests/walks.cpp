@@ -13,15 +13,17 @@
 #include "../simulation/SimpleSampling.hpp"
 #include "../simulation/Metropolis.hpp"
 
-double simple_sampling(const Cmd o)
+double simple_sampling(Cmd o)
 {
+    o.sampling_method = SM_SIMPLESAMPLING;
     SimpleSampling s(o);
     s.mute();
     s.run();
     return s.check();
 }
-double MCMC_sampling(const Cmd o)
+double MCMC_sampling(Cmd o)
 {
+    o.sampling_method = SM_METROPOLIS;
     Metropolis s(o);
     s.mute();
     s.run();
@@ -89,13 +91,13 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.type = WT_LOOP_ERASED_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 47.95;
+            simple = 49.785;
             mcmc = 65.3;
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            simple = 40.4283333333;
+            simple = 41.9783333333;
             mcmc = 64.8066666667;
         }
     }
@@ -173,7 +175,7 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.type = WT_SCENT_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 17.42;
+            simple = 17.47;
             mcmc = 20.35;
         }
     }
