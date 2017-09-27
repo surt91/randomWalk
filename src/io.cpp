@@ -30,3 +30,9 @@ void gzip(const std::string filename)
         LOG(LOG_ERROR) << "Failed to zip '" << filename << "'";
     }
 }
+
+int filesize(const char* filename)
+{
+    std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+    return in.tellg();
+}

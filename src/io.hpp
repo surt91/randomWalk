@@ -25,4 +25,6 @@ std::ostream& binary_write_string(std::ofstream& stream, const std::string& valu
 bool file_exist(const char *fileName);
 void gzip(const std::string filename);
 
+int filesize(const char* filename);
+
 #endif

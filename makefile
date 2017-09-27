@@ -23,6 +23,7 @@ test testD:
 	./$@
 
 proper:
+	rm bench*
 	$(MAKE) proper -C src
 
 clean: proper
