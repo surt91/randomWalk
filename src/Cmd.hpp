@@ -107,9 +107,51 @@ const std::vector<std::string> SAMPLING_METHOD_LABEL = {
 class Cmd
 {
     public:
+        // these are sane default values
         Cmd()
-            : mu(0.0),
-              sigma(1.0)
+            : tmp_path("."),
+              data_path("out.dat"),
+              conf_path(),
+              data_path_vector(),
+              conf_path_vector(),
+              svg_path(),
+              pov_path(),
+              gp_path(),
+              threejs_path(),
+              steps(100),
+              numWalker(1),
+              seedRealization(0),
+              seedMC(0),
+              type(WT_RANDOM_WALK),
+              d(2),
+              iterations(100),
+              sweep(-1),
+              t_eq(-1),
+              t_eqMax(1e5),
+              parallel(1),
+              theta(1e4),
+              parallelTemperatures(),
+              simpleSampling(false),
+              wangLandauBorders(),
+              wangLandauBins(100),
+              wangLandauOverlap(10),
+              sampling_method(SM_SIMPLESAMPLING),
+              chAlg(CH_QHULL),
+              wantedObservable(WO_VOLUME),
+              passageTimeStart(0),
+              passageTimeStarts(),
+              mu(0.0),
+              sigma(1.0),
+              width(10),
+              tas(1000),
+              lnf_min(1e-8),
+              flatness_criterion(0.8),
+              onlyBounds(false),
+              onlyCenters(false),
+              onlyLERWExample(false),
+              onlyPivotExample(false),
+              onlyPTTemperatures(false),
+              text()
             {}
         Cmd(int argc, char** argv);
 

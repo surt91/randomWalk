@@ -14,6 +14,7 @@
 /** Constructs the command line parser, given argc and argv.
  */
 Cmd::Cmd(int argc, char** argv)
+    : Cmd() // delegating constructor for default values
 {
     for(int i=0; i<argc; ++i)
     {
@@ -33,31 +34,31 @@ Cmd::Cmd(int argc, char** argv)
 
         // value argument
         // -short, --long, description, required, default, type
-        TCLAP::ValueArg<int> numArg("N", "steps", "how many steps", false, 100, "integer");
-        TCLAP::ValueArg<int> numWalkerArg("M", "walker", "how many walker", false, 1, "integer");
-        TCLAP::ValueArg<int> sweepArg("k", "sweep", "how many MC tries per sweep (default: number of steps)", false, -1, "integer");
-        TCLAP::ValueArg<int> iterationsArg("n", "iterations", "how many MC sweeps", false, 100, "integer");
-        TCLAP::ValueArg<int> t_eqArg("", "t_eq", "equilibration time to use", false, -1, "integer");
-        TCLAP::ValueArg<int> t_eqMaxArg("", "t_eq_max", "maximum number equilibration time, abort simulation if not equilibrated ", false, 1e5, "integer");
-        TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, 0, "integer");
-        TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, 0, "integer");
-        TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, 2, "integer");
+        TCLAP::ValueArg<int> numArg("N", "steps", "how many steps", false, steps, "integer");
+        TCLAP::ValueArg<int> numWalkerArg("M", "walker", "how many walker", false, numWalker, "integer");
+        TCLAP::ValueArg<int> sweepArg("k", "sweep", "how many MC tries per sweep (default: number of steps)", false, sweep, "integer");
+        TCLAP::ValueArg<int> iterationsArg("n", "iterations", "how many MC sweeps", false, iterations, "integer");
+        TCLAP::ValueArg<int> t_eqArg("", "t_eq", "equilibration time to use", false, t_eq, "integer");
+        TCLAP::ValueArg<int> t_eqMaxArg("", "t_eq_max", "maximum number equilibration time, abort simulation if not equilibrated ", false, t_eqMax, "integer");
+        TCLAP::ValueArg<int> seedMCArg("x", "seedMC", "seed for Monte Carlo", false, seedMC, "integer");
+        TCLAP::ValueArg<int> seedRArg("y", "seedR", "seed for realizations", false, seedRealization, "integer");
+        TCLAP::ValueArg<int> dimArg("d", "dimension", "dimension of the system", false, d, "integer");
         TCLAP::MultiArg<int> passageTimeStartArg("z", "passageTimeStart", "reference point to start from", false, "integer");
-        TCLAP::ValueArg<int> parallelArg("P", "parallel", "use openMP to use this many cpus, zero means all (only available for Wang Landau Sampling)", false, 1, "integer");
+        TCLAP::ValueArg<int> parallelArg("P", "parallel", "use openMP to use this many cpus, zero means all (only available for Wang Landau Sampling)", false, parallel, "integer");
         TCLAP::MultiArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme, multiple for Parallel Tempering", false, "double");
-        TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, 0.0, "double");
-        TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, 1.0, "double");
-        TCLAP::ValueArg<int> widthArg("", "width", "width of the field (only for t=9: scent walk)", false, 10, "integer");
-        TCLAP::ValueArg<int> tasArg("", "tas", "lifetime of the scent (only for t=9: scent walk)", false, 1000, "integer");
-        TCLAP::ValueArg<double> lnfArg("", "lnf", "minimum value of ln(f) for the Wang Landau algorithm (default 1e-8)", false, 1e-8, "double");
-        TCLAP::ValueArg<double> flatnessArg("", "flatness", "flatness criterion for the Wang Landau algorithm (default 0.8)", false, 0.8, "double");
-        TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, ".", "string");
+        TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, mu, "double");
+        TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, sigma, "double");
+        TCLAP::ValueArg<int> widthArg("", "width", "width of the field (only for t=9: scent walk)", false, width, "integer");
+        TCLAP::ValueArg<int> tasArg("", "tas", "lifetime of the scent (only for t=9: scent walk)", false, tas, "integer");
+        TCLAP::ValueArg<double> lnfArg("", "lnf", "minimum value of ln(f) for the Wang Landau algorithm (default 1e-8)", false, lnf_min, "double");
+        TCLAP::ValueArg<double> flatnessArg("", "flatness", "flatness criterion for the Wang Landau algorithm (default 0.8)", false, flatness_criterion, "double");
+        TCLAP::ValueArg<std::string> tmpPathArg("", "tmp", "path for temporary files", false, tmp_path, "string");
         TCLAP::MultiArg<std::string> dataPathArg("o", "output", "datafile for the output, (for each -T / --theta one)", false, "string");
         TCLAP::MultiArg<std::string> confPathArg("O", "confoutput", "datafile for the raw output, (for each -T / --theta one)", false, "string");
-        TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, "", "string");
-        TCLAP::ValueArg<std::string> povArg("p", "pov", "povray filename, will be a xyz projection", false, "", "string");
-        TCLAP::ValueArg<std::string> gpArg("g", "gnuplot", "gnuplot filename, will be a xyz projection", false, "", "string");
-        TCLAP::ValueArg<std::string> threejsArg("j", "threejs", "three.js filename, will be a xyz projection", false, "", "string");
+        TCLAP::ValueArg<std::string> svgArg("s", "svg", "svg filename, will be a xy projection", false, svg_path, "string");
+        TCLAP::ValueArg<std::string> povArg("p", "pov", "povray filename, will be a xyz projection", false, pov_path, "string");
+        TCLAP::ValueArg<std::string> gpArg("g", "gnuplot", "gnuplot filename, will be a xyz projection", false, gp_path, "string");
+        TCLAP::ValueArg<std::string> threejsArg("j", "threejs", "three.js filename, will be a xyz projection", false, threejs_path, "string");
         TCLAP::ValueArg<std::string> logfileArg("L", "logfile", "log to file", false, "", "string");
         TCLAP::ValueArg<int> verboseArg("v", "verbose", "verbosity level:\n"
                                                         "\tquiet  : 0\n"
@@ -82,7 +83,7 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\tCorrelated random walk: 7\n"
                                                   "\tEscape random walk    : 8\n"
                                                   "\tScent random walk     : 9\n",
-                                     false, 1, &allowedWT);
+                                     false, type, &allowedWT);
 
         std::vector<int> ch({0, 1, 2, 3, 4});
         TCLAP::ValuesConstraint<int> allowedCH(ch);
@@ -92,14 +93,14 @@ Cmd::Cmd(int argc, char** argv)
                                                              "\tAndrews Monotone Chain: 2\n"
                                                              "\tGraham Scan           : 3\n"
                                                              "\tJarvis March          : 4",
-                                      false, 1, &allowedCH);
+                                      false, chAlg, &allowedCH);
         std::vector<int> wo({1, 2, 3});
         TCLAP::ValuesConstraint<int> allowedWO(wo);
         TCLAP::ValueArg<int> wantedobservableArg("w", "wantedObservable", "observable for which the probability density is desired:\n"
                                                                           "\tsurface area (L)    : 1 (default)\n"
                                                                           "\tvolume       (A)    : 2\n"
                                                                           "\tpassage time (t)    : 3",
-                                                 false, 1, &allowedWO);
+                                                 false, wantedObservable, &allowedWO);
 
         std::vector<int> sm({0, 1, 2, 3, 4, 5});
         TCLAP::ValuesConstraint<int> allowedSM(sm);
@@ -110,7 +111,7 @@ Cmd::Cmd(int argc, char** argv)
                                                                       "\tFast Wang Landau    : 3\n"
                                                                       "\tParallel Tempering  : 4\n"
                                                                       "\tPT using MPI        : 5",
-                                                 false, 1, &allowedSM);
+                                                 false, sampling_method, &allowedSM);
 
         TCLAP::MultiArg<double> wangLandauBordersMArg("e", "energyBorder", "specifies inside which energy ranges, i.e., "
                                                                            "volumes or areas, the Wang Landau sampling "
@@ -119,9 +120,9 @@ Cmd::Cmd(int argc, char** argv)
                                                                            "will be used.", false, "double");
         TCLAP::ValueArg<int> wangLandauOverlapArg("E", "energyOverlap", "specifies how many bins between adjacent ranges "
                                                                         "should overlap. (default 10)",
-                                                                        false, 10, "integer");
+                                                                        false, wangLandauOverlap, "integer");
         TCLAP::ValueArg<int> wangLandauBinsArg("B", "energyBins", "specifies how many bins each range should have (default 100)",
-                                                                      false, 100, "integer");
+                                                                      false, wangLandauBins, "integer");
 
         // switch argument
         // -short, --long, description, default
@@ -390,8 +391,7 @@ Cmd::Cmd(int argc, char** argv)
 
         if(!thetaArg.getValue().empty())
             theta = thetaArg.getValue()[0];
-        else
-            theta = 0.0;
+
         parallelTemperatures = thetaArg.getValue();
         if(!simpleSampling && sampling_method == SM_METROPOLIS)
         {
@@ -474,10 +474,7 @@ Cmd::Cmd(int argc, char** argv)
             data_path_vector = dataPathArg.getValue();
             data_path = data_path_vector[0];
         }
-        else
-        {
-            data_path = "out.dat";
-        }
+
         if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING  || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
         {
             data_path = "";
@@ -505,10 +502,7 @@ Cmd::Cmd(int argc, char** argv)
             conf_path_vector = confPathArg.getValue();
             conf_path = conf_path_vector[0];
         }
-        else
-        {
-            conf_path = "";
-        }
+
         if(sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING || sampling_method == SM_METROPOLIS_PARALLEL_TEMPERING_MPI)
         {
             if(conf_path_vector.size() && parallelTemperatures.size() != conf_path_vector.size())
