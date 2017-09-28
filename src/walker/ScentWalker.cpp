@@ -29,16 +29,26 @@ void ScentWalker::reconstruct()
     if(!amnesia)
         random_numbers = rng.vector((numSteps+relax)*numWalker);
 
+    std::set<Step<int>> pos;
+
     m_steps.clear();
     for(auto &h : histograms)
         h.reset();
 
     std::vector<int> tmp_start(d);
+    starts.clear();
     for(int j=0; j<numWalker; ++j)
     {
         for(int k=0; k<d; ++k)
             tmp_start[k] = rng() * sideLength;
 
+        // test if this place is alreay occupied (low probability, but it happens)
+        if(pos.find(Step<int>(tmp_start)) != pos.end())
+        {
+            --j;
+            continue;
+        }
+        pos.emplace(tmp_start);
         starts.emplace_back(tmp_start);
     }
 
