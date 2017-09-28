@@ -175,8 +175,15 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.type = WT_SCENT_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 17.47;
-            mcmc = 20.35;
+            o.width = 10;
+            o.tas = 100;
+            o.steps = 100;
+            o.theta = -5;
+            o.numWalker = 5;
+            o.gp_path = "out";
+            o.svg_path = "out.svg";
+            simple = 14.135;
+            mcmc = 128.8;
         }
     }
     SECTION( "Multi" ) {

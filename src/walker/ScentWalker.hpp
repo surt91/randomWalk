@@ -47,8 +47,8 @@ class ScentWalker final : public SpecWalker<int>
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;
 
-        virtual void svg(const std::string filename, const bool with_hull) const override;
-        virtual void gp(const std::string filename, const bool with_hull) const override;
+        virtual void svg(const std::string filename, const bool with_hull=false) const override;
+        virtual void gp(const std::string filename, const bool with_hull=false) const override;
         void svg_histogram(const std::string filename) const;
 
         const int numWalker;

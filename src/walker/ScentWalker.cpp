@@ -11,7 +11,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     LOG(LOG_INFO) << "This type needs to relax first, " << relax
                   << " additional steps will be simulated.";
 
-    m_steps.reserve(numSteps);
+    m_steps.resize(numSteps);
 
     histograms = std::vector<HistogramND>(numWalker,
                                 HistogramND(sideLength+1, d, 0, sideLength));
@@ -26,31 +26,32 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
 
 void ScentWalker::reconstruct()
 {
-    if(!amnesia)
-        random_numbers = rng.vector((numSteps+relax)*numWalker);
+    std::set<Step<int>> occupied_starts;
 
-    std::set<Step<int>> pos;
-
-    m_steps.clear();
+    starts.clear();
+    pos.clear();
+    step.clear();
     for(auto &h : histograms)
         h.reset();
 
     std::vector<int> tmp_start(d);
-    starts.clear();
     for(int j=0; j<numWalker; ++j)
     {
         for(int k=0; k<d; ++k)
             tmp_start[k] = rng() * sideLength;
 
         // test if this place is alreay occupied (low probability, but it happens)
-        if(pos.find(Step<int>(tmp_start)) != pos.end())
+        if(occupied_starts.find(Step<int>(tmp_start)) != occupied_starts.end())
         {
             --j;
             continue;
         }
-        pos.emplace(tmp_start);
+        occupied_starts.emplace(tmp_start);
         starts.emplace_back(tmp_start);
     }
+
+    if(!amnesia)
+        random_numbers = rng.vector((numSteps+relax)*numWalker);
 
     init();
 }
@@ -61,7 +62,7 @@ void ScentWalker::updateField(Site &site, int time)
     static std::vector<int> to_remove;
     to_remove.clear();
 
-    for(auto &k : site)
+    for(const auto &k : site)
         if(k.second < time-Tas)
             to_remove.push_back(k.first);
 
@@ -73,8 +74,9 @@ void ScentWalker::updateSteps()
 {
     // use numWalker vectors for the steps (scent traces will be steps[now-Tas:now])
     // every walker has its own history
-
-    Field trail(sideLength*sideLength);
+    // static -> will be allocated only once
+    static Field trail(sideLength*sideLength);
+    trail.clear();
 
     // start the agent simulation
     for(int j=0; j<numWalker; ++j)
@@ -87,6 +89,7 @@ void ScentWalker::updateSteps()
 
     // iterate the time, every agent does one move each timestep
     for(int i=0; i<numSteps+relax; ++i)
+    {
         for(int j=0; j<numWalker; ++j)
         {
             auto &current = trail[pos[j]];
@@ -123,9 +126,10 @@ void ScentWalker::updateSteps()
                 // TODO: maybe just the last relax many steps?
                 histograms[j].add(pos[j]);
                 if(j == 0)
-                    m_steps.push_back(step[j]);
+                    m_steps[i-relax] = step[j];
             }
         }
+    }
 }
 
 void ScentWalker::change(UniformRNG &rng, bool update)

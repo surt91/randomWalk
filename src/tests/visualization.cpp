@@ -59,6 +59,23 @@ TEST_CASE( "images", "[vis]" ) {
             w.threejs(filename, true);
         }
     }
+    SECTION( " Scent") {
+        o.d = 2;
+        o.width = 10;
+        o.tas = 100;
+        o.steps = 100;
+        o.theta = -1;
+        o.numWalker = 5;
+        ScentWalker w(o.d, o.steps, o.numWalker, o.width, o.tas, rngReal, o.chAlg);
+        SECTION( "SVG" ) {
+            filename = "benchHist.svg";
+            w.svg(filename);
+        }
+        SECTION( "gp" ) {
+            w.gp("benchHist", true);
+            filename = "benchHist.gp";
+        }
+    }
 
     REQUIRE( filesize(filename.c_str()) > 200 );
 }
