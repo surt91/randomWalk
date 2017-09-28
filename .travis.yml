@@ -3,8 +3,9 @@ language: cpp
 script:
   - make
   - make testD
-  - make doc
   - if [ $CC = gcc ]; then ./get_code_cov.sh; fi
+  - if [ $CC = gcc ]; then make doc; done
+  - if [ $CC = gcc ]; then valgrind --error-exitcode=5 --suppressions=qhull.supp ./testD; fi
 
 after_success:
   - if [ $CC = gcc ]; then bash <(curl -s https://codecov.io/bash); fi
@@ -24,6 +25,7 @@ addons:
     packages:
       - doxygen
       - graphviz
+      - valgrind
 
 deploy:
   provider: pages
