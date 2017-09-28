@@ -37,12 +37,9 @@ void SimpleSampling::run()
             << w->L() << " "
             << w->A() << " ";
 
-        auto maxE = w->maxExtent();
         oss << w->r() << " "
             << w->r2() << " "
             << w->maxDiameter() << " "
-            << maxE[0] << " "
-            << maxE[1] << " "
             << w->rx() << " "
             << w->ry() << " ";
 
