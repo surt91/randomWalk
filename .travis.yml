@@ -4,7 +4,7 @@ script:
   - make
   - make testD
   - if [ $CC = gcc ]; then ./get_code_cov.sh; fi
-  - if [ $CC = gcc ]; then make doc; done
+  - if [ $CC = gcc ]; then make doc; fi
   - if [ $CC = gcc ]; then valgrind --error-exitcode=5 --suppressions=qhull.supp ./testD; fi
 
 after_success:
