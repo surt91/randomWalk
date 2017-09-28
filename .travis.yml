@@ -1,7 +1,7 @@
 language: cpp
 
 script:
-  - make
+  - make randomWalk
   - make testD
   - if [ $CC = gcc ]; then ./get_code_cov.sh; fi
   - if [ $CC = gcc ]; then make doc; fi
