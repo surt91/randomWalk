@@ -196,6 +196,7 @@ TEST_CASE( "misc", "[walk]" ) {
     SECTION( "Dimerization" ) {
         UniformRNG rngReal(42);
         SelfAvoidingWalker w(2, 30, rngReal, CH_ANDREWS_AKL, true);
-        REQUIRE( w.A() == 32 );
+        w.generate_from_dimerization();
+        REQUIRE( w.A() == 52.5 );
     }
 }
