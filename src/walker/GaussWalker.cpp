@@ -71,37 +71,6 @@ void GaussWalker::undoChange()
     m_convex_hull = m_old_convex_hull;
 }
 
-/** Change only one component of the gauss steps.
- *
- * This seems to not offer great advantages
- */
-void GaussWalker::changeSingle(UniformRNG &rng)
-{
-    // We need d random numbers per step to determine the d directions
-    steps(); // steps need to be initialized
-    int rnidx = rng() * numSteps * d;
-    int idx = rnidx / d;
-    undo_index = rnidx;
-    undo_value = random_numbers[rnidx];
-    random_numbers[rnidx] = rng.gaussian();
-
-    m_steps[idx] = genStep(random_numbers.begin() + idx*d);
-    updatePoints(idx+1);
-    updateHull();
-}
-
-/** Undo the single component change.
- */
-void GaussWalker::undoChangeSingle()
-{
-    random_numbers[undo_index] = undo_value;
-    int idx = undo_index / d;
-
-    m_steps[idx] = genStep(random_numbers.begin() + idx*d);
-    updatePoints(idx+1);
-    updateHull();
-}
-
 /** Set the random numbers such that we get an half circle shape.
  *
  * The distance will be chosen as 5, which should correspond to something
