@@ -342,10 +342,8 @@ void SpecWalker<T>::gp(const std::string filename, const bool with_hull) const
         std::vector<std::vector<double>> points;
         for(auto i : p)
         {
-            T x = i[0], y = i[1], z = 0;
-            if(d > 2)
-                z = i[2];
-            std::vector<double> point {(double) x, (double) y, (double) z};
+            T x = i[0], y = i[1];
+            std::vector<double> point {(double) x, (double) y};
 
             points.push_back(point);
         }
@@ -372,9 +370,7 @@ void SpecWalker<T>::gp(const std::string filename, const bool with_hull) const
         std::vector<std::vector<double>> points;
         for(auto i : p)
         {
-            T x = i[0], y = i[1], z = 0;
-            if(d > 2)
-                z = i[2];
+            T x = i[0], y = i[1], z = i[2];
             std::vector<double> point {(double) x, (double) y, (double) z};
 
             points.push_back(point);
