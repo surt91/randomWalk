@@ -69,6 +69,14 @@ TEST_CASE( "sampling types", "[sampling]" ) {
         checksum = 11021.0;
         s = std::unique_ptr<MetropolisParallelTempering>(new MetropolisParallelTempering(o));
     }
+    SECTION( "Metropolis Auto-Equilibration" ) {
+        o.sampling_method = SM_METROPOLIS;
+        o.t_eq = -1;
+        o.steps = 100;
+        o.sweep = o.steps;
+        checksum = 392.17;
+        s = std::unique_ptr<Metropolis>(new Metropolis(o));
+    }
     s->mute();
     s->run();
     REQUIRE( s->check() == Approx(checksum) );
