@@ -63,7 +63,7 @@ TEST_CASE( "sampling types", "[sampling]" ) {
         s = std::unique_ptr<WangLandau>(new WangLandau(o));
     }
     SECTION( "Parallel Tempering" ) {
-        o.sampling_method = SM_METROPOLIS;
+        o.sampling_method = SM_METROPOLIS_PARALLEL_TEMPERING;
         o.steps = 100;
         o.sweep = o.steps;
         checksum = 11021.0;
