@@ -17,7 +17,7 @@ test testD: $(shell find src | sed 's/ /\\ /g')
 	./$@
 
 proper:
-	rm bench*
+	rm -f bench*
 	$(MAKE) proper -C src
 
 clean: proper
