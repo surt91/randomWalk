@@ -102,6 +102,7 @@ MultipleWalker<T>::MultipleWalker(int d, int numSteps, int numWalker, const Unif
         auto rng_privat = UniformRNG(rng() * 2000000000);
         m_walker.emplace_back(d, numSteps, rng_privat, hull_algo, amnesia);
     }
+    updateHull();
 }
 
 /// Get new random numbers and reconstruct the walk

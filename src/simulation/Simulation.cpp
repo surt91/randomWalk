@@ -125,7 +125,6 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
     }
     else if(o.type == WT_SCENT_RANDOM_WALK)
     {
-        // TODO pass sidelength and Tas
         w = std::unique_ptr<Walker>(
             new ScentWalker(o.d, o.steps, o.numWalker, o.width, o.tas, rngReal, o.chAlg, amnesia)
         );

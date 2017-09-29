@@ -42,6 +42,7 @@ TEST_CASE( "images", "[vis]" ) {
             filename = "bench2.gp";
         }
     }
+
     SECTION( "3D" ) {
         o.d = 3;
         o.chAlg = CH_QHULL;
@@ -59,6 +60,29 @@ TEST_CASE( "images", "[vis]" ) {
             w.threejs(filename, true);
         }
     }
+
+    SECTION( "Multi" ) {
+        o.d = 2;
+        o.numWalker = 3;
+        MultipleWalker<LatticeWalker> w(o.d, o.steps, o.numWalker, rngReal, o.chAlg);
+        SECTION( "SVG" ) {
+            filename = "benchM.svg";
+            w.svg(filename, true);
+        }
+        SECTION( "GP" ) {
+            w.gp("benchM", true);
+            filename = "benchM.gp";
+        }
+        SECTION( "GP 3D" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            o.numWalker = 3;
+            MultipleWalker<GaussWalker> w(o.d, o.steps, o.numWalker, rngReal, o.chAlg);
+            w.gp("benchM3", true);
+            filename = "benchM3.gp";
+        }
+    }
+
     SECTION( " Scent") {
         o.d = 2;
         o.width = 10;
