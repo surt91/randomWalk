@@ -60,7 +60,6 @@ class SpecWalker : public Walker
         ///\name observables
         double A() const final { return convexHull().A(); }
         double L() const final { return convexHull().L(); }
-        std::vector<double> maxExtent() const final;
         double maxDiameter() const final;
         double r() const final;
         double r2() const final;
@@ -407,25 +406,6 @@ std::string SpecWalker<T>::print() const
         ss << i << " ";
     ss << "\n";
     return ss.str();
-}
-
-/// Get the maximum extend along any axis.
-template <class T>
-std::vector<double> SpecWalker<T>::maxExtent() const
-{
-    std::vector<double> maxE(d, 0);
-    int n_hullpoints = hullPoints().size();
-    Step<T> diff;
-    for(int i=0; i<n_hullpoints; ++i)
-        for(int j=0; j<i; ++j)
-        {
-            diff = hullPoints()[i] - hullPoints()[j];
-            for(int k=0; k<d; ++k)
-                if(std::abs(diff[k]) > maxE[k])
-                    maxE[k] = std::abs(diff[k]);
-        }
-
-    return maxE;
 }
 
 /// Get the maximum distance of any two points of the walk.

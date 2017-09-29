@@ -51,7 +51,6 @@ class MultipleWalker : public Walker
         // convenience functions
         double A() const final;
         double L() const final;
-        std::vector<double> maxExtent() const final;
         double maxDiameter() const final;
         double r() const final;
         double rx() const final;
@@ -207,8 +206,6 @@ template <class T>
 double MultipleWalker<T>::A() const { return m_convex_hull.A(); }
 template <class T>
 double MultipleWalker<T>::L() const { return m_convex_hull.L(); }
-template <class T>
-std::vector<double> MultipleWalker<T>::maxExtent() const { LOG(LOG_WARNING) << "not yet implemented"; return {0}; }
 template <class T>
 double MultipleWalker<T>::maxDiameter() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>

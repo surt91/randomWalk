@@ -95,13 +95,10 @@ void MetropolisParallelTempering::run()
                         // inf or nan do not work with gcc's -ffast-math
                         if(theta >= 1.4e32)
                         {
-                            auto maxE = allWalkers[n]->maxExtent();
                             *files[thetaMap[n]]
                                 << allWalkers[n]->r() << " "
                                 << allWalkers[n]->r2() << " "
                                 << allWalkers[n]->maxDiameter() << " "
-                                << maxE[0] << " "
-                                << maxE[1] << " "
                                 << allWalkers[n]->rx() << " "
                                 << allWalkers[n]->ry();
                         }

@@ -116,13 +116,10 @@ void MetropolisParallelTemperingMPI::run()
                 // inf or nan do not work with gcc's -ffast-math
                 if(theta >= 1.4e32)
                 {
-                    auto maxE = walker->maxExtent();
                     current_stream
                         << walker->r() << " "
                         << walker->r2() << " "
                         << walker->maxDiameter() << " "
-                        << maxE[0] << " "
-                        << maxE[1] << " "
                         << walker->rx() << " "
                         << walker->ry();
                 }

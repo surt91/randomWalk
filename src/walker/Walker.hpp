@@ -43,7 +43,6 @@ class Walker
         // convenience functions
         virtual double A() const = 0;   ///< Returns the Volume of the convex hull
         virtual double L() const = 0;   ///< Returns the surface area of the convex hull
-        virtual std::vector<double> maxExtent() const = 0; ///< Returns a vector with d entries of the maximum extension in the corresponding dimension
         virtual double maxDiameter() const = 0;            ///< Returns the maximum distance between all pairs
         virtual double r() const = 0;  ///< Distance between start and end point
         virtual double r2() const = 0; ///< Squared distance between start and end point
