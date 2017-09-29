@@ -192,7 +192,7 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.d = 2;
 
         simple = 58.125;
-        mcmc = 57.75;
+        mcmc = 361.53;
     }
 
     REQUIRE( simple_sampling(o) == Approx(simple) );

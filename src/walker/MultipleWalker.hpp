@@ -150,9 +150,7 @@ template <class T>
 void MultipleWalker<T>::change(UniformRNG &rng, bool update)
 {
     undo_walker_idx = floor(rng() * m_walker.size());
-    // change a random walker, but do not update
-    // since we will calculate the hull of every walker here
-    m_walker[undo_walker_idx].change(rng, false);
+    m_walker[undo_walker_idx].change(rng, true);
 
     if(update)
     {
@@ -187,20 +185,6 @@ void MultipleWalker<T>::updatePoints(int /*start*/)
 template <class T>
 void MultipleWalker<T>::updateHull()
 {
-    // TODO
-    // Is it faster to calculate the hull of the union of all points
-    // of all walkers or to keep the hulls of the single walkers up
-    // to date and calculate the hull of the union of the hulls of
-    // all walkers?
-
-    //~ for(auto w : m_walker)
-        //~ w.updateHull();
-
-
-    //~ hulls.push_back(m_walker[0].convexHull())
-    //~ for(auto w : m_walker)
-        //~ w.convexHull();
-
     // FIXME: this will be copying way too much and needs to be
     // optimized. Maybe with a new method of ConvexHull which takes
     // multiple vectors?
