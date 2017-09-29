@@ -47,6 +47,10 @@ TEST_CASE( "images", "[vis]" ) {
         o.d = 3;
         o.chAlg = CH_QHULL;
         LatticeWalker w(o.d, o.steps, rngReal, o.chAlg);
+        SECTION( "SVG" ) {
+            filename = "bench3.svg";
+            w.svg(filename, true);
+        }
         SECTION( "POV" ) {
             filename = "bench.pov";
             w.pov(filename, true);
