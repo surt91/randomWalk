@@ -184,7 +184,7 @@ cli.md: $(TARGET) ../README.md makefile
 	@echo '~~~' >> cli.md
 
 proper:
-	rm -rf $(OBJ) $(DBG) $(GCH)
+	rm -rf obj dbg
 
 clean: proper
 	rm -rf dep
