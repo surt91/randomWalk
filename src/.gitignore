@@ -5,6 +5,10 @@ dbg/
 callgrind.out*
 
 randomWalk
+randomWalkD
+test
+testD
+bench
 passage*/
 
 *.dat
