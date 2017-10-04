@@ -209,9 +209,7 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
         for(int i=0; i<pow2[m_d]; ++i)
         {
             for(int j=0; j<m_d; ++j)
-            {
                 diff[j] = (i & (1 << j)) ? 1 : -1;
-            }
             ret[2*m_d + i] += diff;
         }
 
@@ -219,9 +217,7 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
         // for each direction, leave it at zero and generate all combinations
         // of the remaining two directions
         if(m_d == 3)
-        {
             for(int i=0; i<m_d; ++i)
-            {
                 for(int j=0; j<pow2[m_d-1]; ++j)
                 {
                     diff[i] = 0;
@@ -234,8 +230,6 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
                     }
                     ret[2*m_d + pow2[m_d] + i*pow2[m_d-1] + j] += diff;
                 }
-            }
-        }
 
         // I can not imagine d > 3 easily. There should be one category more
         // where two coordinates are the same and two change.
