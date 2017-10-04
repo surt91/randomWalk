@@ -158,8 +158,6 @@ inline double Step<int>::readToRN()
     return 0;
 }
 
-// TODO: lookup table of powers of two
-
 /// Yields neighbors
 template <>
 inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
@@ -184,6 +182,19 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
 
     if(diagonal)
     {
+        // build a lookup table ... actually, I am not sure if it gets faster at all
+        #ifdef D_MAX
+            int pow2[D_MAX+1];
+            pow2[0] = 1;
+            for(int i = 1; i<=D_MAX; ++i)
+                pow2[i] = pow2[i-1] * 2;
+        #else
+            std::vector<int> pow2(m_d);
+            pow2[0] = 1;
+            for(int i = 1; i<=D_MAX; ++i)
+                pow2[i] = pow2[i-1] * 2;
+        #endif
+
         if(m_d > 3)
             throw std::invalid_argument("not implemented for d > 3");
 
@@ -195,7 +206,7 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
         // in negative direction for 0 and positive for 1.
         // The sum of the center and this displacement generates
         // all cornerstones.
-        for(int i=0; i<std::pow(2, m_d); ++i)
+        for(int i=0; i<pow2[m_d]; ++i)
         {
             for(int j=0; j<m_d; ++j)
             {
@@ -211,7 +222,7 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
         {
             for(int i=0; i<m_d; ++i)
             {
-                for(int j=0; j<std::pow(2, m_d-1); ++j)
+                for(int j=0; j<pow2[m_d-1]; ++j)
                 {
                     diff[i] = 0;
                     for(int k=0; k<m_d-1; ++k)
@@ -221,7 +232,7 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
                         else
                             diff[k] = (j & (1 << k)) ? 1 : -1;
                     }
-                    ret[2*m_d + std::pow(2, m_d) + i*std::pow(2, m_d-1) + j] += diff;
+                    ret[2*m_d + pow2[m_d] + i*pow2[m_d-1] + j] += diff;
                 }
             }
         }
