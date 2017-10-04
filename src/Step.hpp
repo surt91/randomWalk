@@ -4,6 +4,7 @@
 #include <cmath>
 #include <list>
 #include <vector>
+#include <set>
 #include <unordered_set>
 #include <unordered_map>
 #include <iostream>
@@ -97,12 +98,6 @@ class Step
         // output operators
         template <class U>
         friend std::ostream& operator<<(std::ostream& os, const Step<U> &obj);
-
-        template <class U>
-        friend std::ostream& operator<<(std::ostream& os, const std::vector<Step<U>> &obj);
-
-        template <class U>
-        friend std::ostream& operator<<(std::ostream& os, const std::list<Step<U>> &obj);
 
         // access operators
         T operator[](std::size_t idx) const { return m_coordinates[idx]; }
@@ -672,18 +667,33 @@ std::ostream& operator<<(std::ostream& os, const Step<T> &obj)
     return os;
 }
 
-// will write any std::container of Steps to a stream
-template <
-    class T,
-    template <class, class...> class Container,
-    class... AddParams
->
-std::ostream& operator<<(std::ostream& os, const Container<Step<T>, AddParams...> &obj)
+template <class T>
+std::ostream& operator<<(std::ostream& os, const std::list<Step<T>> &obj)
 {
     os << "[";
     for(const auto &i : obj)
         os << i << " ";
     os << "]";
+    return os;
+}
+
+template <class T>
+std::ostream& operator<<(std::ostream& os, const std::set<Step<T>> &obj)
+{
+    os << "[";
+    for(const auto &i : obj)
+        os << i << " ";
+    os << "]";
+    return os;
+}
+
+template <class T, class U>
+std::ostream& operator<<(std::ostream& os, const std::unordered_map<Step<T>, U> &obj)
+{
+    os << "{";
+    for(const auto &i : obj)
+    os << i.first << ": " << i.second << ", ";
+    os << "}";
     return os;
 }
 
