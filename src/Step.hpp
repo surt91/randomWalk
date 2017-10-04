@@ -665,33 +665,18 @@ std::ostream& operator<<(std::ostream& os, const Step<T> &obj)
     return os;
 }
 
-template <class T>
-std::ostream& operator<<(std::ostream& os, const std::vector<Step<T>> &obj)
+// will write any std::container of Steps to a stream
+template <
+    class T,
+    template <class, class...> class Container,
+    class... AddParams
+>
+std::ostream& operator<<(std::ostream& os, const Container<Step<T>, AddParams...> &obj)
 {
     os << "[";
     for(const auto &i : obj)
         os << i << " ";
     os << "]";
-    return os;
-}
-
-template <class T>
-std::ostream& operator<<(std::ostream& os, const std::list<Step<T>> &obj)
-{
-    os << "[";
-    for(const auto &i : obj)
-        os << i << " ";
-    os << "]";
-    return os;
-}
-
-template <class T, class U>
-std::ostream& operator<<(std::ostream& os, const std::unordered_map<Step<T>, U> &obj)
-{
-    os << "{";
-    for(const auto &i : obj)
-        os << i.first << ": " << i.second << ", ";
-    os << "}";
     return os;
 }
 
