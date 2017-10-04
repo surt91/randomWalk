@@ -81,7 +81,7 @@ TEST_CASE("Step is tested", "[step]" ) {
     REQUIRE( direct3 == set_direct3 );
     auto tmp_diagonal3 = c3.neighbors(true);
     auto set_diagonal3 = std::set<Step<int>>(begin(tmp_diagonal3), end(tmp_diagonal3));
-    // REQUIRE( diagonal3.size() == 26 );
-    // REQUIRE( set_diagonal3.size() == 26 );
+    REQUIRE( diagonal3.size() == 26 );
+    REQUIRE( set_diagonal3.size() == 26 );
     REQUIRE( diagonal3 == set_diagonal3 );
 }
