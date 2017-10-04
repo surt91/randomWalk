@@ -158,6 +158,8 @@ inline double Step<int>::readToRN()
     return 0;
 }
 
+// TODO: lookup table of powers of two
+
 /// Yields neighbors
 template <>
 inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
@@ -207,21 +209,19 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
         // of the remaining two directions
         if(m_d == 3)
         {
-            for(int i=0; i<std::pow(2, m_d-1); ++i)
+            for(int i=0; i<m_d; ++i)
             {
-                // wrong!
-                for(int j=0; j<m_d; ++j)
+                for(int j=0; j<std::pow(2, m_d-1); ++j)
                 {
-                    diff[j] = 0;
-                    for(int k=0, l=0; k<m_d; ++k)
+                    diff[i] = 0;
+                    for(int k=0; k<m_d-1; ++k)
                     {
-                        if(k != j)
-                        {
-                            diff[k] = (i & (1 << l)) ? 1 : -1;
-                            ++l;
-                        }
+                        if(i <= k)
+                            diff[k+1] = (j & (1 << k)) ? 1 : -1;
+                        else
+                            diff[k] = (j & (1 << k)) ? 1 : -1;
                     }
-                    ret[2*m_d + i*std::pow(2, m_d-1) + j] += diff;
+                    ret[2*m_d + std::pow(2, m_d) + i*std::pow(2, m_d-1) + j] += diff;
                 }
             }
         }
