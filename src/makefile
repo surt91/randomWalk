@@ -4,6 +4,7 @@ DEBUG	= randomWalkD
 DOC 	= manual.pdf
 TEST	= test
 TESTD	= testD
+BENCH	= bench
 
 # max dimension
 # 0 for arbitrary (needs heap allocations, may be slower)
@@ -44,10 +45,12 @@ DBG	 = $(CPP:%.cpp=dbg/%.o)
 GCH	 = $(HPP:%.hpp=%.hpp.gch)
 DEP	 = $(CPP:%.cpp=dep/%.d)
 
-# for CATCH unit tests
 CPP := $(filter-out test.cpp, $(CPP))
-TEST_CPP := $(filter-out main.cpp, $(CPP))
+CPP := $(filter-out benchmark.cpp, $(CPP))
 CPP := $(filter-out $(wildcard tests/*.cpp), $(CPP))
+
+# for CATCH unit tests
+TEST_CPP := $(filter-out benchmark.cpmain.cpp, $(CPP))
 TEST_CPP += test.cpp
 TEST_OBJ := $(TEST_CPP:%.cpp=obj/%.o)
 TEST_DBG := $(TEST_CPP:%.cpp=dbg/%.o)
@@ -55,8 +58,18 @@ TEST_GCH := $(GCH)
 TEST_GCH += Catch/single_include/catch.hpp
 TEST_DEP := $(TEST_CPP:%.cpp=dep/%.d)
 
+# for benchmarks
+BENCH_CPP := $(filter-out main.cpp, $(CPP))
+BENCH_CPP += benchmark.cpp
+BENCH_OBJ := $(BENCH_CPP:%.cpp=obj/%.o)
+BENCH_GCH := $(GCH)
+BENCH_GCH += benchmark/include/benchmark/benchmark.h
+BENCH_DEP := $(BENCH_CPP:%.cpp=dep/%.d)
+
 QHULL_CPP = qhull/lib/libqhullcpp.a
 QHULL = qhull/lib/libqhullstatic_r.a
+
+LIBBENCHMARK := benchmark/build/src/libbenchmark.a
 
 # diagnostics color is introduced with gcc 4.9, test if our gcc knows it
 # http://stackoverflow.com/a/17947005/1698412
@@ -78,7 +91,8 @@ LNDIRS  = -Lqhull/lib
 INCLUDES = -isystem tclap/include \
            -isystem qhull/src \
            -isystem qhull/src/libqhullcpp \
-		   -isystem Catch/single_include
+		   -isystem Catch/single_include \
+		   -isystem benchmark/include \
 
 CXXFLAGS += $(INCLUDES)
 
@@ -148,6 +162,10 @@ $(QHULL) $(QHULL_CPP):
 	@echo "Building $@"
 	@$(MAKE) -C qhull $(@:qhull/%=%)
 
+$(LIBBENCHMARK):
+	@echo "Building $@"
+	cd benchmark; mkdir -p build; cd build; cmake -DCMAKE_BUILD_TYPE=Release -DBENCHMARK_ENABLE_LTO=true ..; $(MAKE)
+
 $(TARGET): $(QHULL_CPP) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJ) $(LFLAGS)
 
@@ -159,6 +177,9 @@ $(TEST): $(QHULL_CPP) $(TEST_OBJ)
 
 $(TESTD): $(QHULL_CPP) $(TEST_DBG)
 	$(CXX) $(DBGFLAGS) -o $(TESTD) $(TEST_DBG) $(LFLAGS)
+
+$(BENCH): $(QHULL_CPP) $(BENCH_OBJ) $(LIBBENCHMARK)
+	$(CXX) $(CXXFLAGS) -o $(BENCH) $(BENCH_OBJ) $(LIBBENCHMARK) -pthread $(LFLAGS)
 
 manual.pdf: doc
 	$(MAKE) -C doc/latex clean

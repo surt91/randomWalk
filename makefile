@@ -1,7 +1,7 @@
 all: randomWalk test
 
 .DELETE_ON_ERROR:
-.PHONY: clean proper cleanall test testD
+.PHONY: clean proper cleanall test testD bench
 
 randomWalk randomWalkD: $(shell find src | sed 's/ /\\ /g')
 	$(MAKE) $@ -C src
@@ -11,7 +11,7 @@ doc: randomWalk
 	$(MAKE) doc -C src
 	cp -r src/doc .
 
-test testD: $(shell find src | sed 's/ /\\ /g')
+test testD bench: $(shell find src | sed 's/ /\\ /g')
 	$(MAKE) $@ -C src
 	cp src/$@ .
 	./$@

@@ -34,6 +34,15 @@ Doxygen documentation of the latest version is at [surt91.github.io/randomWalk](
 4. `python3 evaluate.py` will evaluate the results to intermediate "data".
     And `python3 gnuplot.py` will visualize this data with plots in `py/plots`.
 
+## Tests
+
+To compile and run the tests, just `make testD`.
+
+## Benchmark
+
+To compile and run the benchmarks, just `make bench`.
+This needs cmake in order to compile Googles benchmark library.
+
 ## Misc
 
 To compile with clang use:

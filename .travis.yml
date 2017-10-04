@@ -3,6 +3,7 @@ language: cpp
 script:
   - make randomWalk
   - make testD
+  - make bench
   - if [ $CC = gcc ]; then ./get_code_cov.sh; fi
   - if [ $CC = gcc ]; then make doc; fi
   - if [ $CC = gcc ]; then valgrind --error-exitcode=5 --suppressions=qhull.supp ./testD; fi

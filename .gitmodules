@@ -7,3 +7,6 @@
 [submodule "src/Catch"]
 	path = src/Catch
 	url = git@github.com:surt91/Catch.git
+[submodule "src/benchmark"]
+	path = src/benchmark
+	url = git@github.com:surt91/benchmark.git
