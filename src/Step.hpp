@@ -183,13 +183,13 @@ inline std::vector<Step<int>> Step<int>::neighbors(bool diagonal) const
     if(diagonal)
     {
         // build a lookup table ... actually, I am not sure if it gets faster at all
-        #ifdef D_MAX
-            int pow2[D_MAX+1];
+        #if D_MAX == 0
+            std::vector<int> pow2(m_d);
             pow2[0] = 1;
             for(int i = 1; i<=D_MAX; ++i)
                 pow2[i] = pow2[i-1] * 2;
         #else
-            std::vector<int> pow2(m_d);
+            int pow2[D_MAX+1];
             pow2[0] = 1;
             for(int i = 1; i<=D_MAX; ++i)
                 pow2[i] = pow2[i-1] * 2;
@@ -366,8 +366,6 @@ inline int Step<int>::winding_angle(const Step<int> &next) const
     if(next.right_of(*this))
         return 1;
     return 0;
-    //
-    // throw std::invalid_argument("you use the winding_angle function wrong!");
 }
 
 #if D_MAX == 0
