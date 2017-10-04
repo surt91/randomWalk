@@ -561,12 +561,19 @@ Step<T>& Step<T>::operator/=(const double d)
 
 /** a point is smaller, if the x value is smaller
  * in case of a tie the smaller y value decides
- * only for 2d, since it is only needed for the 2d andrew algorithm
+ * we need to do in in arbitrary dimensions to make std::set of Step possible
  */
 template <class T>
 bool Step<T>::operator<(const Step<T> &other) const
 {
-    return x() < other.x() || (x() == other.x() && y() < other.y());
+    for(int i=0; i<m_d; ++i)
+    {
+        if(x(i) == other.x(i))
+            continue;
+        return x(i) < other.x(i);
+    }
+    // apperently all coordinates are equal
+    return 0;
 }
 
 template <class T>
