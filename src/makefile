@@ -48,10 +48,11 @@ DEP	 = $(CPP:%.cpp=dep/%.d)
 CPP := $(filter-out test.cpp, $(CPP))
 CPP := $(filter-out benchmark.cpp, $(CPP))
 CPP := $(filter-out $(wildcard tests/*.cpp), $(CPP))
+CPP := $(filter-out $(wildcard benchmarks/*.cpp), $(CPP))
 
 # for CATCH unit tests
-TEST_CPP := $(filter-out benchmark.cpmain.cpp, $(CPP))
-TEST_CPP += test.cpp
+TEST_CPP := $(filter-out main.cpp, $(CPP))
+TEST_CPP += test.cpp $(wildcard tests/*.cpp)
 TEST_OBJ := $(TEST_CPP:%.cpp=obj/%.o)
 TEST_DBG := $(TEST_CPP:%.cpp=dbg/%.o)
 TEST_GCH := $(GCH)
@@ -60,7 +61,7 @@ TEST_DEP := $(TEST_CPP:%.cpp=dep/%.d)
 
 # for benchmarks
 BENCH_CPP := $(filter-out main.cpp, $(CPP))
-BENCH_CPP += benchmark.cpp
+BENCH_CPP += benchmark.cpp $(wildcard benchmarks/*.cpp)
 BENCH_OBJ := $(BENCH_CPP:%.cpp=obj/%.o)
 BENCH_GCH := $(GCH)
 BENCH_GCH += benchmark/include/benchmark/benchmark.h
