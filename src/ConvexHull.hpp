@@ -61,6 +61,7 @@ class ConvexHull
         // observables
         double A() const;
         double L() const;
+        int num_vertices() const;
 
         // hull
         const std::vector<Step<T>>& hullPoints() const;
@@ -195,6 +196,20 @@ double ConvexHull<T>::L() const
     return m_L;
 }
 
+/// number of vertices on the convex hull (lazy).
+template <class T>
+int ConvexHull<T>::num_vertices() const
+{
+    // first and last are listed twice
+    int c = hullPoints().size() - 1;
+
+    // qhull does not list first and last twice
+    if(algorithm == CH_QHULL_AKL || algorithm == CH_QHULL)
+        c++;
+
+    return c;
+}
+
 /// Vertices of the convex hull (lazy).
 template <class T>
 const std::vector<Step<T>>& ConvexHull<T>::hullPoints() const
@@ -208,6 +223,7 @@ const std::vector<Step<T>>& ConvexHull<T>::hullPoints() const
 }
 
 /// deletes points from interior points according to the Akl Toussaint heuristic
+/// \image html akl.svg "discarded points for 4 and 8 points"
 template <class T>
 void ConvexHull<T>::preprocessAklToussaint()
 {
