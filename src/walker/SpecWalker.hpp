@@ -66,6 +66,7 @@ class SpecWalker : public Walker
         double rx() const final;
         double ry() const final;
         int num_on_hull() const final;
+        double oblateness() const final;
         int passage(int t1=0, int axis=0) const final;
         std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
@@ -424,6 +425,49 @@ double SpecWalker<T>::maxDiameter() const
         }
 
     return maxD;
+}
+
+/// Get the oblateness of the walk
+/// (this is not really oblateness but more the ratio of the longest and shortest diameter)
+template <class T>
+double SpecWalker<T>::oblateness() const
+{
+    double maxLongAxis = 0.;
+    int maxI = 0;
+    int maxJ = 0;
+    int n_hullpoints = hullPoints().size();
+
+    // first: search the two points with largest distance
+    for(int i=0; i<n_hullpoints; ++i)
+        for(int j=0; j<i; ++j)
+        {
+            double diameter = (hullPoints()[i] - hullPoints()[j]).length();
+            if(diameter > maxLongAxis)
+            {
+                maxLongAxis = diameter;
+                maxI = i;
+                maxJ = j;
+            }
+        }
+
+    double maxShortAxis = 0.;
+    double maxCross = 0.;
+    // second search point with largest distance to the axis between i and j
+    // that is the point p which (in d = 2)
+    // maximizes |cross2d(i, p, j)|
+    for(int k=0; k<n_hullpoints; ++k)
+    {
+        double cross = std::abs(cross2d_z(hullPoints()[maxI], hullPoints()[k], hullPoints()[maxJ]));
+        if(cross > maxCross)
+        {
+            maxShortAxis = cross / hullPoints()[maxI].dist(hullPoints()[maxJ]);
+            maxCross = cross;
+        }
+    }
+
+    // divide by 2 maxShortAxis, to give 1 for a sphere
+    // will result in unintuitive values for asymmetric shapes
+    return maxLongAxis/maxShortAxis/2.;
 }
 
 /// Get the end-to-end distance of the walk.

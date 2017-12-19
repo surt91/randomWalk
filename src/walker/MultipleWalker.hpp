@@ -57,6 +57,7 @@ class MultipleWalker : public Walker
         double ry() const final;
         double r2() const final;
         int num_on_hull() const final;
+        double oblateness() const final;
         int passage(int t1=0, int axis=0) const final;
         std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
@@ -219,6 +220,8 @@ template <class T>
 double MultipleWalker<T>::r2() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 int MultipleWalker<T>::num_on_hull() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+template <class T>
+double MultipleWalker<T>::oblateness() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 int MultipleWalker<T>::passage(int, int) const {LOG(LOG_ERROR) << "not implemented"; return 0; }
 template <class T>
