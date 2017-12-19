@@ -65,6 +65,7 @@ class SpecWalker : public Walker
         double r2() const final;
         double rx() const final;
         double ry() const final;
+        int num_on_hull() const final;
         int passage(int t1=0, int axis=0) const final;
         std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
@@ -452,6 +453,13 @@ double SpecWalker<T>::r2() const
 {
     double tmp = r();
     return tmp * tmp;
+}
+
+/// Get the number of vertices of the hull
+template <class T>
+int SpecWalker<T>::num_on_hull() const
+{
+    return convexHull().num_vertices();
 }
 
 /// Get the time at which the sign changes after starting at t1

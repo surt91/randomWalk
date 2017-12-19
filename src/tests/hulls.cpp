@@ -20,6 +20,7 @@ TEST_CASE( "hull types", "[hull]" ) {
     o.chAlg = CH_NOP;
 
     double A, L;
+    int count;
 
     std::unique_ptr<Walker> w;
 
@@ -29,6 +30,7 @@ TEST_CASE( "hull types", "[hull]" ) {
 
         A = 984338.0;
         L = 3747.1842096012;
+        count = 32;
 
         Simulation::prepare(w, o);
 
@@ -57,6 +59,7 @@ TEST_CASE( "hull types", "[hull]" ) {
 
         A = 6729163.333333333;
         L = 209560.8119192145;
+        count = 124;
 
         Simulation::prepare(w, o);
 
@@ -70,4 +73,5 @@ TEST_CASE( "hull types", "[hull]" ) {
 
     REQUIRE(w->A() == Approx(A));
     REQUIRE(w->L() == Approx(L));
+    REQUIRE(w->num_on_hull() == count);
 }
