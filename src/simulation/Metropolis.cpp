@@ -261,13 +261,15 @@ void Metropolis::run()
                 }
 
                 // some observables are only interesting during simple sampling
-                if(o.simpleSampling)
+                // if(o.simpleSampling)
                 {
                     oss << w->r() << " "
                         << w->r2() << " "
                         << w->maxDiameter() << " "
                         << w->rx() << " "
-                        << w->ry() << " ";
+                        << w->ry() << " "
+                        << w->num_on_hull() << " "
+                        << w->oblateness() << " ";
 
                     for(auto j : o.passageTimeStarts)
                         oss << w->passage(j) << " ";
