@@ -263,6 +263,7 @@ void Metropolis::run()
                 // some observables are only interesting during simple sampling
                 // if(o.simpleSampling)
                 {
+                    w->updateHull();
                     oss << w->r() << " "
                         << w->r2() << " "
                         << w->maxDiameter() << " "
