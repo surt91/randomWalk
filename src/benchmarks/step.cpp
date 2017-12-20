@@ -1,6 +1,6 @@
 #include <benchmark/benchmark.h>
 
-#include "Step.hpp"
+#include "../Step.hpp"
 
 static void BM_neighbors2(benchmark::State& state) {
     Step<int> a {13, 42};
