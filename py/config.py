@@ -296,6 +296,13 @@ class Simulation():
                                             hours=math.ceil(getSec(N)*self.n/3600*2),
                                             mb=getMem(N),
                                             parallel=self.parallel))
+                with open(os.path.join("HPC", name+".bsub"), "w") as f:
+                    template = self.env.get_template("jobarray.bsub")
+                    f.write(template.render(name=name,
+                                            count=ctr,
+                                            hours=math.ceil(getSec(N)*self.n/3600*2),
+                                            mb=getMem(N),
+                                            parallel=self.parallel))
 
     # start the calculation
     def __call__(self):

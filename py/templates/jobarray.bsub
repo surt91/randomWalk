@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#BSUB -J "{{ name }}[1-{{ count }}]"
+#BSUB -q mpi
+#BSUB -W {{ hours }}:00
+#BSUB -o out.%J
+
+module load gcc
+mkdir -p rawData
+
+$(sed -n ${LSB_JOBINDEX}'p' {{ name }}.lst)
