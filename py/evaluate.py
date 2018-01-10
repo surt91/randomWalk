@@ -26,8 +26,9 @@ if __name__ == "__main__":
 
     logging.info("Using {}-way parallelism".format(parallelness))
 
+    sampling = param.parameters["sampling"]
+    
     if not "--fast" in sys.argv:
-        sampling = param.parameters["sampling"]
         if sampling == 1 or sampling == 4 or sampling == 5:
             if "--lin" in sys.argv:
                 ht = 1
