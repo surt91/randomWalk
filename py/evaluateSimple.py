@@ -131,6 +131,18 @@ def eval_simplesampling(name, outdir, N=0, parallelness=1):
         with open("{}/simple.dat".format(outdir), "a") as f:
             f.write(s)
 
+        counts, bins = getDistribution(data[0])
+        centers, _ = getCentersFromBins(bins)
+        with open("{}/distL_N{}.dat".format(outdir, N), "w") as f:
+            for c, d in zip(centers, counts):
+                f.write("{} {}\n".format(c, d))
+
+        counts, bins = getDistribution(data[1])
+        centers, _ = getCentersFromBins(bins)
+        with open("{}/distA_N{}.dat".format(outdir, N), "w") as f:
+            for c, d in zip(centers, counts):
+                f.write("{} {}\n".format(c, d))
+
 
 def getCentersFromBins(bins):
     """Calculates the centers of the bins.
@@ -149,17 +161,13 @@ def getCentersFromBins(bins):
     return centers, centers_err
 
 
-def getDistribution(data, bins=None):
+def getDistribution(data, bins='auto'):
     """Given a dict of samples at different temperatures, return the
     distribution (combined and stichted).
 
     This is intendet to be used inside a bootstrap function and therefore
     does not calculate errors.
     If write_intermediate_files is true
-
-    :param dataDict: dict{T: [data]} raw data to derive the distribution from
-    :param bins: Number of bins or borders of bins to use in the histogram.
-    :returns: whole distribution
     """
 
     counts, bins = np.histogram(data, bins)
@@ -170,9 +178,9 @@ def getDistribution(data, bins=None):
     # normalize to area of 1
     # integrate, to get the normalization constant
     area = trapz(counts, centers)
-    counts -= log(area)
+    counts /= area
 
-    return counts
+    return counts, bins
 
 
 def cat(out, in_list):
