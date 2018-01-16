@@ -161,7 +161,7 @@ def getCentersFromBins(bins):
     return centers, centers_err
 
 
-def getDistribution(data, bins='auto'):
+def getDistribution(data, bins=None):
     """Given a dict of samples at different temperatures, return the
     distribution (combined and stichted).
 
@@ -169,6 +169,12 @@ def getDistribution(data, bins='auto'):
     does not calculate errors.
     If write_intermediate_files is true
     """
+
+    if bins is None:
+        bins = np.max(data) - np.min(data)
+        while bins > 200:
+            bins /= 2
+        bins = int(bins)
 
     counts, bins = np.histogram(data, bins)
     centers, centers_err = getCentersFromBins(bins)
