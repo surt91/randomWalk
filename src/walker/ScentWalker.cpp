@@ -103,11 +103,39 @@ void ScentWalker::updateSteps()
 
             // if we are on a foreign scent: retreat
             // if there is more than one marker (one marker is from us)
-            // TODO: do not retreat directly but on a random neighboring field
-            // withour the encountered scent
             if(current.size() > 1 && i > 0)
             {
-                step[j].invert();
+                std::vector<Step<int>> candidates;
+                for(const auto &k : pos[j].neighbors())
+                {
+                    // if there is no scent, it is a candidates
+                    // if there is exatly one, it might be me, test that
+                    if(
+                        trail[k].size() == 0
+                        || (trail[k].size() == 1 && trail[k].find(j) != trail[k].end())
+                    )
+                    {
+                        candidates.push_back(k);
+                    }
+                }
+
+                if(candidates.size() == 0)
+                {
+                    // we are stuck, so just intrude into the other territory, I guess
+                    if(!amnesia)
+                        step[j].fillFromRN(random_numbers[i*numWalker + j]);
+                    else
+                        step[j].fillFromRN(rng());
+                }
+                else
+                {
+                    int idx;
+                    if(!amnesia)
+                        idx = random_numbers[i*numWalker + j] * candidates.size();
+                    else
+                        idx = rng() * candidates.size();
+                    step[j] = candidates[idx] - pos[j];
+                }
                 pos[j] += step[j];
             }
             else
@@ -118,12 +146,12 @@ void ScentWalker::updateSteps()
                 else
                     step[j].fillFromRN(rng());
                 pos[j] += step[j];
-
-                if(periodic)
-                    pos[j].periodic(sideLength);
-                else
-                    pos[j].bouncyBoundary(sideLength);
             }
+
+            if(periodic)
+                pos[j].periodic(sideLength);
+            else
+                pos[j].bouncyBoundary(sideLength);
 
             // populate the histogram (for a figure as in the articel)
             if(i >= relax)
