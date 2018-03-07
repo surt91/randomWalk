@@ -185,8 +185,8 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.numWalker = 5;
             o.gp_path = "out";
             o.svg_path = "out.svg";
-            simple = 14.135;
-            mcmc = 128.8;
+            simple = 15.945;
+            mcmc = 58.655;
         }
     }
     SECTION( "Multi" ) {
