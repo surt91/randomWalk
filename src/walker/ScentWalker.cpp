@@ -15,7 +15,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     m_steps.resize(numSteps);
 
     histograms = std::vector<HistogramND>(numWalker,
-                                HistogramND(sideLength+1, d, 0, sideLength));
+                                HistogramND(sideLength, d, 0, sideLength));
     newStep = Step<int>(d);
     undoStep = Step<int>(d);
 
