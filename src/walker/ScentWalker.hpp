@@ -55,6 +55,7 @@ class ScentWalker final : public SpecWalker<int>
         const int sideLength;
         const int Tas;
         const int relax;    ///< number of steps to relax the walk before measurements are taken
+        bool periodic;      ///< use periodic or open (closed?) boundaries
 
     protected:
         std::vector<Step<int>> starts;

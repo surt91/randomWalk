@@ -85,6 +85,7 @@ class Step
         T dist(const Step<T> &other) const;
 
         void periodic(const int len);
+        void bouncyBoundary(const int len);
         void invert();
 
         template <class U>
@@ -637,13 +638,27 @@ inline double Step<double>::dist(const Step<double> &other) const
     return d;
 }
 
-/// ensures that the step is inside [0, len]^d with periodic boundaries
+/// ensures that the step is inside [0, len)^d with periodic boundaries
 template <class T>
 void Step<T>::periodic(const int len)
 {
     // FIXME will not always work
     for(auto &k : m_coordinates)
         k = (k+len) % len;
+}
+
+/// ensures that the step is inside [0, len)^d, if one step is taken outside
+/// the walker is bounced in the opposite direction
+template <class T>
+void Step<T>::bouncyBoundary(const int len)
+{
+    for(auto &k : m_coordinates)
+    {
+        if(k >= len)
+            k = len - 2;
+        if(k < 0)
+            k = 1;
+    }
 }
 
 /// inverts the step

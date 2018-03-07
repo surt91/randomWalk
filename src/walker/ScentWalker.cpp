@@ -5,7 +5,8 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       numWalker(numWalker_in),
       sideLength(sideLength_in),
       Tas(Tas_in),
-      relax(2*Tas)
+      relax(2*Tas),
+      periodic(false)
 {
     // TODO: pass relax as parameter
     LOG(LOG_INFO) << "This type needs to relax first, " << relax
@@ -117,7 +118,11 @@ void ScentWalker::updateSteps()
                 else
                     step[j].fillFromRN(rng());
                 pos[j] += step[j];
-                pos[j].periodic(sideLength);
+
+                if(periodic)
+                    pos[j].periodic(sideLength);
+                else
+                    pos[j].bouncyBoundary(sideLength);
             }
 
             // populate the histogram (for a figure as in the articel)
