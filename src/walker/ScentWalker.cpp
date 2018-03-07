@@ -136,6 +136,7 @@ void ScentWalker::updateSteps()
                         idx = rng() * candidates.size();
                     step[j] = candidates[idx] - pos[j];
                 }
+
                 pos[j] += step[j];
             }
             else
@@ -148,10 +149,20 @@ void ScentWalker::updateSteps()
                 pos[j] += step[j];
             }
 
-            if(periodic)
-                pos[j].periodic(sideLength);
-            else
-                pos[j].bouncyBoundary(sideLength);
+            // FIXME: this should be hidden
+            for(int k=0; k<pos[j].d(); ++k)
+            {
+                if(pos[j][k] >= sideLength)
+                {
+                    pos[j][k] = sideLength - 2;
+                    step[j].invert();
+                }
+                else if(pos[j][k] < 0)
+                {
+                    pos[j][k] = 1;
+                    step[j].invert();
+                }
+            }
 
             // populate the histogram (for a figure as in the articel)
             if(i >= relax)
