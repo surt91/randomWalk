@@ -10,3 +10,6 @@
 [submodule "src/benchmark"]
 	path = src/benchmark
 	url = git@github.com:surt91/benchmark.git
+[submodule "glue++"]
+	path = glue++
+	url = git@github.com:surt91/glue-.git
