@@ -1,15 +1,12 @@
 import os
-from math import sqrt
 import subprocess
 from subprocess import call
 from multiprocessing import Pool
-import warnings
 import math
 import logging
 import operator
 import copy
 import pickle
-from copy import copy
 
 import numpy as np
 import jinja2
@@ -210,7 +207,7 @@ class Simulation():
         # time per sweep
         def getSec(N):
             if self.sampling == 1 or self.sampling == 4:
-                t = 0 # time for 1000 sweeps
+                t = 0  # time for 1000 sweeps
                 max_t_corr = 1
                 try:
                     # correct according to maximum t_corr
@@ -226,7 +223,7 @@ class Simulation():
                         t = 5
                     elif N <= 128:
                         t = 15
-                    elif N <=256:
+                    elif N <= 256:
                         t = 50
                     elif N <= 512:
                         t = 250
@@ -247,7 +244,7 @@ class Simulation():
                 else:
                     t = 86000*3  # say, 3 days
 
-                return t/self.parallel * 3 # factor 3 to be sure
+                return t/self.parallel * 3  # factor 3 to be sure
 
             return 86000*3  # 3 days default
 
@@ -430,7 +427,7 @@ class SimulationInstance():
             self.x += int(1e5*t)
             self.y += int(1e5*t)
         elif sampling == 4 or sampling == 5:
-            pass # we only have one process and do not need to change the seeds
+            pass  # we only have one process and do not need to change the seeds
         elif sampling == 2 or sampling == 3:
             self.x += int(self.energy[0])
             self.y += int(self.energy[0])
@@ -481,9 +478,9 @@ class SimulationInstance():
                     print(" ".join(cmd))
                     print(l)
             outlines = [l for l in out.stdout.split("\n") if not l.startswith("#") and not l.startswith("Info") and not l.startswith("Warning") and l]
-            #~ centers = [list(map(float, i.split())) for i in outlines]
-            #~ print(out.stdout)
-            #~ print(outlines[0].split())
+            # centers = [list(map(float, i.split())) for i in outlines]
+            # print(out.stdout)
+            # print(outlines[0].split())
             centers = list(map(float, outlines[0].split()))
         else:
             raise
@@ -564,7 +561,7 @@ class SimulationInstance():
         try:
             for i in self.passageTimeStart:
                 if self.N < i:
-                    i = 1 # some dummy
+                    i = 1  # some dummy
                 opts.append("-z {:.0f}".format(i))
         except ValueError:
             pass
@@ -585,7 +582,7 @@ class SimulationInstance():
                 if T != float("inf"):
                     opts.append("-T {0:.5f}".format(T))
                 else:
-                    opts.append("-T {0:.5f}".format(1.417e32)) # Planck temperature ;)
+                    opts.append("-T {0:.5f}".format(1.417e32))  # Planck temperature ;)
 
         elif self.m == 2 or self.m == 3:
             for e in self.energy:
@@ -595,8 +592,8 @@ class SimulationInstance():
             opts.append("--lnf {}".format(self.lnf))
             opts.append("--flatness {}".format(self.flatness))
 
-        #~ if self.loadFile:
-            #~ opts.append("-f {0}".format(self.loadFile))
+        # if self.loadFile:
+        #     opts.append("-f {0}".format(self.loadFile))
 
         return opts
 
