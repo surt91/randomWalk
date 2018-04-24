@@ -1,6 +1,7 @@
 language: cpp
 
 script:
+  - if [ $CC = clang ]; then scan-build --status-bugs make randomWalk; fi
   - make randomWalk
   - make testD
   - make bench
