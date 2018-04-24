@@ -206,7 +206,7 @@ cli.md: $(TARGET) ../README.md makefile
 	@echo '~~~' >> cli.md
 
 proper:
-	rm -rf obj dbg
+	rm -rf obj dbg $(GCH)
 
 clean: proper
 	rm -rf dep
