@@ -1,13 +1,13 @@
 language: cpp
 
 script:
-  - if [ $CC = clang ]; then scan-build --status-bugs make randomWalk; fi
   - make randomWalk
   - make testD
   - make bench
   - if [ $CC = gcc ]; then ./get_code_cov.sh; fi
   - if [ $CC = gcc ]; then make doc; fi
   - if [ $CC = gcc ]; then valgrind --error-exitcode=5 --suppressions=qhull.supp ./testD; fi
+  - if [ $CC = clang ]; then make clean; scan-build --status-bugs make randomWalk; fi
 
 after_success:
   - if [ $CC = gcc ]; then bash <(curl -s https://codecov.io/bash); fi
