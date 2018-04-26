@@ -129,6 +129,16 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
             new ScentWalker(o.d, o.steps, o.numWalker, o.width, o.tas, rngReal, o.chAlg, amnesia)
         );
     }
+    else if(o.type == WT_TRUE_SELF_AVOIDING_WALK)
+    {
+        if(o.numWalker == 1)
+            w = std::unique_ptr<Walker>(new TrueSelfAvoidingWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
+        else
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<TrueSelfAvoidingWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
+        w->setP1(o.mu);
+    }
     else
     {
         LOG(LOG_ERROR) << "type " << o.type << " is not known";

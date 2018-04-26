@@ -1,7 +1,8 @@
 #include "TrueSelfAvoidingWalker.hpp"
 
 TrueSelfAvoidingWalker::TrueSelfAvoidingWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
-    : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia)
+    : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia),
+      beta(1.0)
 {
 
 }
@@ -9,7 +10,7 @@ TrueSelfAvoidingWalker::TrueSelfAvoidingWalker(int d, int numSteps, const Unifor
 /// Get new random numbers and reconstruct the walk
 void TrueSelfAvoidingWalker::reconstruct()
 {
-
+    // TODO
 }
 
 void TrueSelfAvoidingWalker::updateSteps()
@@ -91,4 +92,15 @@ void TrueSelfAvoidingWalker::undoChange()
     updateSteps();
     updatePoints();
     m_convex_hull = m_old_convex_hull;
+}
+
+void TrueSelfAvoidingWalker::setP1(double p1)
+{
+    // this is expensive, so ask first, if something changes
+    if(beta == p1)
+        return;
+    beta = p1;
+    updateSteps();
+    updatePoints();
+    updateHull();
 }

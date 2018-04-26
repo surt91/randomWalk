@@ -30,6 +30,7 @@
 #include "../walker/CorrelatedWalker.hpp"
 #include "../walker/EscapeWalker.hpp"
 #include "../walker/ScentWalker.hpp"
+#include "../walker/TrueSelfAvoidingWalker.hpp"
 #include "../RNG.hpp"
 #include "../io.hpp"
 

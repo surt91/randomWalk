@@ -30,6 +30,7 @@ class TrueSelfAvoidingWalker final : public SpecWalker<int>
         void undoChange() final;
 
         double beta;
+        void setP1(double beta) final;
 
     protected:
         Step<int> newStep;
