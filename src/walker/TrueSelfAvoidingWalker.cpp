@@ -33,7 +33,7 @@ void TrueSelfAvoidingWalker::updateSteps()
         for(const auto &i : neighbors)
         {
             int times_visited = number_of_visits[i];
-            double prob = std::exp(beta*times_visited); // FIXME: correct formula
+            double prob = std::exp(-beta*times_visited);
             norm += prob;
             p[ctr] = norm; // p is cumulative probability function
             ++ctr;
