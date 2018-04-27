@@ -172,6 +172,42 @@ TEST_CASE( "walk types", "[walk]" ) {
             DO(15.945, 58.655)
         }
     }
+    SECTION( "'True' Self-Avoiding" ) {
+        o.type = WT_TRUE_SELF_AVOIDING_WALK;
+        SECTION( "2D, beta = 1" ) {
+            o.d = 2;
+            o.beta = 1.0;
+            DO(26.325, 37.795)
+        }
+        SECTION( "2D, beta = 0.1" ) {
+            o.d = 2;
+            o.beta = 0.1;
+            DO(17.905, 27.98)
+        }
+        SECTION( "2D, beta = 10" ) {
+            o.d = 2;
+            o.beta = 10.0;
+            DO(36.88, 50.475)
+        }
+        SECTION( "3D, beta = 1.0" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            o.beta = 1.0;
+            DO(26.2783333333, 45.5583333333)
+        }
+        SECTION( "3D, beta = 0.1" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            o.beta = 0.1;
+            DO(18.61, 35.3166666667)
+        }
+        SECTION( "3D, beta = 10" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            o.beta = 10.0;
+            DO(52.005, 32.1266666667)
+        }
+    }
     SECTION( "Multi" ) {
         o.type = WT_RANDOM_WALK;
         o.numWalker = 3;
