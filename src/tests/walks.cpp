@@ -13,6 +13,8 @@
 #include "../simulation/SimpleSampling.hpp"
 #include "../simulation/Metropolis.hpp"
 
+#define DO(simple, mcmc) REQUIRE( simple_sampling(o) == Approx(simple) ); REQUIRE( MCMC_sampling(o) == Approx(mcmc) );
+
 double simple_sampling(Cmd o)
 {
     o.sampling_method = SM_SIMPLESAMPLING;
@@ -57,121 +59,103 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.type = WT_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 17.125;
-            mcmc = 27.365;
+            DO(17.125, 27.365)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            simple = 17.4983333333;
-            mcmc = 33.9366666667;
+            DO(17.4983333333, 33.9366666667)
         }
     }
     SECTION( "SAW" ) {
         o.type = WT_SELF_AVOIDING_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 52.22;
-            mcmc = 66.035;
+            DO(52.22, 66.035)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            simple = 47.9533333333;
-            mcmc = 62.3283333333;
+            DO(47.9533333333, 62.3283333333)
         }
         SECTION( "4D" ) {
             o.d = 4;
             o.chAlg = CH_QHULL;
-            simple = 27.78875;
-            mcmc = 29.33875;
+            DO(27.78875, 29.33875)
         }
     }
     SECTION( "LERW" ) {
         o.type = WT_LOOP_ERASED_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 49.785;
-            mcmc = 65.3;
+            DO(49.785, 65.3)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            simple = 41.9783333333;
-            mcmc = 64.8066666667;
+            DO(41.9783333333, 64.8066666667)
         }
     }
     SECTION( "SKSAW" ) {
         o.type = WT_ESCAPE_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 39.125;
-            mcmc = 53.44;
+            DO(39.125, 53.44)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            simple = 32.3766666667;
-            mcmc = 53.845;
+            DO(32.3766666667, 53.845)
         }
     }
     SECTION( "Gauss" ) {
         o.type = WT_GAUSSIAN_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 31.866471759;
-            mcmc = 185.5809789266;
+            DO(31.866471759, 185.5809789266)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            simple = 97.3490964514;
-            mcmc = 3737.0787245416;
+            DO(97.3490964514, 3737.0787245416)
         }
     }
     SECTION( "Real" ) {
         o.type = WT_REAL_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 16.3204219374;
-            mcmc = 29.1930753626;
+            DO(16.3204219374, 29.1930753626)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            simple = 16.8672871474;
-            mcmc = 31.3519408254;
+            DO(16.8672871474, 31.3519408254)
         }
     }
     // SECTION( "Levy" ) {
     //     o.type = WT_LEVY_FLIGHT;
     //     SECTION( "2D" ) {
     //         o.d = 2;
-    //         simple = 775.1929289234;
-    //         mcmc = 49233.6337909333;
             // ? mcmc = 11251.5984407024
+            // DO(775.1929289234, 49233.6337909333)
     //     }
     //     SECTION( "3D" ) {
     //         o.d = 3;
     //         o.chAlg = CH_QHULL;
-    //         simple = 257.8045513253;
-    //         mcmc = 419333.7615910646;
             // ? mcmc = 2695113.9654559563
-
+            // DO(257.8045513253, 2695113.9654559563)
     //     }
     // }
     SECTION( "Correlated" ) {
         o.type = WT_CORRELATED_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            simple = 12.6226044285;
-            mcmc = 17.1042609018;
+            DO(12.6226044285, 17.1042609018)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            simple = 9.8537841832;
-            mcmc = 13.3748261316;
+            DO(9.8537841832, 13.3748261316)
         }
     }
     SECTION( "Agent" ) {
@@ -185,21 +169,15 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.numWalker = 5;
             o.gp_path = "out";
             o.svg_path = "out.svg";
-            simple = 15.945;
-            mcmc = 58.655;
+            DO(15.945, 58.655)
         }
     }
     SECTION( "Multi" ) {
         o.type = WT_RANDOM_WALK;
         o.numWalker = 3;
         o.d = 2;
-
-        simple = 58.125;
-        mcmc = 361.53;
+        DO(58.125, 361.53)
     }
-
-    REQUIRE( simple_sampling(o) == Approx(simple) );
-    REQUIRE( MCMC_sampling(o) == Approx(mcmc) );
 }
 
 TEST_CASE( "misc", "[walk]" ) {
