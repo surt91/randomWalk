@@ -48,6 +48,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::MultiArg<double> thetaArg("T", "theta", "temperature for the large deviation scheme, multiple for Parallel Tempering", false, "double");
         TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, mu, "double");
         TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, sigma, "double");
+        TCLAP::ValueArg<double> betaArg("", "beta", "avoidance parameter, step on visited sites with exp(-beta N) (only for t=10: true self-avoiding walk)", false, beta, "double");
         TCLAP::ValueArg<int> widthArg("", "width", "width of the field (only for t=9: scent walk)", false, width, "integer");
         TCLAP::ValueArg<int> tasArg("", "tas", "lifetime of the scent (only for t=9: scent walk)", false, tas, "integer");
         TCLAP::ValueArg<double> lnfArg("", "lnf", "minimum value of ln(f) for the Wang Landau algorithm (default 1e-8)", false, lnf_min, "double");
@@ -71,18 +72,19 @@ Cmd::Cmd(int argc, char** argv)
                                                         "\tdebug3 : 7",
                                         false, 4, "integer");
 
-        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9});
+        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
         TCLAP::ValuesConstraint<int> allowedWT(wt);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
-                                                  "\tlattice random walk   : 1 (default)\n"
-                                                  "\tlooperased walk       : 2\n"
-                                                  "\tself-avoiding walk    : 3\n"
-                                                  "\treal random walk      : 4\n"
-                                                  "\tGaussian random walk  : 5\n"
-                                                  "\tLevy flight           : 6\n"
-                                                  "\tCorrelated random walk: 7\n"
-                                                  "\tEscape random walk    : 8\n"
-                                                  "\tScent random walk     : 9\n",
+                                                  "\tlattice random walk       :  1 (default)\n"
+                                                  "\tlooperased walk           :  2\n"
+                                                  "\tself-avoiding walk        :  3\n"
+                                                  "\treal random walk          :  4\n"
+                                                  "\tGaussian random walk      :  5\n"
+                                                  "\tLevy flight               :  6\n"
+                                                  "\tCorrelated random walk    :  7\n"
+                                                  "\tEscape random walk        :  8\n"
+                                                  "\tScent random walk         :  9\n"
+                                                  "\t'True' self-avoiding walk : 10\n",
                                      false, type, &allowedWT);
 
         std::vector<int> ch({0, 1, 2, 3, 4});
@@ -158,6 +160,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(typeArg);
         cmd.add(muArg);
         cmd.add(sigmaArg);
+        cmd.add(betaArg);
         cmd.add(widthArg);
         cmd.add(tasArg);
         cmd.add(passageTimeStartArg);
@@ -276,6 +279,9 @@ Cmd::Cmd(int argc, char** argv)
         {
             LOG(LOG_INFO) << "sigma                      " << sigma;
         }
+
+        beta = betaArg.getValue();
+        LOG(LOG_INFO) << "beta                      " << beta;
 
         width = widthArg.getValue();
         if(width != 10)

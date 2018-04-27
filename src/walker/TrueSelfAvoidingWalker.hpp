@@ -1,5 +1,5 @@
-#ifndef SELFAVOIDINGWALKER_H
-#define SELFAVOIDINGWALKER_H
+#ifndef TRUESELFAVOIDINGWALKER_H
+#define TRUESELFAVOIDINGWALKER_H
 
 #include <list>
 #include <iterator>

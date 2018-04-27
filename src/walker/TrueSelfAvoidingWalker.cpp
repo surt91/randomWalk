@@ -4,17 +4,29 @@ TrueSelfAvoidingWalker::TrueSelfAvoidingWalker(int d, int numSteps, const Unifor
     : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia),
       beta(1.0)
 {
-
+    newStep = Step<int>(d);
+    undoStep = Step<int>(d);
+    if(!amnesia)
+        random_numbers = rng.vector(numSteps);
+    init();
 }
 
 /// Get new random numbers and reconstruct the walk
 void TrueSelfAvoidingWalker::reconstruct()
 {
-    // TODO
+    if(!amnesia)
+    {
+        // write new random numers into our state
+        std::generate(random_numbers.begin(), random_numbers.end(), std::ref(rng));
+    }
+    init();
 }
 
 void TrueSelfAvoidingWalker::updateSteps()
 {
+    m_steps.clear();
+    m_steps.reserve(numSteps);
+
     std::unordered_map<Step<int>, int> number_of_visits;
 
     // build the whole walk here
@@ -23,14 +35,19 @@ void TrueSelfAvoidingWalker::updateSteps()
     std::vector<double> p(2*d);
     // current position
     Step<int> head(d);
+    if(!amnesia)
+        head.fillFromRN(random_numbers[0]);
+    else
+        head.fillFromRN(rng());
 
-    m_steps[0].fillFromRN(random_numbers[0]);
+    m_steps.push_back(head);
     for(int t=1; t<numSteps; ++t)
     {
         // iterate over neighbors, to update the probabilites p
         int ctr = 0;
         double norm = 0.;
-        std::vector<Step<int>> neighbors = m_steps[t-1].neighbors();
+        std::vector<Step<int>> neighbors = head.neighbors();
+        ++number_of_visits[head];
         for(const auto &i : neighbors)
         {
             int times_visited = number_of_visits[i];
@@ -41,14 +58,20 @@ void TrueSelfAvoidingWalker::updateSteps()
         }
 
         // step on a neighbor according to p
-        double rn = random_numbers[t] * norm;
+        double rn = norm;
+        if(!amnesia)
+            rn *= random_numbers[t];
+        else
+            rn *= rng();
+
         int idx = 0;
         // for high dimensions a bisection would make sense, but for low not
         while(rn > p[idx])
         {
             ++idx;
         }
-        m_steps[t] = neighbors[idx];
+        m_steps.emplace_back(neighbors[idx] - head);
+        head = neighbors[idx];
     }
 }
 

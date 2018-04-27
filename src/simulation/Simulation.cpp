@@ -137,7 +137,7 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
             w = std::unique_ptr<Walker>(
                 new MultipleWalker<TrueSelfAvoidingWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
             );
-        w->setP1(o.mu);
+        w->setP1(o.beta);
     }
     else
     {
