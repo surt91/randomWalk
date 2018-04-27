@@ -10,12 +10,13 @@
 
 /** True Self-Avoiding Random Walk
  *
- * A Walk which tries not to self intersect.
+ * A Walk which tries not to self intersect. Probablity to step on site \f$i\f$
+ * which was visited \f$n_i\f$ times is weighted with \f$\exp(-\beta n_i) = 1\f$.
  *
  * See also:
  * doi: 10.1103/PhysRevB.27.1635
  *
- * \image html TSAW.svg "example of a true self-avoiding walk"
+ * \image html TSAW.svg "example of a true self-avoiding walk, \f$\beta = 1\f$"
  */
 class TrueSelfAvoidingWalker final : public SpecWalker<int>
 {
