@@ -205,7 +205,7 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
             o.beta = 10.0;
-            DO(52.005, 32.1266666667)
+            DO(32.1266666667, 52.005)
         }
     }
     SECTION( "Multi" ) {
