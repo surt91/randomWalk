@@ -16,8 +16,6 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
 
     histograms = std::vector<HistogramND>(numWalker,
                                 HistogramND(sideLength, d, 0, sideLength));
-    newStep = Step<int>(d);
-    undoStep = Step<int>(d);
 
     pos = std::vector<Step<int>>(numWalker, Step<int>(d));
     step = std::vector<Step<int>>(numWalker, Step<int>(d));
@@ -184,12 +182,6 @@ void ScentWalker::change(UniformRNG &rng, bool update)
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();
 
-    newStep.fillFromRN(random_numbers[idx]);
-    // test if something changes
-    undoStep.fillFromRN(undo_value);
-    if(newStep == undoStep)
-        return;
-
     updateSteps();
     updatePoints();
 
@@ -203,9 +195,6 @@ void ScentWalker::change(UniformRNG &rng, bool update)
 void ScentWalker::undoChange()
 {
     random_numbers[undo_index] = undo_value;
-    // test if something changed
-    if(newStep == undoStep)
-        return;
 
     updateSteps();
     updatePoints();

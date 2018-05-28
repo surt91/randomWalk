@@ -62,10 +62,6 @@ class ScentWalker final : public SpecWalker<int>
         std::vector<HistogramND> histograms;
 
         std::vector<Step<int>> step, pos;
-
-    private:
-        Step<int> newStep;
-        Step<int> undoStep;
 };
 
 #endif

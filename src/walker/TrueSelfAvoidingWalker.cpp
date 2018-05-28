@@ -4,8 +4,6 @@ TrueSelfAvoidingWalker::TrueSelfAvoidingWalker(int d, int numSteps, const Unifor
     : SpecWalker<int>(d, numSteps, rng_in, hull_algo, amnesia),
       beta(1.0)
 {
-    newStep = Step<int>(d);
-    undoStep = Step<int>(d);
     if(!amnesia)
         random_numbers = rng.vector(numSteps);
     init();
