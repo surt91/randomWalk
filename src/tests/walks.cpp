@@ -177,35 +177,35 @@ TEST_CASE( "walk types", "[walk]" ) {
         SECTION( "2D, beta = 1" ) {
             o.d = 2;
             o.beta = 1.0;
-            DO(26.325, 37.795)
+            DO(26.325, 40.32)
         }
         SECTION( "2D, beta = 0.1" ) {
             o.d = 2;
             o.beta = 0.1;
-            DO(17.905, 27.98)
+            DO(17.905, 29.23)
         }
         SECTION( "2D, beta = 10" ) {
             o.d = 2;
             o.beta = 10.0;
-            DO(36.88, 50.475)
+            DO(36.88, 56.42)
         }
         SECTION( "3D, beta = 1.0" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
             o.beta = 1.0;
-            DO(26.2783333333, 45.5583333333)
+            DO(26.2783333333, 47.575)
         }
         SECTION( "3D, beta = 0.1" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
             o.beta = 0.1;
-            DO(18.61, 35.3166666667)
+            DO(18.61, 35.0116666667)
         }
         SECTION( "3D, beta = 10" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
             o.beta = 10.0;
-            DO(32.1266666667, 52.005)
+            DO(32.1266666667, 53.6433333333)
         }
     }
     SECTION( "Multi" ) {
