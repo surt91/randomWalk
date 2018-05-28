@@ -83,7 +83,7 @@ void TrueSelfAvoidingWalker::updateSteps()
 void TrueSelfAvoidingWalker::change(UniformRNG &rng, bool update)
 {
     // I should do this in a far more clever way
-    int idx = rng() * nRN();
+    int idx = rng() * numSteps;
     undo_index = idx;
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();
