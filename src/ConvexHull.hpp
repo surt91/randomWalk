@@ -43,13 +43,17 @@ class ConvexHull
 
     public:
         ConvexHull(hull_algorithm_t algorithm=CH_QHULL)
-            : algorithm(algorithm)
+            : n(0),
+              d(0),
+              algorithm(algorithm)
         {
         }
 
         /// Constructs the hull of the given points.
         ConvexHull(std::vector<Step<T>> *interiorPoints, hull_algorithm_t algorithm)
-            : algorithm(algorithm)
+            : n(0),
+              d(0),
+              algorithm(algorithm)
         {
             run(interiorPoints);
         }
@@ -128,6 +132,7 @@ template <class T>
 void ConvexHull<T>::setPoints(std::vector<Step<T>> *points)
 {
     interiorPoints = points;
+
     n = interiorPoints->size();
     d = (*interiorPoints)[0].d();
 
@@ -640,7 +645,9 @@ void ConvexHull<T>::runQhull()
 
     if(algorithm != CH_QHULL_AKL)
     {
-        coords = std::vector<double>(n*d);
+        if(coords.size() != n*d)
+            coords = std::vector<double>(n*d);
+
         for(int i=0; i<n; ++i)
             for(int j=0; j<d; ++j)
                 coords[i*d + j] = (*interiorPoints)[i][j];
