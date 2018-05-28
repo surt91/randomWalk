@@ -88,12 +88,6 @@ void TrueSelfAvoidingWalker::change(UniformRNG &rng, bool update)
     undo_value = random_numbers[idx];
     random_numbers[idx] = rng();
 
-    newStep.fillFromRN(random_numbers[idx]);
-    // test if something changes
-    undoStep.fillFromRN(undo_value);
-    if(newStep == undoStep)
-        return;
-
     updateSteps();
     updatePoints();
 
@@ -108,9 +102,6 @@ void TrueSelfAvoidingWalker::change(UniformRNG &rng, bool update)
 void TrueSelfAvoidingWalker::undoChange()
 {
     random_numbers[undo_index] = undo_value;
-    // test if something changed
-    if(newStep == undoStep)
-        return;
 
     updateSteps();
     updatePoints();
