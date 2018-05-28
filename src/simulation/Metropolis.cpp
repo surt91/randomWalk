@@ -76,26 +76,6 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
             w3->change(rngMC);
             //~ w4->change(rngMC);
             //~ w5->change(rngMC);
-
-            if(!o.simpleSampling)
-            {
-                // Metropolis rejection
-                double p_acc1 = std::min({1.0, exp(-(S(w1) - oldS1)/o.theta)});
-                double p_acc2 = std::min({1.0, exp(-(S(w2) - oldS2)/o.theta)});
-                double p_acc3 = std::min({1.0, exp(-(S(w3) - oldS3)/o.theta)});
-                //~ double p_acc4 = std::min({1.0, exp(-(S(w4) - oldS4)/o.theta)});
-                //~ double p_acc5 = std::min({1.0, exp(-(S(w5) - oldS5)/o.theta)});
-                if(p_acc1 < 1 - rngMC1())
-                    w1->undoChange();
-                if(p_acc2 < 1 - rngMC())
-                    w2->undoChange();
-                if(p_acc3 < 1 - rngMC())
-                    w3->undoChange();
-                //~ if(p_acc4 < 1 - rngMC())
-                    //~ w4->undoChange();
-                //~ if(p_acc5 < 1 - rngMC())
-                    //~ w5->undoChange();
-            }
         }
 
         oss << t_eq << " " << w1->L() << " " << w1->A()
@@ -184,15 +164,10 @@ void Metropolis::run()
 {
     UniformRNG rngMC(o.seedMC);
 
-    if(!o.simpleSampling)
-        oss << "# large deviation simulation at theta=" << o.theta << " and steps=" << o.steps << "\n";
-    else
-        oss << "# simple sampling simulation with steps=" << o.steps << "\n";
+    oss << "# large deviation simulation at theta=" << o.theta << " and steps=" << o.steps << "\n";
 
     // header
     oss << "# sweeps L A";
-    if(o.simpleSampling)
-        oss << " r r2 maxDiameter maxX maxY rx ry";
     oss << "\n";
 
     std::unique_ptr<Walker> w;
@@ -218,24 +193,19 @@ void Metropolis::run()
             {
                 // change one random number to another random number
                 double oldS = S(w);
-                w->change(rngMC, !o.simpleSampling);
+                w->change(rngMC);
                 ++tries;
 
-                if(!o.simpleSampling)
+                // Metropolis rejection
+                double p_acc = std::exp((oldS - S(w))/o.theta);
+                LOG(LOG_INFO) << "p_acc: " << p_acc << " (" << oldS << " -> " << S(w) << ")";
+                if(p_acc < rngMC())
                 {
-                    // Metropolis rejection
-                    double p_acc = std::exp((oldS - S(w))/o.theta);
-                    if(p_acc < rngMC())
-                    {
-                        ++fails;
-                        w->undoChange();
-                    }
+                    LOG(LOG_INFO) << "reject";
+                    ++fails;
+                    w->undoChange();
                 }
             }
-
-            // for simple sampling the hull is never updated, do it now
-            if(o.simpleSampling)
-                w->updateHull();
 
             // save measurements to file
             if(i >= 2*o.t_eq)
@@ -257,24 +227,20 @@ void Metropolis::run()
                 else
                 {
                     oss << i << " "
-                        << S(w) << " ";
+                        << S(w) << " nan ";
                 }
 
-                // some observables are only interesting during simple sampling
-                // if(o.simpleSampling)
-                {
-                    w->updateHull();
-                    oss << w->r() << " "
-                        << w->r2() << " "
-                        << w->maxDiameter() << " "
-                        << w->rx() << " "
-                        << w->ry() << " "
-                        << w->num_on_hull() << " "
-                        << w->oblateness() << " ";
+                oss << w->r() << " "
+                    << w->r2() << " "
+                    << w->maxDiameter() << " "
+                    << w->rx() << " "
+                    << w->ry() << " "
+                    << w->num_on_hull() << " "
+                    << w->oblateness() << " ";
 
-                    for(auto j : o.passageTimeStarts)
-                        oss << w->passage(j) << " ";
-                }
+                for(auto j : o.passageTimeStarts)
+                    oss << w->passage(j) << " ";
+
                 // flush after every iteration
                 oss << std::endl;
             }
