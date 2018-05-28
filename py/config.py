@@ -263,7 +263,7 @@ class Simulation():
                         # own processes
                         if self.sampling == 2 or self.sampling == 3:
                             for k in range(1, self.n+1):
-                                sim = copy(i)
+                                sim = copy.copy(i)
                                 sim.n = 1
                                 sim.filename = i.filename + ".{}".format(k)
                                 sim.logname = i.logname + ".{}".format(k)
@@ -362,7 +362,7 @@ class SimulationInstance():
                        t_eq_max=None, theta=None, energy=None,
                        first=False, last=False, sweep=None,
                        number_of_walkers=None, passageTimeStart=-1,
-                       batch_id=0, **not_used):
+                       batch_id=0, beta=1.0, **not_used):
 
         self.N = steps
         self.number_of_walkers = number_of_walkers
@@ -391,7 +391,11 @@ class SimulationInstance():
         self.overlap_direction = overlap_direction
         self.sweep = sweep
         self.passageTimeStart = passageTimeStart
+        self.beta = beta
         self.quiet = False
+        
+        self.first = first
+        self.last = last
 
         self.loadFile = None
 
@@ -438,19 +442,19 @@ class SimulationInstance():
         self.y = abs(self.y) % 1700000339
 
         if sampling == 0:
-            self.basename = para.basesimple.format(typ=self.t, steps=self.N, seedR=self.y, batch=batch_id, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
+            self.basename = para.basesimple.format(typ=self.t, steps=self.N, seedR=self.y, batch=batch_id, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta)
         elif sampling == 1:
-            self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
+            self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta)
         elif sampling == 4 or sampling == 5:
             self.basename = []
             for T in self.T:
-                self.basename.append(para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart))
+                self.basename.append(para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta))
         elif sampling == 2 or sampling == 3:
-            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart)
+            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta)
 
         if sampling == 4 or sampling == 5:
             self.filename = []
-            self.logname = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart) + ".log"
+            self.logname = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta) + ".log"
             for bn in self.basename:
                 self.filename.append("{}/{}.dat".format(self.rawData, bn))
                 if self.rawConf:
@@ -520,6 +524,7 @@ class SimulationInstance():
                 "-t {}".format(self.t),
                 "-w {}".format(self.w),
                 "-m {}".format(self.m),
+                "--beta {}".format(self.beta),
                ]
 
         if self.m == 4 or self.m == 5:
@@ -587,7 +592,18 @@ class SimulationInstance():
         elif self.m == 2 or self.m == 3:
             for e in self.energy:
                 opts.append("-e {}".format(e))
-            opts.append("-B {}".format(self.nbins))
+
+            if self.overlap_direction == "right":
+                if self.last:
+                    opts.append("-B {}".format(self.nbins-self.overlap))
+                else:
+                    opts.append("-B {}".format(self.nbins))
+            else:
+                if self.first:
+                    opts.append("-B {}".format(self.nbins-self.overlap))
+                else:
+                    opts.append("-B {}".format(self.nbins))
+
             opts.append("-E {}".format(self.overlap))
             opts.append("--lnf {}".format(self.lnf))
             opts.append("--flatness {}".format(self.flatness))
