@@ -84,6 +84,15 @@ void FastWLEntropic::run()
                         }
                         ++t;
                     }
+
+                    if(lnf_min > 1./t)
+                    {
+                        lnf_min = 1./(t+1./lnf_min);
+                        LOG(LOG_WARNING) << "the exponential phase takes too much time, "
+                            "the histogram might contain zeros "
+                            "reduce target, do more iterations until t=" << 1./lnf_min;
+                        break;
+                    }
                 } while(H.min() == 0);
                 // run until we have one entry in each bin
                 H.reset();
@@ -96,7 +105,7 @@ void FastWLEntropic::run()
             if(lnf_min > 1./t)
             {
                 lnf_min = 1./(t+1./lnf_min);
-                LOG(LOG_INFO) << "this seems to take too much time, "
+                LOG(LOG_WARNING) << "this seems to take too much time, "
                     "reduce target, do more iterations until t=" << 1./lnf_min;
             }
 
