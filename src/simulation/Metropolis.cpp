@@ -208,10 +208,8 @@ void Metropolis::run()
 
                 // Metropolis rejection
                 double p_acc = std::exp((oldS - S(w))/o.theta);
-                LOG(LOG_INFO) << "p_acc: " << p_acc << " (" << oldS << " -> " << S(w) << ")";
                 if(p_acc < rngMC())
                 {
-                    LOG(LOG_INFO) << "reject";
                     ++fails;
                     w->undoChange();
                 }
