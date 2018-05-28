@@ -76,6 +76,16 @@ int Metropolis::equilibrate(std::unique_ptr<Walker>& w1, UniformRNG& rngMC1)
             w3->change(rngMC);
             //~ w4->change(rngMC);
             //~ w5->change(rngMC);
+            // Metropolis rejection
+            double p_acc1 = std::min({1.0, exp(-(S(w1) - oldS1)/o.theta)});
+            double p_acc2 = std::min({1.0, exp(-(S(w2) - oldS2)/o.theta)});
+            double p_acc3 = std::min({1.0, exp(-(S(w3) - oldS3)/o.theta)});
+            if(p_acc1 < 1 - rngMC1())
+                w1->undoChange();
+            if(p_acc2 < 1 - rngMC())
+                w2->undoChange();
+            if(p_acc3 < 1 - rngMC())
+                w3->undoChange();
         }
 
         oss << t_eq << " " << w1->L() << " " << w1->A()
