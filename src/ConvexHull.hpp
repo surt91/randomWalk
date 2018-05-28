@@ -645,7 +645,7 @@ void ConvexHull<T>::runQhull()
 
     if(algorithm != CH_QHULL_AKL)
     {
-        if(coords.size() != n*d)
+        if(coords.size() != (size_t) n*d)
             coords = std::vector<double>(n*d);
 
         for(int i=0; i<n; ++i)
