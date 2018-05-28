@@ -44,6 +44,7 @@ void FastWLEntropic::run()
 
             int t = 0;
             double status = 1.;
+            bool aborted = false;
 
             findStart(w, lb, ub, rngMC);
             LOG(LOG_DEBUG) << "found configuration: " << lb << " < " << S(w)
@@ -91,9 +92,12 @@ void FastWLEntropic::run()
                         LOG(LOG_WARNING) << "the exponential phase takes too much time, "
                             "the histogram might contain zeros "
                             "reduce target, do more iterations until t=" << 1./lnf_min;
+                        aborted = true;
                         break;
                     }
                 } while(H.min() == 0);
+                if(aborted)
+                    break;
                 // run until we have one entry in each bin
                 H.reset();
                 lnf /= 2;
