@@ -78,6 +78,7 @@ class MultipleWalker : public Walker
         ///\name visualization
         virtual std::string print() const;
         virtual void svg(const std::string filename, const bool with_hull=false) const;
+        virtual void svgOfChange(std::string filename, UniformRNG &rng_in);
         virtual void pov(const std::string filename, const bool with_hull=false) const;
         virtual void gp(const std::string filename, const bool with_hull=false) const;
         virtual void threejs(const std::string filename, const bool with_hull=false) const;
@@ -320,6 +321,9 @@ void MultipleWalker<T>::svg(const std::string filename, const bool with_hull) co
     pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
     pic.save();
 }
+
+template <class T>
+void MultipleWalker<T>::svgOfChange(std::string /*filename*/, UniformRNG &/*rng_in*/) { LOG(LOG_WARNING) << "not yet implemented"; }
 
 // FIXME: this is almost exactly the same code as in SpecWalker
 // can probably be reduced

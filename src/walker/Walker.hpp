@@ -81,6 +81,7 @@ class Walker
         ///\name visualization
         virtual std::string print() const = 0;
         virtual void svg(const std::string filename, const bool with_hull=false) const = 0;
+        virtual void svgOfChange(std::string filename, UniformRNG &rng_in) = 0;
         virtual void pov(const std::string filename, const bool with_hull=false) const = 0;
         virtual void gp(const std::string filename, const bool with_hull=false) const = 0;
         virtual void threejs(const std::string filename, const bool with_hull=false) const = 0;

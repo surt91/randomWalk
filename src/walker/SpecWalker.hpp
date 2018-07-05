@@ -82,6 +82,7 @@ class SpecWalker : public Walker
 
         ///\name visualization
         virtual void svg(const std::string filename, const bool with_hull=false) const override;
+        virtual void svgOfChange(std::string filename, UniformRNG &rng_in) override;
         virtual void pov(const std::string filename, const bool with_hull=false) const override;
         virtual void gp(const std::string filename, const bool with_hull=false) const override;
         virtual void threejs(const std::string filename, const bool with_hull=false) const override;
@@ -214,6 +215,66 @@ void SpecWalker<T>::svg(const std::string filename, const bool with_hull) const
     pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
     pic.save();
 }
+
+
+template <class T>
+void SpecWalker<T>::svgOfChange(std::string filename, UniformRNG &rng)
+{
+    SVG pic(filename);
+    std::vector<Step<T>> p = points();
+    std::vector<std::vector<double>> ps;
+    int min_x=0, max_x=0, min_y=0, max_y=0;
+    for(auto i : p)
+    {
+        T x1 = i[0], y1 = i[1];
+        std::vector<double> point {(double) x1, (double) y1};
+
+        pic.circle(x1, y1, true, "grey");
+
+        ps.push_back(point);
+
+        if(x1 < min_x)
+            min_x = x1;
+        if(x1 > max_x)
+            max_x = x1;
+        if(y1 < min_y)
+            min_y = y1;
+        if(y1 > max_y)
+            max_y = y1;
+    }
+    pic.polyline(ps, false, "grey");
+
+    change(rng);
+    p = points();
+
+    ps.clear();
+    for(auto i : p)
+    {
+        T x1 = i[0], y1 = i[1];
+        std::vector<double> point {(double) x1, (double) y1};
+
+        pic.circle(x1, y1, true);
+
+        ps.push_back(point);
+
+        if(x1 < min_x)
+            min_x = x1;
+        if(x1 > max_x)
+            max_x = x1;
+        if(y1 < min_y)
+            min_y = y1;
+        if(y1 > max_y)
+            max_y = y1;
+    }
+    pic.polyline(ps, false);
+
+    if(d > 2)
+        pic.text(min_x, max_y-20, "projected from d=" + std::to_string(d), "red");
+
+    pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
+    pic.save();
+}
+
 
 /** Save a povray file visualizing the walk.
  *

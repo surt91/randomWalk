@@ -7,6 +7,7 @@
 #include "walker/Walker.hpp"
 #include "walker/LoopErasedWalker.hpp"
 #include "walker/SelfAvoidingWalker.hpp"
+#include "simulation/Simulation.hpp"
 #include "simulation/SimpleSampling.hpp"
 #include "simulation/Metropolis.hpp"
 #include "simulation/MetropolisParallelTempering.hpp"
@@ -49,6 +50,17 @@ int main(int argc, char** argv)
         UniformRNG rngReal(o.seedRealization);
         LoopErasedWalker w(o.d, o.steps, rngReal, o.chAlg);
         w.svgOfErasedLoops(o.svg_path);
+        return 0;
+    }
+
+    if(o.onlyChangeExample)
+    {
+        LOG(LOG_INFO) << "generate a change svg and exit";
+        UniformRNG rngReal(o.seedRealization);
+        std::unique_ptr<Walker> w;
+        o.sampling_method = SM_METROPOLIS;
+        Simulation::prepare(w, o);
+        w->svgOfChange(o.svg_path, rngReal);
         return 0;
     }
 

@@ -133,6 +133,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::SwitchArg onlyBoundsSwitch("", "onlyBounds", "just output minimum and maximum of the wanted observable and exit", false);
         TCLAP::SwitchArg onlyCentersSwitch("", "onlyCenters", "just output the centers of the WL bins and exit", false);
         TCLAP::SwitchArg onlyLERWExampleSwitch("", "onlyLERWExample", "just output a picture of erased loops", false);
+        TCLAP::SwitchArg onlyChangeExampleSwitch("", "onlyChangeExample", "just output a picture of a random change", false);
         TCLAP::SwitchArg onlyPivotExampleSwitch("", "onlyPivotExample", "just output a picture of a pivot step", false);
         TCLAP::SwitchArg onlyPTTemperaturesSwitch("", "onlyPTTemperatures", "just estimate reasonalbe temperatures for parallel tempering. will start from the supplied temperatures. specify at least two as boundaries.", false);
         TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode, log only to file (if specified) and not to stdout", false);
@@ -178,6 +179,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(onlyBoundsSwitch);
         cmd.add(onlyCentersSwitch);
         cmd.add(onlyLERWExampleSwitch);
+        cmd.add(onlyChangeExampleSwitch);
         cmd.add(onlyPivotExampleSwitch);
         cmd.add(onlyPTTemperaturesSwitch);
 
@@ -194,9 +196,18 @@ Cmd::Cmd(int argc, char** argv)
         onlyBounds = onlyBoundsSwitch.getValue();
         onlyCenters = onlyCentersSwitch.getValue();
         onlyLERWExample = onlyLERWExampleSwitch.getValue();
+        onlyChangeExample = onlyChangeExampleSwitch.getValue();
         onlyPivotExample = onlyPivotExampleSwitch.getValue();
         onlyPTTemperatures = onlyPTTemperaturesSwitch.getValue();
-        if(onlyBounds + onlyCenters + onlyLERWExample + onlyPivotExample + onlyPTTemperatures > 1)
+        if(
+            onlyBounds
+            + onlyCenters
+            + onlyLERWExample
+            + onlyChangeExample
+            + onlyPivotExample
+            + onlyPTTemperatures
+            > 1
+        )
         {
             LOG(LOG_ERROR) << "--only* are mutually exclusive";
             std::string list;
@@ -206,6 +217,8 @@ Cmd::Cmd(int argc, char** argv)
                 list += "--onlyCenters ";
             if(onlyLERWExample)
                 list += "--onlyLERWExample ";
+            if(onlyChangeExample)
+                list += "--onlyChangeExample ";
             if(onlyPivotExample)
                 list += "--onlyPivotExample ";
             if(onlyPTTemperatures)
@@ -229,25 +242,15 @@ Cmd::Cmd(int argc, char** argv)
             LOG(LOG_INFO) << "onlyPTTemperatures Mode";
         }
 
-        if(onlyLERWExample)
+        if(onlyLERWExample || onlyChangeExample || onlyPivotExample)
         {
             if(svgArg.getValue().empty())
             {
                 LOG(LOG_ERROR) << "-s path needed to save the visualization";
                 exit(1);
             }
-            LOG(LOG_INFO) << "onlyLERWExample Mode";
+            LOG(LOG_INFO) << "onlyExample Mode";
         }
-
-        if(onlyPivotExample)
-        {
-            if(svgArg.getValue().empty())
-            {
-                LOG(LOG_ERROR) << "-s path needed to save the visualization";
-            }
-            LOG(LOG_INFO) << "onlyPivotExample Mode";
-        }
-
 
         // Get the value parsed by each arg.
         Logger::quiet = quietSwitch.getValue();
