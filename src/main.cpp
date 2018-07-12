@@ -73,7 +73,7 @@ int main(int argc, char** argv)
         Simulation::prepare(w, o);
         for(int i=0; i<o.iterations; ++i)
         {
-            w->svg(o.svg_path + "." + std::to_string(i));
+            w->svg(o.svg_path + "." + std::to_string(i), true);
             w->change(rngReal);
         }
         return 0;
