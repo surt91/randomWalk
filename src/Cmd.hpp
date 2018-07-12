@@ -204,6 +204,7 @@ class Cmd
         bool onlyCenters;           ///< output only the centers of the Wang Landau bins and exit
         bool onlyLERWExample;       ///< save a LERW with visualized erased loops and exit
         bool onlyChangeExample;     ///< save a picture of a random change and exit
+        bool onlySingleChangeExample;///< save n pictures of random changes and exit
         bool onlyPivotExample;      ///< save a picture of a pivot step and exit
         bool onlyPTTemperatures;    ///< estimate good temperatures for parallel tempering and exit
 

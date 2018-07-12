@@ -64,6 +64,21 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    if(o.onlySingleChangeExample)
+    {
+        LOG(LOG_INFO) << "generate n change svgs and exit";
+        UniformRNG rngReal(o.seedRealization);
+        std::unique_ptr<Walker> w;
+        o.sampling_method = SM_METROPOLIS;
+        Simulation::prepare(w, o);
+        for(int i=0; i<o.iterations; ++i)
+        {
+            w->svg(o.svg_path + "." + std::to_string(i));
+            w->change(rngReal);
+        }
+        return 0;
+    }
+
     if(o.onlyPTTemperatures)
     {
         LOG(LOG_INFO) << "generate temperatures for parallel tempering and exit";

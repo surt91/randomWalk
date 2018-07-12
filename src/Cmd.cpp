@@ -134,6 +134,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::SwitchArg onlyCentersSwitch("", "onlyCenters", "just output the centers of the WL bins and exit", false);
         TCLAP::SwitchArg onlyLERWExampleSwitch("", "onlyLERWExample", "just output a picture of erased loops", false);
         TCLAP::SwitchArg onlyChangeExampleSwitch("", "onlyChangeExample", "just output a picture of a random change", false);
+        TCLAP::SwitchArg onlySingleChangeExampleSwitch("", "onlySingleChangeExample", "just output n pictures of a random changes", false);
         TCLAP::SwitchArg onlyPivotExampleSwitch("", "onlyPivotExample", "just output a picture of a pivot step", false);
         TCLAP::SwitchArg onlyPTTemperaturesSwitch("", "onlyPTTemperatures", "just estimate reasonalbe temperatures for parallel tempering. will start from the supplied temperatures. specify at least two as boundaries.", false);
         TCLAP::SwitchArg quietSwitch("q", "quiet", "quiet mode, log only to file (if specified) and not to stdout", false);
@@ -180,6 +181,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(onlyCentersSwitch);
         cmd.add(onlyLERWExampleSwitch);
         cmd.add(onlyChangeExampleSwitch);
+        cmd.add(onlySingleChangeExampleSwitch);
         cmd.add(onlyPivotExampleSwitch);
         cmd.add(onlyPTTemperaturesSwitch);
 
@@ -197,6 +199,7 @@ Cmd::Cmd(int argc, char** argv)
         onlyCenters = onlyCentersSwitch.getValue();
         onlyLERWExample = onlyLERWExampleSwitch.getValue();
         onlyChangeExample = onlyChangeExampleSwitch.getValue();
+        onlySingleChangeExample = onlySingleChangeExampleSwitch.getValue();
         onlyPivotExample = onlyPivotExampleSwitch.getValue();
         onlyPTTemperatures = onlyPTTemperaturesSwitch.getValue();
         if(
@@ -204,6 +207,7 @@ Cmd::Cmd(int argc, char** argv)
             + onlyCenters
             + onlyLERWExample
             + onlyChangeExample
+            + onlySingleChangeExample
             + onlyPivotExample
             + onlyPTTemperatures
             > 1
@@ -219,6 +223,8 @@ Cmd::Cmd(int argc, char** argv)
                 list += "--onlyLERWExample ";
             if(onlyChangeExample)
                 list += "--onlyChangeExample ";
+            if(onlySingleChangeExample)
+                list += "--onlySingleChangeExample ";
             if(onlyPivotExample)
                 list += "--onlyPivotExample ";
             if(onlyPTTemperatures)
@@ -242,7 +248,10 @@ Cmd::Cmd(int argc, char** argv)
             LOG(LOG_INFO) << "onlyPTTemperatures Mode";
         }
 
-        if(onlyLERWExample || onlyChangeExample || onlyPivotExample)
+        if(onlyLERWExample
+            || onlyChangeExample
+            || onlySingleChangeExample
+            || onlyPivotExample)
         {
             if(svgArg.getValue().empty())
             {
