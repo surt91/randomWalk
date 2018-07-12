@@ -95,7 +95,7 @@ void SVG::setGeometry(const double min, const double max, const bool border)
 void SVG::setGeometry(const double min_x, const double min_y, const double max_x, const double max_y, const bool border)
 {
     std::stringstream ss;
-    ss << min_x << " " << min_y << " " << (max_x-min_x) << " " << (max_y-min_y) ;
+    ss << min_x << " " << min_y << " " << (max_x-min_x) << " " << (max_y-min_y);
     std::string area = ss.str();
 
     ss.str("");
@@ -103,7 +103,15 @@ void SVG::setGeometry(const double min_x, const double min_y, const double max_x
        << "' width='" << (max_x - min_x) << "' height='" << (max_y-min_y)
        << "' fill='white' />\n";
 
-    header.insert(header.find_last_of(">"), "viewBox='" + area + "'");
+    header = std::string("<?xml version='1.0' encoding='UTF-8'?> \n\
+                <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>\n\
+                <svg xmlns='http://www.w3.org/2000/svg'\n\
+                xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events'\n\
+                version='1.1' baseProfile='full'\
+                width='" + std::to_string((int) (max_x-min_x)) + "0px' \
+                height='" + std::to_string((int) (max_y-min_y)) + "0px' \
+                viewBox='" + area + "'>\n");
+
     header += ss.str();
     if(border)
     {
