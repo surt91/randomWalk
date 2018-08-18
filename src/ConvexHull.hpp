@@ -898,41 +898,32 @@ void ConvexHull<T>::runChan()
         for(int i=0; i<k; ++i)
             subhulls[i] = andrew(subsets[i]);
 
-        for(int i=0; i<k; ++i)
-        {
-            LOG(LOG_INFO) << subhulls[i];
-        }
-
         // perform Jarvis' march with only the tangent points
         // find p1: leftmost point
         Step<T> p1 = std::min(*interiorPoints);
-        Step<T> p = p1;
-        hull.push_back(p);
+        Step<T> q = p1;
+        hull.push_back(p1);
         for(int i=0; i<m; ++i)
         {
-            // FIXME: this just tries every point of the subhulls and will thus
-            // not resultin the speedup, but it ensures that the rest works
-            // However, the tangent finding needs to be implemented
             for(auto j=0; j<k; ++j)
-                for(auto it = subhulls[j].begin(); it != subhulls[j].end(); ++it)
+            {
+                Step<T> t = polygon_tangent(hull[i], subhulls[j]);
+
+                T orientation = cross2d_z(hull[i], t, q);
+                if(orientation > 0)
+                    q = t;
+                else if(orientation == 0) // colinear
                 {
-                    T orientation = cross2d_z(hull[i], *it, p);
-                    if(orientation > 0)
-                        p = *it;
-                    else if(orientation == 0) // colinear
-                    {
-                        // take the one furthest away
-                        if((p-hull[i]).length() < (*it-hull[i]).length())
-                            p = *it;
-                        // and delete all other
-                    }
+                    // take the one furthest away
+                    if((q-hull[i]).length() < (t-hull[i]).length())
+                        q = t;
                 }
-            hull.push_back(p);
+            }
+            hull.push_back(q);
 
             // if we are finished after <= m iterations, we found the hull
-            if(p == p1)
+            if(q == p1)
             {
-                LOG(LOG_INFO) << "finished" << hull;
                 hullPoints_ = hull;
                 return;
             }

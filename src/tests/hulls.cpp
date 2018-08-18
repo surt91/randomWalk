@@ -36,27 +36,31 @@ TEST_CASE( "hull types", "[hull]" ) {
 
         SECTION("Andrews") {
             w->setHullAlgo(CH_ANDREWS);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
         SECTION("Andrews + Akl") {
             w->setHullAlgo(CH_ANDREWS_AKL);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
         SECTION("Jarvis") {
             w->setHullAlgo(CH_JARVIS);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
         SECTION("Jarvis + Akl") {
             w->setHullAlgo(CH_JARVIS_AKL);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
         SECTION("qhull") {
             w->setHullAlgo(CH_QHULL);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
         SECTION("qhull + Akl") {
             w->setHullAlgo(CH_QHULL_AKL);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
         SECTION("chan") {
             w->setHullAlgo(CH_CHAN);
-        }
-        SECTION("chan + Akl") {
-            w->setHullAlgo(CH_CHAN_AKL);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
     }
     SECTION( "3D" ) {
@@ -71,13 +75,11 @@ TEST_CASE( "hull types", "[hull]" ) {
 
         SECTION("qhull") {
             w->setHullAlgo(CH_QHULL);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
         SECTION("qhull + Akl") {
             w->setHullAlgo(CH_QHULL_AKL);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
     }
-
-    REQUIRE(w->A() == Approx(A));
-    REQUIRE(w->L() == Approx(L));
-    REQUIRE(w->num_on_hull() == count);
 }

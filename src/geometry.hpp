@@ -23,6 +23,14 @@ T cross2d_z(const Step<T>& O,
     return (A.x() - O.x()) * (B.y() - O.y()) - (A.y() - O.y()) * (B.x() - O.x());
 }
 
+template <class T>
+T cross2d_z(const std::array<T, 2>& O,
+            const std::array<T, 2>& A,
+            const std::array<T, 2>& B)
+{
+    return (A[0] - O[0]) * (B[1] - O[1]) - (A[1] - O[1]) * (B[0] - O[0]);
+}
+
 /** Test if point p is inside the triangel formed by p1, p2, p3.
  *
  * Sequence of the points matters, must be counterclockwise.
@@ -254,6 +262,45 @@ T side(orgQhull::QhullFacet& f, const Step<T>& p)
            + (v[1]-p.y()) * normal[1]
            + (v[2]-p.z()) * normal[2];
     return s < 0 ? -1 : 1;
+}
+
+template <class T>
+int orientation(Step<T> O, Step<T> A, Step<T> B)
+{
+	// T val = (A[1] - O[1]) * (B[0] - A[0]) - (A[0] - O[0]) * (B[1] - A[1]);
+    T val = -cross2d_z(O, A, B);
+	if (val == 0) return 0;  // Collinear
+	return (val > 0)? -1: 1; // CW: -1 or CCW: 1
+}
+
+// cmp: https://github.com/ypranay/Convex-Hull/blob/master/ChansAlgorithmForConvexHull.cpp
+template <class T>
+Step<T> polygon_tangent(const Step<T> &p, const std::vector<Step<T>> &v)
+{
+    // search for the tangent through `p` of the polygon `poly`
+    // use a clever binary search
+    // all points q before the tangent t are ptq oriented ccw and after cw
+
+    int n = v.size();
+    int l = 0;
+    int r = n;
+    int l_before = orientation(p, v[0], v[n-1]);
+    int l_after = orientation(p, v[0], v[(l + 1) % n]);
+    while (l < r){
+        int c = (l + r)/2;
+        int c_before = orientation(p, v[c], v[(c - 1) % n]);
+        int c_after = orientation(p, v[c], v[(c + 1) % n]);
+        int c_side = orientation(p, v[l], v[c]);
+        if (c_before >= 0 && c_after >= 0)
+            return v[c];
+        else if (((c_side > 0) && (l_after < 0 || l_before == l_after)) || (c_side < 0 && c_before < 0))
+            r = c;
+        else
+            l = c + 1 ;
+        l_before = -c_after;
+        l_after = orientation(p, v[l], v[(l + 1) % n]);
+    }
+    return v[l];
 }
 
 #endif
