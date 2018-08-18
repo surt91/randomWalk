@@ -84,6 +84,7 @@ class ConvexHull
         // for Andrews, and Jarvis
         void runAndrews();
         void runJarvis();
+        void runChan();
         void preprocessAklToussaint();
 
         std::vector<Step<T>*> pointSelection;
@@ -116,6 +117,12 @@ void ConvexHull<T>::run(std::vector<Step<T>> *points)
             // fall through
         case CH_JARVIS:
             runJarvis();
+            break;
+        case CH_CHAN_AKL:
+            preprocessAklToussaint();
+            // fall through
+        case CH_CHAN:
+            runChan();
             break;
         default:
             LOG(LOG_ERROR) << "Algorithm not implemented, yet: "
@@ -826,6 +833,114 @@ void ConvexHull<T>::runJarvis()
         }
     } while(p!=p1); // if we reach the first, we have finished
     // mind that first and last entry of hullPoints_ are the same
+}
+
+// this is the same andrews implementation as above, but as a pure function
+// TODO join this with the above implementation
+template <class T>
+std::vector<Step<T>> andrew(std::vector<Step<T>> &points)
+{
+    // sort points lexicographically
+    std::sort(points.begin(), points.end());
+
+    int n = points.size();
+    std::vector<Step<T>> hull(2*n);
+
+    int k = 0;
+    // Build lower hull
+    for(int i=0; i<n; ++i)
+    {
+        while (k>=2 && cross2d_z(hull[k-2], hull[k-1], points[i]) <= 0)
+            k--;
+        hull[k++] = points[i];
+    }
+
+    // Build upper hull
+    for(int i=n-2, t=k+1; i>=0; --i)
+    {
+        while (k>=t && cross2d_z(hull[k-2], hull[k-1], points[i]) <= 0)
+            k--;
+        hull[k++] = points[i];
+    }
+
+    hull.resize(k);
+    return hull;
+}
+
+template <class T>
+void ConvexHull<T>::runChan()
+{
+    if(d > 3)
+    {
+        LOG(LOG_ERROR) << "Chan's Algorithm does only work in d=2 and d=3, the data is d = " << d;
+        throw std::invalid_argument("Chan's Algorithm does only work in d=2 and d=3");
+    }
+    if(d != 2)
+    {
+        LOG(LOG_ERROR) << "Chan's Algorithm is only implemented in d=2, the data is d = " << d;
+        throw std::invalid_argument("Chan's Algorithm is only implemented in d=2");
+    }
+
+    int n = interiorPoints->size();
+    int m = 10;
+    std::vector<Step<T>> hull;
+    while(true)
+    {
+        int k = n/m + 1;
+        // split point set in n/m sub sets of size <= m
+        auto subsets = std::vector<std::vector<Step<T>>>(k);
+        for(int i=0; i<n; ++i)
+            subsets[i%k].push_back((*interiorPoints)[i]);
+
+        // calculate the sub-hulls with Andrew's algorithm
+        // the implementation above is f***ed up, just reimplement it :/
+        auto subhulls = std::vector<std::vector<Step<T>>>(k);
+        for(int i=0; i<k; ++i)
+            subhulls[i] = andrew(subsets[i]);
+
+        for(int i=0; i<k; ++i)
+        {
+            LOG(LOG_INFO) << subhulls[i];
+        }
+
+        // perform Jarvis' march with only the tangent points
+        // find p1: leftmost point
+        Step<T> p1 = std::min(*interiorPoints);
+        Step<T> p = p1;
+        hull.push_back(p);
+        for(int i=0; i<m; ++i)
+        {
+            // FIXME: this just tries every point of the subhulls and will thus
+            // not resultin the speedup, but it ensures that the rest works
+            // However, the tangent finding needs to be implemented
+            for(auto j=0; j<k; ++j)
+                for(auto it = subhulls[j].begin(); it != subhulls[j].end(); ++it)
+                {
+                    T orientation = cross2d_z(hull[i], *it, p);
+                    if(orientation > 0)
+                        p = *it;
+                    else if(orientation == 0) // colinear
+                    {
+                        // take the one furthest away
+                        if((p-hull[i]).length() < (*it-hull[i]).length())
+                            p = *it;
+                        // and delete all other
+                    }
+                }
+            hull.push_back(p);
+
+            // if we are finished after <= m iterations, we found the hull
+            if(p == p1)
+            {
+                LOG(LOG_INFO) << "finished" << hull;
+                hullPoints_ = hull;
+                return;
+            }
+        }
+
+        m = m*m;
+        hull.clear();
+    }
 }
 
 #endif

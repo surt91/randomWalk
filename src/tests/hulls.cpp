@@ -52,6 +52,12 @@ TEST_CASE( "hull types", "[hull]" ) {
         SECTION("qhull + Akl") {
             w->setHullAlgo(CH_QHULL_AKL);
         }
+        SECTION("chan") {
+            w->setHullAlgo(CH_CHAN);
+        }
+        SECTION("chan + Akl") {
+            w->setHullAlgo(CH_CHAN_AKL);
+        }
     }
     SECTION( "3D" ) {
         o.d = 3;

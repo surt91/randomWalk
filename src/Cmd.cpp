@@ -87,14 +87,15 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\t'True' self-avoiding walk : 10\n",
                                      false, type, &allowedWT);
 
-        std::vector<int> ch({0, 1, 2, 3, 4});
+        std::vector<int> ch({0, 1, 2, 3, 4, 5});
         TCLAP::ValuesConstraint<int> allowedCH(ch);
         TCLAP::ValueArg<int> chAlgArg("c", "convexHullAlgo", "convex hull algorithm:\n"
                                                              "\tNOP (do nothing)      : 0\n"
                                                              "\tquickhull (QHull)     : 1 (default)\n"
                                                              "\tAndrews Monotone Chain: 2\n"
                                                              "\tGraham Scan           : 3\n"
-                                                             "\tJarvis March          : 4",
+                                                             "\tJarvis March          : 4\n"
+                                                             "\tChans                 : 5",
                                       false, chAlg, &allowedCH);
         std::vector<int> wo({1, 2, 3});
         TCLAP::ValuesConstraint<int> allowedWO(wo);
