@@ -177,10 +177,24 @@ void ScentWalker::updateSteps()
 void ScentWalker::change(UniformRNG &rng, bool update)
 {
     // I should do this in a far more clever way
-    int idx = rng() * nRN();
+    int idx = rng() * (nRN()+1) - numWalker;
+    // in the case of idx < 0, change the starting position of the (|idx|-1)-th walk
     undo_index = idx;
-    undo_value = random_numbers[idx];
-    random_numbers[idx] = rng();
+    if(idx < 0)
+    {
+        undo_start = starts[abs(idx)-1];
+
+        std::vector<int> tmp_start(d);
+        for(int k=0; k<d; ++k)
+            tmp_start[k] = rng() * sideLength;
+
+        starts[abs(idx)-1] = Step<int>(tmp_start);
+    }
+    else
+    {
+        undo_value = random_numbers[idx];
+        random_numbers[idx] = rng();
+    }
 
     updateSteps();
     updatePoints();
@@ -194,7 +208,14 @@ void ScentWalker::change(UniformRNG &rng, bool update)
 
 void ScentWalker::undoChange()
 {
-    random_numbers[undo_index] = undo_value;
+    if(undo_index < 0)
+    {
+        starts[abs(undo_index)-1] = undo_start;
+    }
+    else
+    {
+        random_numbers[undo_index] = undo_value;
+    }
 
     updateSteps();
     updatePoints();

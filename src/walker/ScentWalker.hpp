@@ -61,6 +61,8 @@ class ScentWalker final : public SpecWalker<int>
         std::vector<Step<int>> starts;
         std::vector<HistogramND> histograms;
 
+        Step<int> undo_start;
+
         std::vector<Step<int>> step, pos;
 };
 
