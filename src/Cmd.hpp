@@ -146,6 +146,8 @@ class Cmd
               passageTimeStarts(),
               mu(0.0),
               sigma(1.0),
+              beta(0.0),
+              resetrate(0.0),
               width(10),
               tas(1000),
               lnf_min(1e-8),

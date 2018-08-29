@@ -297,10 +297,16 @@ Cmd::Cmd(int argc, char** argv)
         }
 
         beta = betaArg.getValue();
-        LOG(LOG_INFO) << "beta                       " << beta;
+        if(beta != 0.0)
+        {
+            LOG(LOG_INFO) << "beta                       " << beta;
+        }
 
         resetrate = resetrateArg.getValue();
-        LOG(LOG_INFO) << "resetrate                  " << resetrate;
+        if(resetrate != 0.0)
+        {
+            LOG(LOG_INFO) << "resetrate                  " << resetrate;
+        }
 
         width = widthArg.getValue();
         if(width != 10)
