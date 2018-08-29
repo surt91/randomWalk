@@ -362,7 +362,7 @@ class SimulationInstance():
                        t_eq_max=None, theta=None, energy=None,
                        first=False, last=False, sweep=None,
                        number_of_walkers=None, passageTimeStart=-1,
-                       batch_id=0, beta=1.0, **not_used):
+                       batch_id=0, beta=1.0, reset=0.0, **not_used):
 
         self.N = steps
         self.number_of_walkers = number_of_walkers
@@ -392,8 +392,9 @@ class SimulationInstance():
         self.sweep = sweep
         self.passageTimeStart = passageTimeStart
         self.beta = beta
+        self.reset = reset
         self.quiet = False
-        
+
         self.first = first
         self.last = last
 
@@ -442,19 +443,19 @@ class SimulationInstance():
         self.y = abs(self.y) % 1700000339
 
         if sampling == 0:
-            self.basename = para.basesimple.format(typ=self.t, steps=self.N, seedR=self.y, batch=batch_id, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta)
+            self.basename = para.basesimple.format(typ=self.t, steps=self.N, seedR=self.y, batch=batch_id, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta, reset=self.reset)
         elif sampling == 1:
-            self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta)
+            self.basename = para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=self.T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta, reset=self.reset)
         elif sampling == 4 or sampling == 5:
             self.basename = []
             for T in self.T:
-                self.basename.append(para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta))
+                self.basename.append(para.basetheta.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, theta=T, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta, reset=self.reset))
         elif sampling == 2 or sampling == 3:
-            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta)
+            self.basename = para.basee.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, estart=self.energy[0], eend=self.energy[-1], iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta, reset=self.reset)
 
         if sampling == 4 or sampling == 5:
             self.filename = []
-            self.logname = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta) + ".log"
+            self.logname = para.basename.format(typ=self.t, steps=self.N, seedMC=self.x, seedR=self.y, iterations=self.n, observable=self.w, sampling=self.m, dimension=self.D, passageTimeStart=self.passageTimeStart, beta=self.beta, reset=self.reset) + ".log"
             for bn in self.basename:
                 self.filename.append("{}/{}.dat".format(self.rawData, bn))
                 if self.rawConf:
@@ -525,6 +526,7 @@ class SimulationInstance():
                 "-w {}".format(self.w),
                 "-m {}".format(self.m),
                 "--beta {}".format(self.beta),
+                "--reset {}".format(self.reset),
                ]
 
         if self.m == 4 or self.m == 5:
