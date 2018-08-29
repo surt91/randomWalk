@@ -31,6 +31,7 @@
 #include "../walker/EscapeWalker.hpp"
 #include "../walker/ScentWalker.hpp"
 #include "../walker/TrueSelfAvoidingWalker.hpp"
+#include "../walker/ResetWalker.hpp"
 #include "../RNG.hpp"
 #include "../io.hpp"
 

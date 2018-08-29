@@ -55,6 +55,7 @@ enum walk_type_t {
     WT_ESCAPE_RANDOM_WALK,          ///< Escape random walk
     WT_SCENT_RANDOM_WALK,           ///< Scent random walk
     WT_TRUE_SELF_AVOIDING_WALK,     ///< "True" Self-avoiding walk
+    WT_RESET_WALK,                  ///< resetting random walk
 };
 
 const std::vector<std::string> TYPE_LABEL = {
@@ -69,6 +70,7 @@ const std::vector<std::string> TYPE_LABEL = {
     "Escape Random Walk",
     "Scent Random Walk",
     "'True' Self-Avoiding Walk",
+    "Resetting Random Walk",
 };
 
 enum wanted_observable_t {
@@ -193,6 +195,8 @@ class Cmd
         double sigma;               ///< standard deviation \f$\sigma\f$ of the Gaussian to draw random numbers from (only correlated walks)
 
         double beta;                ///< avoidance parameter, step on visited sites with exp(-beta N) (only true self-avoiding walk)
+
+        double resetrate;           ///< reset rate (only resetting random walk)
 
         int width;                  ///< side length of a periodic field (only Scent walks)
         int tas;                    ///< lifetime of the scent (only Scent walks)
