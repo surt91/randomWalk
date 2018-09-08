@@ -298,9 +298,9 @@ Step<T> polygon_tangent(const Step<T> &p, const std::vector<Step<T>> &v)
         else
             l = c + 1 ;
         l_before = -c_after;
-        l_after = orientation(p, v[l], v[(l + 1) % n]);
+        l_after = orientation(p, v[l%n], v[(l + 1) % n]);
     }
-    return v[l];
+    return v[l%n];
 }
 
 #endif

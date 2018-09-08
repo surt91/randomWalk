@@ -62,6 +62,10 @@ TEST_CASE( "hull types", "[hull]" ) {
             w->setHullAlgo(CH_CHAN);
             REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
         }
+        SECTION("chan + Akl") {
+            w->setHullAlgo(CH_CHAN_AKL);
+            REQUIRE(w->A() == Approx(A)); REQUIRE(w->L() == Approx(L)); REQUIRE(w->num_on_hull() == count);
+        }
     }
     SECTION( "3D" ) {
         o.d = 3;
