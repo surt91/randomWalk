@@ -5,7 +5,8 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       numWalker(numWalker_in),
       sideLength(sideLength_in),
       Tas(Tas_in),
-      relax(2*Tas),
+      // relax(2*Tas),
+      relax(0),
       periodic(false)
 {
     // TODO: pass relax as parameter
@@ -156,11 +157,14 @@ void ScentWalker::updateSteps()
                 }
             }
 
-            // populate the histogram (for a figure as in the articel)
-            if(i >= relax)
-            {
+            // populate the histogram (for a figure as in the article)
+            // if(i >= numSteps - relax)
+            // {
                 // TODO: maybe just the last relax many steps?
                 histograms[j].add(pos[j]);
+            // }
+            if(i >= relax)
+            {
                 if(j == 0)
                     m_steps[i-relax] = step[j];
             }
