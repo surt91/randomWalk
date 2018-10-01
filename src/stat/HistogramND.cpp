@@ -54,6 +54,20 @@ const std::vector<double> HistogramND::centers() const
     return center;
 }
 
+/// return the bin borders
+const std::vector<double> HistogramND::get_bins() const
+{
+    std::vector<double> borders;
+
+    for(int i=0; i<bins+1; ++i)
+    {
+        double width = (upper - lower) / bins;
+        borders.push_back(width * i);
+    }
+
+    return borders;
+}
+
 /// get a reference to the raw data array
 const std::vector<int>& HistogramND::get_data() const
 {

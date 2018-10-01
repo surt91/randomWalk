@@ -36,6 +36,7 @@ class HistogramND
         void reset();
 
         const std::vector<double> centers() const;
+        const std::vector<double> get_bins() const;
         const std::vector<int>& get_data() const;
         int num_bins() const;
 
