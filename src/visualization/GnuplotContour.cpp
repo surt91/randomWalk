@@ -5,6 +5,7 @@ GnuplotContour::GnuplotContour(const std::string &f)
 {
     /* Write Header */
     filename_matrix = filename + ".matrix.dat";
+    filename_starts = filename + ".starts.dat";
     filename_png = filename + ".png";
     filename += ".gp";
 
@@ -19,7 +20,7 @@ GnuplotContour::GnuplotContour(const std::string &f)
               "\n";
 }
 
-void GnuplotContour::data(const std::vector<HistogramND> &histograms)
+void GnuplotContour::data(const std::vector<HistogramND> &histograms, const std::vector<Step<int>> &starts)
 {
     for(size_t i=0; i<histograms.size(); ++i)
     {
@@ -38,7 +39,10 @@ void GnuplotContour::data(const std::vector<HistogramND> &histograms)
         for(int x=0; x<bins; ++x)
         {
             for(int y=0; y<bins; ++y)
-                oss << (data[x*bins + y] / max) << " ";
+                if(data[x*bins + y])
+                    oss << std::max(0.1, data[x*bins + y] / max) << " ";
+                else
+                    oss << "0 ";
             oss << "\n";
         }
     }
@@ -65,6 +69,12 @@ void GnuplotContour::data(const std::vector<HistogramND> &histograms)
         buffer << "  '" + name + ".lines" + "' w l lc '"
                << COLOR[i%COLOR.size()] << "',\\\n";
     }
+
+    std::ofstream oss_starts(filename_starts);
+    for(size_t i=0; i<starts.size(); ++i)
+        oss_starts << starts[i][0] << " " << starts[i][1] << "\n";
+    buffer << "  '" + filename_starts + "' w p pt 1 ps 2 lw 2 lc 8\n";
+
     buffer << "\n";
 }
 

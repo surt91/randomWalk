@@ -274,7 +274,7 @@ void ScentWalker::gp(const std::string filename, const bool /*with_hull*/) const
 {
     GnuplotContour pic(filename);
 
-    pic.data(histograms);
+    pic.data(histograms, starts);
 
     pic.save();
 }

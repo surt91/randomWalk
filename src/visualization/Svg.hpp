@@ -12,16 +12,14 @@
 
 /// Colors used by the SVG backend for different walks
 static const std::vector<std::string> COLOR = {
-    "#008000", //"green",
-    "#0000ff", //"blue",
-    "#ffff00", //"yellow"
-    "#ffa500", //"orange",
-    "#4b0082", //"indigo",
-    "#b22222", //"firebrick",
-    "#2e8b57", //"seagreen"
-    "#dc143c", //"crimson"
-    "#8b008b", //"darkmagenta",
-    "#00bfff", //"deepskyblue",
+    "#1b9e77",
+    "#d95f02",
+    "#7570b3",
+    "#e7298a",
+    "#66a61e",
+    "#e6ab02",
+    "#a6761d",
+    "#666666"
 };
 
 /** Class to easily create 2d pictures in svg format.

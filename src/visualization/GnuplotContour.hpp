@@ -11,6 +11,7 @@
 
 #include "../Logging.hpp"
 #include "../stat/HistogramND.hpp"
+#include "../Step.hpp"
 
 /** Class to easily create 2d contour plots with gnuplot.
  */
@@ -19,7 +20,7 @@ class GnuplotContour
     public:
         GnuplotContour(const std::string &filename);
 
-        void data(const std::vector<HistogramND> &histograms);
+        void data(const std::vector<HistogramND> &histograms, const std::vector<Step<int>> &starts);
 
         void save();
 
@@ -27,6 +28,7 @@ class GnuplotContour
         std::string filename;
         std::string filename_png;
         std::string filename_matrix;
+        std::string filename_starts;
         std::stringstream buffer;
         std::stringstream buffer_points;
 };
