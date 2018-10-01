@@ -70,10 +70,14 @@ void GnuplotContour::data(const std::vector<HistogramND> &histograms, const std:
                << COLOR[i%COLOR.size()] << "',\\\n";
     }
 
-    std::ofstream oss_starts(filename_starts);
     for(size_t i=0; i<starts.size(); ++i)
+    {
+        std::ofstream oss_starts(filename_starts+std::to_string(i));
         oss_starts << starts[i][0] << " " << starts[i][1] << "\n";
-    buffer << "  '" + filename_starts + "' w p pt 1 ps 2 lw 2 lc 8\n";
+        buffer << "  '" + filename_starts+std::to_string(i) + "' w p pt 7 ps 3 lc 8, ";
+        buffer << "  '" + filename_starts+std::to_string(i) + "' w p pt 1 ps 2 lw 3 lc '"
+               << COLOR[i%COLOR.size()] << "',\\\n";
+    }
 
     buffer << "\n";
 }
