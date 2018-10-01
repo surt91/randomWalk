@@ -106,15 +106,9 @@ void ScentWalker::updateSteps()
                 std::vector<Step<int>> candidates;
                 for(const auto &k : pos[j].neighbors())
                 {
-                    // if there is no scent, it is a candidates
-                    // if there is exatly one, it might be me, test that
-                    if(
-                        trail[k].size() == 0
-                        || (trail[k].size() == 1 && trail[k].find(j) != trail[k].end())
-                    )
-                    {
+                    // retreat only on own scent to not trap yourself behind a bridge
+                    if(trail[k].size() == 1 && trail[k].find(j) != trail[k].end())
                         candidates.push_back(k);
-                    }
                 }
 
                 if(candidates.size() == 0)
