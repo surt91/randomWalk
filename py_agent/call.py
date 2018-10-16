@@ -14,7 +14,7 @@ for p in parameters:
         cmd = ["./randomWalk"]
         cmd += ["-T", f"{T}"]
         # only agent walk
-        cmd += ["-t", 9]
+        cmd += ["-t", "9"]
 
         n = p["iterations"]
         cmd += ["-n", f"{n}"]
@@ -23,7 +23,7 @@ for p in parameters:
         cmd += ["-N", f"{N}"]
 
         Tas = p["Tas"]
-        cmd += ["--Tas", f"{Tas}"]
+        cmd += ["--tas", f"{Tas}"]
 
         M = p["agents"]
         cmd += ["-M", f"{M}"]
@@ -33,6 +33,11 @@ for p in parameters:
 
         w = p["observable"]
         cmd += ["-w", f"{w}"]
+
+        # defaults
+        cmd += ["-c", "2", "-a"]
+        cmd += ["-m", "1"]
+        cmd += ["--t_eq_max", "1000"]
 
         outfile = "rawData/" + p["file"].format(N=N, T=T, **p) + ".dat"
         cmd += ["-o", outfile]
