@@ -7,7 +7,8 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       Tas(Tas_in),
       // relax(2*Tas),
       relax(0),
-      periodic(false)
+      periodic(false),
+      circleStart(true)
 {
     // TODO: pass relax as parameter
     LOG(LOG_INFO) << "This type needs to relax first, " << relax
@@ -26,28 +27,49 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
 
 void ScentWalker::reconstruct()
 {
-    std::set<Step<int>> occupied_starts;
-
     starts.clear();
     pos.clear();
     step.clear();
     for(auto &h : histograms)
         h.reset();
 
-    std::vector<int> tmp_start(d);
-    for(int j=0; j<numWalker; ++j)
+    if(circleStart)
     {
-        for(int k=0; k<d; ++k)
-            tmp_start[k] = rng() * sideLength;
-
-        // test if this place is alreay occupied (low probability, but it happens)
-        if(occupied_starts.find(Step<int>(tmp_start)) != occupied_starts.end())
+        int radius = std::min(sideLength/3, 2*numWalker);
+        double phi_incr = 2.*M_PI/numWalker;
+        LOG(LOG_INFO) << "starts on a circle with radius " << radius << " and angle increment " << phi_incr;
+        for(int j=0; j<numWalker; ++j)
         {
-            --j;
-            continue;
+            std::vector<int> tmp_start(d);
+
+            int mid = sideLength/2;
+            double phi = j*phi_incr;
+            int x = radius * std::cos(phi) + mid;
+            int y = radius * std::sin(phi) + mid;
+            tmp_start[0] = x;
+            tmp_start[1] = y;
+
+            starts.emplace_back(std::move(tmp_start));
         }
-        occupied_starts.emplace(tmp_start);
-        starts.emplace_back(tmp_start);
+    }
+    else
+    {
+        std::set<Step<int>> occupied_starts;
+        std::vector<int> tmp_start(d);
+        for(int j=0; j<numWalker; ++j)
+        {
+            for(int k=0; k<d; ++k)
+                tmp_start[k] = rng() * sideLength;
+
+            // test if this place is alreay occupied (low probability, but it happens)
+            if(occupied_starts.find(Step<int>(tmp_start)) != occupied_starts.end())
+            {
+                --j;
+                continue;
+            }
+            occupied_starts.emplace(tmp_start);
+            starts.emplace_back(tmp_start);
+        }
     }
 
     if(!amnesia)
@@ -175,7 +197,12 @@ void ScentWalker::updateSteps()
 void ScentWalker::change(UniformRNG &rng, bool update)
 {
     // I should do this in a far more clever way
-    int idx = rng() * (nRN()+1) - numWalker;
+
+    // variable starts:
+    // int idx = rng() * (nRN()+1) - numWalker;
+    // fixed starts:
+    int idx = rng() * (nRN()+1);
+
     // in the case of idx < 0, change the starting position of the (|idx|-1)-th walk
     undo_index = idx;
     if(idx < 0)
