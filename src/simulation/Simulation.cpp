@@ -149,6 +149,16 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
             );
         w->setP1(o.resetrate);
     }
+    else if(o.type == WT_BRANCH_WALK)
+    {
+        if(o.numWalker == 1)
+            w = std::unique_ptr<Walker>(new BranchingGauss(o.d, o.steps, rngReal, o.chAlg, amnesia));
+        else
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<BranchingGauss>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
+        w->setP1(o.resetrate);
+    }
     else
     {
         LOG(LOG_ERROR) << "type " << o.type << " is not known";

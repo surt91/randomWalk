@@ -73,7 +73,7 @@ Cmd::Cmd(int argc, char** argv)
                                                         "\tdebug3 : 7",
                                         false, 4, "integer");
 
-        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
         TCLAP::ValuesConstraint<int> allowedWT(wt);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
                                                   "\tlattice random walk       :  1 (default)\n"
@@ -86,7 +86,8 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\tEscape random walk        :  8\n"
                                                   "\tScent random walk         :  9\n"
                                                   "\t'True' self-avoiding walk : 10\n"
-                                                  "\tResetting random walk     : 11\n",
+                                                  "\tResetting random walk     : 11\n"
+                                                  "\tbranching Gaussian walk   : 12\n",
                                      false, type, &allowedWT);
 
         std::vector<int> ch({0, 1, 2, 3, 4, 5});

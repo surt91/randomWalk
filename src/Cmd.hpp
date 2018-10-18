@@ -56,6 +56,7 @@ enum walk_type_t {
     WT_SCENT_RANDOM_WALK,           ///< Scent random walk
     WT_TRUE_SELF_AVOIDING_WALK,     ///< "True" Self-avoiding walk
     WT_RESET_WALK,                  ///< resetting random walk
+    WT_BRANCH_WALK,                 ///< branching Gaussian walk
 };
 
 const std::vector<std::string> TYPE_LABEL = {
@@ -71,6 +72,7 @@ const std::vector<std::string> TYPE_LABEL = {
     "Scent Random Walk",
     "'True' Self-Avoiding Walk",
     "Resetting Random Walk",
+    "Branching Gaussian Walk",
 };
 
 enum wanted_observable_t {

@@ -32,6 +32,7 @@
 #include "../walker/ScentWalker.hpp"
 #include "../walker/TrueSelfAvoidingWalker.hpp"
 #include "../walker/ResetWalker.hpp"
+#include "../walker/BranchingGauss.hpp"
 #include "../RNG.hpp"
 #include "../io.hpp"
 
