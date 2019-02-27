@@ -59,6 +59,8 @@ class Step
         Step<T> right_turn() const { throw std::invalid_argument("right_turn() only implemented for Step<int>"); }
         int winding_angle(const Step<T> & /*next*/) const { throw std::invalid_argument("winding_angle() only implemented for Step<int>"); }
 
+        void turn_direction(const Step<T> &other);
+
         // properties
         double length() const;
         double length2() const;
@@ -432,6 +434,15 @@ inline Step<int>::Step(int d, double rn)
 #endif
 {
     fillFromRN(rn);
+}
+
+template <class T>
+void Step<T>::turn_direction(const Step<T> &other)
+{
+    double l1 = this->length();
+    double l2 = other.length();
+    this->m_coordinates = other.m_coordinates;
+    *this /= l1/l2;
 }
 
 /// Euclidean distance to zero.
