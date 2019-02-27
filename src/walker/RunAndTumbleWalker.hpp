@@ -12,7 +12,7 @@
 class RunAndTumbleWalker final : public SpecWalker<double>
 {
     public:
-        RunAndTumbleWalker(int d, int numSteps, double gamma, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
+        RunAndTumbleWalker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void reconstruct() final;
 
@@ -24,7 +24,7 @@ class RunAndTumbleWalker final : public SpecWalker<double>
         void changeSingle(UniformRNG &rng);
         void undoChangeSingle();
 
-        double gamma;
+        void setP1(double gamma) final;
 
     protected:
         Step<double> genStep(int idx) const;
@@ -32,6 +32,8 @@ class RunAndTumbleWalker final : public SpecWalker<double>
         std::vector<double> undo_values;
         double undo_tumble;
         std::vector<double> random_tumble;
+
+        double gamma;
 };
 
 #endif

@@ -1,8 +1,8 @@
 #include "RunAndTumbleWalker.hpp"
 
-RunAndTumbleWalker::RunAndTumbleWalker(int d, int numSteps, double gamma, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
+RunAndTumbleWalker::RunAndTumbleWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<double>(d, numSteps, rng_in, hull_algo, amnesia),
-      gamma(gamma)
+      gamma(0.5)
 {
     // we need d gaussian random numbers per step, for each direction
     random_numbers = rng.vector_gaussian(d * numSteps);
@@ -22,6 +22,11 @@ void RunAndTumbleWalker::reconstruct()
                   [this]{ return this->rng.uniform(); });
 
     init();
+}
+
+void RunAndTumbleWalker::setP1(double gamma_in)
+{
+    gamma = gamma_in;
 }
 
 /** Generate a step by unit distance and angles determined by the

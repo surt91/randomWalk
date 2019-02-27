@@ -50,6 +50,7 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, sigma, "double");
         TCLAP::ValueArg<double> betaArg("", "beta", "avoidance parameter, step on visited sites with exp(-beta N) (only for t=10: true self-avoiding walk)", false, beta, "double");
         TCLAP::ValueArg<double> resetrateArg("", "reset", "reset rate (only for t=11: resetting random walk)", false, resetrate, "double");
+        TCLAP::ValueArg<double> gammaArg("", "gamma", "gamma, probability of direction change (only for t=13: run-and-tumble walk)", false, gamma, "double");
         TCLAP::ValueArg<int> widthArg("", "width", "width of the field (only for t=9: scent walk)", false, width, "integer");
         TCLAP::ValueArg<int> tasArg("", "tas", "lifetime of the scent (only for t=9: scent walk)", false, tas, "integer");
         TCLAP::ValueArg<double> lnfArg("", "lnf", "minimum value of ln(f) for the Wang Landau algorithm (default 1e-8)", false, lnf_min, "double");
@@ -73,7 +74,7 @@ Cmd::Cmd(int argc, char** argv)
                                                         "\tdebug3 : 7",
                                         false, 4, "integer");
 
-        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13});
         TCLAP::ValuesConstraint<int> allowedWT(wt);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
                                                   "\tlattice random walk       :  1 (default)\n"
@@ -87,7 +88,8 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\tScent random walk         :  9\n"
                                                   "\t'True' self-avoiding walk : 10\n"
                                                   "\tResetting random walk     : 11\n"
-                                                  "\tbranching Gaussian walk   : 12\n",
+                                                  "\tbranching Gaussian walk   : 12\n"
+                                                  "\trun-and-tumble walk       : 13\n",
                                      false, type, &allowedWT);
 
         std::vector<int> ch({0, 1, 2, 3, 4, 5});
@@ -168,6 +170,7 @@ Cmd::Cmd(int argc, char** argv)
         cmd.add(sigmaArg);
         cmd.add(betaArg);
         cmd.add(resetrateArg);
+        cmd.add(gammaArg);
         cmd.add(widthArg);
         cmd.add(tasArg);
         cmd.add(passageTimeStartArg);
@@ -307,6 +310,12 @@ Cmd::Cmd(int argc, char** argv)
         if(resetrate != 0.0)
         {
             LOG(LOG_INFO) << "resetrate                  " << resetrate;
+        }
+
+        gamma = gammaArg.getValue();
+        if(gamma != 1.0)
+        {
+            LOG(LOG_INFO) << "gamma                      " << gamma;
         }
 
         width = widthArg.getValue();
