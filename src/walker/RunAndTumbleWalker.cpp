@@ -45,7 +45,12 @@ Step<double> RunAndTumbleWalker::genStep(int idx) const
     // with prob 1-gamma let this step be in the same direction as the predecessor
     if(idx > 0 && gamma < random_tumble[idx])
     {
-        step.turn_direction(m_steps[idx-1]);
+        // this recursive call is dumb ... we might call it all the way back to
+        // the start for each step
+        // unfortunately this method is marked const, and I cannot cache the
+        // result. maybe introduce an extra mutable buffer.
+        Step<double> prev = genStep(idx-1);
+        step.turn_direction(prev);
     }
     return step;
 }
