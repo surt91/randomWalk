@@ -9,6 +9,7 @@
 #include "../walker/GaussWalker.hpp"
 #include "../walker/LevyWalker.hpp"
 #include "../walker/CorrelatedWalker.hpp"
+#include "../walker/RunAndTumbleWalker.hpp"
 #include "../simulation/Simulation.hpp"
 #include "../simulation/SimpleSampling.hpp"
 #include "../simulation/Metropolis.hpp"
@@ -206,6 +207,38 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.chAlg = CH_QHULL;
             o.beta = 10.0;
             DO(32.1266666667, 53.6433333333)
+        }
+    }
+    SECTION( "run-and-tumble" ) {
+        o.type = WT_RUNANDTUMBLE_WALK;
+        SECTION( "2D, gamma = 1" ) {
+            o.d = 2;
+            o.gamma = 1.0;
+            // different from Gaussian, because 1/3 of all random numbers
+            // are used differently
+            DO(33.1102607375, 112.7493630651)
+        }
+        SECTION( "2D, gamma = 0.5" ) {
+            o.d = 2;
+            o.gamma = 0.5;
+            DO(64.3026413451, 565.7831196295)
+        }
+        SECTION( "2D, gamma = 0" ) {
+            o.d = 2;
+            o.gamma = 0.0;
+            DO(0., 0.)
+        }
+        SECTION( "3, gamma = 1" ) {
+            o.d = 3;
+            o.gamma = 1.0;
+            o.chAlg = CH_QHULL;
+            DO(97.9954767682, 227.3335573896)
+        }
+        SECTION( "3, gamma = 0.5" ) {
+            o.d = 3;
+            o.gamma = 0.5;
+            o.chAlg = CH_QHULL;
+            DO(204.9498538464, 5283.8909672363)
         }
     }
     SECTION( "Multi" ) {
