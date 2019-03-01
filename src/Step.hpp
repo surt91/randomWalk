@@ -82,6 +82,7 @@ class Step
         Step<T> operator/(const double d) const;
         Step<T>& operator+=(const Step<T> &other);
         Step<T>& operator-=(const Step<T> &other);
+        Step<T>& operator*=(const double m);
         Step<T>& operator/=(const double d);
 
         T dist(const Step<T> &other) const;
@@ -441,8 +442,9 @@ void Step<T>::turn_direction(const Step<T> &other)
 {
     double l1 = this->length();
     double l2 = other.length();
-    this->m_coordinates = other.m_coordinates;
-    *this /= l1/l2;
+    for(int i=0; i<m_d; ++i)
+        this->m_coordinates[i] = other.m_coordinates[i];
+    *this *= l1/l2;
 }
 
 /// Euclidean distance to zero.
@@ -555,6 +557,15 @@ Step<T>& Step<T>::operator-=(const Step<T> &other)
 
     for(int i=0; i<m_d; ++i)
         m_coordinates[i] -= other.m_coordinates[i];
+
+    return *this;
+}
+
+template <class T>
+Step<T>& Step<T>::operator*=(const double m)
+{
+    for(int i=0; i<m_d; ++i)
+        m_coordinates[i] = m_coordinates[i]*m;
 
     return *this;
 }
