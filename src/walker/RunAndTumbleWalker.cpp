@@ -43,7 +43,7 @@ Step<double> RunAndTumbleWalker::genStep(int idx) const
     auto first = random_numbers.begin() + idx*d;
     Step<double> step(std::vector<double>(first, first+d));
     // with prob 1-gamma let this step be in the same direction as the predecessor
-    if(idx > 0 && gamma < random_tumble[idx])
+    if(idx > 0 && gamma <= random_tumble[idx])
     {
         // this recursive call is dumb ... we might call it all the way back to
         // the start for each step
@@ -86,8 +86,10 @@ void RunAndTumbleWalker::change(UniformRNG &rng, bool update)
         random_tumble[idx] = rng();
     }
 
-    m_steps[idx] = genStep(idx);
-    updatePoints(idx+1);
+    // TODO: if we changed the direction, we have to change also the direction
+    // of all steps in the following run-phase -- not all steps
+    updateSteps();
+    updatePoints();
 
     if(update)
     {
@@ -103,7 +105,9 @@ void RunAndTumbleWalker::undoChange()
         random_numbers[undo_index*d + t++] = i;
     random_tumble[undo_index] = undo_tumble;
 
-    m_steps[undo_index] = genStep(undo_index);
-    updatePoints(undo_index+1);
+    // TODO: if we changed the direction, we have to change also the direction
+    // of all steps in the following run-phase -- not all steps
+    updateSteps();
+    updatePoints();
     m_convex_hull = m_old_convex_hull;
 }
