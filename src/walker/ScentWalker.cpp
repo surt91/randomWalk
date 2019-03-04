@@ -201,7 +201,7 @@ void ScentWalker::change(UniformRNG &rng, bool update)
     // variable starts:
     // int idx = rng() * (nRN()+1) - numWalker;
     // fixed starts:
-    int idx = rng() * (nRN()+1);
+    int idx = rng() * (nRN());
 
     // in the case of idx < 0, change the starting position of the (|idx|-1)-th walk
     undo_index = idx;

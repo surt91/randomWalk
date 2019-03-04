@@ -170,7 +170,7 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.numWalker = 5;
             o.gp_path = "out";
             o.svg_path = "out.svg";
-            DO(16.465, 26.435)
+            DO(16.465, 29.425)
         }
     }
     SECTION( "'True' Self-Avoiding" ) {
