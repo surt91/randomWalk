@@ -34,8 +34,8 @@ void RunAndTumbleWalker::setP1(double gamma_in)
  *
  * Algortihm see http://en.wikipedia.org/wiki/N-sphere#Spherical_coordinates
  *
- * \param first iterator to the first random number to use, must have at
- *        least $d-1$ following entries
+ * \param idx index of the step to be generated, this walk has a kind of memory
+            and needs sometimes the direction of the preceding step
  * \return r-value Step
  */
 Step<double> RunAndTumbleWalker::genStep(int idx) const
