@@ -3,7 +3,8 @@
 // exact mean perimeter: g = 0.5; f(x) = 1/g*(-(pi+2)+2*sqrt(pi)*(gamma(2.+floor((n-1)/2.))/gamma(3./2.+floor(n-1)/2.) + gamma(3./2. + floor(n/2.))/gamma(1.+floor(n/2.)))
 RunAndTumbleWalkerT::RunAndTumbleWalkerT(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<double>(d, numSteps, rng_in, hull_algo, amnesia),
-      gamma(0.5)
+      gamma(0.5),
+      fixed_time(10)
 {
     // we need d gaussian random numbers per step, for each direction
     random_numbers = rng.vector_gaussian(d * numSteps);
