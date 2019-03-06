@@ -30,6 +30,11 @@ void RunAndTumbleWalkerT::setP1(double gamma_in)
     gamma = gamma_in;
 }
 
+void RunAndTumbleWalkerT::setP2(double fixed_time_in)
+{
+    fixed_time = fixed_time_in;
+}
+
 /** Generate a step
  *
  * \param idx index of the step to be generated, this walk has a kind of memory
@@ -51,7 +56,7 @@ void RunAndTumbleWalkerT::updateSteps()
     m_steps.clear();
     int N = random_tumble.size();
 
-    total_length = 0;
+    double total_length = 0.;
     int i = -1;
     while(total_length < fixed_time)
     {
