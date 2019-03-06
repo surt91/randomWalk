@@ -81,6 +81,7 @@ void RunAndTumbleWalkerT::updateSteps()
         total_length += m_steps[i].length();
     }
 
+    numSteps = i;
     // truncate from last step
     m_steps[i] *= (total_length - fixed_time) / m_steps[i].length();
 }

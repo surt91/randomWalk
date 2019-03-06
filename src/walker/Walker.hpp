@@ -29,7 +29,7 @@ class Walker
         Walker(const Walker &) = default;
         virtual ~Walker() = default;
 
-        const int numSteps;  ///< Number of steps the Walk should have
+        int numSteps;        ///< Number of steps the Walk should have
         const int d;         ///< Dimension in which the Walker walks
 
         virtual void reconstruct() = 0;
