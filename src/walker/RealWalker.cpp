@@ -4,14 +4,21 @@ RealWalker::RealWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algor
     : SpecWalker<double>(d, numSteps, rng_in, hull_algo, amnesia)
 {
     // we need d-1 random numbers per step, for each angle one
-    random_numbers = rng.vector((d-1) * numSteps);
+    random_numbers = rng.vector_gaussian(d * numSteps);
+    init();
+}
+
+/// Get new random numbers and reconstruct the walk
+void RealWalker::reconstruct()
+{
+    // write new gaussian random numers into our state
+    std::generate(random_numbers.begin(), random_numbers.end(),
+                  [this]{ return this->rng.gaussian(); });
     init();
 }
 
 /** Generate a step by unit distance and angles determined by the
  * d-1 random numbers after first (inclusive first).
- *
- * Algortihm see http://en.wikipedia.org/wiki/N-sphere#Spherical_coordinates
  *
  * \param first iterator to the first random number to use, must have at
  *        least $d-1$ following entries
@@ -19,26 +26,8 @@ RealWalker::RealWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algor
  */
 Step<double> RealWalker::genStep(std::vector<double>::iterator first) const
 {
-    Step<double> s(d);
-
-    // http://en.wikipedia.org/wiki/N-sphere#Spherical_coordinates
-    double r = 1;
-    std::vector<double> theta(d-1);
-    for(int i=0; i<d-2; ++i)
-        theta[i] = *first++ * M_PI;
-    theta[d-2] = *first++ * 2*M_PI;
-
-    for(int i=0; i<d-1; ++i)
-    {
-        s[i] = r;
-        for(int j=0; j<i; ++j)
-            s[i] *= sin(theta[j]);
-
-        if(i == d-2)
-            s[i+1] = s[i] * sin(theta[i]);
-
-        s[i] *= cos(theta[i]);
-    }
+    Step<double> s(std::vector<double>(first, first+d));
+    s *= 1./s.length();
     return s;
 }
 

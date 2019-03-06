@@ -16,6 +16,8 @@ class RealWalker final : public SpecWalker<double>
     public:
         RealWalker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
+        void reconstruct();
+
         void updateSteps() final;
 
         void change(UniformRNG &rng, bool update=true) final;
