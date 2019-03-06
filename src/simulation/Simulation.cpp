@@ -169,6 +169,17 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
             );
         w->setP1(o.gamma);
     }
+    else if(o.type == WT_RUNANDTUMBLE_T_WALK)
+    {
+        if(o.numWalker == 1)
+            w = std::unique_ptr<Walker>(new RunAndTumbleWalkerT(o.d, o.steps, rngReal, o.chAlg, amnesia));
+        else
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<RunAndTumbleWalkerT>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
+        w->setP1(o.gamma);
+        w->setP2(o.total_length);
+    }
     else
     {
         LOG(LOG_ERROR) << "type " << o.type << " is not known";

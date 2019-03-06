@@ -34,6 +34,7 @@
 #include "../walker/ResetWalker.hpp"
 #include "../walker/BranchingGauss.hpp"
 #include "../walker/RunAndTumbleWalker.hpp"
+#include "../walker/RunAndTumbleWalkerT.hpp"
 #include "../RNG.hpp"
 #include "../io.hpp"
 

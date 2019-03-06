@@ -57,7 +57,8 @@ enum walk_type_t {
     WT_TRUE_SELF_AVOIDING_WALK,     ///< "True" Self-avoiding walk
     WT_RESET_WALK,                  ///< resetting random walk
     WT_BRANCH_WALK,                 ///< branching Gaussian walk
-    WT_RUNANDTUMBLE_WALK,           ///< run-and-tumble walk
+    WT_RUNANDTUMBLE_WALK,           ///< run-and-tumble walk (fixed n)
+    WT_RUNANDTUMBLE_T_WALK,         ///< run-and-tumble walk (fixed t)
 };
 
 const std::vector<std::string> TYPE_LABEL = {
@@ -74,7 +75,8 @@ const std::vector<std::string> TYPE_LABEL = {
     "'True' Self-Avoiding Walk",
     "Resetting Random Walk",
     "Branching Gaussian Walk",
-    "Run-and-tumble Walk",
+    "Run-and-tumble Walk (fixed n)",
+    "Run-and-tumble Walk (fixed t)",
 };
 
 enum wanted_observable_t {
@@ -153,6 +155,7 @@ class Cmd
               beta(0.0),
               resetrate(0.0),
               gamma(1.0),
+              total_length(10.5),
               width(10),
               tas(1000),
               lnf_min(1e-8),
@@ -206,6 +209,7 @@ class Cmd
         double resetrate;           ///< reset rate (only resetting random walk)
 
         double gamma;               ///< direction change probability (only run-and-tumble walk)
+        double total_length;        ///< total length of the walk (only run-and-tumble walk, fixed t)
 
         int width;                  ///< side length of a periodic field (only Scent walks)
         int tas;                    ///< lifetime of the scent (only Scent walks)
