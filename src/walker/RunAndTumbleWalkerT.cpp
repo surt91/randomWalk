@@ -72,11 +72,11 @@ void RunAndTumbleWalkerT::updateSteps()
         }
 
         m_steps.push_back(genStep(i));
-        total_length += m_steps[i].length()
+        total_length += m_steps[i].length();
     }
 
     // truncate from last step
-    m_steps[i] *= (total_length - fixed_time) / s.length();
+    m_steps[i] *= (total_length - fixed_time) / m_steps[i].length();
 }
 
 void RunAndTumbleWalkerT::change(UniformRNG &rng, bool update)
