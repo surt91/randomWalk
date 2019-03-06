@@ -1,5 +1,6 @@
 #include "RunAndTumbleWalker.hpp"
 
+// exact mean perimeter: g = 0.5; f(x) = 1/g*(-(pi+2)+2*sqrt(pi)*(gamma(2.+floor((n-1)/2.))/gamma(3./2.+floor(n-1)/2.) + gamma(3./2. + floor(n/2.))/gamma(1.+floor(n/2.)))
 RunAndTumbleWalker::RunAndTumbleWalker(int d, int numSteps, const UniformRNG &rng_in, hull_algorithm_t hull_algo, bool amnesia)
     : SpecWalker<double>(d, numSteps, rng_in, hull_algo, amnesia),
       gamma(0.5)
@@ -29,10 +30,7 @@ void RunAndTumbleWalker::setP1(double gamma_in)
     gamma = gamma_in;
 }
 
-/** Generate a step by unit distance and angles determined by the
- * d-1 random numbers after first (inclusive first).
- *
- * Algortihm see http://en.wikipedia.org/wiki/N-sphere#Spherical_coordinates
+/** Generate a step
  *
  * \param idx index of the step to be generated, this walk has a kind of memory
             and needs sometimes the direction of the preceding step
@@ -40,19 +38,12 @@ void RunAndTumbleWalker::setP1(double gamma_in)
  */
 Step<double> RunAndTumbleWalker::genStep(int idx) const
 {
+    double r = -std::log(random_tumble[idx])/gamma;
     auto first = random_numbers.begin() + idx*d;
-    Step<double> step(std::vector<double>(first, first+d));
-    // with prob 1-gamma let this step be in the same direction as the predecessor
-    if(idx > 0 && gamma <= random_tumble[idx])
-    {
-        // this recursive call is dumb ... we might call it all the way back to
-        // the start for each step
-        // unfortunately this method is marked const, and I cannot cache the
-        // result. maybe introduce an extra mutable buffer.
-        Step<double> prev = genStep(idx-1);
-        step.turn_direction(prev);
-    }
-    return step;
+    Step<double> s(std::vector<double>(first, first+d));
+    s *= r/s.length();
+
+    return s;
 }
 
 void RunAndTumbleWalker::updateSteps()
@@ -86,10 +77,8 @@ void RunAndTumbleWalker::change(UniformRNG &rng, bool update)
         random_tumble[idx] = rng();
     }
 
-    // TODO: if we changed the direction, we have to change also the direction
-    // of all steps in the following run-phase -- not all steps
-    updateSteps();
-    updatePoints();
+    m_steps[idx] = genStep(idx);
+    updatePoints(idx+1);
 
     if(update)
     {
@@ -105,9 +94,7 @@ void RunAndTumbleWalker::undoChange()
         random_numbers[undo_index*d + t++] = i;
     random_tumble[undo_index] = undo_tumble;
 
-    // TODO: if we changed the direction, we have to change also the direction
-    // of all steps in the following run-phase -- not all steps
-    updateSteps();
-    updatePoints();
+    m_steps[undo_index] = genStep(undo_index);
+    updatePoints(undo_index+1);
     m_convex_hull = m_old_convex_hull;
 }

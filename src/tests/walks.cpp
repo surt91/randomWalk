@@ -214,14 +214,12 @@ TEST_CASE( "walk types", "[walk]" ) {
         SECTION( "2D, gamma = 1" ) {
             o.d = 2;
             o.gamma = 1.0;
-            // different from Gaussian, because 1/3 of all random numbers
-            // are used differently
-            DO(33.1102607375, 112.7493630651)
+            DO(30.2189224613, 1108.8955173997)
         }
         SECTION( "2D, gamma = 0.5" ) {
             o.d = 2;
             o.gamma = 0.5;
-            DO(64.3026413451, 565.7831196295)
+            DO(120.8756898452, 8018.9229082423)
         }
         SECTION( "2D, gamma = 0" ) {
             o.d = 2;
@@ -232,13 +230,13 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.d = 3;
             o.gamma = 1.0;
             o.chAlg = CH_QHULL;
-            DO(97.9954767682, 227.3335573896)
+            DO(35.8831267428, 437.2901145499)
         }
         SECTION( "3, gamma = 0.5" ) {
             o.d = 3;
             o.gamma = 0.5;
             o.chAlg = CH_QHULL;
-            DO(204.9498538464, 5283.8909672363)
+            DO(287.0650139422, 119367.451631576)
         }
     }
     SECTION( "Multi" ) {
