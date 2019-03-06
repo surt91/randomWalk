@@ -26,6 +26,16 @@ void RunAndTumbleWalkerT::reconstruct()
     init();
 }
 
+/// Do initialization, e.g. calculate the steps and the hull.
+void RunAndTumbleWalkerT::init()
+{
+    updateSteps();
+    m_points.clear();
+    m_points = std::vector<Step<double>>(numSteps+1, Step<double>(d));
+    updatePoints();
+    setHullAlgo(hull_algo); // does also update hull
+}
+
 void RunAndTumbleWalkerT::setP1(double gamma_in)
 {
     gamma = gamma_in;
@@ -83,7 +93,8 @@ void RunAndTumbleWalkerT::updateSteps()
 
     numSteps = i;
     // truncate from last step
-    m_steps[i] *= (total_length - fixed_time) / m_steps[i].length();
+    double len = m_steps[i].length();
+    m_steps[i] *= (len - (total_length - fixed_time)) / len;
 }
 
 void RunAndTumbleWalkerT::change(UniformRNG &rng, bool update)
