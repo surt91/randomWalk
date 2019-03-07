@@ -276,4 +276,12 @@ TEST_CASE( "misc", "[walk]" ) {
         w.generate_from_dimerization();
         REQUIRE( w.A() == 52.5 );
     }
+    SECTION( "Run-and-tumble fixed-t" ) {
+        double t = 103.4;
+        UniformRNG rngReal(42);
+        RunAndTumbleWalkerT w(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        w.setP2(t);
+        w.reconstruct();
+        REQUIRE( w.length() == t );
+    }
 }

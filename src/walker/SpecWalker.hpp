@@ -67,6 +67,7 @@ class SpecWalker : public Walker
         double ry() const final;
         int num_on_hull() const final;
         double oblateness() const final;
+        double length() const final;
         int passage(int t1=0, int axis=0) const final;
         std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
@@ -529,6 +530,16 @@ double SpecWalker<T>::oblateness() const
     // divide by 2 maxShortAxis, to give 1 for a sphere
     // will result in unintuitive values for asymmetric shapes
     return maxLongAxis/maxShortAxis/2.;
+}
+
+/// Get the length of the walk
+template <class T>
+double SpecWalker<T>::length() const
+{
+    double len = 0.;
+    for(auto s : steps())
+        len += s.length();
+    return len;
 }
 
 /// Get the end-to-end distance of the walk.

@@ -50,6 +50,7 @@ class Walker
         virtual double ry() const = 0; ///< y coordinate of endpoint
         virtual int num_on_hull() const = 0;    ///< number of vertices of the hull
         virtual double oblateness() const = 0;  ///< ratio of largest and smallest diameter
+        virtual double length() const = 0;      ///< length the walker walks
         virtual int passage(int t1=0, int axis=0) const = 0; ///< first passage of x=0 after t1
         virtual std::vector<double> correlation(std::vector<int> t, int axis=0) const = 0; ///< output a vector of points to calculate a correlation later
 
