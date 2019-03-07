@@ -4,8 +4,7 @@
 #include "../Logging.hpp"
 #include "SpecWalker.hpp"
 
-/** A walk with displacements drawn from a gaussian distribution, with
- * probability 1-gamma, the walk does not change direction.
+/** With probability 1-gamma, the walk does not change direction.
  *
  * \image html RTP.svg "example of a run-and-tumble particle"
  */

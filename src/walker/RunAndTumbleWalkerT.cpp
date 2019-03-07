@@ -38,6 +38,10 @@ void RunAndTumbleWalkerT::init()
 
 void RunAndTumbleWalkerT::setP1(double gamma_in)
 {
+    if(gamma <= 0)
+    {
+        LOG(LOG_ERROR) << "gamma needs to be larger than 0";
+    }
     gamma = gamma_in;
 }
 

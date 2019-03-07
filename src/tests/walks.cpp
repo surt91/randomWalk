@@ -221,11 +221,6 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.gamma = 0.5;
             DO(120.8756898452, 8018.9229082423)
         }
-        SECTION( "2D, gamma = 0" ) {
-            o.d = 2;
-            o.gamma = 0.0;
-            DO(0., 0.)
-        }
         SECTION( "3, gamma = 1" ) {
             o.d = 3;
             o.gamma = 1.0;
