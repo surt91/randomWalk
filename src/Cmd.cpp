@@ -323,7 +323,7 @@ Cmd::Cmd(int argc, char** argv)
         total_length = total_lengthArg.getValue();
         if(type == WT_RUNANDTUMBLE_T_WALK)
         {
-            LOG(LOG_INFO) << "total_length                      " << total_length;
+            LOG(LOG_INFO) << "total_length               " << total_length;
         }
 
         width = widthArg.getValue();
