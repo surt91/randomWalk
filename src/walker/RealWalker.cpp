@@ -35,18 +35,18 @@ void RealWalker::updateSteps()
 {
     m_steps.resize(numSteps);
     for(int i=0; i<numSteps; ++i)
-        m_steps[i] = genStep(random_numbers.begin() + i*(d-1));
+        m_steps[i] = genStep(random_numbers.begin() + i*d);
 }
 
 void RealWalker::change(UniformRNG &rng, bool update)
 {
     // We need d-1 random numbers per step to determine the d-1 angles
     int idx = rng() * numSteps;
-    int rnidx = idx * (d-1);
+    int rnidx = idx * d;
     undo_index = idx;
     undo_values = std::vector<double>(random_numbers.begin() + rnidx,
-                                      random_numbers.begin() + rnidx + d-1);
-    for(int i=0; i<d-1; ++i)
+                                      random_numbers.begin() + rnidx + d);
+    for(int i=0; i<d; ++i)
         random_numbers[rnidx + i] = rng();
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx);
@@ -63,7 +63,7 @@ void RealWalker::undoChange()
 {
     int t = 0;
     for(const auto i : undo_values)
-        random_numbers[undo_index * (d-1) + t++] = i;
+        random_numbers[undo_index * d + t++] = i;
 
     m_steps[undo_index] = genStep(undo_values.begin());
     updatePoints(undo_index+1);

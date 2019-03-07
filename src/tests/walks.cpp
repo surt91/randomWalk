@@ -125,12 +125,12 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.type = WT_REAL_RANDOM_WALK;
         SECTION( "2D" ) {
             o.d = 2;
-            DO(11.6209528201, 47.5018692182)
+            DO(16.7933274792, 50.9012134021)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            DO(14.2284895896, 35.6043978658)
+            DO(19.2329672236, 30.3348949734)
         }
     }
     // SECTION( "Levy" ) {
