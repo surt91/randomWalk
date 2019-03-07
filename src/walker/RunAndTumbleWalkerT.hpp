@@ -28,8 +28,6 @@ class RunAndTumbleWalkerT final : public SpecWalker<double>
         void setP1(double gamma) final;
         void setP2(double fixed_time) final;
 
-        void init() final;
-
     protected:
         Step<double> genStep(int idx) const;
 

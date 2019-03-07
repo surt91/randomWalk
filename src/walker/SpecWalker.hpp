@@ -47,7 +47,7 @@ class SpecWalker : public Walker
         SpecWalker(const SpecWalker &) = default;
         virtual ~SpecWalker() = default;
 
-        virtual void init();
+        void init();
         virtual void reconstruct() override;
         virtual void generate_independent_sample() override;
 

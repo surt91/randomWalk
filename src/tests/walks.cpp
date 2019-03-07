@@ -10,6 +10,7 @@
 #include "../walker/LevyWalker.hpp"
 #include "../walker/CorrelatedWalker.hpp"
 #include "../walker/RunAndTumbleWalker.hpp"
+#include "../walker/RunAndTumbleWalkerT.hpp"
 #include "../simulation/Simulation.hpp"
 #include "../simulation/SimpleSampling.hpp"
 #include "../simulation/Metropolis.hpp"
@@ -232,6 +233,32 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.gamma = 0.5;
             o.chAlg = CH_QHULL;
             DO(287.0650139422, 119367.451631576)
+        }
+    }
+    SECTION( "run-and-tumble, fixed t" ) {
+        o.type = WT_RUNANDTUMBLE_T_WALK;
+        o.total_length = o.steps;
+        SECTION( "2D, gamma = 1" ) {
+            o.d = 2;
+            o.gamma = 1.0;
+            DO(25.5645379981, 46.3748572042)
+        }
+        SECTION( "2D, gamma = 0.5" ) {
+            o.d = 2;
+            o.gamma = 0.5;
+            DO(41.1912452125, 74.2724893121)
+        }
+        SECTION( "3, gamma = 1" ) {
+            o.d = 3;
+            o.gamma = 1.0;
+            o.chAlg = CH_QHULL;
+            DO(31.3300385101, 82.72686285)
+        }
+        SECTION( "3, gamma = 0.5" ) {
+            o.d = 3;
+            o.gamma = 0.5;
+            o.chAlg = CH_QHULL;
+            DO(45.6040828329, 156.2499267033)
         }
     }
     SECTION( "Multi" ) {
