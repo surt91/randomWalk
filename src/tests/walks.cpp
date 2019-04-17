@@ -248,13 +248,13 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.gamma = 0.5;
             DO(44.9899649586, 88.4146502402)
         }
-        SECTION( "3, gamma = 1" ) {
+        SECTION( "3D, gamma = 1" ) {
             o.d = 3;
             o.gamma = 1.0;
             o.chAlg = CH_QHULL;
             DO(33.7755411132, 78.0667975388)
         }
-        SECTION( "3, gamma = 0.5" ) {
+        SECTION( "3D, gamma = 0.5" ) {
             o.d = 3;
             o.gamma = 0.5;
             o.chAlg = CH_QHULL;
