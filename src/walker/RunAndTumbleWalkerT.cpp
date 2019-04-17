@@ -122,7 +122,6 @@ void RunAndTumbleWalkerT::change(UniformRNG &rng, bool update)
 
     if(update)
     {
-        m_old_convex_hull = m_convex_hull;
         updateHull();
     }
 }
@@ -136,5 +135,5 @@ void RunAndTumbleWalkerT::undoChange()
 
     updateSteps();
     updatePoints();
-    m_convex_hull = m_old_convex_hull;
+    updateHull();
 }
