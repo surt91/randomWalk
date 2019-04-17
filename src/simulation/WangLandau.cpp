@@ -133,7 +133,7 @@ void WangLandau::run()
             // save g to file
             #pragma omp critical
             {
-                oss << g.get_bins() << "\n";
+                oss << g.borders() << "\n";
                 oss << g.get_data() << std::endl;
 
                 // calculate a checksum (similar to a not-normalized mean)
