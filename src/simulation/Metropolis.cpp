@@ -245,7 +245,8 @@ void Metropolis::run()
                     << w->ry() << " "
                     << w->num_on_hull() << " "
                     << w->oblateness() << " "
-                    << w->visitedSites() << " ";
+                    << w->visitedSites() << " "
+                    << w->enclosedSites() << " ";
 
                 for(auto j : o.passageTimeStarts)
                     oss << w->passage(j) << " ";

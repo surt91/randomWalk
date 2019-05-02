@@ -44,7 +44,8 @@ void SimpleSampling::run()
             << w->ry() << " "
             << w->num_on_hull() << " "
             << w->oblateness() << " "
-            << w->visitedSites() << " ";
+            << w->visitedSites() << " "
+            << w->enclosedSites() << " ";
 
         //~ auto c = w->correlation(o.passageTimeStarts);
         //~ for(auto j : c)

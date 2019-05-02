@@ -69,6 +69,7 @@ class SpecWalker : public Walker
         double oblateness() const final;
         double length() const final;
         int visitedSites() const final;
+        int enclosedSites() const final;
         int passage(int t1=0, int axis=0) const final;
         std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
@@ -557,6 +558,77 @@ inline int SpecWalker<int>::visitedSites() const
     for(auto &p : points())
         distinctPoints.insert(p);
     return distinctPoints.size();
+}
+
+template <>
+inline int SpecWalker<double>::enclosedSites() const
+{
+    return -1;
+}
+
+/// Get the number of distinct visited sites
+template <>
+inline int SpecWalker<int>::enclosedSites() const
+{
+    // derive a bounding box from the convex hull,
+    // extend it by 1 in every direction
+    // perform a DFS (visited sites can not be entered)
+    // every not-encountered site is enclosed by the walk
+    std::unordered_set<Step<int>> distinctPoints;
+    std::unordered_set<Step<int>> encountered_sites;
+    std::vector<Step<int>> stack;
+
+
+    std::vector<int> max(d, 0), min(d, 0);
+    for(auto &p : points())
+    {
+        for(int i=0; i<d; ++i)
+        {
+            if(p[i] > max[i])
+                max[i] = p[i];
+            if(p[i] < min[i])
+                min[i] = p[i];
+        }
+        distinctPoints.insert(p);
+    }
+
+    for(int i=0; i<d; ++i)
+    {
+        ++max[i];
+        --min[i];
+    }
+
+    int size = 1;
+    for(int i=0; i<d; ++i)
+    {
+        size *= max[i] - min[i] + 1;
+    }
+
+    // start in a corner
+    Step<int> start(max);
+    stack.push_back(start);
+    encountered_sites.insert(start);
+    while(!stack.empty())
+    {
+        Step<int> current = stack.back();
+        stack.pop_back();
+
+        for(auto &n : current.neighbors())
+        {
+            bool inside_bounds = true;
+            for(int i=0; i<d; ++i)
+                if(n[i] > max[i] || n[i] < min[i])
+                    inside_bounds = false;
+
+            if(inside_bounds && !encountered_sites.count(n) && !distinctPoints.count(n))
+            {
+                stack.push_back(n);
+                encountered_sites.insert(n);
+            }
+        }
+    }
+
+    return size - encountered_sites.size();
 }
 
 /// Get the end-to-end distance of the walk.
