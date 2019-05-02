@@ -41,10 +41,10 @@ void SimpleSampling::run()
             << w->r2() << " "
             << w->maxDiameter() << " "
             << w->rx() << " "
-            << w->ry() << " ";
-
-        oss << i << " "
-            << S(w) << " ";
+            << w->ry() << " "
+            << w->num_on_hull() << " "
+            << w->oblateness() << " "
+            << w->visitedSites() << " ";
 
         //~ auto c = w->correlation(o.passageTimeStarts);
         //~ for(auto j : c)
