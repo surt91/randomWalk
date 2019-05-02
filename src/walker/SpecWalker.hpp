@@ -68,6 +68,7 @@ class SpecWalker : public Walker
         int num_on_hull() const final;
         double oblateness() const final;
         double length() const final;
+        int visitedSites() const final;
         int passage(int t1=0, int axis=0) const final;
         std::vector<double> correlation(std::vector<int> t, int axis=0) const final;
 
@@ -540,6 +541,22 @@ double SpecWalker<T>::length() const
     for(auto s : steps())
         len += s.length();
     return len;
+}
+
+template <>
+inline int SpecWalker<double>::visitedSites() const
+{
+    return -1;
+}
+
+/// Get the number of distinct visited sites
+template <>
+inline int SpecWalker<int>::visitedSites() const
+{
+    std::set<Step<int>> distinctPoints;
+    for(auto &p : points())
+        distinctPoints.insert(p);
+    return distinctPoints.size();
 }
 
 /// Get the end-to-end distance of the walk.
