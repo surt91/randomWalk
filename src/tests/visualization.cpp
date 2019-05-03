@@ -18,6 +18,12 @@ TEST_CASE( "images", "[vis]" ) {
     o.chAlg = CH_ANDREWS_AKL;
     std::string filename;
 
+    SECTION( "Gauss change Example" ) {
+        GaussWalker w(o.d, o.steps, rngReal, o.chAlg);
+        filename = "bench.gauss";
+        w.svgOfChange(filename, rngReal);
+    }
+
     SECTION( "SAW Pivot Example" ) {
         SelfAvoidingWalker w(o.d, o.steps, rngReal, o.chAlg);
         filename = "bench.saw";

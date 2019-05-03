@@ -68,6 +68,7 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.chAlg = CH_QHULL;
             DO(17.4983333333, 33.9366666667)
         }
+        // TODO also test degenerate cases
     }
     SECTION( "SAW" ) {
         o.type = WT_SELF_AVOIDING_RANDOM_WALK;
@@ -208,6 +209,31 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.chAlg = CH_QHULL;
             o.beta = 10.0;
             DO(32.1266666667, 53.6433333333)
+        }
+    }
+    SECTION( "Resetting" ) {
+        o.type = WT_RESET_WALK;
+        o.resetrate = 0.2;
+        SECTION( "2D" ) {
+            o.d = 2;
+            DO(11.08, 14.83)
+        }
+        SECTION( "3D" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            DO(7.8416666667, 10.3333333333)
+        }
+    }
+    SECTION( "Branching" ) {
+        o.type = WT_BRANCH_WALK;
+        SECTION( "2D" ) {
+            o.d = 2;
+            DO(13.8732059507, 15.2605265458)
+        }
+        SECTION( "3D" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            DO(118.2958629731, 130.1254492704)
         }
     }
     SECTION( "run-and-tumble" ) {
