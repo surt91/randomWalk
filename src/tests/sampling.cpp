@@ -7,6 +7,7 @@
 #include "../simulation/SimpleSampling.hpp"
 #include "../simulation/Metropolis.hpp"
 #include "../simulation/WangLandau.hpp"
+#include "../simulation/FastWLEntropic.hpp"
 #include "../simulation/MetropolisParallelTempering.hpp"
 
 TEST_CASE( "sampling types", "[sampling]" ) {
@@ -61,6 +62,14 @@ TEST_CASE( "sampling types", "[sampling]" ) {
         o.sweep = o.steps;
         checksum = 131.0506230333;
         s = std::unique_ptr<WangLandau>(new WangLandau(o));
+    }
+    SECTION( "Fast Wang landau + entropic" ) {
+        o.sampling_method = SM_FAST_WANG_LANDAU;
+        o.iterations = 1;
+        o.steps = 100;
+        o.sweep = o.steps;
+        checksum = 137.9641392872;
+        s = std::unique_ptr<FastWLEntropic>(new FastWLEntropic(o));
     }
     SECTION( "Parallel Tempering" ) {
         o.sampling_method = SM_METROPOLIS_PARALLEL_TEMPERING;
