@@ -88,6 +88,7 @@ class ConvexHull
         void preprocessAklToussaint();
 
         std::vector<Step<T>*> pointSelection;
+        int zero_axis;
 };
 
 /// Calculates the convex hull of the given points.
@@ -486,13 +487,28 @@ void ConvexHull<T>::updateHullPoints() const
 
     for(const auto &v : vl)
     {
-        // FIXME: for d>=3, if the points are in a hyperplane, coord will have
+        auto coord = v.point().coordinates();
+        // for d>=3, if the points are in a hyperplane, coord will have
         // (d-1)*(n+1) entries instead of d*(n+1)
         // This leads to a invalid read
         // It must be determined which dimension was dropped and zeros
         // need to be written into hullPoints_
-        auto coord = v.point().coordinates();
-        hullPoints_.emplace_back(std::vector<T>(coord, coord+d));
+        if(zero_axis >= 0 && v.point().dimension() != d)
+        {
+            std::vector<T> vec;
+            vec.reserve(d);
+            for(int i=0; i<d-1; ++i)
+            {
+                if(zero_axis == i)
+                    vec.push_back(0);
+                vec.push_back(coord[i]);
+            }
+            hullPoints_.emplace_back(vec);
+        }
+        else
+        {
+            hullPoints_.emplace_back(std::vector<T>(coord, coord+d));
+        }
     }
 
     if(d==2) // for 2D we can order the points clockwise
@@ -604,6 +620,7 @@ std::vector<std::vector<Step<T>>> ConvexHull<T>::hullFacets() const
 template <>
 inline int ConvexHull<double>::countZerosAndUpdateCmd(std::string &cmd)
 {
+    zero_axis = -1;
     cmd = "Qt";
     if(Logger::verbosity <= LOG_INFO)
         cmd += " Pp";
@@ -616,7 +633,7 @@ inline int ConvexHull<int>::countZerosAndUpdateCmd(std::string &cmd)
     // test, if points are fully dimensional
     // we need to do that first, since qhull seems to leak on exceptions
     int num_zeros = 0;
-    int zero_axis = 0;
+    zero_axis = -1;
     int limit = coords.size() / d;
     for(int i=0; i<d; ++i)
     {
@@ -884,7 +901,7 @@ void ConvexHull<T>::runChan()
     }
 
     int n = interiorPoints->size();
-    int m = 10;
+    int m = 100;
     std::vector<Step<T>> hull;
     while(true)
     {
