@@ -12,14 +12,15 @@
 
 /// Colors used by the SVG backend for different walks
 static const std::vector<std::string> COLOR = {
-    "#1b9e77",
-    "#d95f02",
-    "#7570b3",
-    "#e7298a",
-    "#66a61e",
-    "#e6ab02",
-    "#a6761d",
-    "#666666"
+    "#e41a1c",
+    "#377eb8",
+    "#4daf4a",
+    "#984ea3",
+    "#ff7f00",
+    "#ffff33",
+    "#a65628",
+    "#f781bf",
+    "#999999",
 };
 
 /** Class to easily create 2d pictures in svg format.
