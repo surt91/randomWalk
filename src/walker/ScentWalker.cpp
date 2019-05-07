@@ -35,14 +35,16 @@ void ScentWalker::reconstruct()
 
     if(circleStart)
     {
-        int radius = std::min(sideLength/3, 2*numWalker);
-        double phi_incr = 2.*M_PI/numWalker;
-        LOG(LOG_INFO) << "starts on a circle with radius " << radius << " and angle increment " << phi_incr;
-        for(int j=0; j<numWalker; ++j)
+        int radius = std::min(sideLength/2., sqrt(numSteps));
+        double phi_incr = 2.*M_PI/(numWalker-1);
+        LOG(LOG_DEBUG) << "starts on a circle with radius " << radius << " and angle increment " << phi_incr;
+        int mid = sideLength/2;
+        std::vector<int> middle(d, mid);
+        starts.emplace_back(std::move(middle));
+        for(int j=1; j<numWalker; ++j)
         {
             std::vector<int> tmp_start(d);
 
-            int mid = sideLength/2;
             double phi = j*phi_incr;
             int x = radius * std::cos(phi) + mid;
             int y = radius * std::sin(phi) + mid;
