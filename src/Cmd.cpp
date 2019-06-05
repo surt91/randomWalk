@@ -75,7 +75,7 @@ Cmd::Cmd(int argc, char** argv)
                                                         "\tdebug3 : 7",
                                         false, 4, "integer");
 
-        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14});
+        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
         TCLAP::ValuesConstraint<int> allowedWT(wt);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
                                                   "\tlattice random walk       :  1 (default)\n"
@@ -91,7 +91,8 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\tResetting random walk     : 11\n"
                                                   "\tbranching Gaussian walk   : 12\n"
                                                   "\trun-and-tumble walk, fix n: 13\n"
-                                                  "\trun-and-tumble walk, fix t: 14\n",
+                                                  "\trun-and-tumble walk, fix t: 14\n"
+                                                  "\treturning lattice walk    : 15\n",
                                      false, type, &allowedWT);
 
         std::vector<int> ch({0, 1, 2, 3, 4, 5});
@@ -339,6 +340,12 @@ Cmd::Cmd(int argc, char** argv)
 
         steps = numArg.getValue();
         LOG(LOG_INFO) << "Number of steps            " << steps;
+
+        if(type == WT_RETURNING_LATTICE_WALK && steps % 1)
+        {
+            LOG(LOG_ERROR) << "returning walks need an even number of steps";
+            exit(1);
+        }
 
         numWalker = numWalkerArg.getValue();
         LOG(LOG_INFO) << "Number of walker           " << numWalker;

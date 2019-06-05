@@ -35,6 +35,7 @@
 #include "../walker/BranchingGauss.hpp"
 #include "../walker/RunAndTumbleWalker.hpp"
 #include "../walker/RunAndTumbleWalkerT.hpp"
+#include "../walker/ReturningLatticeWalker.hpp"
 #include "../RNG.hpp"
 #include "../io.hpp"
 

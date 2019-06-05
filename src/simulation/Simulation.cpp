@@ -180,6 +180,15 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
         w->setP1(o.gamma);
         w->setP2(o.total_length);
     }
+    if(o.type == WT_RETURNING_LATTICE_WALK)
+    {
+        if(o.numWalker == 1)
+            w = std::unique_ptr<Walker>(new ReturningLatticeWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
+        else
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<ReturningLatticeWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
+    }
     else
     {
         LOG(LOG_ERROR) << "type " << o.type << " is not known";

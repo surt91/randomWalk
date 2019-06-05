@@ -11,6 +11,7 @@
 #include "../walker/CorrelatedWalker.hpp"
 #include "../walker/RunAndTumbleWalker.hpp"
 #include "../walker/RunAndTumbleWalkerT.hpp"
+#include "../walker/ReturningLatticeWalker.hpp"
 #include "../simulation/Simulation.hpp"
 #include "../simulation/SimpleSampling.hpp"
 #include "../simulation/Metropolis.hpp"
@@ -309,5 +310,15 @@ TEST_CASE( "misc", "[walk]" ) {
         w.setP2(t);
         w.reconstruct();
         REQUIRE( w.length() == t );
+    }
+    SECTION( "Closed Walk" ) {
+        double t = 103.4;
+        UniformRNG rngReal(42);
+        ReturningLatticeWalker w(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        w.reconstruct();
+        Step<int> s = Step<int>(w.d);
+        for(auto i : w.steps())
+            s += i;
+        REQUIRE( s == Step<int>(w.d) );
     }
 }
