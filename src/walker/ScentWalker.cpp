@@ -200,10 +200,13 @@ void ScentWalker::change(UniformRNG &rng, bool update)
 {
     // I should do this in a far more clever way
 
-    // variable starts:
-    // int idx = rng() * (nRN()+1) - numWalker;
+    int idx;
     // fixed starts:
-    int idx = rng() * (nRN());
+    if(circleStart)
+        idx = rng() * nRN();
+    // variable starts:
+    else
+        idx = rng() * nRN() - numWalker;
 
     // in the case of idx < 0, change the starting position of the (|idx|-1)-th walk
     undo_index = idx;
