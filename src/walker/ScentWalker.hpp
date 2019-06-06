@@ -1,6 +1,7 @@
 #ifndef SCENTWALKER_H
 #define SCENTWALKER_H
 
+#include <unordered_set>
 #include <unordered_map>
 #include <map>
 
@@ -51,18 +52,29 @@ class ScentWalker final : public SpecWalker<int>
         virtual void gp(const std::string filename, const bool with_hull=false) const override;
         void svg_histogram(const std::string filename) const;
 
-        const int numWalker;
-        const int sideLength;
-        const int Tas;
-        const int relax;    ///< number of steps to relax the walk before measurements are taken
-        bool periodic;      ///< use periodic or open (closed?) boundaries
-        bool circleStart;   ///< use periodic or open (closed?) boundaries
+        /// counts the number of adversary walkers with which the walker of
+        /// interest interacts (between `0` and `numWalker-1`).
+        /// Will probably only be sensible for simple sampling
+        int interactions(int walkerId=0);
+
+        const int numWalker;    ///< total number of competing agents
+        const int sideLength;   ///< side length of the square world
+        const int Tas;          ///< number of time steps the scentmarks persist
+        const int relax;        ///< number of steps to relax the walk before measurements are taken
+        bool periodic;          ///< use periodic or open (closed?) boundaries
+
+        /// start the adversary walkers on a circle around the walker of interest
+        /// otherwise random starting positions
+        bool circleStart;
 
     protected:
-        std::vector<Step<int>> starts;
+        std::vector<Step<int>> starts;  ///< initial positions of walkers
         std::vector<HistogramND> histograms;
 
         Step<int> undo_start;
+
+        /// records the walker ids, who interacted with any walker
+        std::vector<std::unordered_set<int>> interaction_sets;
 
         std::vector<Step<int>> step, pos;
 };

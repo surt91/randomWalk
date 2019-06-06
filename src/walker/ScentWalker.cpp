@@ -15,6 +15,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
                   << " additional steps will be simulated.";
 
     m_steps.resize(numSteps);
+    interaction_sets.resize(numWalker);
 
     histograms = std::vector<HistogramND>(numWalker,
                                 HistogramND(sideLength, d, 0, sideLength));
@@ -78,6 +79,15 @@ void ScentWalker::reconstruct()
         random_numbers = rng.vector((numSteps+relax)*numWalker);
 
     init();
+
+    LOG(LOG_DEBUG) << "Interactions";
+    for(int i=0; i<numWalker; ++i)
+        LOG(LOG_DEBUG) << i << ": " << interactions(i);
+}
+
+int ScentWalker::interactions(int walkerId)
+{
+    return interaction_sets[walkerId].size();
 }
 
 void ScentWalker::updateField(Site &site, int time)
@@ -102,10 +112,13 @@ void ScentWalker::updateSteps()
     static Field trail(sideLength*sideLength);
     trail.clear();
 
+    for(auto &i : interaction_sets)
+        i.clear();
+
     // start the agent simulation
     for(int j=0; j<numWalker; ++j)
     {
-        // init with random positions
+        // init with starting positions
         pos[j] = starts[j];
         // reset the histograms
         histograms[j].reset();
@@ -128,6 +141,14 @@ void ScentWalker::updateSteps()
             // if there is more than one marker (one marker is from us)
             if(current.size() > 1 && i > 0)
             {
+                // record with which adversary we interacted
+                for(auto &field_entry : current)
+                {
+                    int adversary = field_entry.first;
+                    if(adversary != j) // do not record yourself
+                        interaction_sets[j].insert(adversary);
+                }
+
                 std::vector<Step<int>> candidates;
                 for(const auto &k : pos[j].neighbors())
                 {

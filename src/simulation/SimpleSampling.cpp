@@ -47,6 +47,9 @@ void SimpleSampling::run()
             << w->visitedSites() << " "
             << w->enclosedSites() << " ";
 
+        if(auto r = dynamic_cast<ScentWalker*>(w.get()))
+            oss << r->interactions();
+
         //~ auto c = w->correlation(o.passageTimeStarts);
         //~ for(auto j : c)
             //~ oss << j << " ";
