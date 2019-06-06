@@ -288,6 +288,18 @@ TEST_CASE( "walk types", "[walk]" ) {
             DO(54.3861179925, 166.7646193637)
         }
     }
+    SECTION( "Returning RW" ) {
+        o.type = WT_RETURNING_LATTICE_WALK;
+        SECTION( "2D" ) {
+            o.d = 2;
+            DO(12.135, 16.105)
+        }
+        SECTION( "3D" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            DO(10.73, 13.9866666667)
+        }
+    }
     SECTION( "Multi" ) {
         o.type = WT_RANDOM_WALK;
         o.numWalker = 3;
