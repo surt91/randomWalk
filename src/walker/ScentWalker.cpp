@@ -42,7 +42,17 @@ void ScentWalker::reconstruct()
 
     if(circleStart)
     {
-        int radius = std::min(sideLength/2., sqrt(numSteps));
+        // double wanted_radius = pow(numSteps, 0.33)*4;
+        // double wanted_radius = numSteps/10.;
+        double wanted_radius = sqrt(numSteps);
+        int radius = std::min(sideLength/2., wanted_radius);
+
+        if(radius >= sideLength/2.)
+        {
+            LOG(LOG_WARNING) << "cutoff field size: should be "
+                << wanted_radius << " but is " << radius;
+        }
+
         double phi_incr = 2.*M_PI/(numWalker-1);
         LOG(LOG_DEBUG) << "starts on a circle with radius " << radius << " and angle increment " << phi_incr;
         int mid = sideLength/2;
