@@ -8,7 +8,8 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       // relax(2*Tas),
       relax(0),
       periodic(false),
-      circleStart(true)
+      circleStart(true),
+      save_histograms(false)
 {
     // TODO: pass relax as parameter
     LOG(LOG_INFO) << "This type needs to relax first, " << relax
@@ -17,8 +18,11 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
     m_steps.resize(numSteps);
     interaction_sets.resize(numWalker);
 
-    histograms = std::vector<HistogramND>(numWalker,
-                                HistogramND(sideLength, d, 0, sideLength));
+    if(save_histograms)
+        histograms = std::vector<HistogramND>(
+            numWalker,
+            HistogramND(sideLength, d, 0, sideLength)
+        );
 
     pos = std::vector<Step<int>>(numWalker, Step<int>(d));
     step = std::vector<Step<int>>(numWalker, Step<int>(d));
@@ -31,8 +35,10 @@ void ScentWalker::reconstruct()
     starts.clear();
     pos.clear();
     step.clear();
-    for(auto &h : histograms)
-        h.reset();
+
+    if(save_histograms)
+        for(auto &h : histograms)
+            h.reset();
 
     if(circleStart)
     {
@@ -109,7 +115,7 @@ void ScentWalker::updateSteps()
     // use numWalker vectors for the steps (scent traces will be steps[now-Tas:now])
     // every walker has its own history
     // static -> will be allocated only once
-    static Field trail(sideLength*sideLength);
+    static Field trail(std::min(sideLength*sideLength, numSteps*numWalker));
     trail.clear();
 
     for(auto &i : interaction_sets)
@@ -120,8 +126,10 @@ void ScentWalker::updateSteps()
     {
         // init with starting positions
         pos[j] = starts[j];
+
         // reset the histograms
-        histograms[j].reset();
+        if(save_histograms)
+            histograms[j].reset();
     }
 
     // iterate the time, every agent does one move each timestep
@@ -206,7 +214,8 @@ void ScentWalker::updateSteps()
             // if(i >= numSteps - relax)
             // {
                 // TODO: maybe just the last relax many steps?
-                histograms[j].add(pos[j]);
+                if(save_histograms)
+                    histograms[j].add(pos[j]);
             // }
             if(i >= relax)
             {
@@ -275,6 +284,12 @@ void ScentWalker::undoChange()
 
 void ScentWalker::svg(const std::string filename, const bool with_hull) const
 {
+    if(!save_histograms)
+    {
+        LOG(LOG_ERROR) << "the auxillary histogram information was not saved -> visualization not possible";
+        return;
+    }
+
     SpecWalker::svg(filename, with_hull);
 
     histograms[0].svg("histo0_" + filename);
@@ -284,6 +299,12 @@ void ScentWalker::svg(const std::string filename, const bool with_hull) const
 
 void ScentWalker::svg_histogram(const std::string filename) const
 {
+    if(!save_histograms)
+    {
+        LOG(LOG_ERROR) << "the auxillary histogram information was not saved -> visualization not possible";
+        return;
+    }
+
     SVG pic(filename);
 
     // find the global maximum
@@ -323,6 +344,12 @@ void ScentWalker::svg_histogram(const std::string filename) const
 
 void ScentWalker::gp(const std::string filename, const bool /*with_hull*/) const
 {
+    if(!save_histograms)
+    {
+        LOG(LOG_ERROR) << "the auxillary histogram information was not saved -> visualization not possible";
+        return;
+    }
+
     GnuplotContour pic(filename);
 
     pic.data(histograms, starts);

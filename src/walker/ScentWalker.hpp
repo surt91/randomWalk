@@ -67,6 +67,8 @@ class ScentWalker final : public SpecWalker<int>
         /// otherwise random starting positions
         bool circleStart;
 
+        bool save_histograms;   ///< save auxillary information for visualization
+
     protected:
         std::vector<Step<int>> starts;  ///< initial positions of walkers
         std::vector<HistogramND> histograms;
