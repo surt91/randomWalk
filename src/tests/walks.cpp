@@ -308,6 +308,46 @@ TEST_CASE( "walk types", "[walk]" ) {
     }
 }
 
+TEST_CASE( "bounds", "[walk]" ) {
+    Cmd o;
+    o.seedRealization = 13;
+    o.seedMC = 42;
+    o.numWalker = 1;
+
+    o.data_path = "bench.tmp";
+
+    o.d = 2;
+    o.chAlg = CH_QHULL;
+    o.iterations = 100;
+
+    o.steps = 102;
+
+    o.type = WT_RANDOM_WALK;
+
+    SECTION( "RW: A" ) {
+        o.wantedObservable = WO_VOLUME;
+        REQUIRE( Simulation::getLowerBound(o) == 0 );
+        REQUIRE( Simulation::getUpperBound(o) == std::pow(o.steps / 2., 2) / 2. );
+    }
+    SECTION( "RW: L" ) {
+        o.wantedObservable = WO_SURFACE_AREA;
+        REQUIRE( Simulation::getLowerBound(o) == 2 );
+        REQUIRE( Simulation::getUpperBound(o) == 2*o.steps );
+    }
+    SECTION( "RW: V" ) {
+        o.d = 3;
+        o.wantedObservable = WO_VOLUME;
+        REQUIRE( Simulation::getLowerBound(o) == 0 );
+        REQUIRE( Simulation::getUpperBound(o) == Approx(std::pow(o.steps / 3., 3) / 6.) );
+    }
+    SECTION( "RW: dV" ) {
+        o.d = 3;
+        o.wantedObservable = WO_SURFACE_AREA;
+        REQUIRE( Simulation::getLowerBound(o) == 0 );
+        REQUIRE( Simulation::getUpperBound(o) == Approx(std::pow(o.steps / 2., 2) / 2.) );
+    }
+}
+
 TEST_CASE( "misc", "[walk]" ) {
     SECTION( "Dimerization" ) {
         UniformRNG rngReal(42);

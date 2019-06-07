@@ -41,7 +41,7 @@ template <>
 void SpecWalker<int>::degenerateMinSurface()
 {
     for(size_t i=0; i<random_numbers.size(); ++i)
-        random_numbers[i] = i % 2 ? .99 : .99 - 1./d;
+        random_numbers[i] = i % 2 ? .99 : .99 - 1./d/2.;
 
     updateSteps();
     updatePoints();

@@ -691,10 +691,23 @@ void ConvexHull<T>::runQhull()
     }
     else if(num_zeros == 1)
     {
-        if(d - num_zeros <= 1)
+        if(d == 2)
         {
             LOG(LOG_DEBUG) << "One dimensional";
-            m_L = 2*n;
+            // since its two d, this will switch 0 and 1
+            int nonzero_axis = !zero_axis;
+            double span = 0;
+            double mini = 0, maxi = 0 ;
+            for(const auto &s : *interiorPoints)
+            {
+                if(s[nonzero_axis] < mini)
+                    mini = s[nonzero_axis];
+                if(s[nonzero_axis] > maxi)
+                    maxi = s[nonzero_axis];
+            }
+            span = maxi-mini;
+
+            m_L = 2*span;
             m_A = 0;
             return;
         }
