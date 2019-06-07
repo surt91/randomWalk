@@ -1,6 +1,6 @@
 #include "ScentWalker.hpp"
 
-ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia)
+ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia, bool save_histograms_in)
     : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia),
       numWalker(numWalker_in),
       sideLength(sideLength_in),
@@ -9,7 +9,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       relax(0),
       periodic(false),
       circleStart(true),
-      save_histograms(false)
+      save_histograms(save_histograms_in)
 {
     // TODO: pass relax as parameter
     LOG(LOG_INFO) << "This type needs to relax first, " << relax
