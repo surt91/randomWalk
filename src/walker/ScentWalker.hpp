@@ -38,8 +38,9 @@ typedef std::unordered_map<Step<int>, Site> Field;
 class ScentWalker final : public SpecWalker<int>
 {
     public:
-        ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false, bool save_histograms_in=false);
+        ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, agent_start_t start_configuration, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false, bool save_histograms_in=false);
 
+        void updatedNumWalker();
         void reconstruct() final;
 
         void updateSteps() final;
@@ -57,15 +58,13 @@ class ScentWalker final : public SpecWalker<int>
         /// Will probably only be sensible for simple sampling
         int interactions(int walkerId=0);
 
-        const int numWalker;    ///< total number of competing agents
+        int numWalker;          ///< total number of competing agents
         const int sideLength;   ///< side length of the square world
         const int Tas;          ///< number of time steps the scentmarks persist
         const int relax;        ///< number of steps to relax the walk before measurements are taken
         bool periodic;          ///< use periodic or open (closed?) boundaries
 
-        /// start the adversary walkers on a circle around the walker of interest
-        /// otherwise random starting positions
-        bool circleStart;
+        agent_start_t start_configuration;
 
         const bool save_histograms;   ///< save auxillary information for visualization
 

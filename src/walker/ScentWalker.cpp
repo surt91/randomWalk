@@ -1,6 +1,6 @@
 #include "ScentWalker.hpp"
 
-ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia, bool save_histograms_in)
+ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_in, int Tas_in, agent_start_t start_configuration_in, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia, bool save_histograms_in)
     : SpecWalker<int>(d, numSteps, rng, hull_algo, amnesia),
       numWalker(numWalker_in),
       sideLength(sideLength_in),
@@ -8,7 +8,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       // relax(2*Tas),
       relax(0),
       periodic(false),
-      circleStart(true),
+      start_configuration(start_configuration_in),
       save_histograms(save_histograms_in)
 {
     // TODO: pass relax as parameter
@@ -16,6 +16,13 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
                   << " additional steps will be simulated.";
 
     m_steps.resize(numSteps);
+
+    updatedNumWalker();
+    reconstruct();
+}
+
+void ScentWalker::updatedNumWalker()
+{
     interaction_sets.resize(numWalker);
 
     if(save_histograms)
@@ -26,8 +33,6 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
 
     pos = std::vector<Step<int>>(numWalker, Step<int>(d));
     step = std::vector<Step<int>>(numWalker, Step<int>(d));
-
-    reconstruct();
 }
 
 void ScentWalker::reconstruct()
@@ -40,7 +45,7 @@ void ScentWalker::reconstruct()
         for(auto &h : histograms)
             h.reset();
 
-    if(circleStart)
+    if(start_configuration == AS_CIRCLE)
     {
         // double wanted_radius = pow(numSteps, 0.33)*4;
         // double wanted_radius = numSteps/10.;
@@ -70,6 +75,64 @@ void ScentWalker::reconstruct()
 
             starts.emplace_back(std::move(tmp_start));
         }
+    }
+    else if(start_configuration == AS_TRIANGULAR)
+    {
+        double lattice_constant = sqrt(numSteps)/2;
+        // double lattice_constant = numSteps/5;
+
+        if(lattice_constant >= sideLength/2.)
+        {
+            LOG(LOG_WARNING) << "cutoff field size: should be less than "
+                << (sideLength/2.) << " but is " << lattice_constant;
+        }
+
+        LOG(LOG_INFO) << "starts on a triangular lattice with lattice constant " << lattice_constant;
+        int mid = sideLength/2;
+        std::vector<int> middle(d, mid);
+        starts.emplace_back(std::move(middle));
+
+        /*
+           we will place the other agents on a triangular lattice, with
+           the walker of interest in the center, like this:
+
+           -o-o-o-
+           /\/\/\
+           o-o-o-o
+           \/\/\/\
+           o-o-o-
+
+           We will raster all possible points in the square and perform a
+           simple rejection method for points outside of the square.
+           Therefore we use $e_1 = (1,0)$ and $e_2 = (-0.5,\sqrt(3)/2)$
+           times the lattice constant as our coordinate vectors.
+        */
+
+        int max_e1 = sideLength / lattice_constant + 1;
+        int min_e1 = -sideLength / lattice_constant - 1;
+        numWalker = 1;
+        for(double x1=min_e1; x1<max_e1; ++x1)
+            for(double x2=min_e1; x2<max_e1; ++x2)
+            {
+                // the center is already our walk of interest
+                if(x1 == 0 && x2 == 0)
+                    continue;
+
+                std::vector<int> tmp_start(d);
+                // double x = x1 * 1.0 + x2 * -0.5;
+                // double y = x1 * 0.0 + x2 * sqrt(3.)/2.;
+                double x = (x1 + x2 * -0.5) * lattice_constant + mid;
+                double y = (x2 * sqrt(3.)/2.) * lattice_constant + mid;
+                if(x < 0 || x > sideLength || y < 0 || y > sideLength)
+                    continue;
+
+                ++numWalker;
+                tmp_start[0] = std::round(x);
+                tmp_start[1] = std::round(y);
+                starts.emplace_back(std::move(tmp_start));
+            }
+        updatedNumWalker();
+        LOG(LOG_INFO) << "number of other walkers: " << numWalker;
     }
     else
     {
@@ -242,7 +305,7 @@ void ScentWalker::change(UniformRNG &rng, bool update)
 
     int idx;
     // fixed starts:
-    if(circleStart)
+    if(start_configuration == AS_CIRCLE || start_configuration == AS_TRIANGULAR)
         idx = rng() * nRN();
     // variable starts:
     else

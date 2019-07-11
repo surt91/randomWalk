@@ -164,16 +164,25 @@ TEST_CASE( "walk types", "[walk]" ) {
     }
     SECTION( "Agent" ) {
         o.type = WT_SCENT_RANDOM_WALK;
+        o.d = 2;
+        o.width = 10;
+        o.tas = 100;
+        o.steps = 100;
+        o.theta = -5;
+        o.numWalker = 5;
+        o.gp_path = "out";
+        o.svg_path = "out.svg";
         SECTION( "2D" ) {
-            o.d = 2;
-            o.width = 10;
-            o.tas = 100;
-            o.steps = 100;
-            o.theta = -5;
-            o.numWalker = 5;
-            o.gp_path = "out";
-            o.svg_path = "out.svg";
+            o.agent_start = AS_RANDOM;
+            DO(16.81, 56.39)
+        }
+        SECTION( "2D" ) {
+            o.agent_start = AS_CIRCLE;
             DO(18.245, 33.125)
+        }
+        SECTION( "2D" ) {
+            o.agent_start = AS_TRIANGULAR;
+            DO(15.72, 30.375)
         }
     }
     SECTION( "'True' Self-Avoiding" ) {

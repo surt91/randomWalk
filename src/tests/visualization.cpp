@@ -114,7 +114,7 @@ TEST_CASE( "images", "[vis]" ) {
         o.steps = 100;
         o.theta = -1;
         o.numWalker = 5;
-        ScentWalker w(o.d, o.steps, o.numWalker, o.width, o.tas, rngReal, o.chAlg, true, true);
+        ScentWalker w(o.d, o.steps, o.numWalker, o.width, o.tas, AS_RANDOM, rngReal, o.chAlg, true, true);
         SECTION( "SVG" ) {
             filename = "benchHist.svg";
             remove(filename.c_str());

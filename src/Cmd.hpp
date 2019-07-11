@@ -112,6 +112,18 @@ const std::vector<std::string> SAMPLING_METHOD_LABEL = {
     "Metropolis and Parallel Tempering MPI",
 };
 
+enum agent_start_t {
+    AS_RANDOM = 0,      ///< Start the agents randomly in the plane
+    AS_CIRCLE = 1,      ///< Start the agents in a circle around the chosen one
+    AS_TRIANGULAR = 2,  ///< Start the agents on the sites of an triangular lattice
+};
+
+const std::vector<std::string> AGENT_START_LABEL = {
+    "random",
+    "circular",
+    "triangular",
+};
+
 /** Command line parser.
  *
  * This command line parser uses TCLAP (http://tclap.sourceforge.net/).
@@ -160,6 +172,7 @@ class Cmd
               total_length(10.5),
               width(10),
               tas(1000),
+              agent_start(AS_RANDOM),
               lnf_min(1e-8),
               flatness_criterion(0.8),
               onlyBounds(false),
@@ -215,6 +228,7 @@ class Cmd
 
         int width;                  ///< side length of a periodic field (only Scent walks)
         int tas;                    ///< lifetime of the scent (only Scent walks)
+        agent_start_t agent_start;  ///< start configuration of the agents (only Scent walks)
 
         double lnf_min;             ///< minimum refinement factor up to which is simulated (only Wang Landau type simulations)
         double flatness_criterion;  ///< flatness criterion to be used (only Wang Landau type simulations)

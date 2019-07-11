@@ -125,8 +125,10 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
     }
     else if(o.type == WT_SCENT_RANDOM_WALK)
     {
+        // If an image is requested, save information needed for visualisation
+        bool visualize = !o.gp_path.empty() || !o.svg_path.empty();
         w = std::unique_ptr<Walker>(
-            new ScentWalker(o.d, o.steps, o.numWalker, o.width, o.tas, rngReal, o.chAlg, amnesia)
+            new ScentWalker(o.d, o.steps, o.numWalker, o.width, o.tas, o.agent_start, rngReal, o.chAlg, amnesia, visualize)
         );
     }
     else if(o.type == WT_TRUE_SELF_AVOIDING_WALK)
