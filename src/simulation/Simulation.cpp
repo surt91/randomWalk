@@ -247,7 +247,7 @@ double Simulation::getReasonalbleLowerBound(Cmd &o)
 /** get the exact upper bound (possibly infinity) */
 double Simulation::getUpperBound(Cmd &o)
 {
-    double S_min = 0;
+    double S_max = 0;
 
     std::unique_ptr<Walker> w;
     prepare(w, o);
@@ -257,17 +257,17 @@ double Simulation::getUpperBound(Cmd &o)
     if(o.wantedObservable == WO_VOLUME)
     {
         w->degenerateMaxVolume();
-        S_min = S(w);
+        S_max = S(w);
     }
     else
     {
         w->degenerateMaxSurface();
-        S_min = S(w);
+        S_max = S(w);
     }
 
     w->svg("upper.svg");
 
-    return S_min;
+    return S_max;
 }
 
 /** get the exact lower bound (possibly zero) */
