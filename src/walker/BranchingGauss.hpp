@@ -7,6 +7,8 @@
 #include "SpecWalker.hpp"
 
 /** A branching Gaussian walk
+
+    \image html branch.svg "example of a branching random walk"
  */
 class BranchingGauss final : public SpecWalker<double>
 {
