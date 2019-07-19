@@ -188,11 +188,11 @@ def get_max_dist():
         a = np.loadtxt(whole_distribution_file)
         a = a.transpose()
 
-        idx = np.argmax(a[2])
+        idx = np.argmax(a[1])
         maxX = a[0][idx]
-        maxY = a[2][idx]
-        xErr = a[1][idx]
-        yErr = a[3][idx]
+        maxY = a[1][idx]
+        xErr = 0
+        yErr = a[2][idx]
 
         with open("{}/{}.dat".format(param.parameters["directory"], "max"), "a") as f:
             f.write("{} {} {} {} {}\n".format(N, maxX, xErr, maxY, yErr))
