@@ -309,6 +309,19 @@ TEST_CASE( "walk types", "[walk]" ) {
             DO(10.73, 13.9866666667)
         }
     }
+    SECTION( "Gauss Resetting" ) {
+        o.type = WT_GAUSSIAN_RESET_WALK;
+        o.resetrate = 0.2;
+        SECTION( "2D" ) {
+            o.d = 2;
+            DO(19.1111182588, 61.260523307)
+        }
+        SECTION( "3D" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            DO(43.6963589006, 158.147226285)
+        }
+    }
     SECTION( "Multi" ) {
         o.type = WT_RANDOM_WALK;
         o.numWalker = 3;

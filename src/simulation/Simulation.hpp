@@ -36,6 +36,7 @@
 #include "../walker/RunAndTumbleWalker.hpp"
 #include "../walker/RunAndTumbleWalkerT.hpp"
 #include "../walker/ReturningLatticeWalker.hpp"
+#include "../walker/GaussResetWalker.hpp"
 #include "../RNG.hpp"
 #include "../io.hpp"
 

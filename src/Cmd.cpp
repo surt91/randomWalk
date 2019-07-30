@@ -82,7 +82,7 @@ Cmd::Cmd(int argc, char** argv)
                                                         "\tdebug3 : 7",
                                         false, 4, "integer");
 
-        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
+        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
         TCLAP::ValuesConstraint<int> allowedWT(wt);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
                                                   "\tlattice random walk       :  1 (default)\n"
@@ -99,7 +99,8 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\tbranching Gaussian walk   : 12\n"
                                                   "\trun-and-tumble walk, fix n: 13\n"
                                                   "\trun-and-tumble walk, fix t: 14\n"
-                                                  "\treturning lattice walk    : 15\n",
+                                                  "\treturning lattice walk    : 15\n"
+                                                  "\tGaussian resetting walk   : 16\n",
                                      false, type, &allowedWT);
 
         std::vector<int> ch({0, 1, 2, 3, 4, 5});

@@ -191,6 +191,16 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
                 new MultipleWalker<ReturningLatticeWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
             );
     }
+    else if(o.type == WT_GAUSSIAN_RESET_WALK)
+    {
+        if(o.numWalker == 1)
+            w = std::unique_ptr<Walker>(new GaussResetWalker(o.d, o.steps, rngReal, o.chAlg, amnesia));
+        else
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<GaussResetWalker>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
+        w->setP1(o.resetrate);
+    }
     else
     {
         LOG(LOG_ERROR) << "type " << o.type << " is not known";

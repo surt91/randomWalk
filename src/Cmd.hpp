@@ -60,6 +60,7 @@ enum walk_type_t {
     WT_RUNANDTUMBLE_WALK,           ///< run-and-tumble walk (fixed n)
     WT_RUNANDTUMBLE_T_WALK,         ///< run-and-tumble walk (fixed t)
     WT_RETURNING_LATTICE_WALK,      ///< Lattice random walk returning to origin
+    WT_GAUSSIAN_RESET_WALK,         ///< resetting gaussian random walk
 };
 
 const std::vector<std::string> TYPE_LABEL = {
@@ -79,6 +80,7 @@ const std::vector<std::string> TYPE_LABEL = {
     "Run-and-tumble Walk (fixed n)",
     "Run-and-tumble Walk (fixed t)",
     "Returning Lattice Random Walk",
+    "Gaussian Resetting Random Walk",
 };
 
 enum wanted_observable_t {
