@@ -40,8 +40,6 @@ void GaussResetWalker::updateSteps()
             offset.setZero();
         }
 
-        LOG(LOG_INFO) << offset;
-
         m_steps.emplace_back(genStep(random_numbers.begin() + i*(d+1) + 1));
         m_steps.back() += offset;
         pos += m_steps.back();
