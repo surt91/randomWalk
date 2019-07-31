@@ -15,7 +15,7 @@
  * See also:
  * doi: 10.1103/PhysRevLett.106.160601
  *
- * \image html GRRW.svg "example of a gaussian resetting random walk, \f$p = 0.1\f$"
+ * \image html GRRW.svg "example of a gaussian resetting random walk, \f$p = 0.1, T = 100\f$"
  */
 class GaussResetWalker final : public SpecWalker<double>
 {
