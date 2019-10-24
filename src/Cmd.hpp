@@ -118,12 +118,14 @@ enum agent_start_t {
     AS_RANDOM = 0,      ///< Start the agents randomly in the plane
     AS_CIRCLE = 1,      ///< Start the agents in a circle around the chosen one
     AS_TRIANGULAR = 2,  ///< Start the agents on the sites of an triangular lattice
+    AS_RELAXED = 3,     ///< Start the agents with an already relaxed configuration
 };
 
 const std::vector<std::string> AGENT_START_LABEL = {
     "random",
     "circular",
     "triangular",
+    "relaxed",
 };
 
 /** Command line parser.

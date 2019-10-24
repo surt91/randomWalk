@@ -54,12 +54,13 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<double> total_lengthArg("", "total_length", "total_length (only for t=14: run-and-tumble walk, fixed t)", false, total_length, "double");
         TCLAP::ValueArg<int> widthArg("", "width", "width of the field (only for t=9: scent walk)", false, width, "integer");
         TCLAP::ValueArg<int> tasArg("", "tas", "lifetime of the scent (only for t=9: scent walk)", false, tas, "integer");
-        std::vector<int> as({0, 1, 2});
+        std::vector<int> as({0, 1, 2, 3});
         TCLAP::ValuesConstraint<int> allowedAS(as);
         TCLAP::ValueArg<int> agentStartArg("", "agentStart", "Start configuration of agents (only for t=9: scent walk):\n"
                                                              "\trandom              : 0 (default)\n"
                                                              "\tcircle              : 1\n"
-                                                             "\ttriangular lattice  : 2",
+                                                             "\ttriangular lattice  : 2\n"
+                                                             "\trelaxed             : 3",
                                                  false, agent_start, &allowedAS);
         TCLAP::ValueArg<double> lnfArg("", "lnf", "minimum value of ln(f) for the Wang Landau algorithm (default 1e-8)", false, lnf_min, "double");
         TCLAP::ValueArg<double> flatnessArg("", "flatness", "flatness criterion for the Wang Landau algorithm (default 0.8)", false, flatness_criterion, "double");

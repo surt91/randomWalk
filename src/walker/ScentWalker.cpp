@@ -5,16 +5,11 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       numWalker(numWalker_in),
       sideLength(sideLength_in),
       Tas(Tas_in),
-      // relax(2*Tas),
-      relax(0),
+      relax(start_configuration_in == AS_RELAXED ? Tas_in : 0),
       periodic(false),
       start_configuration(start_configuration_in),
       save_histograms(save_histograms_in)
 {
-    // TODO: pass relax as parameter
-    LOG(LOG_INFO) << "This type needs to relax first, " << relax
-                  << " additional steps will be simulated.";
-
     m_steps.resize(numSteps);
 
     updatedNumWalker();
@@ -78,8 +73,7 @@ void ScentWalker::reconstruct()
     }
     else if(start_configuration == AS_TRIANGULAR)
     {
-        double lattice_constant = sqrt(numSteps)/2;
-        // double lattice_constant = numSteps/5;
+        double lattice_constant = sqrt(numSteps)/2.;
 
         if(lattice_constant >= sideLength/2.)
         {
@@ -96,11 +90,11 @@ void ScentWalker::reconstruct()
            we will place the other agents on a triangular lattice, with
            the walker of interest in the center, like this:
 
-           -o-o-o-
-           /\/\/\
+           o-o-o-o-
+           \/\/\/\
            o-o-o-o
            \/\/\/\
-           o-o-o-
+           o-o-o-o
 
            We will raster all possible points in the square and perform a
            simple rejection method for points outside of the square.
@@ -152,10 +146,24 @@ void ScentWalker::reconstruct()
             occupied_starts.emplace(tmp_start);
             starts.emplace_back(tmp_start);
         }
+        if(start_configuration == AS_RELAXED)
+        {
+            // let the system run for T_as steps and save the
+            // markers and positions as the frozen initial conditions
+            // for the following simulation
+            initial_trail.clear();
+            for(int i=0; i<relax; ++i)
+            {
+                for(int j=0; j<numWalker; ++j)
+                {
+                    moveWalker(j, i, initial_trail, true);
+                }
+            }
+        }
     }
 
     if(!amnesia)
-        random_numbers = rng.vector((numSteps+relax)*numWalker);
+        random_numbers = rng.vector(numSteps*numWalker);
 
     init();
 
@@ -183,13 +191,98 @@ void ScentWalker::updateField(Site &site, int time)
         site.erase(k);
 }
 
+void ScentWalker::moveWalker(int j, int i, Field &trail, bool forced_amnesia)
+{
+    auto &current = trail[pos[j]];
+
+    //  at every visit remove expired entries from the back of the deque
+    //  and entries of oneself (because oneself left a new scent in that moment)
+    current[j] = i; // update last visited
+
+    updateField(current, i);
+
+    // if we are on a foreign scent: retreat
+    // if there is more than one marker (one marker is from us)
+    if(current.size() > 1 && i > 0)
+    {
+        // record with which adversary we interacted
+        for(auto &field_entry : current)
+        {
+            int adversary = field_entry.first;
+            if(adversary != j) // do not record yourself
+                interaction_sets[j].insert(adversary);
+        }
+
+        std::vector<Step<int>> candidates;
+        for(const auto &k : pos[j].neighbors())
+        {
+            // retreat only on own scent to not trap yourself behind a bridge
+            if(trail[k].size() == 1 && trail[k].find(j) != trail[k].end())
+                candidates.push_back(k);
+        }
+
+        if(candidates.size() == 0)
+        {
+            // we are stuck, so just intrude into the other territory, I guess
+            if(!amnesia && !forced_amnesia)
+                step[j].fillFromRN(random_numbers[i*numWalker + j]);
+            else
+                step[j].fillFromRN(rng());
+        }
+        else
+        {
+            int idx;
+            if(!amnesia && !forced_amnesia)
+                idx = random_numbers[i*numWalker + j] * candidates.size();
+            else
+                idx = rng() * candidates.size();
+            step[j] = candidates[idx] - pos[j];
+        }
+
+        pos[j] += step[j];
+    }
+    else
+    {
+        // else do a random step
+        if(!amnesia && !forced_amnesia)
+            step[j].fillFromRN(random_numbers[i*numWalker + j]);
+        else
+            step[j].fillFromRN(rng());
+        pos[j] += step[j];
+    }
+
+    // FIXME: this should be hidden
+    // boundary
+    for(int k=0; k<pos[j].d(); ++k)
+    {
+        if(pos[j][k] >= sideLength)
+        {
+            pos[j][k] = sideLength - 2;
+            step[j].invert();
+        }
+        else if(pos[j][k] < 0)
+        {
+            pos[j][k] = 1;
+            step[j].invert();
+        }
+    }
+}
+
 void ScentWalker::updateSteps()
 {
     // use numWalker vectors for the steps (scent traces will be steps[now-Tas:now])
     // every walker has its own history
     // static -> will be allocated only once
     static Field trail(std::min(sideLength*sideLength, numSteps*numWalker));
-    trail.clear();
+    // in the relaxed start configuration we have scent marks on the initial map
+    if(start_configuration == AS_RELAXED)
+    {
+        trail = initial_trail;
+    }
+    else
+    {
+        trail.clear();
+    }
 
     for(auto &i : interaction_sets)
         i.clear();
@@ -206,95 +299,16 @@ void ScentWalker::updateSteps()
     }
 
     // iterate the time, every agent does one move each timestep
-    for(int i=0; i<numSteps+relax; ++i)
+    for(int i=relax; i<numSteps; ++i)
     {
         for(int j=0; j<numWalker; ++j)
         {
-            auto &current = trail[pos[j]];
+            moveWalker(j, i, trail);
 
-            //  at every visit remove expired entries from the back of the deque
-            //  and entries of oneself (because oneself left a new scent in that moment)
-            current[j] = i; // update last visited
-
-            updateField(current, i);
-
-            // if we are on a foreign scent: retreat
-            // if there is more than one marker (one marker is from us)
-            if(current.size() > 1 && i > 0)
-            {
-                // record with which adversary we interacted
-                for(auto &field_entry : current)
-                {
-                    int adversary = field_entry.first;
-                    if(adversary != j) // do not record yourself
-                        interaction_sets[j].insert(adversary);
-                }
-
-                std::vector<Step<int>> candidates;
-                for(const auto &k : pos[j].neighbors())
-                {
-                    // retreat only on own scent to not trap yourself behind a bridge
-                    if(trail[k].size() == 1 && trail[k].find(j) != trail[k].end())
-                        candidates.push_back(k);
-                }
-
-                if(candidates.size() == 0)
-                {
-                    // we are stuck, so just intrude into the other territory, I guess
-                    if(!amnesia)
-                        step[j].fillFromRN(random_numbers[i*numWalker + j]);
-                    else
-                        step[j].fillFromRN(rng());
-                }
-                else
-                {
-                    int idx;
-                    if(!amnesia)
-                        idx = random_numbers[i*numWalker + j] * candidates.size();
-                    else
-                        idx = rng() * candidates.size();
-                    step[j] = candidates[idx] - pos[j];
-                }
-
-                pos[j] += step[j];
-            }
-            else
-            {
-                // else do a random step
-                if(!amnesia)
-                    step[j].fillFromRN(random_numbers[i*numWalker + j]);
-                else
-                    step[j].fillFromRN(rng());
-                pos[j] += step[j];
-            }
-
-            // FIXME: this should be hidden
-            for(int k=0; k<pos[j].d(); ++k)
-            {
-                if(pos[j][k] >= sideLength)
-                {
-                    pos[j][k] = sideLength - 2;
-                    step[j].invert();
-                }
-                else if(pos[j][k] < 0)
-                {
-                    pos[j][k] = 1;
-                    step[j].invert();
-                }
-            }
-
-            // populate the histogram (for a figure as in the article)
-            // if(i >= numSteps - relax)
-            // {
-                // TODO: maybe just the last relax many steps?
-                if(save_histograms)
-                    histograms[j].add(pos[j]);
-            // }
-            if(i >= relax)
-            {
-                if(j == 0)
-                    m_steps[i-relax] = step[j];
-            }
+            if(save_histograms)
+                histograms[j].add(pos[j]);
+            if(j == 0)
+                m_steps[i-relax] = step[j];
         }
     }
 }
@@ -305,7 +319,11 @@ void ScentWalker::change(UniformRNG &rng, bool update)
 
     int idx;
     // fixed starts:
-    if(start_configuration == AS_CIRCLE || start_configuration == AS_TRIANGULAR)
+    if(
+        start_configuration == AS_CIRCLE ||
+        start_configuration == AS_TRIANGULAR ||
+        start_configuration == AS_RELAXED
+    )
         idx = rng() * nRN();
     // variable starts:
     else

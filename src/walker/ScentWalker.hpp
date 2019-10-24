@@ -70,7 +70,10 @@ class ScentWalker final : public SpecWalker<int>
 
     protected:
         std::vector<Step<int>> starts;  ///< initial positions of walkers
+        Field initial_trail;            ///< initial trail configuration
         std::vector<HistogramND> histograms;
+
+        void moveWalker(int j, int i, Field &trail, bool forced_amnesia=false);
 
         Step<int> undo_start;
 
