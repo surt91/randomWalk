@@ -225,7 +225,7 @@ void ScentWalker::moveWalker(int j, int i, Field &trail, bool forced_amnesia)
         {
             // we are stuck, so just intrude into the other territory, I guess
             if(!amnesia && !forced_amnesia)
-                step[j].fillFromRN(random_numbers[i*numWalker + j]);
+                step[j].fillFromRN(random_numbers[(i-relax)*numWalker + j]);
             else
                 step[j].fillFromRN(rng());
         }
@@ -233,7 +233,7 @@ void ScentWalker::moveWalker(int j, int i, Field &trail, bool forced_amnesia)
         {
             int idx;
             if(!amnesia && !forced_amnesia)
-                idx = random_numbers[i*numWalker + j] * candidates.size();
+                idx = random_numbers[(i-relax)*numWalker + j] * candidates.size();
             else
                 idx = rng() * candidates.size();
             step[j] = candidates[idx] - pos[j];
@@ -245,7 +245,7 @@ void ScentWalker::moveWalker(int j, int i, Field &trail, bool forced_amnesia)
     {
         // else do a random step
         if(!amnesia && !forced_amnesia)
-            step[j].fillFromRN(random_numbers[i*numWalker + j]);
+            step[j].fillFromRN(random_numbers[(i-relax)*numWalker + j]);
         else
             step[j].fillFromRN(rng());
         pos[j] += step[j];
@@ -299,7 +299,7 @@ void ScentWalker::updateSteps()
     }
 
     // iterate the time, every agent does one move each timestep
-    for(int i=relax; i<numSteps; ++i)
+    for(int i=relax; i<numSteps+relax; ++i)
     {
         for(int j=0; j<numWalker; ++j)
         {
