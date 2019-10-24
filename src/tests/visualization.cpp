@@ -107,7 +107,7 @@ TEST_CASE( "images", "[vis]" ) {
         }
     }
 
-    SECTION( " Scent") {
+    SECTION( "Scent" ) {
         o.d = 2;
         o.width = 10;
         o.tas = 100;
@@ -124,6 +124,17 @@ TEST_CASE( "images", "[vis]" ) {
             filename = "benchHist.gp";
             remove(filename.c_str());
             w.gp("benchHist", true);
+        }
+    }
+
+    SECTION( "Branching Gauss" ) {
+        o.d = 2;
+        o.steps = 100;
+        BranchingGauss w(o.d, o.steps, rngReal, o.chAlg, true);
+        SECTION( "SVG" ) {
+            filename = "benchBG.svg";
+            remove(filename.c_str());
+            w.svg(filename);
         }
     }
 
