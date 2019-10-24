@@ -159,6 +159,9 @@ void ScentWalker::reconstruct()
                     moveWalker(j, i, initial_trail, true);
                 }
             }
+            // also shift the starting position to the relaxed position
+            for(int j=0; j<numWalker; ++j)
+                starts[j] = pos[j];
         }
     }
 
