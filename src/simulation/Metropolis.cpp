@@ -253,13 +253,14 @@ void Metropolis::run()
 
                 // flush after every iteration
                 oss << std::endl;
+                
+                // collect some statistics
+                sum_L += w->L();
+                sum_A += w->A();
+                sum_r += w->r();
+                sum_r2 += w->r2();
             }
 
-            // collect some statistics
-            sum_L += w->L();
-            sum_A += w->A();
-            sum_r += w->r();
-            sum_r2 += w->r2();
             checksum += S(w);
         }
     }
