@@ -184,6 +184,10 @@ TEST_CASE( "walk types", "[walk]" ) {
             o.agent_start = AS_TRIANGULAR;
             DO(15.72, 30.375)
         }
+        SECTION( "2D" ) {
+            o.agent_start = AS_RELAXED;
+            DO(17.61, 33.795)
+        }
     }
     SECTION( "'True' Self-Avoiding" ) {
         o.type = WT_TRUE_SELF_AVOIDING_WALK;
