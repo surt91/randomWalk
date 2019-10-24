@@ -51,8 +51,6 @@ class Histogram
 
         const std::string ascii_table() const;
 
-        Histogram& operator+=(const Histogram &other);
-
         friend std::ostream& operator<<(std::ostream& os, const Histogram &obj);
 };
 

@@ -43,13 +43,6 @@ class HistogramND
         void svg(const std::string filename) const;
 
         void print2D() const;
-
-        // double operator[](const double value) const;
-        // double& operator[](const double value);
-        //
-        // const std::string ascii_table() const;
-        // Histogram& operator+=(const Histogram &other);
-        // friend std::ostream& operator<<(std::ostream& os, const Histogram &obj);
 };
 
 

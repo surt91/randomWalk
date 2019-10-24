@@ -116,22 +116,15 @@ void Histogram::reset()
 void Histogram::trim()
 {
     int left=0;
-    int right=num_bins;
+    int right=num_bins-1;
 
-    int i=0;
-    while(data[i] == 0)
-    {
-        ++i;
-        left = i;
-    }
-    for(; i<num_bins; ++i)
-        if(data[i] == 0)
-        {
-            right = i;
-            break;
-        }
+    while(data[left] == 0)
+        ++left;
+    while(data[right] == 0)
+        --right;
+    ++right;
 
-    if(left == right)
+    if(left == num_bins-1)
     {
         LOG(LOG_ERROR) << "The Histogram is empty after trimming!";
     }
