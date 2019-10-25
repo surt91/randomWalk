@@ -172,21 +172,22 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.numWalker = 5;
         o.gp_path = "out";
         o.svg_path = "out.svg";
-        SECTION( "2D" ) {
+        SECTION( "2D random" ) {
             o.agent_start = AS_RANDOM;
-            DO(16.81, 56.39)
+            DO(16.335, 50.255)
         }
-        SECTION( "2D" ) {
+        SECTION( "2D circle" ) {
             o.agent_start = AS_CIRCLE;
-            DO(18.245, 33.125)
+            DO(17.755, 27.17)
         }
-        SECTION( "2D" ) {
+        SECTION( "2D triangular lattice" ) {
             o.agent_start = AS_TRIANGULAR;
-            DO(15.72, 30.375)
+            DO(14.525, 18.56)
         }
-        SECTION( "2D" ) {
-            o.agent_start = AS_RELAXED;
-            DO(15.32, 34.565)
+        SECTION( "2D relaxed" ) {
+            o.agent_start = AS_RELAXED
+            // FIXME: the second value should be larger than the first!
+            DO(14.97, 6.095)
         }
     }
     SECTION( "'True' Self-Avoiding" ) {

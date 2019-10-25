@@ -35,6 +35,7 @@ void ScentWalker::reconstruct()
     starts.clear();
     pos.clear();
     step.clear();
+    initial_trail.clear();
 
     if(save_histograms)
         for(auto &h : histograms)
@@ -151,8 +152,6 @@ void ScentWalker::reconstruct()
             // let the system run for T_as steps and save the
             // markers and positions as the frozen initial conditions
             // for the following simulation
-            initial_trail.clear();
-
             for(int j=0; j<numWalker; ++j)
             {
                 // init with starting positions
@@ -233,6 +232,18 @@ void ScentWalker::moveWalker(int j, int i, Field &trail, bool forced_amnesia)
 
         if(candidates.size() == 0)
         {
+            // if we can not find a site without adversary scent, retreat on
+            // any site which also has own scent
+            for(const auto &k : pos[j].neighbors())
+                if(trail[k].find(j) != trail[k].end())
+                    candidates.push_back(k);
+        }
+
+        if(candidates.size() == 0)
+        {
+            // if there is no own scent adjacent, we are stuck. This should not
+            // happen
+            LOG(LOG_WARNING) << j << " is stuck! at t = " << i;
             // we are stuck, so just intrude into the other territory, I guess
             if(!amnesia && !forced_amnesia)
                 step[j].fillFromRN(random_numbers[(i-relax)*numWalker + j]);
