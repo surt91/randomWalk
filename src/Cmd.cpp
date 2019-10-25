@@ -350,7 +350,7 @@ Cmd::Cmd(int argc, char** argv)
         agent_start = (agent_start_t) agentStartArg.getValue();
         if(type == WT_SCENT_RANDOM_WALK)
         {
-            LOG(LOG_INFO) << "Agent start configuration      " << AGENT_START_LABEL[agent_start];
+            LOG(LOG_INFO) << "Agent start configuration  " << AGENT_START_LABEL[agent_start];
         }
 
         steps = numArg.getValue();
