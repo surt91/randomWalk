@@ -152,6 +152,13 @@ void ScentWalker::reconstruct()
             // markers and positions as the frozen initial conditions
             // for the following simulation
             initial_trail.clear();
+
+            for(int j=0; j<numWalker; ++j)
+            {
+                // init with starting positions
+                pos[j] = starts[j];
+            }
+
             for(int i=0; i<relax; ++i)
             {
                 for(int j=0; j<numWalker; ++j)

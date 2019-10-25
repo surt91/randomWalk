@@ -186,7 +186,7 @@ TEST_CASE( "walk types", "[walk]" ) {
         }
         SECTION( "2D" ) {
             o.agent_start = AS_RELAXED;
-            DO(17.61, 33.795)
+            DO(15.32, 34.565)
         }
     }
     SECTION( "'True' Self-Avoiding" ) {
