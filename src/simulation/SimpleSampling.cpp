@@ -46,6 +46,8 @@ void SimpleSampling::run()
             << w->oblateness() << " "
             << w->visitedSites() << " "
             << w->enclosedSites() << " "
+            << w->length() << " "
+            << w->steps_taken() << " "
             << w->argminx() << " "
             << w->argmaxx() << " ";
 

@@ -70,6 +70,7 @@ class SpecWalker : public Walker
         int num_on_hull() const final;
         double oblateness() const final;
         double length() const final;
+        int steps_taken() const final;
         int visitedSites() const final;
         int enclosedSites() const final;
         int passage(int t1=0, int axis=0) const final;
@@ -544,6 +545,13 @@ double SpecWalker<T>::length() const
     for(auto s : steps())
         len += s.length();
     return len;
+}
+
+/// Get the lnumber of steps taken by the walk (mainly useful for RTP, fixed t)
+template <class T>
+int SpecWalker<T>::steps_taken() const
+{
+    return numSteps;
 }
 
 template <>
