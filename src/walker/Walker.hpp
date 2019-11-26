@@ -48,6 +48,8 @@ class Walker
         virtual double r2() const = 0; ///< Squared distance between start and end point
         virtual double rx() const = 0; ///< x coordinate of endpoint
         virtual double ry() const = 0; ///< y coordinate of endpoint
+        virtual double argminx() const = 0;     ///< time where the minimum x coordinate is reached
+        virtual double argmaxx() const = 0;     ///< time where the maximum x coordinate is reached
         virtual int num_on_hull() const = 0;    ///< number of vertices of the hull
         virtual double oblateness() const = 0;  ///< ratio of largest and smallest diameter
         virtual double length() const = 0;      ///< length the walker walks

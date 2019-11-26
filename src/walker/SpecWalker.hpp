@@ -65,6 +65,8 @@ class SpecWalker : public Walker
         double r2() const final;
         double rx() const final;
         double ry() const final;
+        double argminx() const final;
+        double argmaxx() const final;
         int num_on_hull() const final;
         double oblateness() const final;
         double length() const final;
@@ -650,6 +652,44 @@ template <class T>
 double SpecWalker<T>::ry() const
 {
     return (points().front() - points().back()).y();
+}
+
+/// Get the time where the minimum x-value is reached.
+/// Attention! This is not well defined for integer walks
+template <class T>
+double SpecWalker<T>::argminx() const
+{
+    int argmin = 0;
+    double min = 0; // we always start at (0,0), therefore this is a safe start
+    auto &p = points();
+    for(size_t i=0; i<p.size(); ++i)
+    {
+        if(p[i].x() < min)
+        {
+            min = p[i].x();
+            argmin = i;
+        }
+    }
+    return argmin;
+}
+
+/// Get the time where the maximum x-value is reached.
+/// Attention! This is not well defined for integer walks
+template <class T>
+double SpecWalker<T>::argmaxx() const
+{
+    int argmax = 0;
+    double max = 0; // we always start at (0,0), therefore this is a safe start
+    auto &p = points();
+    for(size_t i=0; i<p.size(); ++i)
+    {
+        if(p[i].x() > max)
+        {
+            max = p[i].x();
+            argmax = i;
+        }
+    }
+    return argmax;
 }
 
 /// Get the squared end-to-end distance of the walk.

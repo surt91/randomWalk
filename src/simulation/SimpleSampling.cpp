@@ -45,7 +45,9 @@ void SimpleSampling::run()
             << w->num_on_hull() << " "
             << w->oblateness() << " "
             << w->visitedSites() << " "
-            << w->enclosedSites() << " ";
+            << w->enclosedSites() << " "
+            << w->argminx() << " "
+            << w->argmaxx() << " ";
 
         if(auto r = dynamic_cast<ScentWalker*>(w.get()))
             oss << r->interactions();
