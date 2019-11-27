@@ -185,7 +185,7 @@ TEST_CASE( "walk types", "[walk]" ) {
             DO(14.525, 18.56)
         }
         SECTION( "2D relaxed" ) {
-            o.agent_start = AS_RELAXED
+            o.agent_start = AS_RELAXED;
             // FIXME: the second value should be larger than the first!
             DO(14.97, 6.095)
         }
