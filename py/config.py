@@ -187,7 +187,7 @@ class Simulation():
         return self.hero(True)
 
     def hero(self, incremental=False):
-        logging.info("Create .sge and .slurm Files for HPC")
+        logging.info("Create .bsub, .slurm and .uge Files for HPC")
         if not os.path.exists("HPC"):
             os.makedirs("HPC")
 
@@ -295,6 +295,13 @@ class Simulation():
                                             parallel=self.parallel))
                 with open(os.path.join("HPC", name+".bsub"), "w") as f:
                     template = self.env.get_template("jobarray.bsub")
+                    f.write(template.render(name=name,
+                                            count=ctr,
+                                            hours=math.ceil(getSec(N)*self.n/3600*2),
+                                            mb=getMem(N),
+                                            parallel=self.parallel))
+                with open(os.path.join("HPC", name+".uge"), "w") as f:
+                    template = self.env.get_template("jobarray.uge")
                     f.write(template.render(name=name,
                                             count=ctr,
                                             hours=math.ceil(getSec(N)*self.n/3600*2),
