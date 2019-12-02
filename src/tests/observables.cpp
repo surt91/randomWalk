@@ -42,6 +42,9 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.num_on_hull() == 7);
         REQUIRE(w.oblateness() == Approx(2.2608617483));
         REQUIRE(w.length() == o.steps);
+        REQUIRE(w.steps_taken() == o.steps);
+        REQUIRE(w.argminx() == 27);
+        REQUIRE(w.argmaxx() == 4);
         REQUIRE(w.visitedSites() == 19);
         REQUIRE(w.enclosedSites() == 20);
     }
@@ -103,6 +106,9 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.num_on_hull() == 7);
         REQUIRE(w.oblateness() == Approx(1.4028496121));
         REQUIRE(w.length() == Approx(40.3715617656));
+        REQUIRE(w.steps_taken() == o.steps);
+        REQUIRE(w.argminx() == 7);
+        REQUIRE(w.argmaxx() == 3);
         REQUIRE(w.visitedSites() == -1); // not implemented
         REQUIRE(w.enclosedSites() == -1); // not implemented
     }
