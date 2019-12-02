@@ -7,8 +7,8 @@ GaussResetWalker::GaussResetWalker(int d, int numSteps, const UniformRNG &rng_in
     // the random number vector has a format of one uniform rn for resetting
     // and d gaussian rn for the displacement
     random_numbers = rng.vector_gaussian((d+1) * numSteps);
-    for(int i=0; i<numSteps; i+=d+1)
-        random_numbers[i] = rng();
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i*(d+1)] = rng();
     init();
 }
 
@@ -18,8 +18,8 @@ void GaussResetWalker::reconstruct()
     // write new random numers into our state
     std::generate(random_numbers.begin(), random_numbers.end(),
                   [this]{ return this->rng.gaussian(); });
-    for(int i=0; i<numSteps; i+=d+1)
-        random_numbers[i] = rng();
+    for(int i=0; i<numSteps; ++i)
+        random_numbers[i*(d+1)] = rng();
     init();
 }
 

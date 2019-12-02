@@ -319,12 +319,12 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.resetrate = 0.2;
         SECTION( "2D" ) {
             o.d = 2;
-            DO(19.1111182588, 61.260523307)
+            DO(26.515668687, 62.9871258023)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            DO(43.6963589006, 158.147226285)
+            DO(65.8120971397, 384.9845397304)
         }
     }
     SECTION( "Multi" ) {
