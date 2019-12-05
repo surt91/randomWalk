@@ -130,3 +130,13 @@ Step<double> BrownianResetWalker::genStep(std::vector<double>::iterator first) c
 {
     return Step<double>(std::vector<double>(first, first+d));
 }
+
+double BrownianResetWalker::argminx() const
+{
+    return SpecWalker<double>::argminx() * delta_t;
+}
+
+double BrownianResetWalker::argmaxx() const
+{
+    return SpecWalker<double>::argmaxx() * delta_t;
+}

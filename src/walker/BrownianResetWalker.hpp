@@ -34,6 +34,9 @@ class BrownianResetWalker final : public SpecWalker<double>
         double total_time;
         void setP2(double total_time) final;
 
+        double argminx() const final;
+        double argmaxx() const final;
+
     protected:
         Step<double> genStep(std::vector<double>::iterator first) const;
 

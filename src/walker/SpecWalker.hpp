@@ -65,8 +65,8 @@ class SpecWalker : public Walker
         double r2() const final;
         double rx() const final;
         double ry() const final;
-        double argminx() const final;
-        double argmaxx() const final;
+        virtual double argminx() const;
+        virtual double argmaxx() const;
         int num_on_hull() const final;
         double oblateness() const final;
         double length() const final;
