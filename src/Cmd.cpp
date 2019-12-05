@@ -49,9 +49,9 @@ Cmd::Cmd(int argc, char** argv)
         TCLAP::ValueArg<double> muArg("", "mu", "mu of the Gaussian distribution, i.e., introducing a direction bias (only for t=7: correlated walk)", false, mu, "double");
         TCLAP::ValueArg<double> sigmaArg("", "sigma", "sigma of the Gaussian distribution, i.e., how narrow should the angle delta be (only for t=7: correlated walk)", false, sigma, "double");
         TCLAP::ValueArg<double> betaArg("", "beta", "avoidance parameter, step on visited sites with exp(-beta N) (only for t=10: true self-avoiding walk)", false, beta, "double");
-        TCLAP::ValueArg<double> resetrateArg("", "reset", "reset rate (only for t=11: resetting random walk)", false, resetrate, "double");
+        TCLAP::ValueArg<double> resetrateArg("", "reset", "reset rate (only for t=11,16,17: resetting random walk)", false, resetrate, "double");
         TCLAP::ValueArg<double> gammaArg("", "gamma", "gamma, probability of direction change (only for t=13,14: run-and-tumble walk)", false, gamma, "double");
-        TCLAP::ValueArg<double> total_lengthArg("", "total_length", "total_length (only for t=14: run-and-tumble walk, fixed t)", false, total_length, "double");
+        TCLAP::ValueArg<double> total_lengthArg("", "total_length", "total_length (only for t=14,17: run-and-tumble walk, fixed t and Brownian motion)", false, total_length, "double");
         TCLAP::ValueArg<int> widthArg("", "width", "width of the field (only for t=9: scent walk)", false, width, "integer");
         TCLAP::ValueArg<int> tasArg("", "tas", "lifetime of the scent (only for t=9: scent walk)", false, tas, "integer");
         std::vector<int> as({0, 1, 2, 3});
@@ -83,7 +83,7 @@ Cmd::Cmd(int argc, char** argv)
                                                         "\tdebug3 : 7",
                                         false, 4, "integer");
 
-        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
+        std::vector<int> wt({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17});
         TCLAP::ValuesConstraint<int> allowedWT(wt);
         TCLAP::ValueArg<int> typeArg("t", "type", "type of walk:\n"
                                                   "\tlattice random walk       :  1 (default)\n"
@@ -101,7 +101,8 @@ Cmd::Cmd(int argc, char** argv)
                                                   "\trun-and-tumble walk, fix n: 13\n"
                                                   "\trun-and-tumble walk, fix t: 14\n"
                                                   "\treturning lattice walk    : 15\n"
-                                                  "\tGaussian resetting walk   : 16\n",
+                                                  "\tGaussian resetting walk   : 16\n"
+                                                  "\rresetting Brownian motion : 17\n",
                                      false, type, &allowedWT);
 
         std::vector<int> ch({0, 1, 2, 3, 4, 5});
@@ -332,9 +333,13 @@ Cmd::Cmd(int argc, char** argv)
             LOG(LOG_INFO) << "gamma                      " << gamma;
         }
         total_length = total_lengthArg.getValue();
-        if(type == WT_RUNANDTUMBLE_T_WALK)
+        if(type == WT_RUNANDTUMBLE_T_WALK || type == WT_BROWNIAN_RESET_WALK)
         {
             LOG(LOG_INFO) << "total_length               " << total_length;
+            if(total_length == 10.5) // default value ... this is really dumb
+            {
+                LOG(LOG_WARNING) << "you probably want to specify a value for `total_length`";
+            }
         }
 
         width = widthArg.getValue();
