@@ -178,6 +178,7 @@ void Metropolis::run()
 
     // header
     oss << "# sweeps L A";
+    oss << " r r2 maxDiameter spanX SpanY numOnHull oblateness visitedSites length stepstaken argminX argmaxX minX maxX";
     oss << "\n";
 
     std::unique_ptr<Walker> w;

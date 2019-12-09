@@ -13,7 +13,7 @@ void SimpleSampling::run()
 
     // header
     oss << "# sweeps L A";
-    oss << " r r2 maxDiameter maxX maxY rx ry S";
+    oss << " r r2 maxDiameter spanX SpanY numOnHull oblateness visitedSites length stepstaken argminX argmaxX minX maxX";
     for(auto i : o.passageTimeStarts)
         oss << " c" << i;
     for(auto i : o.passageTimeStarts)
