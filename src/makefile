@@ -80,12 +80,17 @@ ifeq "$(GCC_GTEQ_490)" "1"
 endif
 
 # enable strict warnings
-WARNLEVEL = -Wall -Wextra -Wpedantic -Werror
+WARNLEVEL = -Wall -Wextra -Werror
+ifeq "$(CXX)" "icc"
+WARNLEVEL += -diag-disable=11074
+else
+WARNLEVEL += -Wpedantic -Wno-unused-result
+endif
 ifeq "$(CXX)" "clang++"
 WARNLEVEL += -Wextra-semi -Wdocumentation -Wdeprecated
 endif
 # relax strictness for OpenMP pragmas
-WARNLEVEL += -Wno-unknown-pragmas -Wno-unused-result
+WARNLEVEL += -Wno-unknown-pragmas
 
 LNDIRS  = -Lqhull/lib
 
@@ -110,7 +115,7 @@ DBGFLAGS := $(CXXFLAGS)
 CXXFLAGS += -DVERSION="\"$(VERSION)\""
 DBGFLAGS += -DVERSION="\"$(DBG_VERSION)\""
 
-CXXFLAGS += -O3 -mtune=native -mtune=corei7 -ffast-math -fno-strict-aliasing -fomit-frame-pointer -DNDEBUG
+CXXFLAGS += -O3 -mtune=native -ffast-math -fno-strict-aliasing -fomit-frame-pointer -DNDEBUG
 DBGFLAGS += -g -fprofile-arcs -ftest-coverage
 
 # add some gcc specific flags (at least clang does not understand them or they caused issues (in the last tested version on arch respectively travis ubuntu trusty))
