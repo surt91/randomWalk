@@ -49,7 +49,9 @@ void SimpleSampling::run()
             << w->length() << " "
             << w->steps_taken() << " "
             << w->argminx() << " "
-            << w->argmaxx() << " ";
+            << w->argmaxx() << " "
+            << w->minx() << " "
+            << w->maxx() << " ";
 
         if(auto r = dynamic_cast<ScentWalker*>(w.get()))
             oss << r->interactions();

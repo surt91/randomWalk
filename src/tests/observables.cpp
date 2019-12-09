@@ -45,6 +45,8 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.steps_taken() == o.steps);
         REQUIRE(w.argminx() == 27);
         REQUIRE(w.argmaxx() == 4);
+        REQUIRE(w.minx() == -5);
+        REQUIRE(w.maxx() == 1);
         REQUIRE(w.visitedSites() == 19);
         REQUIRE(w.enclosedSites() == 20);
     }
@@ -109,6 +111,8 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.steps_taken() == o.steps);
         REQUIRE(w.argminx() == 7);
         REQUIRE(w.argmaxx() == 3);
+        REQUIRE(w.minx() == Approx(-3.2200234575));
+        REQUIRE(w.maxx() == Approx(2.9965956775));
         REQUIRE(w.visitedSites() == -1); // not implemented
         REQUIRE(w.enclosedSites() == -1); // not implemented
     }

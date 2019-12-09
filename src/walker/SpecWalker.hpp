@@ -67,6 +67,8 @@ class SpecWalker : public Walker
         double ry() const final;
         virtual double argminx() const override;
         virtual double argmaxx() const override;
+        double minx() const final;
+        double maxx() const final;
         int num_on_hull() const final;
         double oblateness() const final;
         double length() const final;
@@ -698,6 +700,30 @@ double SpecWalker<T>::argmaxx() const
         }
     }
     return argmax;
+}
+
+/// Get the minimum x-value reached.
+template <class T>
+double SpecWalker<T>::minx() const
+{
+    T min = 0; // we always start at (0,0), therefore this is a safe start
+    auto &p = points();
+    for(size_t i=0; i<p.size(); ++i)
+        if(p[i].x() < min)
+            min = p[i].x();
+    return min;
+}
+
+/// Get the maximum x-value reached.
+template <class T>
+double SpecWalker<T>::maxx() const
+{
+    T max = 0; // we always start at (0,0), therefore this is a safe start
+    auto &p = points();
+    for(size_t i=0; i<p.size(); ++i)
+        if(p[i].x() > max)
+            max = p[i].x();
+    return max;
 }
 
 /// Get the squared end-to-end distance of the walk.

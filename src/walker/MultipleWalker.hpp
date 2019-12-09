@@ -58,6 +58,8 @@ class MultipleWalker : public Walker
         double r2() const final;
         double argminx() const final;
         double argmaxx() const final;
+        double minx() const final;
+        double maxx() const final;
         int num_on_hull() const final;
         double oblateness() const final;
         double length() const final;
@@ -229,6 +231,10 @@ template <class T>
 double MultipleWalker<T>::argminx() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 double MultipleWalker<T>::argmaxx() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+template <class T>
+double MultipleWalker<T>::minx() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+template <class T>
+double MultipleWalker<T>::maxx() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 int MultipleWalker<T>::num_on_hull() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
