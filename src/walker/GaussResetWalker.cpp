@@ -60,11 +60,17 @@ void GaussResetWalker::change(UniformRNG &rng, bool update)
     undo_values = std::vector<double>(random_numbers.begin() + rnidx,
                                       random_numbers.begin() + rnidx + (d+1));
 
-    // the reset rn needs to be distributed uniformly
-    random_numbers[rnidx] = rng();
-    // the displacement rn are distributed normally
-    for(int i=1; i<d+1; ++i)
-        random_numbers[rnidx+i] = rng.gaussian();
+    if(rng() > 0.5)
+    {
+        // the reset rn needs to be distributed uniformly
+        random_numbers[rnidx] = rng();
+    }
+    else
+    {
+        // the displacement rn are distributed normally
+        for(int i=1; i<d+1; ++i)
+            random_numbers[rnidx+i] = rng.gaussian();
+    }
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx + 1);
     updatePoints(idx+1);
@@ -79,11 +85,10 @@ void GaussResetWalker::change(UniformRNG &rng, bool update)
 /// Undoes the last change.
 void GaussResetWalker::undoChange()
 {
-    int t = 0;
-    for(const auto i : undo_values)
-        random_numbers[undo_index*(d+1) + t++] = i;
+    for(int i = 0; i<d+1; ++i)
+        random_numbers[undo_index*(d+1) + i] = undo_values[i];
 
-    m_steps[undo_index] = genStep(undo_values.begin());
+    m_steps[undo_index] = genStep(undo_values.begin() + 1);
     updatePoints(undo_index+1);
     m_convex_hull = m_old_convex_hull;
 }

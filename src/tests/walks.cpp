@@ -319,12 +319,12 @@ TEST_CASE( "walk types", "[walk]" ) {
         o.resetrate = 0.2;
         SECTION( "2D" ) {
             o.d = 2;
-            DO(26.515668687, 62.9871258023)
+            DO(26.515668687, 236.1484821327)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            DO(65.8120971397, 384.9845397304)
+            DO(65.8120971397, 2635.2839025648)
         }
     }
     SECTION( "Resetting Brownian motion" ) {
