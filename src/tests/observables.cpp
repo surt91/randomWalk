@@ -49,6 +49,8 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.maxx() == 1);
         REQUIRE(w.visitedSites() == 19);
         REQUIRE(w.enclosedSites() == 20);
+        REQUIRE(w.num_resets() == 0);
+        REQUIRE(w.maxsteps_partialwalk() == o.steps);
     }
     SECTION( "3D" ) {
         o.d = 3;
@@ -71,6 +73,8 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.length() == Approx(o.steps));
         REQUIRE(w.visitedSites() == 22);
         REQUIRE(w.enclosedSites() == 22);
+        REQUIRE(w.num_resets() == 0);
+        REQUIRE(w.maxsteps_partialwalk() == o.steps);
     }
     SECTION( "Multi" ) {
         o.d = 2;
@@ -89,6 +93,8 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.length() == 0); // not implemented
         REQUIRE(w.visitedSites() == 0); // not implemented
         REQUIRE(w.enclosedSites() == 0); // not implemented
+        REQUIRE(w.num_resets() == 0); // not implemented
+        REQUIRE(w.maxsteps_partialwalk() == 0); // not implemented
     }
     SECTION( "off-lattice" ) {
         o.d = 2;
@@ -115,5 +121,7 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.maxx() == Approx(2.9965956775));
         REQUIRE(w.visitedSites() == -1); // not implemented
         REQUIRE(w.enclosedSites() == -1); // not implemented
+        REQUIRE(w.num_resets() == 0);
+        REQUIRE(w.maxsteps_partialwalk() == o.steps);
     }
 }

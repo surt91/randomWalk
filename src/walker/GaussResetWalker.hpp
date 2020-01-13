@@ -32,10 +32,16 @@ class GaussResetWalker final : public SpecWalker<double>
         double resetrate;
         void setP1(double beta) final;
 
+        int num_resets() const final;
+        int maxsteps_partialwalk() const final;
+
     protected:
         Step<double> genStep(std::vector<double>::iterator first) const;
 
         std::vector<double> undo_values;
+
+        int m_num_resets;
+        int longest_streak;
 };
 
 #endif

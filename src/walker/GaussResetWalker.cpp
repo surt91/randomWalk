@@ -29,20 +29,33 @@ void GaussResetWalker::updateSteps()
     m_steps.reserve(numSteps);
     Step<double> pos(d);
     Step<double> offset(d);
+
+    m_num_resets = 0;
+    longest_streak = 0;
+    int streak = 1;
+
     for(int i=0; i<numSteps; ++i)
     {
         if(random_numbers[i*(d+1)] < resetrate)
         {
             offset = -pos;
+
+            ++m_num_resets;
+            streak = 1;
         }
         else
         {
             offset.setZero();
+
+            ++streak;
         }
 
         m_steps.emplace_back(genStep(random_numbers.begin() + i*(d+1) + 1));
         m_steps.back() += offset;
         pos += m_steps.back();
+
+        if(streak > longest_streak)
+            longest_streak = streak;
     }
 }
 
@@ -116,4 +129,14 @@ void GaussResetWalker::setP1(double p1)
 Step<double> GaussResetWalker::genStep(std::vector<double>::iterator first) const
 {
     return Step<double>(std::vector<double>(first, first+d));
+}
+
+int GaussResetWalker::num_resets() const
+{
+    return m_num_resets;
+}
+
+int GaussResetWalker::maxsteps_partialwalk() const
+{
+    return longest_streak;
 }

@@ -25,6 +25,11 @@ void ResetWalker::updateSteps()
     m_steps.clear();
     m_steps.reserve(numSteps);
     Step<int> pos(d);
+
+    m_num_resets = 0;
+    longest_streak = 0;
+    int streak = 1;
+
     for(int i=0; i<numSteps; ++i)
     {
         double rn;
@@ -40,13 +45,19 @@ void ResetWalker::updateSteps()
             // use the remaining randomness for the next step
             Step<int> next(d, rn/resetrate);
             m_steps.emplace_back(-pos + next);
+            ++m_num_resets;
+            streak = 1;
         }
         else
         {
             // if we do not reset, use the remaining randomness for the next step
             m_steps.emplace_back(d, rn/(1-resetrate));
+            ++streak;
         }
         pos += m_steps.back();
+
+        if(streak > longest_streak)
+            longest_streak = streak;
     }
 }
 
@@ -92,4 +103,14 @@ void ResetWalker::setP1(double p1)
     updateSteps();
     updatePoints();
     updateHull();
+}
+
+int ResetWalker::num_resets() const
+{
+    return m_num_resets;
+}
+
+int ResetWalker::maxsteps_partialwalk() const
+{
+    return longest_streak;
 }

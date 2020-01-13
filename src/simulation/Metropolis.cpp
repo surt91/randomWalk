@@ -253,7 +253,9 @@ void Metropolis::run()
                     << w->argminx() << " "
                     << w->argmaxx() << " "
                     << w->minx() << " "
-                    << w->maxx() << " ";
+                    << w->maxx() << " "
+                    << w->num_resets() << " "
+                    << w->maxsteps_partialwalk() << " ";
 
                 for(auto j : o.passageTimeStarts)
                     oss << w->passage(j) << " ";

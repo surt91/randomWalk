@@ -402,23 +402,46 @@ TEST_CASE( "bounds", "[walk]" ) {
 }
 
 TEST_CASE( "misc", "[walk]" ) {
+    UniformRNG rngReal(42);
+
     SECTION( "Dimerization" ) {
-        UniformRNG rngReal(42);
         SelfAvoidingWalker w(2, 30, rngReal, CH_ANDREWS_AKL, true);
         w.generate_from_dimerization();
         REQUIRE( w.A() == 52.5 );
     }
+
     SECTION( "Run-and-tumble fixed-t" ) {
         double t = 103.4;
-        UniformRNG rngReal(42);
         RunAndTumbleWalkerT w(2, 30, rngReal, CH_ANDREWS_AKL, true);
         w.setP2(t);
         w.reconstruct();
         REQUIRE( w.length() == t );
     }
+
+    double r = 0.1;
+    SECTION( "Resetting Walk (Lattice)" ) {
+        ResetWalker w1(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        w1.setP1(r);
+        w1.reconstruct();
+        REQUIRE( w1.num_resets() == 3 );
+        REQUIRE( w1.maxsteps_partialwalk() == 13 );
+    }
+    SECTION( "Resetting Walk (Gaussian)" ) {
+        GaussResetWalker w2(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        w2.setP1(r);
+        w2.reconstruct();
+        REQUIRE( w2.num_resets() == 4 );
+        REQUIRE( w2.maxsteps_partialwalk() == 12 );
+    }
+    SECTION( "Resetting Walk (Brownian)" ) {
+        BrownianResetWalker w3(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        w3.setP1(r);
+        w3.reconstruct();
+        REQUIRE( w3.num_resets() == 4 );
+        REQUIRE( w3.maxsteps_partialwalk() == 12 );
+    }
+
     SECTION( "Closed Walk" ) {
-        double t = 103.4;
-        UniformRNG rngReal(42);
         ReturningLatticeWalker w(2, 30, rngReal, CH_ANDREWS_AKL, true);
         w.reconstruct();
         Step<int> s = Step<int>(w.d);

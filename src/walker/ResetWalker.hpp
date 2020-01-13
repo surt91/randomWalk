@@ -31,6 +31,13 @@ class ResetWalker final : public SpecWalker<int>
 
         double resetrate;
         void setP1(double beta) final;
+
+        int num_resets() const final;
+        int maxsteps_partialwalk() const final;
+
+    protected:
+        int m_num_resets;
+        int longest_streak;
 };
 
 #endif

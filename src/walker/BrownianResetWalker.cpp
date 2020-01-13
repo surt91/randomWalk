@@ -32,21 +32,34 @@ void BrownianResetWalker::updateSteps()
     Step<double> pos(d);
     Step<double> offset(d);
     const double sdt = sqrt(delta_t);
+
+    m_num_resets = 0;
+    longest_streak = 0;
+    int streak = 1;
+
     for(int i=0; i<numSteps; ++i)
     {
         if(random_numbers[i*(d+1)] < resetrate * delta_t)
         {
             offset = -pos;
+
+            ++m_num_resets;
+            streak = 1;
         }
         else
         {
             offset.setZero();
+
+            ++streak;
         }
 
         m_steps.emplace_back(genStep(random_numbers.begin() + i*(d+1) + 1));
         m_steps.back() *= sdt;
         m_steps.back() += offset;
         pos += m_steps.back();
+
+        if(streak > longest_streak)
+            longest_streak = streak;
     }
 }
 
@@ -139,4 +152,14 @@ double BrownianResetWalker::argminx() const
 double BrownianResetWalker::argmaxx() const
 {
     return SpecWalker<double>::argmaxx() * delta_t;
+}
+
+int BrownianResetWalker::num_resets() const
+{
+    return m_num_resets;
+}
+
+int BrownianResetWalker::maxsteps_partialwalk() const
+{
+    return longest_streak;
 }
