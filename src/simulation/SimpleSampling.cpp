@@ -33,27 +33,7 @@ void SimpleSampling::run()
 
         LOG(LOG_DEBUG) << "Iteration: " << i;
 
-        oss << i << " "
-            << w->L() << " "
-            << w->A() << " ";
-
-        oss << w->r() << " "
-            << w->r2() << " "
-            << w->maxDiameter() << " "
-            << w->rx() << " "
-            << w->ry() << " "
-            << w->num_on_hull() << " "
-            << w->oblateness() << " "
-            << w->visitedSites() << " "
-            << w->enclosedSites() << " "
-            << w->length() << " "
-            << w->steps_taken() << " "
-            << w->argminx() << " "
-            << w->argmaxx() << " "
-            << w->minx() << " "
-            << w->maxx() << " "
-            << w->num_resets() << " "
-            << w->maxsteps_partialwalk() << " ";
+        write_observables(w, i, oss);
 
         if(auto r = dynamic_cast<ScentWalker*>(w.get()))
             oss << r->interactions();

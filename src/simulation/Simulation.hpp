@@ -80,6 +80,8 @@ class Simulation
         void header(std::ofstream &oss);
         void footer(std::ofstream &oss);
 
+        void write_observables(std::unique_ptr<Walker> &w, int i, std::ofstream &oss);
+
     private:
         clock_t start;
 };

@@ -362,3 +362,36 @@ void Simulation::footer(std::ofstream &oss)
     }
     oss.close();
 }
+
+void Simulation::write_observables(std::unique_ptr<Walker> &w, int i, std::ofstream &oss)
+{
+    if(!oss.good())
+    {
+        LOG(LOG_ERROR) << "Path is not writable '" << o.data_path << "'";
+        //~ throw std::invalid_argument("Path is not writable");
+    }
+    else
+    {
+        oss << i << " "
+            << w->L() << " "
+            << w->A() << " ";
+
+        oss << w->r() << " "
+            << w->r2() << " "
+            << w->maxDiameter() << " "
+            << w->rx() << " "
+            << w->ry() << " "
+            << w->num_on_hull() << " "
+            << w->oblateness() << " "
+            << w->visitedSites() << " "
+            << w->enclosedSites() << " "
+            << w->length() << " "
+            << w->steps_taken() << " "
+            << w->argminx() << " "
+            << w->argmaxx() << " "
+            << w->minx() << " "
+            << w->maxx() << " "
+            << w->num_resets() << " "
+            << w->maxsteps_partialwalk() << " ";
+    }
+}

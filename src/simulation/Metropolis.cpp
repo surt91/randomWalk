@@ -226,43 +226,14 @@ void Metropolis::run()
                 LOG(LOG_TOO_MUCH) << "Volume: " << w->A();
                 LOG(LOG_DEBUG) << "Iteration: " << i;
 
-                // FIXME: this inconsistency is a relict, that should be purged
-                if(o.wantedObservable == WO_SURFACE_AREA || o.wantedObservable == WO_VOLUME)
-                {
-                    oss << i << " "
-                        << w->L() << " "
-                        << w->A() << " ";
-                }
-                else
-                {
-                    oss << i << " "
-                        << S(w) << " nan ";
-                }
-
-                oss << w->r() << " "
-                    << w->r2() << " "
-                    << w->maxDiameter() << " "
-                    << w->rx() << " "
-                    << w->ry() << " "
-                    << w->num_on_hull() << " "
-                    << w->oblateness() << " "
-                    << w->visitedSites() << " "
-                    << w->enclosedSites() << " "
-                    << w->length() << " "
-                    << w->steps_taken() << " "
-                    << w->argminx() << " "
-                    << w->argmaxx() << " "
-                    << w->minx() << " "
-                    << w->maxx() << " "
-                    << w->num_resets() << " "
-                    << w->maxsteps_partialwalk() << " ";
+                write_observables(w, i, oss);
 
                 for(auto j : o.passageTimeStarts)
                     oss << w->passage(j) << " ";
 
                 // flush after every iteration
                 oss << std::endl;
-                
+
                 // collect some statistics
                 sum_L += w->L();
                 sum_A += w->A();

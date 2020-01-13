@@ -1,7 +1,8 @@
 #include "FastWLEntropic.hpp"
 
 FastWLEntropic::FastWLEntropic(const Cmd &o)
-    : WangLandau(o)
+    : WangLandau(o),
+      oss2(o.data_path + ".corr", std::ofstream::out)
 {
 }
 
@@ -172,7 +173,14 @@ void FastWLEntropic::run()
                         w->undoChange();
                         ++fails;
                     }
+
                     H.add(S(w));
+                }
+
+                #pragma omp critical
+                {
+                    write_observables(w, j, oss2);
+                    oss2 << std::endl;
                 }
             }
 

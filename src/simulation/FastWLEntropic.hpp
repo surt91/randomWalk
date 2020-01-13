@@ -16,6 +16,9 @@ class FastWLEntropic : public WangLandau
     public:
         FastWLEntropic(const Cmd &o);
         virtual void run();
+
+    protected:
+        std::ofstream oss2;
 };
 
 #endif
