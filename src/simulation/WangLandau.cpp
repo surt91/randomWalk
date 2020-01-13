@@ -41,6 +41,7 @@ std::vector<std::vector<double>> WangLandau::generateBins(const Cmd &o)
 /// Create a starrting walk with lb < S < ub by a simple downhill strategy.
 void WangLandau::findStart(std::unique_ptr<Walker>& w, double lb, double ub, UniformRNG& rng)
 {
+    int ctr = 0;
     do
     {
         // change one random number to another random number
@@ -50,6 +51,19 @@ void WangLandau::findStart(std::unique_ptr<Walker>& w, double lb, double ub, Uni
         if((S(w) < lb && oldS > S(w)) || (S(w) > ub && oldS < S(w)))
             w->undoChange();
 
+        // if we spend to much time in the downhill, try a restart
+        // NOTE: for some problems this might need to be more sophisticated
+        //       e.g., perform WL or metropolis to find the start, or feed
+        //       a start from another simulation
+        // TODO: also we might need to change the threshold
+        if(ctr > 1e4)
+        {
+            LOG(LOG_INFO) << "spent too much time finding a start, restart the downhill";
+            ctr = 0;
+            w->reconstruct();
+        }
+
+        ++ctr;
     } while(S(w) < lb || S(w) > ub);
 }
 
