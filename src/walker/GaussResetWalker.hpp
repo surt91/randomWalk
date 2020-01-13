@@ -34,6 +34,7 @@ class GaussResetWalker final : public SpecWalker<double>
 
         int num_resets() const final;
         int maxsteps_partialwalk() const final;
+        double maxlen_partialwalk() const final;
 
     protected:
         Step<double> genStep(std::vector<double>::iterator first) const;

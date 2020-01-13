@@ -133,7 +133,7 @@ int GaussResetWalker::num_resets() const
 int GaussResetWalker::maxsteps_partialwalk() const
 {
     int longest_streak = 0;
-    int streak = 1;
+    int streak = 0;
 
     for(int i=0; i<numSteps; ++i)
     {
@@ -151,4 +151,28 @@ int GaussResetWalker::maxsteps_partialwalk() const
     }
 
     return longest_streak;
+}
+
+
+double GaussResetWalker::maxlen_partialwalk() const
+{
+    double longest_partial_walk = 0;
+    double partial_walk = 0;
+
+    for(int i=0; i<numSteps; ++i)
+    {
+        if(random_numbers[i*(d+1)] < resetrate )
+        {
+            partial_walk = m_steps[i].length();
+        }
+        else
+        {
+            partial_walk += m_steps[i].length();
+        }
+
+        if(partial_walk > longest_partial_walk)
+            longest_partial_walk = partial_walk;
+    }
+
+    return longest_partial_walk;
 }

@@ -58,6 +58,7 @@ class Walker
         virtual int steps_taken() const = 0;            ///< number of steps the walk took
         virtual int num_resets() const = 0;             ///< number of resets the walk did
         virtual int maxsteps_partialwalk() const = 0;   ///< steps of the longest (in terms of steps) partial walk
+        virtual double maxlen_partialwalk() const = 0;  ///< length of the longest (in terms of length) partial walk
         virtual int visitedSites() const = 0;           ///< number of distinct visited sites
         virtual int enclosedSites() const = 0;          ///< number of sites enclosed in the walk
         virtual int passage(int t1=0, int axis=0) const = 0; ///< first passage of x=0 after t1

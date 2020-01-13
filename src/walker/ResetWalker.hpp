@@ -34,10 +34,12 @@ class ResetWalker final : public SpecWalker<int>
 
         int num_resets() const final;
         int maxsteps_partialwalk() const final;
+        double maxlen_partialwalk() const final;
 
     protected:
         int m_num_resets;
         int m_longest_streak;
+        double m_longest_partial_walk;
 };
 
 #endif

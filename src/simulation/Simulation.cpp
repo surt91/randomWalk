@@ -392,6 +392,7 @@ void Simulation::write_observables(std::unique_ptr<Walker> &w, int i, std::ofstr
             << w->minx() << " "
             << w->maxx() << " "
             << w->num_resets() << " "
-            << w->maxsteps_partialwalk() << " ";
+            << w->maxsteps_partialwalk() << " "
+            << w->maxlen_partialwalk() << " ";
     }
 }

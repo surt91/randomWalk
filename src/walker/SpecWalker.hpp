@@ -75,6 +75,7 @@ class SpecWalker : public Walker
         int steps_taken() const final;
         virtual int num_resets() const override;
         virtual int maxsteps_partialwalk() const override;
+        virtual double maxlen_partialwalk() const override;
         int visitedSites() const final;
         int enclosedSites() const final;
         int passage(int t1=0, int axis=0) const final;
@@ -568,6 +569,12 @@ template <class T>
 int SpecWalker<T>::maxsteps_partialwalk() const
 {
     return steps_taken();
+}
+
+template <class T>
+double SpecWalker<T>::maxlen_partialwalk() const
+{
+    return length();
 }
 
 template <>

@@ -75,6 +75,7 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.enclosedSites() == 22);
         REQUIRE(w.num_resets() == 0);
         REQUIRE(w.maxsteps_partialwalk() == o.steps);
+        REQUIRE(w.maxlen_partialwalk() == Approx(o.steps));
     }
     SECTION( "Multi" ) {
         o.d = 2;
@@ -95,6 +96,7 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.enclosedSites() == 0); // not implemented
         REQUIRE(w.num_resets() == 0); // not implemented
         REQUIRE(w.maxsteps_partialwalk() == 0); // not implemented
+        REQUIRE(w.maxlen_partialwalk() == 0); // not implemented
     }
     SECTION( "off-lattice" ) {
         o.d = 2;
@@ -123,5 +125,6 @@ TEST_CASE( "observables", "[walk]" ) {
         REQUIRE(w.enclosedSites() == -1); // not implemented
         REQUIRE(w.num_resets() == 0);
         REQUIRE(w.maxsteps_partialwalk() == o.steps);
+        REQUIRE(w.maxlen_partialwalk() == Approx(40.3715617656));
     }
 }

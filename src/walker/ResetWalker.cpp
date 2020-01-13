@@ -28,7 +28,9 @@ void ResetWalker::updateSteps()
 
     m_num_resets = 0;
     m_longest_streak = 0;
-    int streak = 1;
+    int streak = 0;
+    m_longest_partial_walk = 0;
+    double partial_walk = 0;
 
     for(int i=0; i<numSteps; ++i)
     {
@@ -47,17 +49,21 @@ void ResetWalker::updateSteps()
             m_steps.emplace_back(-pos + next);
             ++m_num_resets;
             streak = 1;
+            partial_walk = m_steps.back().length();
         }
         else
         {
             // if we do not reset, use the remaining randomness for the next step
             m_steps.emplace_back(d, rn/(1-resetrate));
             ++streak;
+            partial_walk += m_steps.back().length();
         }
         pos += m_steps.back();
 
         if(streak > m_longest_streak)
             m_longest_streak = streak;
+        if(partial_walk > m_longest_partial_walk)
+            m_longest_partial_walk = partial_walk;
     }
 }
 
@@ -125,7 +131,7 @@ int ResetWalker::maxsteps_partialwalk() const
         return m_longest_streak;
 
     int longest_streak = 0;
-    int streak = 1;
+    int streak = 0;
 
     for(int i=0; i<numSteps; ++i)
     {
@@ -143,4 +149,30 @@ int ResetWalker::maxsteps_partialwalk() const
     }
 
     return longest_streak;
+}
+
+double ResetWalker::maxlen_partialwalk() const
+{
+    if(amnesia)
+        return m_longest_partial_walk;
+
+    double longest_partial_walk = 0;
+    int partial_walk = 0;
+
+    for(int i=0; i<numSteps; ++i)
+    {
+        if(random_numbers[i] < resetrate )
+        {
+            partial_walk = m_steps[i].length();
+        }
+        else
+        {
+            partial_walk += m_steps[i].length();
+        }
+
+        if(partial_walk > longest_partial_walk)
+            longest_partial_walk = partial_walk;
+    }
+
+    return longest_partial_walk;
 }

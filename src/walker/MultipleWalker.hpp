@@ -66,6 +66,7 @@ class MultipleWalker : public Walker
         int steps_taken() const final;
         int num_resets() const final;
         int maxsteps_partialwalk() const final;
+        double maxlen_partialwalk() const final;
         int visitedSites() const final;
         int enclosedSites() const final;
         int passage(int t1=0, int axis=0) const final;
@@ -249,6 +250,8 @@ template <class T>
 int MultipleWalker<T>::num_resets() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 int MultipleWalker<T>::maxsteps_partialwalk() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
+template <class T>
+double MultipleWalker<T>::maxlen_partialwalk() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>
 int MultipleWalker<T>::visitedSites() const { LOG(LOG_WARNING) << "not yet implemented"; return 0; }
 template <class T>

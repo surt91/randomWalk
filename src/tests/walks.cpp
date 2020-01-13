@@ -420,25 +420,28 @@ TEST_CASE( "misc", "[walk]" ) {
 
     double r = 0.1;
     SECTION( "Resetting Walk (Lattice)" ) {
-        ResetWalker w1(2, 30, rngReal, CH_ANDREWS_AKL, true);
-        w1.setP1(r);
-        w1.reconstruct();
-        REQUIRE( w1.num_resets() == 3 );
-        REQUIRE( w1.maxsteps_partialwalk() == 13 );
+        ResetWalker w(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        w.setP1(r);
+        w.reconstruct();
+        REQUIRE( w.num_resets() == 3 );
+        REQUIRE( w.maxsteps_partialwalk() == 13 );
+        REQUIRE( w.maxlen_partialwalk() == Approx(13.4142135624) );
     }
     SECTION( "Resetting Walk (Gaussian)" ) {
-        GaussResetWalker w2(2, 30, rngReal, CH_ANDREWS_AKL, true);
-        w2.setP1(r);
-        w2.reconstruct();
-        REQUIRE( w2.num_resets() == 4 );
-        REQUIRE( w2.maxsteps_partialwalk() == 12 );
+        GaussResetWalker w(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        w.setP1(r);
+        w.reconstruct();
+        REQUIRE( w.num_resets() == 4 );
+        REQUIRE( w.maxsteps_partialwalk() == 12 );
+        REQUIRE( w.maxlen_partialwalk() == Approx(20.7990736912) );
     }
     SECTION( "Resetting Walk (Brownian)" ) {
-        BrownianResetWalker w3(2, 30, rngReal, CH_ANDREWS_AKL, true);
-        w3.setP1(r);
-        w3.reconstruct();
-        REQUIRE( w3.num_resets() == 4 );
-        REQUIRE( w3.maxsteps_partialwalk() == 12 );
+        BrownianResetWalker w(2, 30, rngReal, CH_ANDREWS_AKL, true);
+        w.setP1(r);
+        w.reconstruct();
+        REQUIRE( w.num_resets() == 4 );
+        REQUIRE( w.maxsteps_partialwalk() == 12 );
+        REQUIRE( w.maxlen_partialwalk() == Approx(20.7990736912) );
     }
 
     SECTION( "Closed Walk" ) {
