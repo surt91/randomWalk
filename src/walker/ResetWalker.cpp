@@ -27,7 +27,7 @@ void ResetWalker::updateSteps()
     Step<int> pos(d);
 
     m_num_resets = 0;
-    longest_streak = 0;
+    m_longest_streak = 0;
     int streak = 1;
 
     for(int i=0; i<numSteps; ++i)
@@ -56,8 +56,8 @@ void ResetWalker::updateSteps()
         }
         pos += m_steps.back();
 
-        if(streak > longest_streak)
-            longest_streak = streak;
+        if(streak > m_longest_streak)
+            m_longest_streak = streak;
     }
 }
 
@@ -107,10 +107,40 @@ void ResetWalker::setP1(double p1)
 
 int ResetWalker::num_resets() const
 {
-    return m_num_resets;
+    if(amnesia)
+        return m_num_resets;
+
+    int num_resets = 0;
+
+    for(int i=0; i<numSteps; ++i)
+        if(random_numbers[i] < resetrate)
+            ++num_resets;
+
+    return num_resets;
 }
 
 int ResetWalker::maxsteps_partialwalk() const
 {
+    if(amnesia)
+        return m_longest_streak;
+
+    int longest_streak = 0;
+    int streak = 1;
+
+    for(int i=0; i<numSteps; ++i)
+    {
+        if(random_numbers[i] < resetrate )
+        {
+            streak = 1;
+        }
+        else
+        {
+            ++streak;
+        }
+
+        if(streak > longest_streak)
+            longest_streak = streak;
+    }
+
     return longest_streak;
 }

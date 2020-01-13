@@ -39,9 +39,6 @@ class GaussResetWalker final : public SpecWalker<double>
         Step<double> genStep(std::vector<double>::iterator first) const;
 
         std::vector<double> undo_values;
-
-        int m_num_resets;
-        int longest_streak;
 };
 
 #endif

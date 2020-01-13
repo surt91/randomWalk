@@ -46,9 +46,6 @@ class BrownianResetWalker final : public SpecWalker<double>
         std::vector<double> undo_values;
 
         double delta_t;
-
-        int m_num_resets;
-        int longest_streak;
 };
 
 #endif

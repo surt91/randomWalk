@@ -37,7 +37,7 @@ class ResetWalker final : public SpecWalker<int>
 
     protected:
         int m_num_resets;
-        int longest_streak;
+        int m_longest_streak;
 };
 
 #endif
