@@ -189,6 +189,25 @@ TEST_CASE( "walk types", "[walk]" ) {
             // FIXME: the second value should be larger than the first!
             DO(14.97, 6.095)
         }
+        SECTION( "1D random" ) {
+            o.d = 1;
+            o.chAlg = CH_1D;
+            o.width = 30;
+            o.gp_path = "";
+            o.svg_path = "";
+            o.agent_start = AS_RANDOM;
+            DO(5.13, 5.64)
+        }
+        SECTION( "1D no scent" ) {
+            o.d = 1;
+            o.chAlg = CH_1D;
+            o.width = 30;
+            o.gp_path = "";
+            o.svg_path = "";
+            o.agent_start = AS_RANDOM;
+            o.tas = 1;
+            DO(15.34, 18.02)
+        }
     }
     SECTION( "'True' Self-Avoiding" ) {
         o.type = WT_TRUE_SELF_AVOIDING_WALK;

@@ -101,6 +101,8 @@ void ConvexHull<T>::run(std::vector<Step<T>> *points)
     {
         case CH_NOP:
             break;
+        case CH_1D:
+            break;
         case CH_QHULL_AKL:
             preprocessAklToussaintQHull();
             // fall through
@@ -164,6 +166,20 @@ double ConvexHull<T>::A() const
 {
     if(algorithm == CH_NOP)
         return 0;
+    if(algorithm == CH_1D)
+    {
+        std::vector<Step<T>>& p = *interiorPoints;
+        double min = p[0].x(), max = p[0].x();
+        for(int i=0; i<n; ++i)
+        {
+                if(p[i].x() < min)
+                    min = p[i].x();
+                if(p[i].x() > max)
+                    max = p[i].x();
+        }
+        return max - min;
+    }
+
     if(m_A < 0)
     {
         if(d != 2)
@@ -189,6 +205,9 @@ double ConvexHull<T>::L() const
 {
     if(algorithm == CH_NOP)
         return 0;
+    if(algorithm == CH_1D)
+        return 2;
+
     if(m_L < 0)
     {
         if(d != 2)
@@ -227,7 +246,7 @@ int ConvexHull<T>::num_vertices() const
 template <class T>
 const std::vector<Step<T>>& ConvexHull<T>::hullPoints() const
 {
-    if(algorithm == CH_NOP)
+    if(algorithm == CH_NOP || algorithm == CH_1D)
         return hullPoints_;
     if(hullPoints_.empty())
         updateHullPoints();

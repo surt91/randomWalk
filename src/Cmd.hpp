@@ -27,7 +27,8 @@ enum hull_algorithm_t {
     CH_JARVIS,      ///< use Jarvis' march (gift wrapping)
     CH_JARVIS_AKL,  ///< use Jarvis' march (gift wrapping) with Akl's heuristic
     CH_CHAN,        ///< [not implemented]
-    CH_CHAN_AKL     ///< [not implemented]
+    CH_CHAN_AKL,    ///< [not implemented]
+    CH_1D           ///< boring case of 1 dimensional hull
 };
 
 const std::vector<std::string> CH_LABEL = {
@@ -41,7 +42,8 @@ const std::vector<std::string> CH_LABEL = {
     "Jarvis",
     "Jarvis + Akl",
     "Chan",
-    "Chan + Akl"
+    "Chan + Akl",
+    "one dimensional"
 };
 
 enum walk_type_t {

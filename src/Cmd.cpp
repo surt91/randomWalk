@@ -385,6 +385,8 @@ Cmd::Cmd(int argc, char** argv)
         if(aklHeuristic && tmp > 0)
             tmp++;
         chAlg = (hull_algorithm_t) tmp;
+        if(d==1)
+            chAlg = CH_1D;
         LOG(LOG_INFO) << "Convex Hull Algorithm      " << CH_LABEL[chAlg];
 
         seedRealization = seedRArg.getValue();

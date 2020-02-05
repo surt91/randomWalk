@@ -127,9 +127,15 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
     {
         // If an image is requested, save information needed for visualisation
         bool visualize = !o.gp_path.empty() || !o.svg_path.empty();
-        w = std::unique_ptr<Walker>(
-            new ScentWalker(o.d, o.steps, o.numWalker, o.width, o.tas, o.agent_start, rngReal, o.chAlg, amnesia, visualize)
-        );
+        if(o.d == 1) {
+            w = std::unique_ptr<Walker>(
+                new ScentWalker1D(o.d, o.steps, o.numWalker, o.width, o.tas, o.agent_start, rngReal, o.chAlg, amnesia, visualize)
+            );
+        } else {
+            w = std::unique_ptr<Walker>(
+                new ScentWalker(o.d, o.steps, o.numWalker, o.width, o.tas, o.agent_start, rngReal, o.chAlg, amnesia, visualize)
+            );
+        }
     }
     else if(o.type == WT_TRUE_SELF_AVOIDING_WALK)
     {
@@ -375,24 +381,27 @@ void Simulation::write_observables(std::unique_ptr<Walker> &w, int i, std::ofstr
         oss << i << " "
             << w->L() << " "
             << w->A() << " ";
-
-        oss << w->r() << " "
-            << w->r2() << " "
-            << w->maxDiameter() << " "
-            << w->rx() << " "
-            << w->ry() << " "
-            << w->num_on_hull() << " "
-            << w->oblateness() << " "
-            << w->visitedSites() << " "
-            << w->enclosedSites() << " "
-            << w->length() << " "
-            << w->steps_taken() << " "
-            << w->argminx() << " "
-            << w->argmaxx() << " "
-            << w->minx() << " "
-            << w->maxx() << " "
-            << w->num_resets() << " "
-            << w->maxsteps_partialwalk() << " "
-            << w->maxlen_partialwalk() << " ";
+            
+        if(w->d > 1)
+        {
+            oss << w->r() << " "
+                << w->r2() << " "
+                << w->maxDiameter() << " "
+                << w->rx() << " "
+                << w->ry() << " "
+                << w->num_on_hull() << " "
+                << w->oblateness() << " "
+                << w->visitedSites() << " "
+                << w->enclosedSites() << " "
+                << w->length() << " "
+                << w->steps_taken() << " "
+                << w->argminx() << " "
+                << w->argmaxx() << " "
+                << w->minx() << " "
+                << w->maxx() << " "
+                << w->num_resets() << " "
+                << w->maxsteps_partialwalk() << " "
+                << w->maxlen_partialwalk() << " ";
+        }
     }
 }
