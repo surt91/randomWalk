@@ -65,11 +65,17 @@ void BrownianResetWalker::change(UniformRNG &rng, bool update)
     undo_values = std::vector<double>(random_numbers.begin() + rnidx,
                                       random_numbers.begin() + rnidx + (d+1));
 
-    // the reset rn needs to be distributed uniformly
-    random_numbers[rnidx] = rng();
-    // the displacement rn are distributed normally
-    for(int i=1; i<d+1; ++i)
-        random_numbers[rnidx+i] = rng.gaussian();
+    if(rng() > 0.5)
+    {
+        // the reset rn needs to be distributed uniformly
+        random_numbers[rnidx] = rng();
+    }
+    else
+    {
+        // the displacement rn are distributed normally
+        for(int i=1; i<d+1; ++i)
+            random_numbers[rnidx+i] = rng.gaussian();
+    }
 
     m_steps[idx] = genStep(random_numbers.begin() + rnidx + 1);
     m_steps[idx] *= sqrt(delta_t);
