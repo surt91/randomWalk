@@ -193,7 +193,7 @@ class Cmd
               onlyPTTemperatures(false),
               text()
             {}
-        Cmd(int argc, char** argv);
+        Cmd(int argc, const char** argv);
 
         std::string tmp_path;                       ///< path to store temporary files
         std::string data_path;                      ///< full path of output file

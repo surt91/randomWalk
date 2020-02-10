@@ -13,7 +13,7 @@
 
 /** Constructs the command line parser, given argc and argv.
  */
-Cmd::Cmd(int argc, char** argv)
+Cmd::Cmd(int argc, const char** argv)
     : Cmd() // delegating constructor for default values
 {
     for(int i=0; i<argc; ++i)
