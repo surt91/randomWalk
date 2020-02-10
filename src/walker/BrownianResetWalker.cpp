@@ -95,7 +95,7 @@ void BrownianResetWalker::undoChange()
     for(const auto i : undo_values)
         random_numbers[undo_index*(d+1) + t++] = i;
 
-    m_steps[undo_index] = genStep(undo_values.begin());
+    m_steps[undo_index] = genStep(undo_values.begin() + 1);
     m_steps[undo_index] *= sqrt(delta_t);
     updatePoints(undo_index+1);
     m_convex_hull = m_old_convex_hull;

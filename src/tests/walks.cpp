@@ -353,23 +353,23 @@ TEST_CASE( "walk types", "[walk]" ) {
         // steps == total time is identical to gaussian resetting
         SECTION( "2D" ) {
             o.d = 2;
-            DO(26.515668687, 62.9871258023)
+            DO(26.515668687, 236.1484821327)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            DO(65.8120971397, 384.9845397304)
+            DO(65.8120971397, 2635.2839025648)
         }
         // a high number of steps will approximate Brownian motion
         o.steps = 300;
         SECTION( "2D" ) {
             o.d = 2;
-            DO(33.6665845282, 69.1591873613)
+            DO(33.6665845282, 202.367627747)
         }
         SECTION( "3D" ) {
             o.d = 3;
             o.chAlg = CH_QHULL;
-            DO(117.4722305731, 786.9590268349)
+            DO(117.4722305731, 2081.6400864919)
         }
     }
     SECTION( "Multi" ) {
