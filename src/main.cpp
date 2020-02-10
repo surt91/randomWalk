@@ -22,7 +22,7 @@
  * Program to gather the distrbution of different kinds of random walks
  * by different sampling techniques.
  */
-int main(int argc, char** argv)
+int main(int argc, const char** argv)
 {
     Cmd o(argc, argv);
 
