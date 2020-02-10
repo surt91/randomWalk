@@ -11,6 +11,12 @@ TEST_CASE("Step is tested", "[step]" ) {
         REQUIRE( a.length2() == 25 );
     }
 
+    SECTION( "invert" ) {
+        Step<int> a({3, 4, 0});
+
+        REQUIRE( -a == Step<int>({-3, -4, 0}) );
+    }
+
     SECTION( "turns" ) {
         Step<int> b({1, 0});
         REQUIRE( b.d() == 2 );
