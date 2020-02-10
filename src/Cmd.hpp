@@ -64,6 +64,7 @@ enum walk_type_t {
     WT_RETURNING_LATTICE_WALK,      ///< Lattice random walk returning to origin
     WT_GAUSSIAN_RESET_WALK,         ///< resetting gaussian random walk
     WT_BROWNIAN_RESET_WALK,         ///< resetting Brownian motion
+    WT_BROWNIAN_RESET_WALK_SHIFTED, ///< resetting Brownian motion with shift
 };
 
 const std::vector<std::string> TYPE_LABEL = {
@@ -85,6 +86,7 @@ const std::vector<std::string> TYPE_LABEL = {
     "Returning Lattice Random Walk",
     "Gaussian Resetting Random Walk",
     "Resetting Brownian motion",
+    "Resetting Brownian motion with shift",
 };
 
 enum wanted_observable_t {
@@ -176,6 +178,7 @@ class Cmd
               sigma(1.0),
               beta(0.0),
               resetrate(0.0),
+              shift(0.0),
               gamma(1.0),
               total_length(10.5),
               width(10),
@@ -230,6 +233,7 @@ class Cmd
         double beta;                ///< avoidance parameter, step on visited sites with exp(-beta N) (only true self-avoiding walk)
 
         double resetrate;           ///< reset rate (only resetting random walk)
+        double shift;               ///< shift before reset possible (only resetting random walk with shift)
 
         double gamma;               ///< direction change probability (only run-and-tumble walk)
         double total_length;        ///< total length of the walk (only run-and-tumble walk, fixed t)

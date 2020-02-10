@@ -218,6 +218,18 @@ void Simulation::prepare(std::unique_ptr<Walker>& w, const Cmd &o)
         w->setP1(o.resetrate);
         w->setP2(o.total_length);
     }
+    else if(o.type == WT_BROWNIAN_RESET_WALK_SHIFTED)
+    {
+        if(o.numWalker == 1)
+            w = std::unique_ptr<Walker>(new BrownianResetWalkerShifted(o.d, o.steps, rngReal, o.chAlg, amnesia));
+        else
+            w = std::unique_ptr<Walker>(
+                new MultipleWalker<BrownianResetWalkerShifted>(o.d, o.steps, o.numWalker, rngReal, o.chAlg, amnesia)
+            );
+        w->setP1(o.resetrate);
+        w->setP2(o.total_length);
+        w->setP3(o.shift);
+    }
     else
     {
         LOG(LOG_ERROR) << "type " << o.type << " is not known";
@@ -381,7 +393,7 @@ void Simulation::write_observables(std::unique_ptr<Walker> &w, int i, std::ofstr
         oss << i << " "
             << w->L() << " "
             << w->A() << " ";
-            
+
         if(w->d > 1)
         {
             oss << w->r() << " "

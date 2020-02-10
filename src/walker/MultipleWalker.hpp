@@ -47,6 +47,7 @@ class MultipleWalker : public Walker
 
         virtual void setP1(double p1);
         virtual void setP2(double p2);
+        virtual void setP3(double p3);
 
         // convenience functions
         double A() const final;
@@ -157,6 +158,13 @@ void MultipleWalker<T>::setP2(double p2)
 {
     for(auto &w : m_walker)
         w.setP2(p2);
+}
+
+template <class T>
+void MultipleWalker<T>::setP3(double p3)
+{
+    for(auto &w : m_walker)
+        w.setP3(p3);
 }
 
 template <class T>

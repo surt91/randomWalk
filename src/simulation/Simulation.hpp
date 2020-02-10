@@ -39,6 +39,7 @@
 #include "../walker/ReturningLatticeWalker.hpp"
 #include "../walker/GaussResetWalker.hpp"
 #include "../walker/BrownianResetWalker.hpp"
+#include "../walker/BrownianResetWalkerShifted.hpp"
 #include "../RNG.hpp"
 #include "../io.hpp"
 

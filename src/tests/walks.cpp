@@ -372,6 +372,34 @@ TEST_CASE( "walk types", "[walk]" ) {
             DO(117.4722305731, 2081.6400864919)
         }
     }
+    SECTION( "Resetting Brownian motion with shift" ) {
+        o.type = WT_BROWNIAN_RESET_WALK_SHIFTED;
+        o.resetrate = 0.2;
+        o.total_length = 30;
+        o.shift = 10;
+        // steps == total time is identical to gaussian resetting
+        SECTION( "2D" ) {
+            o.d = 2;
+            DO(28.3310194695, 197.7540974922)
+        }
+        SECTION( "3D" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            DO(72.7071591746, 2363.6364635421)
+        }
+        // a high number of steps will approximate Brownian motion
+        o.steps = 300;
+        o.shift = 50;
+        SECTION( "2D" ) {
+            o.d = 2;
+            DO(38.547358699, 196.1653728208)
+        }
+        SECTION( "3D" ) {
+            o.d = 3;
+            o.chAlg = CH_QHULL;
+            DO(135.3498922052, 8065.7474809626)
+        }
+    }
     SECTION( "Multi" ) {
         o.type = WT_RANDOM_WALK;
         o.numWalker = 3;

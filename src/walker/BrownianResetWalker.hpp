@@ -17,14 +17,14 @@
  *
  * \image html BRRW.svg "example of a Brownian motion with resetting, \f$r = 0.1, T = 100, N = 10000\f$"
  */
-class BrownianResetWalker final : public SpecWalker<double>
+class BrownianResetWalker : public SpecWalker<double>
 {
     public:
         BrownianResetWalker(int d, int numSteps, const UniformRNG &rng, hull_algorithm_t hull_algo, bool amnesia=false);
 
         void reconstruct() final;
 
-        void updateSteps() final;
+        void updateSteps() override;
 
         void change(UniformRNG &rng, bool update=true) final;
         void undoChange() final;

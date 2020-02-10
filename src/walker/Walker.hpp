@@ -39,6 +39,7 @@ class Walker
 
         virtual void setP1(double /*p1*/) { LOG(LOG_WARNING) << "P1 not used for this type of random walk"; }
         virtual void setP2(double /*p2*/) { LOG(LOG_WARNING) << "P2 not used for this type of random walk"; }
+        virtual void setP3(double /*p3*/) { LOG(LOG_WARNING) << "P3 not used for this type of random walk"; }
 
         // convenience functions
         virtual double A() const = 0;   ///< Returns the Volume of the convex hull
