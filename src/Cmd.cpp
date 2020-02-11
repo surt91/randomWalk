@@ -333,7 +333,7 @@ Cmd::Cmd(int argc, const char** argv)
         shift = shiftArg.getValue();
         if(shift != 0.0)
         {
-            LOG(LOG_INFO) << "shift                  " << shift;
+            LOG(LOG_INFO) << "shift                      " << shift;
         }
 
         gamma = gammaArg.getValue();
