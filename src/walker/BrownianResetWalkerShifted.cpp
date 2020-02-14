@@ -19,12 +19,15 @@ void BrownianResetWalkerShifted::updateSteps()
     Step<double> pos(d);
     Step<double> offset(d);
     const double sdt = sqrt(delta_t);
+    double segment_time = 0.;
 
     for(int i=0; i<numSteps; ++i)
     {
-        if(random_numbers[i*(d+1)] < resetrate * delta_t && length() > shift)
+        segment_time += delta_t;
+        if(random_numbers[i*(d+1)] < resetrate * delta_t && segment_time > shift)
         {
             offset = -pos;
+            segment_time = 0.;
         }
         else
         {
