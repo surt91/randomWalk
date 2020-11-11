@@ -33,11 +33,14 @@ void BrownianResetWalker::updateSteps()
     Step<double> offset(d);
     const double sdt = sqrt(delta_t);
 
+    reset_times.clear();
+
     for(int i=0; i<numSteps; ++i)
     {
         if(random_numbers[i*(d+1)] < resetrate * delta_t)
         {
             offset = -pos;
+            reset_times.push_back(i);
         }
         else
         {
@@ -204,4 +207,78 @@ double BrownianResetWalker::maxlen_partialwalk() const
     }
 
     return longest_partial_walk;
+}
+
+void BrownianResetWalker::svg(const std::string filename, const bool with_hull) const
+{
+    SVG pic(filename);
+    const std::vector<Step<double>> p = points();
+    std::vector<std::vector<double>> points;
+    int min_x=0, max_x=0, min_y=0, max_y=0;
+    size_t n = 0, m = 0;
+    for(auto i : p)
+    {
+        double x1 = i[0], y1 = i[1];
+        std::vector<double> point {(double) x1, (double) y1};
+
+        points.push_back(point);
+
+        if(m < reset_times.size() && reset_times[m] == n)
+        {
+            pic.polyline(points, false, std::string(COLOR[m % COLOR.size()]));
+
+            points.clear();
+            points.push_back({0., 0.});
+            ++m;
+        }
+        ++n;
+
+        if(x1 < min_x)
+            min_x = x1;
+        if(x1 > max_x)
+            max_x = x1;
+        if(y1 < min_y)
+            min_y = y1;
+        if(y1 > max_y)
+            max_y = y1;
+    }
+    pic.polyline(points, false, COLOR[m % COLOR.size()]);
+
+    n = 0;
+    m = 0;
+    points.clear();
+    for(auto i : p)
+    {
+        double x1 = i[0], y1 = i[1];
+        std::vector<double> point {(double) x1, (double) y1};
+        points.push_back(point);
+
+        if(m < reset_times.size() && reset_times[m] == n)
+        {
+            std::vector<std::vector<double>> points2;
+            points2.push_back({(double) x1, (double) y1});
+            points2.push_back({0., 0.});
+            pic.polyline(points2, false, std::string("black"), true, true);
+            pic.polyline(points2, false, std::string(COLOR[m % COLOR.size()]), true);
+            ++m;
+        }
+        ++n;
+    }
+
+    if(d > 2)
+        pic.text(min_x, max_y-20, "projected from d=" + std::to_string(d), "red");
+
+    points.clear();
+    if(with_hull)
+    {
+        const std::vector<Step<double>> h = hullPoints();
+        for(auto &i : h)
+        {
+            std::vector<double> point {(double) i[0], (double) i[1]};
+            points.push_back(point);
+        }
+        pic.polyline(points, true, std::string("black"));
+    }
+    pic.setGeometry(min_x -1, min_y - 1, max_x + 1, max_y + 1);
+    pic.save();
 }

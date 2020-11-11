@@ -68,7 +68,7 @@ void SVG::line(const double x1, const double x2, const double y1, const double y
            << "' stroke-width='" << stroke*scale << "'/>\n";
 }
 
-void SVG::polyline(const std::vector<std::vector<double>> points, const bool closed, const std::string color)
+void SVG::polyline(const std::vector<std::vector<double>> points, const bool closed, const std::string color, bool dashed, bool border)
 {
     if(closed)
         buffer << "<polygon ";
@@ -78,7 +78,19 @@ void SVG::polyline(const std::vector<std::vector<double>> points, const bool clo
     buffer << "fill='none' points='";
     for(const auto i : points)
         buffer << i[0] << "," << i[1] << " ";
-    buffer << "' stroke='" << color << "' stroke-width='" << stroke*scale << "' />\n";
+    buffer << "' stroke='" << color << "' ";
+    double b = 1.0;
+    if(border)
+    {
+        b = 2;
+    }
+    buffer << "stroke-linecap='square' ";
+    buffer << "stroke-width='" << stroke*scale*b << "' ";
+    if(dashed)
+    {
+        buffer << "stroke-dasharray='0.5,0.5' ";
+    }
+    buffer << "/>\n";
 }
 
 void SVG::text(const double x, const double y, const std::string &t, const std::string color)

@@ -41,10 +41,14 @@ class BrownianResetWalker : public SpecWalker<double>
         int maxsteps_partialwalk() const final;
         double maxlen_partialwalk() const final;
 
+        void svg(const std::string filename, const bool with_hull) const final;
+
     protected:
         Step<double> genStep(std::vector<double>::iterator first) const;
 
         std::vector<double> undo_values;
+
+        std::vector<size_t> reset_times;
 
         double delta_t;
 };
