@@ -178,16 +178,16 @@ TEST_CASE( "walk types", "[walk]" ) {
         }
         SECTION( "2D circle" ) {
             o.agent_start = AS_CIRCLE;
-            DO(17.755, 27.17)
+            DO(17.755, 26.525)
         }
         SECTION( "2D triangular lattice" ) {
             o.agent_start = AS_TRIANGULAR;
-            DO(14.525, 18.56)
+            DO(14.48, 18.56)
         }
         SECTION( "2D relaxed" ) {
             o.agent_start = AS_RELAXED;
             // FIXME: the second value should be larger than the first!
-            DO(14.97, 6.095)
+            DO(15.145, 6.095)
         }
         SECTION( "1D random" ) {
             o.d = 1;

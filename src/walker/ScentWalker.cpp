@@ -6,7 +6,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       sideLength(sideLength_in),
       Tas(Tas_in),
       relax(start_configuration_in == AS_RELAXED ? Tas_in : 0),
-      periodic(true),
+      periodic(d == 1),
       start_configuration(start_configuration_in),
       save_histograms(save_histograms_in)
 {
