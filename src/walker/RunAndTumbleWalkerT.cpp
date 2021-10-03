@@ -97,7 +97,7 @@ void RunAndTumbleWalkerT::change(UniformRNG &rng, bool update)
 {
     // We need d random numbers per step to determine the d directions
     steps(); // steps need to be initialized
-    int idx = rng() * numSteps;
+    int idx = rng() * random_tumble.size();
     int rnidx = idx * d;
     undo_index = idx;
     undo_values = std::vector<double>(

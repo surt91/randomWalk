@@ -301,24 +301,24 @@ TEST_CASE( "walk types", "[walk]" ) {
         SECTION( "2D, gamma = 1" ) {
             o.d = 2;
             o.gamma = 1.0;
-            DO(26.7436202353, 55.8622655703)
+            DO(26.7436202353, 55.1539760809)
         }
         SECTION( "2D, gamma = 0.5" ) {
             o.d = 2;
             o.gamma = 0.5;
-            DO(44.9899649586, 88.4146502402)
+            DO(44.9899649586, 96.7697869833)
         }
         SECTION( "3D, gamma = 1" ) {
             o.d = 3;
             o.gamma = 1.0;
             o.chAlg = CH_QHULL;
-            DO(33.7755411132, 78.0667975388)
+            DO(33.7755411132, 80.3887613502)
         }
         SECTION( "3D, gamma = 0.5" ) {
             o.d = 3;
             o.gamma = 0.5;
             o.chAlg = CH_QHULL;
-            DO(54.3861179925, 166.7646193637)
+            DO(54.3861179925, 163.407527559)
         }
     }
     SECTION( "Returning RW" ) {
