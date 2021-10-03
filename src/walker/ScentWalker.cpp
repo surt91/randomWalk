@@ -6,7 +6,7 @@ ScentWalker::ScentWalker(int d, int numSteps, int numWalker_in, int sideLength_i
       sideLength(sideLength_in),
       Tas(Tas_in),
       relax(start_configuration_in == AS_RELAXED ? Tas_in : 0),
-      periodic(false),
+      periodic(true),
       start_configuration(start_configuration_in),
       save_histograms(save_histograms_in)
 {
@@ -223,8 +223,9 @@ void ScentWalker::moveWalker(int j, int i, Field &trail, bool forced_amnesia)
         }
 
         std::vector<Step<int>> candidates;
-        for(const auto &k : pos[j].neighbors())
+        for(auto &k : pos[j].neighbors())
         {
+            k.periodic(sideLength);
             // retreat only on own scent to not trap yourself behind a bridge
             if(trail[k].size() == 1 && trail[k].find(j) != trail[k].end())
                 candidates.push_back(k);
@@ -234,9 +235,12 @@ void ScentWalker::moveWalker(int j, int i, Field &trail, bool forced_amnesia)
         {
             // if we can not find a site without adversary scent, retreat on
             // any site which also has own scent
-            for(const auto &k : pos[j].neighbors())
+            for(auto &k : pos[j].neighbors())
+            {
+                k.periodic(sideLength);
                 if(trail[k].find(j) != trail[k].end())
                     candidates.push_back(k);
+            }
         }
 
         if(candidates.size() == 0)
@@ -274,18 +278,25 @@ void ScentWalker::moveWalker(int j, int i, Field &trail, bool forced_amnesia)
 
     // FIXME: this should be hidden
     // boundary
-    for(int k=0; k<pos[j].d(); ++k)
+    if(!periodic)
     {
-        if(pos[j][k] >= sideLength)
+        for(int k=0; k<pos[j].d(); ++k)
         {
-            pos[j][k] = sideLength - 2;
-            step[j].invert();
+            if(pos[j][k] >= sideLength)
+            {
+                pos[j][k] = sideLength - 2;
+                step[j].invert();
+            }
+            else if(pos[j][k] < 0)
+            {
+                pos[j][k] = 1;
+                step[j].invert();
+            }
         }
-        else if(pos[j][k] < 0)
-        {
-            pos[j][k] = 1;
-            step[j].invert();
-        }
+    }
+    else
+    {
+        pos[j].periodic(sideLength);
     }
 }
 
