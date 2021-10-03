@@ -1,15 +1,15 @@
 [submodule "src/qhull"]
 	path = src/qhull
-	url = git@github.com:surt91/qhull.git
+	url = https://github.com/surt91/qhull.git
 [submodule "src/tclap"]
 	path = src/tclap
-	url = git@github.com:mirror/tclap.git
+	url = https://github.com/mirror/tclap.git
 [submodule "src/Catch"]
 	path = src/Catch
-	url = git@github.com:surt91/Catch.git
+	url = https://github.com/surt91/Catch.git
 [submodule "src/benchmark"]
 	path = src/benchmark
-	url = git@github.com:surt91/benchmark.git
+	url = https://github.com/surt91/benchmark.git
 [submodule "glue++"]
 	path = glue++
-	url = git@github.com:surt91/glue-.git
+	url = https://github.com/surt91/glue-.git
