@@ -76,7 +76,7 @@ void SVG::polyline(const std::vector<std::vector<double>> points, const bool clo
         buffer << "<polyline ";
 
     buffer << "fill='none' points='";
-    for(const auto i : points)
+    for(const auto &i : points)
         buffer << i[0] << "," << i[1] << " ";
     buffer << "' stroke='" << color << "' ";
     double b = 1.0;
