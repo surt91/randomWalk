@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classSimulation.html" title="Abstract Base Class, derive classes that sample random walks. " alt="" coords="5,81,88,108"/>
+<area shape="rect" id="node2" href="$classMetropolis.html" title="Standard Metropolis Monte Carlo sampling. " alt="" coords="188,5,271,32"/>
+<area shape="rect" id="node3" href="$classMetropolisParallelTempering.html" title="Metropolis Monte Carlo sampling enhanced with parallel tempering. " alt="" coords="136,56,323,83"/>
+<area shape="rect" id="node5" href="$classSimpleSampling.html" title="Naive Simple Sampling. " alt="" coords="171,107,287,133"/>
+<area shape="rect" id="node6" href="$classWangLandau.html" title="Wang Landau Sampling of the distribution of a given observable. " alt="" coords="180,157,279,184"/>
+<area shape="rect" id="node4" href="$classMetropolisParallelTemperingMPI.html" title="Metropolis Monte Carlo sampling enhanced with parallel tempering using MPI. " alt="" coords="371,56,581,83"/>
+<area shape="rect" id="node7" href="$classFastWLEntropic.html" title="Variant of Wang Landau sampling. " alt="" coords="418,157,534,184"/>
+</map>

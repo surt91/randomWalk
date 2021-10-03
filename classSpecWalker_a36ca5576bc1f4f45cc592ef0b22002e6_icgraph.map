@@ -1,0 +1,25 @@
+<map id="SpecWalker::points" name="SpecWalker::points">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a86f5b75490aafb1276b4ab4e80f7f54b" title="Save a gnuplot file visualizing the walk. " alt="" coords="209,37,332,64"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a4da9358f8ea70a58f61ac3f380bd3473" title="SpecWalker::svgOfChange" alt="" coords="400,88,581,114"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#ab61d91d7824e92fb7f6080a94950aea1" title="Save a povray file visualizing the walk. " alt="" coords="429,138,552,165"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#a1ccb774587b4c289994aed5f635e62cc" title="Save a threejs file visualizing the walk. " alt="" coords="421,189,561,216"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#ac1ff628c70185e8b4710d13513304d60" title="Save a gnuplot file visualizing the walk. " alt="" coords="433,240,548,266"/>
+<area shape="rect" id="node9" href="$classSpecWalker.html#a330be9caf093f830314e522d8b6c7a9a" title="Get a human readable representation of the walk. " alt="" coords="207,290,334,317"/>
+<area shape="rect" id="node10" href="$classSpecWalker.html#a6207eb091c80c9f34e2a38551d46b042" title="Get the number of distinct visited sites. " alt="" coords="201,342,340,383"/>
+<area shape="rect" id="node11" href="$classSpecWalker.html#aa22253eeb5354372b3e34ef61f7a33a9" title="Get the number of distinct visited sites. " alt="" coords="201,407,340,448"/>
+<area shape="rect" id="node12" href="$classSpecWalker.html#a006c8bbc97540b78a92fa5a61745cf23" title="Get the end&#45;to&#45;end distance of the walk. " alt="" coords="218,473,323,500"/>
+<area shape="rect" id="node15" href="$classSpecWalker.html#a434b7f4906b5214a90209ae37b4c8f79" title="Get the x&#45;component of the end&#45;to&#45;end distance of the walk. " alt="" coords="435,494,547,521"/>
+<area shape="rect" id="node16" href="$classSpecWalker.html#a07de7ba19c1da2129c1eebe8ba48ad56" title="Get the y&#45;component of the end&#45;to&#45;end distance of the walk. " alt="" coords="435,545,547,572"/>
+<area shape="rect" id="node17" href="$classSpecWalker.html#ad7d65b8308aa3e24724de41974aca72e" title="Get the time where the minimum x&#45;value is reached. " alt="" coords="197,625,344,652"/>
+<area shape="rect" id="node19" href="$classSpecWalker.html#a0c7f12b6f522dc10bc180062d44ae824" title="Get the time where the maximum x&#45;value is reached. " alt="" coords="195,676,346,702"/>
+<area shape="rect" id="node21" href="$classSpecWalker.html#a14ee47b639436e665e72311c8d4cbf44" title="Get the minimum x&#45;value reached. " alt="" coords="426,830,555,857"/>
+<area shape="rect" id="node22" href="$classSpecWalker.html#a230b5f16d17eb319ca78407f3e485e6b" title="Get the maximum x&#45;value reached. " alt="" coords="204,777,337,804"/>
+<area shape="rect" id="node23" href="$classSpecWalker.html#aaaa920ecfde2c00d3cf684ee208f1f7f" title="Get the time at which the sign changes after starting at t1 return &#45;1 if no sign change is detected f..." alt="" coords="195,828,346,854"/>
+<area shape="rect" id="node24" href="$classSpecWalker.html#abfc93aacdcbb47d45cc26615921c0ecb" title="Get position in one direction at the specified timepoints. " alt="" coords="190,878,351,905"/>
+<area shape="rect" id="node3" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="630,113,730,140"/>
+<area shape="rect" id="node4" href="$classScentWalker.html#a260fa8f46270f6eca06a2a9518694bd8" title="Save a gnuplot file visualizing the walk. " alt="" coords="427,37,554,64"/>
+<area shape="rect" id="node13" href="$observables_8cpp.html#ae70efa4b66f790bd544bb6ec33b8c1c5" title="TEST_CASE" alt="" coords="630,570,730,597"/>
+<area shape="rect" id="node14" href="$classSpecWalker.html#adfd67b3a34262b020bb1a6754f2f5bdf" title="Get the squared end&#45;to&#45;end distance of the walk. " alt="" coords="435,444,547,470"/>
+<area shape="rect" id="node18" href="$classBrownianResetWalker.html#a5381c10f705975b4f3736090a77a8050" title="Get the time where the minimum x&#45;value is reached. " alt="" coords="415,647,567,688"/>
+<area shape="rect" id="node20" href="$classBrownianResetWalker.html#a6f443f877ec34de8290001b9196f8b96" title="Get the time where the maximum x&#45;value is reached. " alt="" coords="415,764,567,806"/>
+</map>

@@ -1,0 +1,19 @@
+<map id="TEST_CASE" name="TEST_CASE">
+<area shape="rect" id="node2" href="$classHistogram.html#af200f83890b3e529cfa68fc9effe9310" title="Adds an entry to the corresponding bin. " alt="" coords="185,5,295,32"/>
+<area shape="rect" id="node3" href="$classHistogram.html#af44d71ac0c3d46d3b6525eac79d5c7e2" title="sum of all bins (equal to count, for standard histograms) " alt="" coords="183,56,297,83"/>
+<area shape="rect" id="node4" href="$classHistogram.html#a69b7a8ae5d0b104347a1652f57625924" title="number of insertions into the histogram " alt="" coords="179,107,301,133"/>
+<area shape="rect" id="node5" href="$classHistogram.html#a9e19504ac3f983deb3f9e40b3ac8797d" title="Histogram::at" alt="" coords="189,157,291,184"/>
+<area shape="rect" id="node6" href="$classHistogram.html#a9e04e1b0797e94cb3372f1986658d586" title="minimum value of all bins " alt="" coords="155,208,325,235"/>
+<area shape="rect" id="node7" href="$classHistogram.html#a15cda5cdb6dda691e6e2003a4a5a08a3" title="minimum value of all bins " alt="" coords="185,259,295,285"/>
+<area shape="rect" id="node8" href="$classHistogram.html#a723a8797b753dd03a3c2e29b88d58934" title="mean value of all bins " alt="" coords="179,309,301,336"/>
+<area shape="rect" id="node9" href="$classHistogram.html#ab18fbea2f675c873c9c90d60eaf5dd28" title="sets all entries to zero and clears statistical data " alt="" coords="181,360,299,387"/>
+<area shape="rect" id="node10" href="$classHistogram.html#a6d872df76aeef628ab855737459718fe" title="trim the histogram " alt="" coords="184,411,296,437"/>
+<area shape="rect" id="node11" href="$classHistogram.html#a176bd5fc9d3902c6fd7f983ea5e4f796" title="Histogram::ascii_table" alt="" coords="164,461,316,488"/>
+<area shape="rect" id="node14" href="$classHistogramND.html#a4c70614d9c37719489b01f9b1fe3a2ab" title="Adds an entry to the corresponding bin. " alt="" coords="175,512,305,539"/>
+<area shape="rect" id="node15" href="$classHistogramND.html#a149ac11d4107343e07d0f40f681b1713" title="sum of all bins (for standard histograms) " alt="" coords="173,563,307,589"/>
+<area shape="rect" id="node16" href="$classHistogramND.html#a3ca7cca0cdda510a4ae3d9f163668371" title="max of all bins (for standard histograms) " alt="" coords="173,613,307,640"/>
+<area shape="rect" id="node17" href="$classHistogramND.html#ab7682d6a022aed6cdfbc72491a0e5efc" title="resets the histogram " alt="" coords="171,664,309,691"/>
+<area shape="rect" id="node18" href="$classHistogramND.html#ad642f6b768d2ab19b0dcb74b84a96e24" title="get the number of bins in each direction " alt="" coords="157,715,323,741"/>
+<area shape="rect" id="node12" href="$classHistogram.html#a717ef5527d09cce57314f4b19bdf76e0" title="vector of num_bins elements containing their centers " alt="" coords="377,436,511,463"/>
+<area shape="rect" id="node13" href="$classHistogram.html#a3a5cb89e902d0b665f23b38a696d943d" title="vector of num_bins elements containing their data " alt="" coords="374,487,514,513"/>
+</map>

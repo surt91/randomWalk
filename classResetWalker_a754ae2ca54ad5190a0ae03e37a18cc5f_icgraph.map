@@ -1,0 +1,6 @@
+<map id="ResetWalker::updateSteps" name="ResetWalker::updateSteps">
+<area shape="rect" id="node2" href="$classResetWalker.html#abe66369083dee5c574e3c55407e0f1d8" title="Changes the walk, i.e., performs one trial move. " alt="" coords="247,5,395,32"/>
+<area shape="rect" id="node3" href="$classResetWalker.html#a21b6bc8e5c21eb8afbafe0a35b775a0c" title="Undoes the last change. " alt="" coords="232,56,411,83"/>
+<area shape="rect" id="node4" href="$classResetWalker.html#a9635c51aa38a5ff18a39862d79a94e28" title="ResetWalker::setP1" alt="" coords="251,107,391,133"/>
+<area shape="rect" id="node5" href="$tests_2walks_8cpp.html#a38c7aad84610a3088770789a7ed4a312" title="TEST_CASE" alt="" coords="459,107,559,133"/>
+</map>

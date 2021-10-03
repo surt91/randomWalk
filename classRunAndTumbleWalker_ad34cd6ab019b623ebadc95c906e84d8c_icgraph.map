@@ -1,0 +1,5 @@
+<map id="RunAndTumbleWalker::genStep" name="RunAndTumbleWalker::genStep">
+<area shape="rect" id="node2" href="$classRunAndTumbleWalker.html#ac4da2c5c5a2156fb5cc56e705754b5b1" title="RunAndTumbleWalker\l::updateSteps" alt="" coords="209,5,362,46"/>
+<area shape="rect" id="node3" href="$classRunAndTumbleWalker.html#a4dfffd6783b05eb7cad7e0883d128584" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="209,70,362,111"/>
+<area shape="rect" id="node4" href="$classRunAndTumbleWalker.html#ae50f3557a18edaddb0640272ac6e69ee" title="RunAndTumbleWalker\l::undoChange" alt="" coords="209,135,362,177"/>
+</map>

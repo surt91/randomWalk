@@ -1,0 +1,9 @@
+<map id="SelfAvoidingWalker::transform" name="SelfAvoidingWalker::transform">
+<area shape="rect" id="node2" href="$classSelfAvoidingWalker.html#a3db0f953a1542b617dbd61df44977830" title="Pivot Algorithm. " alt="" coords="189,70,325,111"/>
+<area shape="rect" id="node3" href="$classSelfAvoidingWalker.html#a9e8886e72809537c9ae7619e2eb89a6f" title="Changes the walk, i.e., performs one trial move. " alt="" coords="373,5,509,46"/>
+<area shape="rect" id="node5" href="$classSelfAvoidingWalker.html#a9db75185adcd3d56447f0505a58ddf79" title="Undoes the last change. " alt="" coords="373,70,509,111"/>
+<area shape="rect" id="node6" href="$classSelfAvoidingWalker.html#abd5d0c5938704a6fb0605ba60ae41fbd" title="SelfAvoidingWalker\l::svgOfPivot" alt="" coords="373,135,509,177"/>
+<area shape="rect" id="node4" href="$classSelfAvoidingWalker.html#aa5c26cd25cf50befa1af4b13a5ba3357" title="special initialization for SAW: use MCMC and pivot " alt="" coords="557,5,720,46"/>
+<area shape="rect" id="node7" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="613,117,664,144"/>
+<area shape="rect" id="node8" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="589,168,689,195"/>
+</map>

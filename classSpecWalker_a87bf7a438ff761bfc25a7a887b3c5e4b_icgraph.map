@@ -1,0 +1,9 @@
+<map id="SpecWalker::updateHull" name="SpecWalker::updateHull">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a6b74bf0e88b55c38328cdb00924dff71" title="Set the random numbers such that we get an L shape. " alt="" coords="223,5,377,46"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#a6006a1ba576d57b1f9d7d6fba3ea98af" title="Set the random numbers such that we get an L shape in d&#45;1 dimensions. " alt="" coords="222,70,378,111"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#ab744765fe4007dd785e4230ff2b92480" title="Set the random numbers such that we get an one dimensional line. " alt="" coords="225,135,375,177"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a74ee0f799670bedcd09b23ab09b73104" title="Set the random numbers such that we always step left, right, left, right. " alt="" coords="224,201,376,242"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#aa9f88215c3996c8516ab114002bf09e3" title="Changes the algorithm used to calculate the hull. " alt="" coords="216,267,384,293"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#ac6233887d6ccc79359cdd160219a03ab" title="Do initialization, e.g. calculate the steps and the hull. " alt="" coords="433,267,551,293"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#ab6e2c3b8431e042d0954253724d769f1" title="Get new random numbers and reconstruct the walk. " alt="" coords="601,267,767,293"/>
+</map>

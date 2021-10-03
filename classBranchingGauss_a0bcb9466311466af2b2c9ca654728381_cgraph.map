@@ -1,0 +1,9 @@
+<map id="BranchingGauss::svg" name="BranchingGauss::svg">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker\&lt; double\l \&gt;::points" alt="" coords="206,5,349,46"/>
+<area shape="rect" id="node3" href="$classSVG.html#a8bd66ed169e9c92b62eb7a977a658aa9" title="Write a circle at the given coordinate to the output SVG file. " alt="" coords="233,71,322,97"/>
+<area shape="rect" id="node4" href="$classSVG.html#af91c5660d0e53ab82d59b171c5f66588" title="SVG::polyline" alt="" coords="226,121,329,148"/>
+<area shape="rect" id="node5" href="$classSVG.html#a5b066dce0ce5d97b21bdeadaeb62a4e7" title="SVG::text" alt="" coords="237,172,317,199"/>
+<area shape="rect" id="node6" href="$classConvexHull.html#aa99993910b34297adec7bb6dfe55c061" title="Vertices of the convex hull (lazy). " alt="" coords="200,223,355,249"/>
+<area shape="rect" id="node7" href="$classSVG.html#aaf0c6039cf98a40fc4cd02de7ae89f56" title="SVG::setGeometry" alt="" coords="211,273,344,300"/>
+<area shape="rect" id="node8" href="$classSVG.html#ad803cf74f182bea7d5f938066c261f9d" title="SVG::save" alt="" coords="234,324,321,351"/>
+</map>

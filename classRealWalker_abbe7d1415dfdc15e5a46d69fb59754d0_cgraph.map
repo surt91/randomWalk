@@ -1,0 +1,6 @@
+<map id="RealWalker::change" name="RealWalker::change">
+<area shape="rect" id="node2" href="$classRealWalker.html#a0cba1457e4af53e107982fc6673368f0" title="Generate a step by unit distance and angles determined by the d&#45;1 random numbers after first (inclusi..." alt="" coords="195,5,341,32"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; double\l \&gt;::updatePoints" alt="" coords="197,57,339,98"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; double\l \&gt;::updateHull" alt="" coords="197,122,339,163"/>
+<area shape="rect" id="node3" href="$classStep.html#a95148e87015a0a1a62c796e98d0024d4" title="Euclidean distance to zero. " alt="" coords="390,5,482,32"/>
+</map>

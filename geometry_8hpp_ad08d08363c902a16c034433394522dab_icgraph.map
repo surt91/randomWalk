@@ -1,0 +1,15 @@
+<map id="side" name="side">
+<area shape="rect" id="node2" href="$geometry_8hpp.html#a433f35332770bd1cdab0924bc5535e9c" title="Test if point p is inside the triangel formed by p1, p2, p3. " alt="" coords="131,5,237,32"/>
+<area shape="rect" id="node4" href="$geometry_8hpp.html#af7e39fc4eb3c8425c3119b5748aa83ab" title="Test if point p is inside the quadriliteral formed by p1, p2, p3, p4. " alt="" coords="117,56,251,83"/>
+<area shape="rect" id="node5" href="$geometry_8hpp.html#afb2e6ace8a79eca774a9551f261e8beb" title="Test if point p is inside the octoliteral formed by p1 to p8. " alt="" coords="139,107,229,133"/>
+<area shape="rect" id="node8" href="$geometry_8hpp.html#a780fc177ef186e1efc5f2653fc7e3c39" title="Test if point p is inside the octahedron formed by the given vertices. " alt="" coords="120,157,248,184"/>
+<area shape="rect" id="node9" href="$geometry_8hpp.html#a065ffe4a1f608c6b41aca330d38cd296" title="pointInFacets" alt="" coords="133,208,235,235"/>
+<area shape="rect" id="node10" href="$geometry_8hpp.html#a606e2862f678cc3170f5c7eb142e5478" title="Test if point p is inside the Quattuordecaeder (star tetraeder) formed by the given vertices https://..." alt="" coords="102,259,266,285"/>
+<area shape="rect" id="node11" href="$geometry_8hpp.html#aa1ec392f626bd2aef6f7c8026021f9ed" title="Test if point p is inside the Polygon formed by the N points in the array. " alt="" coords="141,309,227,336"/>
+<area shape="rect" id="node12" href="$geometry_8hpp.html#a47b47b3645e2f57a4971c14b16974ecc" title="Test if point p is inside the polygon formed by the points in poly. " alt="" coords="130,360,238,387"/>
+<area shape="rect" id="node13" href="$classSpecWalker.html#a1ccb774587b4c289994aed5f635e62cc" title="Save a threejs file visualizing the walk. " alt="" coords="114,411,254,437"/>
+<area shape="rect" id="node3" href="$classConvexHull.html#a167e6b68c613ab630d31cf9b4133a271" title="ConvexHull::runJarvis" alt="" coords="330,5,481,32"/>
+<area shape="rect" id="node6" href="$classConvexHull.html#a12c06bdb39138e5ef5f91375c1edfca7" title="deletes points from interior points according to the Akl Toussaint heuristic " alt="" coords="315,99,496,141"/>
+<area shape="rect" id="node7" href="$classConvexHull.html#a3f4c3c1e9dbf0b9d6253fe975863a86f" title="deletes points from interior points according to the Akl Toussaint heuristic " alt="" coords="315,183,496,225"/>
+<area shape="rect" id="node14" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="355,411,455,437"/>
+</map>

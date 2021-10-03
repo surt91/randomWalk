@@ -1,0 +1,12 @@
+<map id="Walker::svg" name="Walker::svg">
+<area shape="rect" id="node2" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="412,116,463,142"/>
+<area shape="rect" id="node3" href="$classMetropolis.html#ac2d1c2359b9b94195a9752d9579426a2" title="Implementation of a Metropolis based large deviations sampling. " alt="" coords="183,174,291,201"/>
+<area shape="rect" id="node5" href="$classSimpleSampling.html#abed9df3a7132905ec4518356d62ded2b" title="SimpleSampling::run" alt="" coords="166,225,309,252"/>
+<area shape="rect" id="node7" href="$classSimulation.html#a052364d4ab80f6378d71432bba1e57f9" title="Estimate an upper bound with a greedy heuristic. " alt="" coords="147,43,328,84"/>
+<area shape="rect" id="node8" href="$classSimulation.html#af7dd8897487984cf8ba1e008511940ee" title="Estimate a lower bound with a greedy heuristic. " alt="" coords="147,108,328,150"/>
+<area shape="rect" id="node9" href="$classSimulation.html#aec411baad84c1eb3ebdd8acfbc180566" title="get the exact upper bound (possibly infinity) " alt="" coords="147,326,328,353"/>
+<area shape="rect" id="node11" href="$classSimulation.html#a24cdbba306df95331553476413d2e2c2" title="get the exact lower bound (possibly zero) " alt="" coords="147,276,328,302"/>
+<area shape="rect" id="node4" href="$tests_2walks_8cpp.html#afc9bc8fc2e68e375a80660ece030815d" title="MCMC_sampling" alt="" coords="376,174,499,201"/>
+<area shape="rect" id="node6" href="$benchmarks_2walks_8cpp.html#a92902f35dec8813d5ca916ac97d9f0ea" title="simple_sampling" alt="" coords="378,225,497,252"/>
+<area shape="rect" id="node10" href="$tests_2walks_8cpp.html#ac857ebaa094fb0a45b367d7e52f5395a" title="TEST_CASE" alt="" coords="387,301,487,328"/>
+</map>

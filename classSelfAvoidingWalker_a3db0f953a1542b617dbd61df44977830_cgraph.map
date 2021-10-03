@@ -1,0 +1,5 @@
+<map id="SelfAvoidingWalker::pivot" name="SelfAvoidingWalker::pivot">
+<area shape="rect" id="node2" href="$classSelfAvoidingWalker.html#acd6fa0fc2dbd7a912355e20110c1da16" title="Applies the transformation matrix m to the point p. " alt="" coords="191,5,327,46"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; int \&gt;::\lupdatePoints" alt="" coords="189,70,328,111"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="189,135,328,177"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="SpecWalker::oblateness" name="SpecWalker::oblateness">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a2992a55a46a88c8be4f2d1119efa8baa" title="SpecWalker::hullPoints" alt="" coords="219,5,378,32"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#acb00292166d9b25d891df5093d05b995" title="Get the length of the walk. " alt="" coords="231,56,367,83"/>
+<area shape="rect" id="node5" href="$Step_8hpp.html#aa039facd0171ae56019922ed65811132" title="cross" alt="" coords="271,157,326,184"/>
+<area shape="rect" id="node9" href="$geometry_8hpp.html#a5969586193db49fc2e5e7691da40d186" title="2D cross product of OA and OB vectors, i.e. " alt="" coords="257,107,340,133"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#ab746b3f8c58a90ccd0d83bb1f3b51fa7" title="SpecWalker::steps" alt="" coords="427,56,560,83"/>
+<area shape="rect" id="node6" href="$classStep.html#a313e046ccc0cce1dc6aeabeaeb8304c2" title="Step::y" alt="" coords="461,107,525,133"/>
+<area shape="rect" id="node7" href="$classStep.html#a183614104daadacf633be71a067b3769" title="Step::z" alt="" coords="461,208,525,235"/>
+<area shape="rect" id="node8" href="$classStep.html#ab743fe4bc056da38442eed3d637263ad" title="Step::x" alt="" coords="461,157,525,184"/>
+</map>

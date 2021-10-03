@@ -1,0 +1,6 @@
+<map id="polygon_tangent" name="polygon_tangent">
+<area shape="rect" id="node2" href="$geometry_8hpp.html#ad08ace394e18b4f798f55662a0fbe1a6" title="orientation" alt="" coords="171,31,253,57"/>
+<area shape="rect" id="node3" href="$geometry_8hpp.html#a5969586193db49fc2e5e7691da40d186" title="2D cross product of OA and OB vectors, i.e. " alt="" coords="301,31,384,57"/>
+<area shape="rect" id="node4" href="$classStep.html#ab743fe4bc056da38442eed3d637263ad" title="Step::x" alt="" coords="432,5,496,32"/>
+<area shape="rect" id="node5" href="$classStep.html#a313e046ccc0cce1dc6aeabeaeb8304c2" title="Step::y" alt="" coords="432,56,496,83"/>
+</map>

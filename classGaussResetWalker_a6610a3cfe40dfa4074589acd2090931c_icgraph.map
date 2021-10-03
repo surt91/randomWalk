@@ -1,0 +1,7 @@
+<map id="GaussResetWalker::genStep" name="GaussResetWalker::genStep">
+<area shape="rect" id="node2" href="$classGaussResetWalker.html#adcec50b7328e1f45002cdcc0d5aece27" title="GaussResetWalker::update\lSteps" alt="" coords="263,5,446,46"/>
+<area shape="rect" id="node5" href="$classGaussResetWalker.html#a95fb17ba3b60991046f843a9406c3ab8" title="Changes the walk, i.e., performs one trial move. " alt="" coords="261,71,448,97"/>
+<area shape="rect" id="node6" href="$classGaussResetWalker.html#a73b8983981eecf7b6d1af563d4c2fa61" title="Undoes the last change. " alt="" coords="246,121,463,148"/>
+<area shape="rect" id="node3" href="$classGaussResetWalker.html#ae097b7f074782f66b8ed82e63c0e481a" title="GaussResetWalker::setP1" alt="" coords="512,12,691,39"/>
+<area shape="rect" id="node4" href="$tests_2walks_8cpp.html#a38c7aad84610a3088770789a7ed4a312" title="TEST_CASE" alt="" coords="739,12,839,39"/>
+</map>

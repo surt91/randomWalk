@@ -1,0 +1,7 @@
+<map id="Hypercube::bestfs" name="Hypercube::bestfs">
+<area shape="rect" id="node2" href="$classEscapeWalker.html#afce1fcced706d1d2656cec4ce1c3d4d7" title="EscapeWalker::escapable" alt="" coords="185,56,359,83"/>
+<area shape="rect" id="node3" href="$classEscapeWalker.html#a3bbde2e00ea41cacae9e844983c690b9" title="EscapeWalker::updateStepsFrom" alt="" coords="408,56,627,83"/>
+<area shape="rect" id="node4" href="$classEscapeWalker.html#afb8684e5ca7ce83d63d50eb1b1b39386" title="EscapeWalker::updateSteps" alt="" coords="675,5,863,32"/>
+<area shape="rect" id="node5" href="$classEscapeWalker.html#a25c1e01865a5783d2309b289d4d319e2" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="691,56,848,83"/>
+<area shape="rect" id="node6" href="$classEscapeWalker.html#adf80ae5e298a6ae592a904ca0e02f194" title="EscapeWalker::undoChange" alt="" coords="675,107,863,133"/>
+</map>

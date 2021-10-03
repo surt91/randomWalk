@@ -1,0 +1,8 @@
+<map id="SpecWalker::pov" name="SpecWalker::pov">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker::points" alt="" coords="192,5,328,32"/>
+<area shape="rect" id="node3" href="$classPovray.html#a5367a12debf88dc61afe6ec9da54d958" title="Povray::polyline" alt="" coords="203,56,317,83"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a12ce543f28e0655e979e8ebc93a6ae01" title="SpecWalker::convexHull" alt="" coords="177,107,343,133"/>
+<area shape="rect" id="node6" href="$classPovray.html#aa990960614466e9a3d55b136b172c21b" title="Povray::facet" alt="" coords="210,157,310,184"/>
+<area shape="rect" id="node7" href="$classPovray.html#a7bdbc6e5f13a37ace3185f9c09b814a0" title="Povray::save" alt="" coords="211,208,309,235"/>
+<area shape="rect" id="node4" href="$classPovray.html#aa791bd7ffc85b0557c5144df6c39abfc" title="Povray::box" alt="" coords="393,56,485,83"/>
+</map>

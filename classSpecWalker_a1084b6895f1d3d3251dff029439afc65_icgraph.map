@@ -1,0 +1,9 @@
+<map id="SpecWalker::updateSteps" name="SpecWalker::updateSteps">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a6b74bf0e88b55c38328cdb00924dff71" title="Set the random numbers such that we get an L shape. " alt="" coords="231,5,385,46"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#a6006a1ba576d57b1f9d7d6fba3ea98af" title="Set the random numbers such that we get an L shape in d&#45;1 dimensions. " alt="" coords="230,70,386,111"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#ab744765fe4007dd785e4230ff2b92480" title="Set the random numbers such that we get an one dimensional line. " alt="" coords="233,135,383,177"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a74ee0f799670bedcd09b23ab09b73104" title="Set the random numbers such that we always step left, right, left, right. " alt="" coords="232,201,384,242"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#ac6233887d6ccc79359cdd160219a03ab" title="Do initialization, e.g. calculate the steps and the hull. " alt="" coords="249,267,367,293"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#ab6e2c3b8431e042d0954253724d769f1" title="Get new random numbers and reconstruct the walk. " alt="" coords="435,267,602,293"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#a521c893659a46a4aabf655f0de75cabf" title="For most Walks this will be just a simple reconstruct, but e.g., SAW will need a MCMC equilibration w..." alt="" coords="651,259,802,301"/>
+</map>

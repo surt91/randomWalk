@@ -1,0 +1,6 @@
+<map id="SpecWalker::goDownhill" name="SpecWalker::goDownhill">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a60d0a9ef2ea1249dac5d6b3d937e6e56" title="Returns the surface area of the convex hull. " alt="" coords="237,5,345,32"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#aca62448e3f35955934ddb524bcf772c3" title="Returns the Volume of the convex hull. " alt="" coords="235,56,346,83"/>
+<area shape="rect" id="node4" href="$classWalker.html#a0034daf0d7d7f2e387384db957dec0a1" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="234,107,347,133"/>
+<area shape="rect" id="node5" href="$classWalker.html#a5d85a6a2d259c04efe462a70a37f1537" title="Walker::undoChange" alt="" coords="219,157,363,184"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="SpecWalker::convexHull" name="SpecWalker::convexHull">
+<area shape="rect" id="node2" href="$classSpecWalker.html#aca62448e3f35955934ddb524bcf772c3" title="SpecWalker\&lt; int \&gt;::A" alt="" coords="235,5,383,32"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#a60d0a9ef2ea1249dac5d6b3d937e6e56" title="SpecWalker\&lt; int \&gt;::L" alt="" coords="236,56,383,83"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#ab61d91d7824e92fb7f6080a94950aea1" title="Save a povray file visualizing the walk. " alt="" coords="248,107,371,133"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#a1ccb774587b4c289994aed5f635e62cc" title="Save a threejs file visualizing the walk. " alt="" coords="239,157,379,184"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#ac1ff628c70185e8b4710d13513304d60" title="Save a gnuplot file visualizing the walk. " alt="" coords="252,208,367,235"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#a55bbc8e562a9524f45b187dead55b797" title="Get the number of vertices of the hull. " alt="" coords="222,259,397,285"/>
+<area shape="rect" id="node5" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="446,157,546,184"/>
+<area shape="rect" id="node9" href="$observables_8cpp.html#ae70efa4b66f790bd544bb6ec33b8c1c5" title="TEST_CASE" alt="" coords="446,259,546,285"/>
+</map>

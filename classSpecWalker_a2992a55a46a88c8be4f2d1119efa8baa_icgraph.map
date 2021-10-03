@@ -1,0 +1,10 @@
+<map id="SpecWalker::hullPoints" name="SpecWalker::hullPoints">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a86f5b75490aafb1276b4ab4e80f7f54b" title="Save a gnuplot file visualizing the walk. " alt="" coords="241,26,364,53"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a1ccb774587b4c289994aed5f635e62cc" title="Save a threejs file visualizing the walk. " alt="" coords="441,77,581,104"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#ac1ff628c70185e8b4710d13513304d60" title="Save a gnuplot file visualizing the walk. " alt="" coords="453,128,568,154"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#adb4de16b45f0bb34acbf567ec790bfe2" title="Get the maximum distance of any two points of the walk. " alt="" coords="213,178,392,205"/>
+<area shape="rect" id="node9" href="$classSpecWalker.html#a86038fb7570f75a3d3845a41344b3e25" title="Get the oblateness of the walk (this is not really oblateness but more the ratio of the longest and s..." alt="" coords="221,229,385,256"/>
+<area shape="rect" id="node3" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="630,52,730,78"/>
+<area shape="rect" id="node4" href="$classScentWalker.html#a260fa8f46270f6eca06a2a9518694bd8" title="Save a gnuplot file visualizing the walk. " alt="" coords="447,26,574,53"/>
+<area shape="rect" id="node8" href="$observables_8cpp.html#ae70efa4b66f790bd544bb6ec33b8c1c5" title="TEST_CASE" alt="" coords="461,204,561,230"/>
+</map>

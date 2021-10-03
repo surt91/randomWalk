@@ -1,0 +1,11 @@
+<map id="SVG::circle" name="SVG::circle">
+<area shape="rect" id="node2" href="$classBranchingGauss.html#a0bcb9466311466af2b2c9ca654728381" title="Save a gnuplot file visualizing the walk. " alt="" coords="408,58,555,84"/>
+<area shape="rect" id="node4" href="$classLoopErasedWalker.html#a1f0592daabffdd3666e216776cd2322f" title="LoopErasedWalker::svgOfErased\lLoops" alt="" coords="144,125,360,166"/>
+<area shape="rect" id="node6" href="$classMultipleWalker.html#aad822266067ca5f05cdaf0f499282531" title="MultipleWalker::svg" alt="" coords="413,260,550,287"/>
+<area shape="rect" id="node7" href="$classSelfAvoidingWalker.html#abd5d0c5938704a6fb0605ba60ae41fbd" title="SelfAvoidingWalker\l::svgOfPivot" alt="" coords="184,190,320,232"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#a86f5b75490aafb1276b4ab4e80f7f54b" title="Save a gnuplot file visualizing the walk. " alt="" coords="191,311,313,338"/>
+<area shape="rect" id="node10" href="$classSpecWalker.html#a4da9358f8ea70a58f61ac3f380bd3473" title="SpecWalker::svgOfChange" alt="" coords="161,8,343,35"/>
+<area shape="rect" id="node3" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="603,210,703,236"/>
+<area shape="rect" id="node5" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="456,159,507,186"/>
+<area shape="rect" id="node9" href="$classScentWalker.html#a260fa8f46270f6eca06a2a9518694bd8" title="Save a gnuplot file visualizing the walk. " alt="" coords="418,362,545,388"/>
+</map>

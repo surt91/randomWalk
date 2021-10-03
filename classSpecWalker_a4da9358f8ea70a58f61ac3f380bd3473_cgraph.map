@@ -1,0 +1,9 @@
+<map id="SpecWalker::svgOfChange" name="SpecWalker::svgOfChange">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker::points" alt="" coords="235,5,371,32"/>
+<area shape="rect" id="node3" href="$classSVG.html#a8bd66ed169e9c92b62eb7a977a658aa9" title="Write a circle at the given coordinate to the output SVG file. " alt="" coords="258,56,347,83"/>
+<area shape="rect" id="node4" href="$classSVG.html#af91c5660d0e53ab82d59b171c5f66588" title="SVG::polyline" alt="" coords="251,107,354,133"/>
+<area shape="rect" id="node5" href="$classWalker.html#a0034daf0d7d7f2e387384db957dec0a1" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="246,157,359,184"/>
+<area shape="rect" id="node6" href="$classSVG.html#a5b066dce0ce5d97b21bdeadaeb62a4e7" title="SVG::text" alt="" coords="263,208,343,235"/>
+<area shape="rect" id="node7" href="$classSVG.html#aaf0c6039cf98a40fc4cd02de7ae89f56" title="SVG::setGeometry" alt="" coords="236,259,369,285"/>
+<area shape="rect" id="node8" href="$classSVG.html#ad803cf74f182bea7d5f938066c261f9d" title="SVG::save" alt="" coords="259,309,346,336"/>
+</map>

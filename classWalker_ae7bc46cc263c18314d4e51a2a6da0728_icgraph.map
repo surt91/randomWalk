@@ -1,0 +1,10 @@
+<map id="Walker::r" name="Walker::r">
+<area shape="rect" id="node2" href="$classMetropolis.html#ac2d1c2359b9b94195a9752d9579426a2" title="Implementation of a Metropolis based large deviations sampling. " alt="" coords="391,5,499,32"/>
+<area shape="rect" id="node5" href="$classMetropolisParallelTemperingMPI.html#a1125563721229546d38ecac87575bb58" title="MetropolisParallelTempering\lMPI::run" alt="" coords="133,49,320,90"/>
+<area shape="rect" id="node6" href="$classSimulation.html#a0378a3ec7114d31c1914210e8524b912" title="Simulation::write_observables" alt="" coords="129,115,325,141"/>
+<area shape="rect" id="node3" href="$tests_2walks_8cpp.html#afc9bc8fc2e68e375a80660ece030815d" title="MCMC_sampling" alt="" coords="565,5,688,32"/>
+<area shape="rect" id="node4" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="601,81,652,108"/>
+<area shape="rect" id="node7" href="$classFastWLEntropic.html#a73b2a75fa0013eb0da67344f86806a5f" title="Implementation of the &quot;Fast&quot; 1/t Wang Landau algorithm extended by Entropic Sampling. " alt="" coords="374,107,517,133"/>
+<area shape="rect" id="node8" href="$classSimpleSampling.html#abed9df3a7132905ec4518356d62ded2b" title="SimpleSampling::run" alt="" coords="374,157,517,184"/>
+<area shape="rect" id="node9" href="$benchmarks_2walks_8cpp.html#a92902f35dec8813d5ca916ac97d9f0ea" title="simple_sampling" alt="" coords="567,157,686,184"/>
+</map>

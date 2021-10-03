@@ -1,0 +1,9 @@
+<map id="ReturningLatticeWalker::change" name="ReturningLatticeWalker::change">
+<area shape="rect" id="node2" href="$classStep.html#a1fe8b5ab1aa770047113fe19dd074188" title="Step::fillFromRN" alt="" coords="225,5,345,32"/>
+<area shape="rect" id="node3" href="$classPermutation.html#a3c8b2a7ca9bfa4096cfbfc64042d20e8" title="Permutation::inverse" alt="" coords="214,56,357,83"/>
+<area shape="rect" id="node5" href="$classStep.html#a47c9b5de71a56d3c816e59998d4734c2" title="Step::readToRN" alt="" coords="227,107,344,133"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; int \&gt;::\lupdatePoints" alt="" coords="216,158,355,199"/>
+<area shape="rect" id="node7" href="$classPermutation.html#aaf6c4248de065c739d65be808e04e53a" title="Permutation::swap" alt="" coords="220,224,351,251"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="216,275,355,317"/>
+<area shape="rect" id="node4" href="$classPermutation.html#ababb72db8c037dcd780a87e4a70591ee" title="Permutation::value" alt="" coords="405,56,536,83"/>
+</map>

@@ -1,0 +1,50 @@
+<map id="TEST_CASE" name="TEST_CASE">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a4da9358f8ea70a58f61ac3f380bd3473" title="SpecWalker::svgOfChange" alt="" coords="348,347,529,373"/>
+<area shape="rect" id="node10" href="$classSelfAvoidingWalker.html#abd5d0c5938704a6fb0605ba60ae41fbd" title="SelfAvoidingWalker\l::svgOfPivot" alt="" coords="371,230,507,271"/>
+<area shape="rect" id="node16" href="$classLoopErasedWalker.html#a1f0592daabffdd3666e216776cd2322f" title="LoopErasedWalker::svgOfErased\lLoops" alt="" coords="331,398,547,439"/>
+<area shape="rect" id="node18" href="$classSpecWalker.html#a86f5b75490aafb1276b4ab4e80f7f54b" title="Save a gnuplot file visualizing the walk. " alt="" coords="377,515,500,541"/>
+<area shape="rect" id="node20" href="$classSpecWalker.html#ac1ff628c70185e8b4710d13513304d60" title="Save a gnuplot file visualizing the walk. " alt="" coords="381,795,496,821"/>
+<area shape="rect" id="node27" href="$classSpecWalker.html#ab61d91d7824e92fb7f6080a94950aea1" title="Save a povray file visualizing the walk. " alt="" coords="377,979,500,1005"/>
+<area shape="rect" id="node32" href="$classSpecWalker.html#a1ccb774587b4c289994aed5f635e62cc" title="Save a threejs file visualizing the walk. " alt="" coords="369,1175,509,1201"/>
+<area shape="rect" id="node39" href="$classMultipleWalker.html#aad822266067ca5f05cdaf0f499282531" title="MultipleWalker::svg" alt="" coords="370,296,507,323"/>
+<area shape="rect" id="node40" href="$classMultipleWalker.html#ae3283e5d7fb703a1846e7691db954530" title="MultipleWalker::gp" alt="" coords="373,845,504,872"/>
+<area shape="rect" id="node41" href="$classScentWalker.html#a260fa8f46270f6eca06a2a9518694bd8" title="Save a gnuplot file visualizing the walk. " alt="" coords="155,565,282,592"/>
+<area shape="rect" id="node44" href="$classScentWalker.html#a6afe8006d1cdc0b63a3cc6059c0b8bab" title="Save a gnuplot file visualizing the walk. " alt="" coords="159,1011,278,1037"/>
+<area shape="rect" id="node47" href="$classBranchingGauss.html#a0bcb9466311466af2b2c9ca654728381" title="Save a gnuplot file visualizing the walk. " alt="" coords="365,464,512,491"/>
+<area shape="rect" id="node49" href="$io_8cpp.html#ad85b1cb4d2ff49a975d65572e7f817fc" title="filesize" alt="" coords="187,1112,250,1139"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker::points" alt="" coords="611,592,747,619"/>
+<area shape="rect" id="node4" href="$classSVG.html#a8bd66ed169e9c92b62eb7a977a658aa9" title="Write a circle at the given coordinate to the output SVG file. " alt="" coords="634,237,723,264"/>
+<area shape="rect" id="node5" href="$classSVG.html#af91c5660d0e53ab82d59b171c5f66588" title="SVG::polyline" alt="" coords="627,288,730,315"/>
+<area shape="rect" id="node6" href="$classWalker.html#a0034daf0d7d7f2e387384db957dec0a1" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="622,187,735,213"/>
+<area shape="rect" id="node7" href="$classSVG.html#a5b066dce0ce5d97b21bdeadaeb62a4e7" title="SVG::text" alt="" coords="639,389,719,416"/>
+<area shape="rect" id="node8" href="$classSVG.html#aaf0c6039cf98a40fc4cd02de7ae89f56" title="SVG::setGeometry" alt="" coords="612,440,745,467"/>
+<area shape="rect" id="node9" href="$classSVG.html#ad803cf74f182bea7d5f938066c261f9d" title="SVG::save" alt="" coords="635,339,722,365"/>
+<area shape="rect" id="node11" href="$classWalker.html#a45ad3ce55896f074a1ed25e4323f3fb3" title="Get the number of random numbers used. " alt="" coords="629,136,728,163"/>
+<area shape="rect" id="node12" href="$classSelfAvoidingWalker.html#a3db0f953a1542b617dbd61df44977830" title="Pivot Algorithm. " alt="" coords="611,70,747,111"/>
+<area shape="rect" id="node13" href="$classSelfAvoidingWalker.html#acd6fa0fc2dbd7a912355e20110c1da16" title="Applies the transformation matrix m to the point p. " alt="" coords="812,5,948,46"/>
+<area shape="rect" id="node14" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; int \&gt;::\lupdatePoints" alt="" coords="811,70,949,111"/>
+<area shape="rect" id="node15" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="811,135,949,177"/>
+<area shape="rect" id="node17" href="$classLoopErasedWalker.html#add55e0de05ceb9448ca6118f4bb364fc" title="Get the number of random numbers used. " alt="" coords="595,491,762,517"/>
+<area shape="rect" id="node19" href="$classSpecWalker.html#a2992a55a46a88c8be4f2d1119efa8baa" title="SpecWalker::hullPoints" alt="" coords="599,693,758,720"/>
+<area shape="rect" id="node21" href="$classGnuplot2D.html#a7ab722a75e44e2647fe8529cc17996f7" title="Gnuplot2D::polyline" alt="" coords="611,947,747,973"/>
+<area shape="rect" id="node22" href="$classGnuplot2D.html#abaef26c69d26651ccdf2ac0147202899" title="Gnuplot2D::save" alt="" coords="619,744,739,771"/>
+<area shape="rect" id="node23" href="$classGnuplot3D.html#a77ade08eabb82d591f050f0304c19246" title="Gnuplot3D::polyline" alt="" coords="611,795,747,821"/>
+<area shape="rect" id="node24" href="$classSpecWalker.html#a12ce543f28e0655e979e8ebc93a6ae01" title="SpecWalker::convexHull" alt="" coords="595,1099,762,1125"/>
+<area shape="rect" id="node25" href="$classGnuplot3D.html#af97d9ded99071375e5f79ba0abda9ba9" title="Gnuplot3D::facet" alt="" coords="618,845,739,872"/>
+<area shape="rect" id="node26" href="$classGnuplot3D.html#a39ae7ef386c15a56ef7e9213b8743f29" title="Gnuplot3D::save" alt="" coords="619,896,739,923"/>
+<area shape="rect" id="node28" href="$classPovray.html#a5367a12debf88dc61afe6ec9da54d958" title="Povray::polyline" alt="" coords="621,1149,736,1176"/>
+<area shape="rect" id="node30" href="$classPovray.html#aa990960614466e9a3d55b136b172c21b" title="Povray::facet" alt="" coords="629,997,729,1024"/>
+<area shape="rect" id="node31" href="$classPovray.html#a7bdbc6e5f13a37ace3185f9c09b814a0" title="Povray::save" alt="" coords="629,1048,728,1075"/>
+<area shape="rect" id="node29" href="$classPovray.html#aa791bd7ffc85b0557c5144df6c39abfc" title="Povray::box" alt="" coords="834,1149,926,1176"/>
+<area shape="rect" id="node33" href="$classThreejs.html#ad6be2adbe36aec4b7341199a79b69350" title="Threejs::polyline" alt="" coords="620,1301,737,1328"/>
+<area shape="rect" id="node34" href="$geometry_8hpp.html#ad08d08363c902a16c034433394522dab" title="Test on which side of the line p1, p2 the point p lies. " alt="" coords="655,1352,702,1379"/>
+<area shape="rect" id="node37" href="$classThreejs.html#a3808077a640ef743edf8bec385fece65" title="Threejs::facet" alt="" coords="627,1200,730,1227"/>
+<area shape="rect" id="node38" href="$classThreejs.html#ad5c4fcee75a2530299ca8dddf8de18ee" title="Threejs::save" alt="" coords="628,1251,729,1277"/>
+<area shape="rect" id="node35" href="$classStep.html#a313e046ccc0cce1dc6aeabeaeb8304c2" title="Step::y" alt="" coords="848,1327,912,1353"/>
+<area shape="rect" id="node36" href="$classStep.html#ab743fe4bc056da38442eed3d637263ad" title="Step::x" alt="" coords="848,1377,912,1404"/>
+<area shape="rect" id="node42" href="$classScentWalker.html#a34cc4e0d14cb77671a27aed4186a4d53" title="ScentWalker::svg_histogram" alt="" coords="343,565,534,592"/>
+<area shape="rect" id="node43" href="$classSVG.html#a38f0439a30729a5220a035093153bb26" title="Write a square at the given coordinate to the output SVG file. " alt="" coords="630,643,727,669"/>
+<area shape="rect" id="node45" href="$classGnuplotContour.html#a3d8ac1736d4a38f570521e0008c0ea1d" title="GnuplotContour::data" alt="" coords="365,1080,512,1107"/>
+<area shape="rect" id="node46" href="$classGnuplotContour.html#a57de38bf833b2bc8274e7cf7bf8a29f9" title="GnuplotContour::save" alt="" coords="364,1029,513,1056"/>
+<area shape="rect" id="node48" href="$classConvexHull.html#aa99993910b34297adec7bb6dfe55c061" title="Vertices of the convex hull (lazy). " alt="" coords="601,541,756,568"/>
+</map>

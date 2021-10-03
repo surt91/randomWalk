@@ -1,0 +1,11 @@
+<map id="TEST_CASE" name="TEST_CASE">
+<area shape="rect" id="node2" href="$classSimulation.html#a27a5df67d0f8cb65c08120be1bd99ffc" title="Simulation::prepare" alt="" coords="159,81,294,108"/>
+<area shape="rect" id="node7" href="$classWalker.html#acbc2187e910cd87bebb7671d7faf9df2" title="Walker::setHullAlgo" alt="" coords="157,132,296,159"/>
+<area shape="rect" id="node8" href="$classWalker.html#adc43204ed9a8721e7355a4491a9b5385" title="Returns the Volume of the convex hull. " alt="" coords="187,183,267,209"/>
+<area shape="rect" id="node9" href="$classWalker.html#a7e99f50e75b0c671d77634acd0be7cb7" title="Returns the surface area of the convex hull. " alt="" coords="187,233,266,260"/>
+<area shape="rect" id="node10" href="$classWalker.html#af3d1d7cb599dc2056edce66ad62159bb" title="number of vertices of the hull " alt="" coords="155,284,299,311"/>
+<area shape="rect" id="node3" href="$classWalker.html#a5fc042bfe21117a4e197f260cd25317f" title="Walker::setP1" alt="" coords="361,5,466,32"/>
+<area shape="rect" id="node4" href="$classWalker.html#a18d7b22fe3d7f63c98123ed15ea169fd" title="Walker::setP2" alt="" coords="361,56,466,83"/>
+<area shape="rect" id="node5" href="$classWalker.html#a67fe1447be2351efe9390c985dcaf064" title="Walker::setP3" alt="" coords="361,107,466,133"/>
+<area shape="rect" id="node6" href="$classWalker.html#ac5502d602f17a25e465ebe753018995a" title="Walker::updateHull" alt="" coords="347,157,480,184"/>
+</map>

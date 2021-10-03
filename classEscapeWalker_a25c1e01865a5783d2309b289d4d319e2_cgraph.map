@@ -1,0 +1,15 @@
+<map id="EscapeWalker::change" name="EscapeWalker::change">
+<area shape="rect" id="node2" href="$classWalker.html#a45ad3ce55896f074a1ed25e4323f3fb3" title="Get the number of random numbers used. " alt="" coords="271,20,369,47"/>
+<area shape="rect" id="node3" href="$classStep.html#a1fe8b5ab1aa770047113fe19dd074188" title="Step::fillFromRN" alt="" coords="260,71,380,98"/>
+<area shape="rect" id="node4" href="$classEscapeWalker.html#a3bbde2e00ea41cacae9e844983c690b9" title="EscapeWalker::updateStepsFrom" alt="" coords="211,122,429,148"/>
+<area shape="rect" id="node14" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="251,173,389,214"/>
+<area shape="rect" id="node5" href="$classStep.html#ad5bd8cc31f7a314887336ee48c1938b9" title="Step::neighbors" alt="" coords="915,172,1029,199"/>
+<area shape="rect" id="node6" href="$classEscapeWalker.html#a6086fda1c6aeaddf9c1bd9aa9184469a" title="Determine the sites which are safe to visit, only d = 2. " alt="" coords="478,71,663,98"/>
+<area shape="rect" id="node9" href="$classStep.html#a92dbaaf7d8ae1429e4e2c7abd16181bd" title="Step::right_of" alt="" coords="521,122,621,148"/>
+<area shape="rect" id="node10" href="$classStep.html#a84db1d91d1fa44d207d148c415fd79b4" title="Step::left_of" alt="" coords="524,172,617,199"/>
+<area shape="rect" id="node11" href="$classEscapeWalker.html#afce1fcced706d1d2656cec4ce1c3d4d7" title="EscapeWalker::escapable" alt="" coords="483,223,658,250"/>
+<area shape="rect" id="node7" href="$classStep.html#ad2bfff5acbb0edc11c2448dee2f74b70" title="Squared Euclidean distance to zero. " alt="" coords="740,71,839,98"/>
+<area shape="rect" id="node8" href="$classStep.html#a4a4e8648b867b2893f1efa1fdb5735ec" title="Step::front_nneighbors" alt="" coords="713,122,866,148"/>
+<area shape="rect" id="node12" href="$classStep.html#a7ee4766d666d763d341f301fb707462f" title="Step::dist" alt="" coords="933,248,1011,275"/>
+<area shape="rect" id="node13" href="$classHypercube.html#a547cf45a9b0f11ad885118a0c04faf96" title="Hypercube::bestfs" alt="" coords="725,223,854,250"/>
+</map>

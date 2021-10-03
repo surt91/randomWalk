@@ -1,0 +1,12 @@
+<map id="EscapeWalker::updateSteps" name="EscapeWalker::updateSteps">
+<area shape="rect" id="node2" href="$classEscapeWalker.html#a3bbde2e00ea41cacae9e844983c690b9" title="EscapeWalker::updateStepsFrom" alt="" coords="243,112,461,138"/>
+<area shape="rect" id="node3" href="$classStep.html#ad5bd8cc31f7a314887336ee48c1938b9" title="Step::neighbors" alt="" coords="947,162,1061,189"/>
+<area shape="rect" id="node4" href="$classEscapeWalker.html#a6086fda1c6aeaddf9c1bd9aa9184469a" title="Determine the sites which are safe to visit, only d = 2. " alt="" coords="510,61,695,88"/>
+<area shape="rect" id="node7" href="$classStep.html#a92dbaaf7d8ae1429e4e2c7abd16181bd" title="Step::right_of" alt="" coords="553,112,653,138"/>
+<area shape="rect" id="node8" href="$classStep.html#a84db1d91d1fa44d207d148c415fd79b4" title="Step::left_of" alt="" coords="556,162,649,189"/>
+<area shape="rect" id="node9" href="$classEscapeWalker.html#afce1fcced706d1d2656cec4ce1c3d4d7" title="EscapeWalker::escapable" alt="" coords="515,213,690,240"/>
+<area shape="rect" id="node5" href="$classStep.html#ad2bfff5acbb0edc11c2448dee2f74b70" title="Squared Euclidean distance to zero. " alt="" coords="772,61,871,88"/>
+<area shape="rect" id="node6" href="$classStep.html#a4a4e8648b867b2893f1efa1fdb5735ec" title="Step::front_nneighbors" alt="" coords="745,112,898,138"/>
+<area shape="rect" id="node10" href="$classStep.html#a7ee4766d666d763d341f301fb707462f" title="Step::dist" alt="" coords="965,238,1043,265"/>
+<area shape="rect" id="node11" href="$classHypercube.html#a547cf45a9b0f11ad885118a0c04faf96" title="Hypercube::bestfs" alt="" coords="757,213,886,240"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="stat/RollingMean.hpp" name="stat/RollingMean.hpp">
+<area shape="rect" id="node2" href="$Metropolis_8hpp.html" title="simulation/Metropolis.hpp" alt="" coords="376,80,547,107"/>
+<area shape="rect" id="node9" href="$RollingMean_8cpp.html" title="stat/RollingMean.cpp" alt="" coords="571,80,716,107"/>
+<area shape="rect" id="node3" href="$benchmarks_2walks_8cpp.html" title="benchmarks/walks.cpp" alt="" coords="5,155,160,181"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title="main.cpp" alt="" coords="185,155,259,181"/>
+<area shape="rect" id="node5" href="$Metropolis_8cpp.html" title="simulation/Metropolis.cpp" alt="" coords="284,155,455,181"/>
+<area shape="rect" id="node6" href="$observables_8cpp.html" title="tests/observables.cpp" alt="" coords="479,155,629,181"/>
+<area shape="rect" id="node7" href="$sampling_8cpp.html" title="tests/sampling.cpp" alt="" coords="654,155,785,181"/>
+<area shape="rect" id="node8" href="$tests_2walks_8cpp.html" title="tests/walks.cpp" alt="" coords="811,155,925,181"/>
+</map>

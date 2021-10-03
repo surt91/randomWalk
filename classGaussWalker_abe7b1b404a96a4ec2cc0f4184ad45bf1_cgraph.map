@@ -1,0 +1,7 @@
+<map id="GaussWalker::change" name="GaussWalker::change">
+<area shape="rect" id="node2" href="$classSpecWalker.html#ab746b3f8c58a90ccd0d83bb1f3b51fa7" title="SpecWalker\&lt; double\l \&gt;::steps" alt="" coords="214,5,357,46"/>
+<area shape="rect" id="node3" href="$classUniformRNG.html#aacf5148679133b7f868aac3912df88b0" title="Generates normal distributed random numbers. " alt="" coords="206,71,365,97"/>
+<area shape="rect" id="node4" href="$classGaussWalker.html#a0f3742cea8dba63552f468cc6bcffe30" title="Generate a step by unit distance and angles determined by the d&#45;1 random numbers after first (inclusi..." alt="" coords="207,121,364,148"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; double\l \&gt;::updatePoints" alt="" coords="214,173,357,214"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; double\l \&gt;::updateHull" alt="" coords="214,238,357,279"/>
+</map>

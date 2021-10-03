@@ -1,0 +1,36 @@
+<map id="tests/observables.cpp" name="tests/observables.cpp">
+<area shape="rect" id="node3" href="$Cmd_8hpp.html" title="../Cmd.hpp" alt="" coords="3745,477,3831,504"/>
+<area shape="rect" id="node11" href="$RNG_8hpp.html" title="../RNG.hpp" alt="" coords="4071,477,4160,504"/>
+<area shape="rect" id="node16" href="$Walker_8hpp.html" title="../walker/Walker.hpp" alt="" coords="3849,395,3991,421"/>
+<area shape="rect" id="node19" href="$LatticeWalker_8hpp.html" title="../walker/LatticeWalker.hpp" alt="" coords="5,237,187,264"/>
+<area shape="rect" id="node27" href="$GaussWalker_8hpp.html" title="../walker/GaussWalker.hpp" alt="" coords="211,237,391,264"/>
+<area shape="rect" id="node28" href="$MultipleWalker_8hpp.html" title="../walker/MultipleWalker.hpp" alt="" coords="3287,320,3473,347"/>
+<area shape="rect" id="node29" href="$Simulation_8hpp.html" title="../simulation/Simulation.hpp" alt="" coords="2585,155,2767,181"/>
+<area shape="rect" id="node49" href="$SimpleSampling_8hpp.html" title="../simulation/SimpleSampling.hpp" alt="" coords="2843,80,3059,107"/>
+<area shape="rect" id="node50" href="$Metropolis_8hpp.html" title="../simulation/Metropolis.hpp" alt="" coords="2585,80,2767,107"/>
+<area shape="rect" id="node7" href="$Logging_8hpp.html" title="Logging.hpp" alt="" coords="2237,560,2328,587"/>
+<area shape="rect" id="node18" href="$io_8hpp.html" title="../io.hpp" alt="" coords="1983,477,2052,504"/>
+<area shape="rect" id="node20" href="$SpecWalker_8hpp.html" title="SpecWalker.hpp" alt="" coords="2385,320,2503,347"/>
+<area shape="rect" id="node21" href="$Svg_8hpp.html" title="../visualization/Svg.hpp" alt="" coords="1799,477,1957,504"/>
+<area shape="rect" id="node22" href="$Povray_8hpp.html" title="../visualization/Povray.hpp" alt="" coords="2633,477,2809,504"/>
+<area shape="rect" id="node23" href="$Gnuplot2D_8hpp.html" title="../visualization/Gnuplot2\lD.hpp" alt="" coords="2833,470,2996,511"/>
+<area shape="rect" id="node24" href="$Gnuplot3D_8hpp.html" title="../visualization/Gnuplot3\lD.hpp" alt="" coords="3071,470,3233,511"/>
+<area shape="rect" id="node25" href="$Step_8hpp.html" title="../Step.hpp" alt="" coords="3258,477,3344,504"/>
+<area shape="rect" id="node26" href="$ConvexHull_8hpp.html" title="../ConvexHull.hpp" alt="" coords="3241,395,3367,421"/>
+<area shape="rect" id="node33" href="$stat_8hpp.html" title="../stat/stat.hpp" alt="" coords="4185,477,4292,504"/>
+<area shape="rect" id="node34" href="$runtime_8hpp.html" title="../stat/runtime.hpp" alt="" coords="3493,395,3621,421"/>
+<area shape="rect" id="node35" href="$LoopErasedWalker_8hpp.html" title="../walker/LoopErasedWalker.hpp" alt="" coords="2808,237,3017,264"/>
+<area shape="rect" id="node36" href="$SelfAvoidingWalker_8hpp.html" title="../walker/SelfAvoidingWalker.hpp" alt="" coords="2569,237,2783,264"/>
+<area shape="rect" id="node37" href="$RealWalker_8hpp.html" title="../walker/RealWalker.hpp" alt="" coords="467,237,636,264"/>
+<area shape="rect" id="node38" href="$LevyWalker_8hpp.html" title="../walker/LevyWalker.hpp" alt="" coords="860,237,1031,264"/>
+<area shape="rect" id="node39" href="$CorrelatedWalker_8hpp.html" title="../walker/CorrelatedWalker.hpp" alt="" coords="3485,237,3688,264"/>
+<area shape="rect" id="node40" href="$EscapeWalker_8hpp.html" title="../walker/EscapeWalker.hpp" alt="" coords="3043,237,3229,264"/>
+<area shape="rect" id="node41" href="$ScentWalker_8hpp.html" title="../walker/ScentWalker.hpp" alt="" coords="1696,237,1872,264"/>
+<area shape="rect" id="node42" href="$ScentWalker1D_8hpp.html" title="../walker/ScentWalker1D.hpp" alt="" coords="1478,237,1671,264"/>
+<area shape="rect" id="node43" href="$TrueSelfAvoidingWalker_8hpp.html" title="../walker/TrueSelfAvoiding\lWalker.hpp" alt="" coords="661,230,835,271"/>
+<area shape="rect" id="node44" href="$ResetWalker_8hpp.html" title="../walker/ResetWalker.hpp" alt="" coords="1106,237,1283,264"/>
+<area shape="rect" id="node45" href="$BranchingGauss_8hpp.html" title="../walker/BranchingGauss.hpp" alt="" coords="1896,237,2093,264"/>
+<area shape="rect" id="node46" href="$RunAndTumbleWalker_8hpp.html" title="../walker/RunAndTumbleWalker.hpp" alt="" coords="2117,237,2349,264"/>
+<area shape="rect" id="node47" href="$RunAndTumbleWalkerT_8hpp.html" title="../walker/RunAndTumbleWalker\lT.hpp" alt="" coords="3254,230,3460,271"/>
+<area shape="rect" id="node48" href="$ReturningLatticeWalker_8hpp.html" title="../walker/ReturningLattice\lWalker.hpp" alt="" coords="2373,230,2544,271"/>
+</map>

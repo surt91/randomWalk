@@ -1,0 +1,6 @@
+<map id="EscapeWalker::safeOptions" name="EscapeWalker::safeOptions">
+<area shape="rect" id="node2" href="$classEscapeWalker.html#a3bbde2e00ea41cacae9e844983c690b9" title="EscapeWalker::updateStepsFrom" alt="" coords="240,56,459,83"/>
+<area shape="rect" id="node3" href="$classEscapeWalker.html#afb8684e5ca7ce83d63d50eb1b1b39386" title="EscapeWalker::updateSteps" alt="" coords="507,5,695,32"/>
+<area shape="rect" id="node4" href="$classEscapeWalker.html#a25c1e01865a5783d2309b289d4d319e2" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="523,56,680,83"/>
+<area shape="rect" id="node5" href="$classEscapeWalker.html#adf80ae5e298a6ae592a904ca0e02f194" title="EscapeWalker::undoChange" alt="" coords="507,107,695,133"/>
+</map>

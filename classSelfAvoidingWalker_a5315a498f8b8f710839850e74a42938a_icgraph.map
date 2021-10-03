@@ -1,0 +1,8 @@
+<map id="SelfAvoidingWalker::checkOverlapFree" name="SelfAvoidingWalker::checkOverlapFree">
+<area shape="rect" id="node2" href="$classSelfAvoidingWalker.html#ab000b0fed6d92f62a2bcae4a501db236" title="SelfAvoidingWalker\l::naiveChange" alt="" coords="204,7,340,49"/>
+<area shape="rect" id="node5" href="$classSelfAvoidingWalker.html#a1152816f0313dd99ce34acf027d30271" title="Dimerization algorithm to construct a Self&#45;Avoiding Walk. " alt="" coords="189,75,355,101"/>
+<area shape="rect" id="node3" href="$classSelfAvoidingWalker.html#a9e8886e72809537c9ae7619e2eb89a6f" title="Changes the walk, i.e., performs one trial move. " alt="" coords="431,5,567,46"/>
+<area shape="rect" id="node4" href="$classSelfAvoidingWalker.html#aa5c26cd25cf50befa1af4b13a5ba3357" title="special initialization for SAW: use MCMC and pivot " alt="" coords="643,5,805,46"/>
+<area shape="rect" id="node6" href="$classSelfAvoidingWalker.html#ae26eb401463cc1fa2fbfbcea3ce8aefb" title="special initialization for SAW: use dimerization (with exponential runtime) " alt="" coords="403,70,594,111"/>
+<area shape="rect" id="node7" href="$tests_2walks_8cpp.html#a38c7aad84610a3088770789a7ed4a312" title="TEST_CASE" alt="" coords="674,77,774,104"/>
+</map>

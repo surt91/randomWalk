@@ -1,0 +1,10 @@
+<map id="SelfAvoidingWalker::change" name="SelfAvoidingWalker::change">
+<area shape="rect" id="node2" href="$classWalker.html#a45ad3ce55896f074a1ed25e4323f3fb3" title="Get the number of random numbers used. " alt="" coords="208,19,307,45"/>
+<area shape="rect" id="node3" href="$classSelfAvoidingWalker.html#a3db0f953a1542b617dbd61df44977830" title="Pivot Algorithm. " alt="" coords="189,70,325,111"/>
+<area shape="rect" id="node7" href="$classSelfAvoidingWalker.html#ab000b0fed6d92f62a2bcae4a501db236" title="SelfAvoidingWalker\l::naiveChange" alt="" coords="189,135,325,177"/>
+<area shape="rect" id="node4" href="$classSelfAvoidingWalker.html#acd6fa0fc2dbd7a912355e20110c1da16" title="Applies the transformation matrix m to the point p. " alt="" coords="375,5,511,46"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; int \&gt;::\lupdatePoints" alt="" coords="373,135,512,177"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="373,70,512,111"/>
+<area shape="rect" id="node8" href="$classSelfAvoidingWalker.html#a5315a498f8b8f710839850e74a42938a" title="SelfAvoidingWalker\l::checkOverlapFree" alt="" coords="375,266,511,307"/>
+<area shape="rect" id="node9" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker\&lt; int \&gt;::\lpoints" alt="" coords="373,201,512,242"/>
+</map>

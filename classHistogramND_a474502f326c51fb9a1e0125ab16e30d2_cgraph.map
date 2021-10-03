@@ -1,0 +1,7 @@
+<map id="HistogramND::svg" name="HistogramND::svg">
+<area shape="rect" id="node2" href="$classHistogramND.html#a3ca7cca0cdda510a4ae3d9f163668371" title="max of all bins (for standard histograms) " alt="" coords="185,5,319,32"/>
+<area shape="rect" id="node3" href="$classSVG.html#a38f0439a30729a5220a035093153bb26" title="Write a square at the given coordinate to the output SVG file. " alt="" coords="203,56,301,83"/>
+<area shape="rect" id="node4" href="$classSVG.html#a5b066dce0ce5d97b21bdeadaeb62a4e7" title="SVG::text" alt="" coords="212,107,292,133"/>
+<area shape="rect" id="node5" href="$classSVG.html#aaf0c6039cf98a40fc4cd02de7ae89f56" title="SVG::setGeometry" alt="" coords="185,157,319,184"/>
+<area shape="rect" id="node6" href="$classSVG.html#ad803cf74f182bea7d5f938066c261f9d" title="SVG::save" alt="" coords="209,208,295,235"/>
+</map>

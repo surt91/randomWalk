@@ -1,0 +1,5 @@
+<map id="SpecWalker::setHullAlgo" name="SpecWalker::setHullAlgo">
+<area shape="rect" id="node2" href="$classSpecWalker.html#ac6233887d6ccc79359cdd160219a03ab" title="Do initialization, e.g. calculate the steps and the hull. " alt="" coords="222,12,341,39"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#ab6e2c3b8431e042d0954253724d769f1" title="Get new random numbers and reconstruct the walk. " alt="" coords="390,12,557,39"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#a521c893659a46a4aabf655f0de75cabf" title="For most Walks this will be just a simple reconstruct, but e.g., SAW will need a MCMC equilibration w..." alt="" coords="606,5,757,46"/>
+</map>

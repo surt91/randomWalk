@@ -1,0 +1,5 @@
+<map id="TEST_CASE" name="TEST_CASE">
+<area shape="rect" id="node2" href="$classSimulation.html#a3674d73798d25c8defc774e425452042" title="Simulation::mute" alt="" coords="159,5,279,32"/>
+<area shape="rect" id="node3" href="$classSimulation.html#ab754c23fba87f6a3ff77ca14bb84bcad" title="Simulation::run" alt="" coords="164,56,273,83"/>
+<area shape="rect" id="node4" href="$classSimulation.html#adf4df2bde6a66eb6d40ea8b1435f1a4a" title="A value which can be checked against a known value in tests to find regressions. " alt="" coords="155,107,282,133"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="SpecWalker::steps" name="SpecWalker::steps">
+<area shape="rect" id="node2" href="$tests_2walks_8cpp.html#a38c7aad84610a3088770789a7ed4a312" title="TEST_CASE" alt="" coords="410,5,510,32"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#acb00292166d9b25d891df5093d05b995" title="Get the length of the walk. " alt="" coords="187,56,323,83"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#adb4de16b45f0bb34acbf567ec790bfe2" title="Get the maximum distance of any two points of the walk. " alt="" coords="371,56,549,83"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#a86038fb7570f75a3d3845a41344b3e25" title="Get the oblateness of the walk (this is not really oblateness but more the ratio of the longest and s..." alt="" coords="378,107,542,133"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#aaa7d17781b7ccbdbc43049db0894159f" title="length of the longest (in terms of length) partial walk " alt="" coords="389,158,531,199"/>
+<area shape="rect" id="node5" href="$observables_8cpp.html#ae70efa4b66f790bd544bb6ec33b8c1c5" title="TEST_CASE" alt="" coords="598,107,698,133"/>
+</map>

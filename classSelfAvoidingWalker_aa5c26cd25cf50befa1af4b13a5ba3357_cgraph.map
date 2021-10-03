@@ -1,0 +1,12 @@
+<map id="SelfAvoidingWalker::generate_from_MCMC" name="SelfAvoidingWalker::generate_from_MCMC">
+<area shape="rect" id="node2" href="$classSpecWalker.html#ac6233887d6ccc79359cdd160219a03ab" title="SpecWalker\&lt; int \&gt;::init" alt="" coords="217,19,373,45"/>
+<area shape="rect" id="node3" href="$classSelfAvoidingWalker.html#a9e8886e72809537c9ae7619e2eb89a6f" title="Changes the walk, i.e., performs one trial move. " alt="" coords="227,70,363,111"/>
+<area shape="rect" id="node4" href="$classWalker.html#a45ad3ce55896f074a1ed25e4323f3fb3" title="Get the number of random numbers used. " alt="" coords="440,19,539,45"/>
+<area shape="rect" id="node5" href="$classSelfAvoidingWalker.html#a3db0f953a1542b617dbd61df44977830" title="Pivot Algorithm. " alt="" coords="421,70,557,111"/>
+<area shape="rect" id="node9" href="$classSelfAvoidingWalker.html#ab000b0fed6d92f62a2bcae4a501db236" title="SelfAvoidingWalker\l::naiveChange" alt="" coords="421,135,557,177"/>
+<area shape="rect" id="node6" href="$classSelfAvoidingWalker.html#acd6fa0fc2dbd7a912355e20110c1da16" title="Applies the transformation matrix m to the point p. " alt="" coords="607,5,743,46"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; int \&gt;::\lupdatePoints" alt="" coords="605,135,744,177"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="605,70,744,111"/>
+<area shape="rect" id="node10" href="$classSelfAvoidingWalker.html#a5315a498f8b8f710839850e74a42938a" title="SelfAvoidingWalker\l::checkOverlapFree" alt="" coords="607,266,743,307"/>
+<area shape="rect" id="node11" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker\&lt; int \&gt;::\lpoints" alt="" coords="605,201,744,242"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="LoopErasedWalker::svgOfErasedLoops" name="LoopErasedWalker::svgOfErasedLoops">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker\&lt; int \&gt;::\lpoints" alt="" coords="284,5,423,46"/>
+<area shape="rect" id="node3" href="$classLoopErasedWalker.html#add55e0de05ceb9448ca6118f4bb364fc" title="Get the number of random numbers used. " alt="" coords="270,71,437,97"/>
+<area shape="rect" id="node4" href="$classSVG.html#a8bd66ed169e9c92b62eb7a977a658aa9" title="Write a circle at the given coordinate to the output SVG file. " alt="" coords="309,121,398,148"/>
+<area shape="rect" id="node5" href="$classSVG.html#af91c5660d0e53ab82d59b171c5f66588" title="SVG::polyline" alt="" coords="302,172,405,199"/>
+<area shape="rect" id="node6" href="$classSVG.html#a5b066dce0ce5d97b21bdeadaeb62a4e7" title="SVG::text" alt="" coords="313,223,393,249"/>
+<area shape="rect" id="node7" href="$classSVG.html#aaf0c6039cf98a40fc4cd02de7ae89f56" title="SVG::setGeometry" alt="" coords="287,273,420,300"/>
+<area shape="rect" id="node8" href="$classSVG.html#ad803cf74f182bea7d5f938066c261f9d" title="SVG::save" alt="" coords="310,324,397,351"/>
+</map>

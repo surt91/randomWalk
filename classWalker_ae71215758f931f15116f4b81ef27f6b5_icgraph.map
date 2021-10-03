@@ -1,0 +1,7 @@
+<map id="Walker::passage" name="Walker::passage">
+<area shape="rect" id="node2" href="$classMetropolis.html#ac2d1c2359b9b94195a9752d9579426a2" title="Implementation of a Metropolis based large deviations sampling. " alt="" coords="191,31,299,57"/>
+<area shape="rect" id="node5" href="$classSimpleSampling.html#abed9df3a7132905ec4518356d62ded2b" title="SimpleSampling::run" alt="" coords="174,81,317,108"/>
+<area shape="rect" id="node3" href="$tests_2walks_8cpp.html#afc9bc8fc2e68e375a80660ece030815d" title="MCMC_sampling" alt="" coords="365,5,488,32"/>
+<area shape="rect" id="node4" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="401,56,452,83"/>
+<area shape="rect" id="node6" href="$benchmarks_2walks_8cpp.html#a92902f35dec8813d5ca916ac97d9f0ea" title="simple_sampling" alt="" coords="367,107,486,133"/>
+</map>

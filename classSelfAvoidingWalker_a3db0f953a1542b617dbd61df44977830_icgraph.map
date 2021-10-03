@@ -1,0 +1,10 @@
+<map id="SelfAvoidingWalker::pivot" name="SelfAvoidingWalker::pivot">
+<area shape="rect" id="node2" href="$classSelfAvoidingWalker.html#a9e8886e72809537c9ae7619e2eb89a6f" title="Changes the walk, i.e., performs one trial move. " alt="" coords="189,38,325,79"/>
+<area shape="rect" id="node6" href="$classSelfAvoidingWalker.html#a9db75185adcd3d56447f0505a58ddf79" title="Undoes the last change. " alt="" coords="189,103,325,145"/>
+<area shape="rect" id="node7" href="$classSelfAvoidingWalker.html#abd5d0c5938704a6fb0605ba60ae41fbd" title="SelfAvoidingWalker\l::svgOfPivot" alt="" coords="189,169,325,210"/>
+<area shape="rect" id="node3" href="$classSelfAvoidingWalker.html#aa5c26cd25cf50befa1af4b13a5ba3357" title="special initialization for SAW: use MCMC and pivot " alt="" coords="373,38,536,79"/>
+<area shape="rect" id="node4" href="$classSelfAvoidingWalker.html#afd59f5d61a5cbd31d9cc08fc671f0b2d" title="SelfAvoidingWalker\l::SelfAvoidingWalker" alt="" coords="584,5,728,46"/>
+<area shape="rect" id="node5" href="$classSelfAvoidingWalker.html#acd1fcbcbebf4dfd274b101e4cad20172" title="Get new random numbers and reconstruct the walk. " alt="" coords="588,70,724,111"/>
+<area shape="rect" id="node8" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="429,151,480,177"/>
+<area shape="rect" id="node9" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="405,201,505,228"/>
+</map>

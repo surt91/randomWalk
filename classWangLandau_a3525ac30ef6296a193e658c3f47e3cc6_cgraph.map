@@ -1,0 +1,18 @@
+<map id="WangLandau::run" name="WangLandau::run">
+<area shape="rect" id="node2" href="$classSimulation.html#a27a5df67d0f8cb65c08120be1bd99ffc" title="Simulation::prepare" alt="" coords="189,107,323,133"/>
+<area shape="rect" id="node7" href="$classWangLandau.html#a86245de63f664be5f382fd0cb004b80e" title="Create a starrting walk with lb &lt; S &lt; ub by a simple downhill strategy. " alt="" coords="179,259,333,285"/>
+<area shape="rect" id="node8" href="$classWalker.html#a0034daf0d7d7f2e387384db957dec0a1" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="397,208,510,235"/>
+<area shape="rect" id="node9" href="$classWalker.html#a5d85a6a2d259c04efe462a70a37f1537" title="Walker::undoChange" alt="" coords="381,309,525,336"/>
+<area shape="rect" id="node11" href="$classHistogram.html#af200f83890b3e529cfa68fc9effe9310" title="Adds an entry to the corresponding bin. " alt="" coords="201,360,311,387"/>
+<area shape="rect" id="node12" href="$classHistogram.html#a15cda5cdb6dda691e6e2003a4a5a08a3" title="minimum value of all bins " alt="" coords="201,411,311,437"/>
+<area shape="rect" id="node13" href="$classHistogram.html#a723a8797b753dd03a3c2e29b88d58934" title="mean value of all bins " alt="" coords="195,461,317,488"/>
+<area shape="rect" id="node14" href="$classHistogram.html#ab18fbea2f675c873c9c90d60eaf5dd28" title="sets all entries to zero and clears statistical data " alt="" coords="197,512,315,539"/>
+<area shape="rect" id="node15" href="$classHistogram.html#aa4a5031d11507681c2122a04463d203b" title="vector of of num_bins + 1 elements containing their borders " alt="" coords="189,563,323,589"/>
+<area shape="rect" id="node16" href="$classHistogram.html#a3a5cb89e902d0b665f23b38a696d943d" title="vector of num_bins elements containing their data " alt="" coords="186,613,326,640"/>
+<area shape="rect" id="node17" href="$classHistogram.html#a717ef5527d09cce57314f4b19bdf76e0" title="vector of num_bins elements containing their centers " alt="" coords="189,664,323,691"/>
+<area shape="rect" id="node3" href="$classWalker.html#a5fc042bfe21117a4e197f260cd25317f" title="Walker::setP1" alt="" coords="401,5,506,32"/>
+<area shape="rect" id="node4" href="$classWalker.html#a18d7b22fe3d7f63c98123ed15ea169fd" title="Walker::setP2" alt="" coords="401,56,506,83"/>
+<area shape="rect" id="node5" href="$classWalker.html#a67fe1447be2351efe9390c985dcaf064" title="Walker::setP3" alt="" coords="401,107,506,133"/>
+<area shape="rect" id="node6" href="$classWalker.html#ac5502d602f17a25e465ebe753018995a" title="Walker::updateHull" alt="" coords="387,157,520,184"/>
+<area shape="rect" id="node10" href="$classWalker.html#aceb1e0ee628cc4f9a2a610b26ea7568b" title="Walker::reconstruct" alt="" coords="385,259,521,285"/>
+</map>

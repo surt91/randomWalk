@@ -1,0 +1,7 @@
+<map id="CorrelatedWalker::setP2" name="CorrelatedWalker::setP2">
+<area shape="rect" id="node2" href="$classCorrelatedWalker.html#ac2cd00b475e45e3de63f1fff4e585be6" title="CorrelatedWalker::update\lSteps" alt="" coords="219,5,389,46"/>
+<area shape="rect" id="node4" href="$classCorrelatedWalker.html#a7f5cdb6a089516b0c85156684f6cb166" title="Updates the points of the walk given its steps. " alt="" coords="219,70,389,111"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; double\l \&gt;::updateHull" alt="" coords="233,135,375,177"/>
+<area shape="rect" id="node3" href="$classCorrelatedWalker.html#a12d316ba48a3048377db9855da6687e0" title="Generate a step by distance &#160;and &#160;gaussian angles differences. " alt="" coords="437,12,616,39"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a006c8bbc97540b78a92fa5a61745cf23" title="SpecWalker\&lt; double \&gt;::r" alt="" coords="443,77,610,104"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="Histogram::centers" name="Histogram::centers">
+<area shape="rect" id="node2" href="$classFastWLEntropic.html#a73b2a75fa0013eb0da67344f86806a5f" title="Implementation of the &quot;Fast&quot; 1/t Wang Landau algorithm extended by Entropic Sampling. " alt="" coords="205,5,347,32"/>
+<area shape="rect" id="node4" href="$classHistogram.html#a176bd5fc9d3902c6fd7f983ea5e4f796" title="Histogram::ascii_table" alt="" coords="200,157,352,184"/>
+<area shape="rect" id="node6" href="$classWangLandau.html#a75e95fc8b1ecc138724d69abe767c6f9" title="WangLandau::printCenters" alt="" coords="187,56,365,83"/>
+<area shape="rect" id="node7" href="$classWangLandau.html#a3525ac30ef6296a193e658c3f47e3cc6" title="Implementation of the Wang Landau algorithm. " alt="" coords="214,107,338,133"/>
+<area shape="rect" id="node3" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="439,56,489,83"/>
+<area shape="rect" id="node5" href="$histo_8cpp.html#a091286729332c99813c090370aac39d9" title="TEST_CASE" alt="" coords="414,157,514,184"/>
+</map>

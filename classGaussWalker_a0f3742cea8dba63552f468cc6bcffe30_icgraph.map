@@ -1,0 +1,6 @@
+<map id="GaussWalker::genStep" name="GaussWalker::genStep">
+<area shape="rect" id="node2" href="$classGaussWalker.html#afcb1ca56ca4389214223e4cb651be888" title="GaussWalker::updateSteps" alt="" coords="211,12,394,39"/>
+<area shape="rect" id="node4" href="$classGaussWalker.html#abe7b1b404a96a4ec2cc0f4184ad45bf1" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="227,63,378,89"/>
+<area shape="rect" id="node5" href="$classGaussWalker.html#ac2d3611eac321277f0e9a110639e0885" title="GaussWalker::undoChange" alt="" coords="211,113,394,140"/>
+<area shape="rect" id="node3" href="$classGaussWalker.html#a12000fb6fcef6b5cfbd32ef31b4b4ae7" title="Set the random numbers such that we get an half circle shape. " alt="" coords="443,5,642,46"/>
+</map>

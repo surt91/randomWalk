@@ -1,0 +1,13 @@
+<map id="SelfAvoidingWalker::svgOfPivot" name="SelfAvoidingWalker::svgOfPivot">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker\&lt; int \&gt;::\lpoints" alt="" coords="189,5,328,46"/>
+<area shape="rect" id="node3" href="$classSVG.html#a8bd66ed169e9c92b62eb7a977a658aa9" title="Write a circle at the given coordinate to the output SVG file. " alt="" coords="214,71,303,97"/>
+<area shape="rect" id="node4" href="$classSVG.html#af91c5660d0e53ab82d59b171c5f66588" title="SVG::polyline" alt="" coords="207,121,310,148"/>
+<area shape="rect" id="node5" href="$classWalker.html#a45ad3ce55896f074a1ed25e4323f3fb3" title="Get the number of random numbers used. " alt="" coords="209,172,308,199"/>
+<area shape="rect" id="node6" href="$classSelfAvoidingWalker.html#a3db0f953a1542b617dbd61df44977830" title="Pivot Algorithm. " alt="" coords="191,223,327,265"/>
+<area shape="rect" id="node10" href="$classSVG.html#a5b066dce0ce5d97b21bdeadaeb62a4e7" title="SVG::text" alt="" coords="219,289,299,316"/>
+<area shape="rect" id="node11" href="$classSVG.html#aaf0c6039cf98a40fc4cd02de7ae89f56" title="SVG::setGeometry" alt="" coords="192,340,325,367"/>
+<area shape="rect" id="node12" href="$classSVG.html#ad803cf74f182bea7d5f938066c261f9d" title="SVG::save" alt="" coords="215,391,302,417"/>
+<area shape="rect" id="node7" href="$classSelfAvoidingWalker.html#acd6fa0fc2dbd7a912355e20110c1da16" title="Applies the transformation matrix m to the point p. " alt="" coords="377,158,513,199"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; int \&gt;::\lupdatePoints" alt="" coords="376,223,515,265"/>
+<area shape="rect" id="node9" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="376,289,515,330"/>
+</map>

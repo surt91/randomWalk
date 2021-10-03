@@ -1,0 +1,6 @@
+<map id="ScentWalker::svg_histogram" name="ScentWalker::svg_histogram">
+<area shape="rect" id="node2" href="$classSVG.html#a38f0439a30729a5220a035093153bb26" title="Write a square at the given coordinate to the output SVG file. " alt="" coords="263,5,361,32"/>
+<area shape="rect" id="node3" href="$classSVG.html#a5b066dce0ce5d97b21bdeadaeb62a4e7" title="SVG::text" alt="" coords="272,56,352,83"/>
+<area shape="rect" id="node4" href="$classSVG.html#aaf0c6039cf98a40fc4cd02de7ae89f56" title="SVG::setGeometry" alt="" coords="245,107,379,133"/>
+<area shape="rect" id="node5" href="$classSVG.html#ad803cf74f182bea7d5f938066c261f9d" title="SVG::save" alt="" coords="269,157,355,184"/>
+</map>

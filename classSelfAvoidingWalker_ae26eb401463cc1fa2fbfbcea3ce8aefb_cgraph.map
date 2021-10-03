@@ -1,0 +1,5 @@
+<map id="SelfAvoidingWalker::generate_from_dimerization" name="SelfAvoidingWalker::generate_from_dimerization">
+<area shape="rect" id="node2" href="$classSelfAvoidingWalker.html#a1152816f0313dd99ce34acf027d30271" title="Dimerization algorithm to construct a Self&#45;Avoiding Walk. " alt="" coords="245,12,411,39"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#ac6233887d6ccc79359cdd160219a03ab" title="SpecWalker\&lt; int \&gt;::init" alt="" coords="250,63,406,89"/>
+<area shape="rect" id="node3" href="$classSelfAvoidingWalker.html#a5315a498f8b8f710839850e74a42938a" title="SelfAvoidingWalker\l::checkOverlapFree" alt="" coords="459,5,595,46"/>
+</map>

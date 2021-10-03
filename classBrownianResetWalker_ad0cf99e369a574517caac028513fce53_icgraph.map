@@ -1,0 +1,10 @@
+<map id="BrownianResetWalker::genStep" name="BrownianResetWalker::genStep">
+<area shape="rect" id="node2" href="$classBrownianResetWalker.html#a9289e83ba42832455c08ee47150205ca" title="BrownianResetWalker\l::updateSteps" alt="" coords="227,37,379,78"/>
+<area shape="rect" id="node6" href="$classBrownianResetWalker.html#a08c428e1469255e1c593a1e26a15d2e8" title="Changes the walk, i.e., performs one trial move. " alt="" coords="227,102,379,143"/>
+<area shape="rect" id="node7" href="$classBrownianResetWalker.html#a40bf811adb4f1bbfab533df38b6f7000" title="Undoes the last change. " alt="" coords="227,167,379,209"/>
+<area shape="rect" id="node8" href="$classBrownianResetWalkerShifted.html#a9c99b6fa3050f5b816d1b504fecd478e" title="BrownianResetWalkerShifted\l::updateSteps" alt="" coords="206,233,399,274"/>
+<area shape="rect" id="node3" href="$classBrownianResetWalker.html#a785ce07ef75d1fb90b7bdcb225fb99f8" title="BrownianResetWalker\l::setP1" alt="" coords="469,5,621,46"/>
+<area shape="rect" id="node5" href="$classBrownianResetWalker.html#a8a078ad4033c9fb69636f0a40b496de8" title="BrownianResetWalker\l::setP2" alt="" coords="469,70,621,111"/>
+<area shape="rect" id="node4" href="$tests_2walks_8cpp.html#a38c7aad84610a3088770789a7ed4a312" title="TEST_CASE" alt="" coords="691,12,791,39"/>
+<area shape="rect" id="node9" href="$classBrownianResetWalkerShifted.html#acc9ca7eaab72415fce5d447e5ccd20bd" title="BrownianResetWalkerShifted\l::setP3" alt="" coords="449,233,642,274"/>
+</map>

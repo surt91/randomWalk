@@ -1,0 +1,28 @@
+<map id="Step::x" name="Step::x">
+<area shape="rect" id="node2" href="$classConvexHull.html#a12c06bdb39138e5ef5f91375c1edfca7" title="deletes points from interior points according to the Akl Toussaint heuristic " alt="" coords="499,403,680,445"/>
+<area shape="rect" id="node3" href="$classConvexHull.html#a3f4c3c1e9dbf0b9d6253fe975863a86f" title="deletes points from interior points according to the Akl Toussaint heuristic " alt="" coords="499,809,680,850"/>
+<area shape="rect" id="node4" href="$geometry_8hpp.html#a5969586193db49fc2e5e7691da40d186" title="2D cross product of OA and OB vectors, i.e. " alt="" coords="135,157,217,184"/>
+<area shape="rect" id="node13" href="$geometry_8hpp.html#ad08d08363c902a16c034433394522dab" title="Test on which side of the line p1, p2 the point p lies. " alt="" coords="153,639,199,665"/>
+<area shape="rect" id="node24" href="$classStep.html#a2b6eb3e8f8f4fa666347e901a81d26a4" title="a point is smaller, if the x value is smaller in case of a tie the smaller y value decides we need to..." alt="" coords="120,841,232,868"/>
+<area shape="rect" id="node25" href="$Step_8hpp.html#aa039facd0171ae56019922ed65811132" title="cross" alt="" coords="149,309,203,336"/>
+<area shape="rect" id="node27" href="$classStep.html#a7ee4766d666d763d341f301fb707462f" title="Manhattan distance. " alt="" coords="118,892,234,919"/>
+<area shape="rect" id="node5" href="$classConvexHull.html#a68ac59767efb2ff8f4a37fe2c4143cd0" title="ConvexHull::runAndrews" alt="" coords="283,5,450,32"/>
+<area shape="rect" id="node6" href="$classConvexHull.html#a167e6b68c613ab630d31cf9b4133a271" title="ConvexHull::runJarvis" alt="" coords="514,208,665,235"/>
+<area shape="rect" id="node7" href="$ConvexHull_8hpp.html#a8a95ad15d676949c2bd5f039b40b470e" title="andrew" alt="" coords="557,5,621,32"/>
+<area shape="rect" id="node8" href="$classConvexHull.html#ac1700b2764d5d9a87f8659e9164dc017" title="ConvexHull::runChan" alt="" coords="728,81,875,108"/>
+<area shape="rect" id="node9" href="$geometry_8hpp.html#ad08ace394e18b4f798f55662a0fbe1a6" title="orientation" alt="" coords="325,107,408,133"/>
+<area shape="rect" id="node11" href="$classSpecWalker.html#a86038fb7570f75a3d3845a41344b3e25" title="Get the oblateness of the walk (this is not really oblateness but more the ratio of the longest and s..." alt="" coords="285,259,449,285"/>
+<area shape="rect" id="node10" href="$geometry_8hpp.html#ab4c8eeac1972c18ee6cbf7c94b65eddc" title="polygon_tangent" alt="" coords="531,56,648,83"/>
+<area shape="rect" id="node12" href="$observables_8cpp.html#ae70efa4b66f790bd544bb6ec33b8c1c5" title="TEST_CASE" alt="" coords="539,259,639,285"/>
+<area shape="rect" id="node14" href="$geometry_8hpp.html#a433f35332770bd1cdab0924bc5535e9c" title="Test if point p is inside the triangel formed by p1, p2, p3. " alt="" coords="313,360,420,387"/>
+<area shape="rect" id="node15" href="$geometry_8hpp.html#af7e39fc4eb3c8425c3119b5748aa83ab" title="Test if point p is inside the quadriliteral formed by p1, p2, p3, p4. " alt="" coords="299,512,434,539"/>
+<area shape="rect" id="node16" href="$geometry_8hpp.html#afb2e6ace8a79eca774a9551f261e8beb" title="Test if point p is inside the octoliteral formed by p1 to p8. " alt="" coords="322,765,411,792"/>
+<area shape="rect" id="node17" href="$geometry_8hpp.html#a780fc177ef186e1efc5f2653fc7e3c39" title="Test if point p is inside the octahedron formed by the given vertices. " alt="" coords="303,563,431,589"/>
+<area shape="rect" id="node18" href="$geometry_8hpp.html#a065ffe4a1f608c6b41aca330d38cd296" title="pointInFacets" alt="" coords="316,816,417,843"/>
+<area shape="rect" id="node19" href="$geometry_8hpp.html#a606e2862f678cc3170f5c7eb142e5478" title="Test if point p is inside the Quattuordecaeder (star tetraeder) formed by the given vertices https://..." alt="" coords="285,613,449,640"/>
+<area shape="rect" id="node20" href="$geometry_8hpp.html#aa1ec392f626bd2aef6f7c8026021f9ed" title="Test if point p is inside the Polygon formed by the N points in the array. " alt="" coords="323,664,410,691"/>
+<area shape="rect" id="node21" href="$geometry_8hpp.html#a47b47b3645e2f57a4971c14b16974ecc" title="Test if point p is inside the polygon formed by the points in poly. " alt="" coords="313,715,421,741"/>
+<area shape="rect" id="node22" href="$classSpecWalker.html#a1ccb774587b4c289994aed5f635e62cc" title="Save a threejs file visualizing the walk. " alt="" coords="297,461,437,488"/>
+<area shape="rect" id="node23" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="539,469,639,496"/>
+<area shape="rect" id="node26" href="$classConvexHull.html#a7aa9b92a849a8fb6610825d7160fde87" title="ConvexHull::hullFacets" alt="" coords="287,309,446,336"/>
+</map>

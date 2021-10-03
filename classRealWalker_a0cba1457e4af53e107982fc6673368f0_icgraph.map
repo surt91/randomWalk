@@ -1,0 +1,5 @@
+<map id="RealWalker::genStep" name="RealWalker::genStep">
+<area shape="rect" id="node2" href="$classRealWalker.html#a352bd2664f495f66071689a913db051e" title="RealWalker::updateSteps" alt="" coords="200,5,371,32"/>
+<area shape="rect" id="node3" href="$classRealWalker.html#abbe7d1415dfdc15e5a46d69fb59754d0" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="215,56,355,83"/>
+<area shape="rect" id="node4" href="$classRealWalker.html#a01cdea33800261c213f5bfc852107128" title="RealWalker::undoChange" alt="" coords="200,107,371,133"/>
+</map>

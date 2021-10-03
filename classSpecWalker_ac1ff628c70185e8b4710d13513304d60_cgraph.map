@@ -1,0 +1,10 @@
+<map id="SpecWalker::gp" name="SpecWalker::gp">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker::points" alt="" coords="184,5,320,32"/>
+<area shape="rect" id="node3" href="$classGnuplot2D.html#a7ab722a75e44e2647fe8529cc17996f7" title="Gnuplot2D::polyline" alt="" coords="184,56,320,83"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#a2992a55a46a88c8be4f2d1119efa8baa" title="SpecWalker::hullPoints" alt="" coords="173,107,331,133"/>
+<area shape="rect" id="node5" href="$classGnuplot2D.html#abaef26c69d26651ccdf2ac0147202899" title="Gnuplot2D::save" alt="" coords="192,157,312,184"/>
+<area shape="rect" id="node6" href="$classGnuplot3D.html#a77ade08eabb82d591f050f0304c19246" title="Gnuplot3D::polyline" alt="" coords="184,208,320,235"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#a12ce543f28e0655e979e8ebc93a6ae01" title="SpecWalker::convexHull" alt="" coords="169,259,335,285"/>
+<area shape="rect" id="node8" href="$classGnuplot3D.html#af97d9ded99071375e5f79ba0abda9ba9" title="Gnuplot3D::facet" alt="" coords="191,309,313,336"/>
+<area shape="rect" id="node9" href="$classGnuplot3D.html#a39ae7ef386c15a56ef7e9213b8743f29" title="Gnuplot3D::save" alt="" coords="192,360,312,387"/>
+</map>

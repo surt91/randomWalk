@@ -1,0 +1,11 @@
+<map id="Step::neighbors" name="Step::neighbors">
+<area shape="rect" id="node2" href="$tests_2step_8cpp.html#ab7d7d9c3bf19710fbae8f2355ea6e677" title="TEST_CASE" alt="" coords="199,5,299,32"/>
+<area shape="rect" id="node3" href="$classHypercube.html#a547cf45a9b0f11ad885118a0c04faf96" title="Hypercube::bestfs" alt="" coords="185,56,314,83"/>
+<area shape="rect" id="node4" href="$classEscapeWalker.html#afce1fcced706d1d2656cec4ce1c3d4d7" title="EscapeWalker::escapable" alt="" coords="379,107,554,133"/>
+<area shape="rect" id="node5" href="$classEscapeWalker.html#a3bbde2e00ea41cacae9e844983c690b9" title="EscapeWalker::updateStepsFrom" alt="" coords="603,132,821,159"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#aa22253eeb5354372b3e34ef61f7a33a9" title="Get the number of distinct visited sites. " alt="" coords="180,209,319,250"/>
+<area shape="rect" id="node7" href="$classTrueSelfAvoidingWalker.html#a28d864fc07db741bd600973a794c32d4" title="TrueSelfAvoidingWalker\l::updateSteps" alt="" coords="168,274,331,315"/>
+<area shape="rect" id="node8" href="$classTrueSelfAvoidingWalker.html#a3871b3d1213a43a7d8cb3b92a64e4942" title="Changes the walk, i.e., performs one trial move. " alt="" coords="385,209,548,250"/>
+<area shape="rect" id="node9" href="$classTrueSelfAvoidingWalker.html#aca40c9716fb4cdb63f04b230bf8ba79d" title="Undoes the last change. " alt="" coords="385,274,548,315"/>
+<area shape="rect" id="node10" href="$classTrueSelfAvoidingWalker.html#a89f6b6e56775cdd62f7f8baccdac953f" title="TrueSelfAvoidingWalker\l::setP1" alt="" coords="385,339,548,381"/>
+</map>

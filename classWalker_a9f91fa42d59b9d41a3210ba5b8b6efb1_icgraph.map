@@ -1,0 +1,5 @@
+<map id="Walker::goDownhill" name="Walker::goDownhill">
+<area shape="rect" id="node2" href="$classSimulation.html#a052364d4ab80f6378d71432bba1e57f9" title="Estimate an upper bound with a greedy heuristic. " alt="" coords="189,5,371,46"/>
+<area shape="rect" id="node4" href="$classSimulation.html#af7dd8897487984cf8ba1e008511940ee" title="Estimate a lower bound with a greedy heuristic. " alt="" coords="189,70,371,111"/>
+<area shape="rect" id="node3" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="419,45,469,72"/>
+</map>

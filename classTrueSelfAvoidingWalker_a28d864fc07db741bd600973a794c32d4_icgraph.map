@@ -1,0 +1,5 @@
+<map id="TrueSelfAvoidingWalker::updateSteps" name="TrueSelfAvoidingWalker::updateSteps">
+<area shape="rect" id="node2" href="$classTrueSelfAvoidingWalker.html#a3871b3d1213a43a7d8cb3b92a64e4942" title="Changes the walk, i.e., performs one trial move. " alt="" coords="216,5,379,46"/>
+<area shape="rect" id="node3" href="$classTrueSelfAvoidingWalker.html#aca40c9716fb4cdb63f04b230bf8ba79d" title="Undoes the last change. " alt="" coords="216,70,379,111"/>
+<area shape="rect" id="node4" href="$classTrueSelfAvoidingWalker.html#a89f6b6e56775cdd62f7f8baccdac953f" title="TrueSelfAvoidingWalker\l::setP1" alt="" coords="216,135,379,177"/>
+</map>

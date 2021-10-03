@@ -1,0 +1,6 @@
+<map id="GaussResetWalker::change" name="GaussResetWalker::change">
+<area shape="rect" id="node2" href="$classUniformRNG.html#aacf5148679133b7f868aac3912df88b0" title="Generates normal distributed random numbers. " alt="" coords="257,5,415,32"/>
+<area shape="rect" id="node3" href="$classGaussResetWalker.html#a6610a3cfe40dfa4074589acd2090931c" title="Generate a step by unit distance and angles determined by the d&#45;1 random numbers after first (inclusi..." alt="" coords="240,56,432,83"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; double\l \&gt;::updatePoints" alt="" coords="265,107,407,149"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; double\l \&gt;::updateHull" alt="" coords="265,173,407,214"/>
+</map>

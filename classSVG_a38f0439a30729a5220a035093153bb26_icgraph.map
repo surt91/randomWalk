@@ -1,0 +1,6 @@
+<map id="SVG::square" name="SVG::square">
+<area shape="rect" id="node2" href="$classHistogramND.html#a474502f326c51fb9a1e0125ab16e30d2" title="save a visualization, only d = 2 " alt="" coords="183,5,313,32"/>
+<area shape="rect" id="node3" href="$classScentWalker.html#a34cc4e0d14cb77671a27aed4186a4d53" title="ScentWalker::svg_histogram" alt="" coords="153,56,343,83"/>
+<area shape="rect" id="node4" href="$classScentWalker.html#a260fa8f46270f6eca06a2a9518694bd8" title="Save a gnuplot file visualizing the walk. " alt="" coords="393,56,519,83"/>
+<area shape="rect" id="node5" href="$visualization_8cpp.html#aa6345a5101469be2ef5aa2a88018ce8d" title="TEST_CASE" alt="" coords="569,56,669,83"/>
+</map>

@@ -1,0 +1,39 @@
+<map id="TEST_CASE" name="TEST_CASE">
+<area shape="rect" id="node2" href="$classSelfAvoidingWalker.html#ae26eb401463cc1fa2fbfbcea3ce8aefb" title="special initialization for SAW: use dimerization (with exponential runtime) " alt="" coords="165,5,355,46"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#aca62448e3f35955934ddb524bcf772c3" title="Returns the Volume of the convex hull. " alt="" coords="205,371,315,397"/>
+<area shape="rect" id="node7" href="$classRunAndTumbleWalkerT.html#a344752a4407e5d2abbec70ac7cd3a95f" title="RunAndTumbleWalkerT\l::setP2" alt="" coords="179,422,341,463"/>
+<area shape="rect" id="node8" href="$classRunAndTumbleWalkerT.html#ae7b6d572ebeb4ba51e0de5e16271d2d8" title="Get new random numbers and reconstruct the walk. " alt="" coords="179,122,341,163"/>
+<area shape="rect" id="node11" href="$classSpecWalker.html#acb00292166d9b25d891df5093d05b995" title="Get the length of the walk. " alt="" coords="192,539,328,565"/>
+<area shape="rect" id="node12" href="$classSpecWalker.html#ab746b3f8c58a90ccd0d83bb1f3b51fa7" title="SpecWalker::steps" alt="" coords="439,488,572,515"/>
+<area shape="rect" id="node13" href="$classResetWalker.html#a9635c51aa38a5ff18a39862d79a94e28" title="ResetWalker::setP1" alt="" coords="190,589,330,616"/>
+<area shape="rect" id="node17" href="$classResetWalker.html#ad9700e50ffa8003c3c63717eb2fd8137" title="Get new random numbers and reconstruct the walk. " alt="" coords="175,71,345,97"/>
+<area shape="rect" id="node18" href="$classResetWalker.html#adb8894be9075db4b54b8fefd1efda16d" title="number of resets the walk did " alt="" coords="173,757,347,784"/>
+<area shape="rect" id="node19" href="$classResetWalker.html#a77505e7478cac4d559cb15dfa4775235" title="steps of the longest (in terms of steps) partial walk " alt="" coords="179,809,341,850"/>
+<area shape="rect" id="node20" href="$classResetWalker.html#a63bd021a7c3107509d1dce4cda9b2bfb" title="length of the longest (in terms of length) partial walk " alt="" coords="186,874,334,915"/>
+<area shape="rect" id="node21" href="$classGaussResetWalker.html#ae097b7f074782f66b8ed82e63c0e481a" title="GaussResetWalker::setP1" alt="" coords="171,640,349,667"/>
+<area shape="rect" id="node25" href="$classGaussResetWalker.html#a59ce4840f8045f982f853229d7d4bb0b" title="Get new random numbers and reconstruct the walk. " alt="" coords="155,188,365,215"/>
+<area shape="rect" id="node26" href="$classGaussResetWalker.html#a4a7ecddb94ac833fb179b4bcd4586619" title="number of resets the walk did " alt="" coords="175,939,345,981"/>
+<area shape="rect" id="node27" href="$classGaussResetWalker.html#a3f53027075ca28fb14383f6f8bb1c802" title="steps of the longest (in terms of steps) partial walk " alt="" coords="159,1005,361,1046"/>
+<area shape="rect" id="node28" href="$classGaussResetWalker.html#aef3615982b48538c81487c60c99c830e" title="length of the longest (in terms of length) partial walk " alt="" coords="167,1070,353,1111"/>
+<area shape="rect" id="node29" href="$classBrownianResetWalker.html#a785ce07ef75d1fb90b7bdcb225fb99f8" title="BrownianResetWalker\l::setP1" alt="" coords="184,691,336,733"/>
+<area shape="rect" id="node32" href="$classBrownianResetWalker.html#acda42ef7e234edd67e0cdae149b20274" title="Get new random numbers and reconstruct the walk. " alt="" coords="184,239,336,281"/>
+<area shape="rect" id="node33" href="$classBrownianResetWalker.html#a1b01473875df3ca5b609587e015fdf5c" title="number of resets the walk did " alt="" coords="184,1135,336,1177"/>
+<area shape="rect" id="node34" href="$classBrownianResetWalker.html#ad0f98ad5c6334fa7aab02c5108ae91c3" title="steps of the longest (in terms of steps) partial walk " alt="" coords="182,1201,338,1242"/>
+<area shape="rect" id="node35" href="$classBrownianResetWalker.html#a0781995f450cc6e81462b7d35e1ca0f1" title="length of the longest (in terms of length) partial walk " alt="" coords="184,1266,336,1307"/>
+<area shape="rect" id="node36" href="$classReturningLatticeWalker.html#ac311fb4ea44ff085f0421fc8ab334455" title="Get new random numbers and reconstruct the walk. " alt="" coords="181,305,339,346"/>
+<area shape="rect" id="node3" href="$classSelfAvoidingWalker.html#a1152816f0313dd99ce34acf027d30271" title="Dimerization algorithm to construct a Self&#45;Avoiding Walk. " alt="" coords="423,12,588,39"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#ac6233887d6ccc79359cdd160219a03ab" title="SpecWalker\&lt; int \&gt;::init" alt="" coords="427,159,583,185"/>
+<area shape="rect" id="node4" href="$classSelfAvoidingWalker.html#a5315a498f8b8f710839850e74a42938a" title="SelfAvoidingWalker\l::checkOverlapFree" alt="" coords="673,5,809,46"/>
+<area shape="rect" id="node9" href="$classUniformRNG.html#aacf5148679133b7f868aac3912df88b0" title="Generates normal distributed random numbers. " alt="" coords="426,209,585,236"/>
+<area shape="rect" id="node10" href="$classUniformRNG.html#a3cc6d6fa9bd3ddb32650f65da1f204a6" title="Generates uniformly distributed random numbers. " alt="" coords="431,108,580,135"/>
+<area shape="rect" id="node14" href="$classResetWalker.html#a754ae2ca54ad5190a0ae03e37a18cc5f" title="ResetWalker::updateSteps" alt="" coords="416,539,595,565"/>
+<area shape="rect" id="node15" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; int \&gt;::\lupdatePoints" alt="" coords="436,590,575,631"/>
+<area shape="rect" id="node16" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="436,655,575,697"/>
+<area shape="rect" id="node22" href="$classGaussResetWalker.html#adcec50b7328e1f45002cdcc0d5aece27" title="GaussResetWalker::update\lSteps" alt="" coords="414,721,597,762"/>
+<area shape="rect" id="node23" href="$classStep.html#a98f2efff93d83421d7e3fcd7bcd21175" title="Step::setZero" alt="" coords="691,756,792,783"/>
+<area shape="rect" id="node24" href="$classGaussResetWalker.html#a6610a3cfe40dfa4074589acd2090931c" title="Generate a step by unit distance and angles determined by the d&#45;1 random numbers after first (inclusi..." alt="" coords="645,705,837,732"/>
+<area shape="rect" id="node30" href="$classBrownianResetWalker.html#a9289e83ba42832455c08ee47150205ca" title="BrownianResetWalker\l::updateSteps" alt="" coords="429,786,581,827"/>
+<area shape="rect" id="node31" href="$classBrownianResetWalker.html#ad0cf99e369a574517caac028513fce53" title="Generate a step by unit distance and angles determined by the d&#45;1 random numbers after first (inclusi..." alt="" coords="665,807,817,849"/>
+<area shape="rect" id="node37" href="$classPermutation.html#adb3f23b406de27439e6a84546d399e43" title="Permutation::sort" alt="" coords="444,287,567,313"/>
+<area shape="rect" id="node38" href="$classPermutation.html#a81207117fee11e0780c4fcb2b01f6790" title="Permutation::shuffle" alt="" coords="436,337,575,364"/>
+</map>

@@ -1,0 +1,23 @@
+<map id="walker/LevyWalker.hpp" name="walker/LevyWalker.hpp">
+<area shape="rect" id="node2" href="$Simulation_8hpp.html" title="simulation/Simulation.hpp" alt="" coords="467,80,637,107"/>
+<area shape="rect" id="node4" href="$benchmarks_2walks_8cpp.html" title="benchmarks/walks.cpp" alt="" coords="45,237,200,264"/>
+<area shape="rect" id="node10" href="$tests_2walks_8cpp.html" title="tests/walks.cpp" alt="" coords="315,237,429,264"/>
+<area shape="rect" id="node22" href="$LevyWalker_8cpp.html" title="walker/LevyWalker.cpp" alt="" coords="662,80,820,107"/>
+<area shape="rect" id="node3" href="$benchmarks_2hulls_8cpp.html" title="benchmarks/hulls.cpp" alt="" coords="652,155,800,181"/>
+<area shape="rect" id="node5" href="$SimpleSampling_8hpp.html" title="simulation/SimpleSampling.hpp" alt="" coords="1021,155,1224,181"/>
+<area shape="rect" id="node6" href="$main_8cpp.html" title="main.cpp" alt="" coords="1596,328,1669,355"/>
+<area shape="rect" id="node8" href="$observables_8cpp.html" title="tests/observables.cpp" alt="" coords="846,237,996,264"/>
+<area shape="rect" id="node9" href="$sampling_8cpp.html" title="tests/sampling.cpp" alt="" coords="943,328,1075,355"/>
+<area shape="rect" id="node11" href="$Metropolis_8hpp.html" title="simulation/Metropolis.hpp" alt="" coords="825,155,996,181"/>
+<area shape="rect" id="node13" href="$MetropolisParallelTempering_8hpp.html" title="simulation/MetropolisParallel\lTempering.hpp" alt="" coords="1893,230,2080,271"/>
+<area shape="rect" id="node16" href="$WangLandau_8hpp.html" title="simulation/WangLandau.hpp" alt="" coords="1309,155,1496,181"/>
+<area shape="rect" id="node19" href="$Simulation_8cpp.html" title="simulation/Simulation.cpp" alt="" coords="151,155,321,181"/>
+<area shape="rect" id="node20" href="$tests_2hulls_8cpp.html" title="tests/hulls.cpp" alt="" coords="345,155,452,181"/>
+<area shape="rect" id="node21" href="$visualization_8cpp.html" title="tests/visualization.cpp" alt="" coords="476,155,628,181"/>
+<area shape="rect" id="node7" href="$SimpleSampling_8cpp.html" title="simulation/SimpleSampling.cpp" alt="" coords="1021,237,1224,264"/>
+<area shape="rect" id="node12" href="$Metropolis_8cpp.html" title="simulation/Metropolis.cpp" alt="" coords="499,237,669,264"/>
+<area shape="rect" id="node14" href="$MetropolisParallelTempering_8cpp.html" title="simulation/MetropolisParallel\lTempering.cpp" alt="" coords="1998,321,2185,362"/>
+<area shape="rect" id="node15" href="$MetropolisParallelTemperingMPI_8hpp.html" title="simulation/MetropolisParallel\lTemperingMPI.hpp" alt="" coords="1786,321,1973,362"/>
+<area shape="rect" id="node17" href="$FastWLEntropic_8hpp.html" title="simulation/FastWLEntropic.hpp" alt="" coords="1301,237,1504,264"/>
+<area shape="rect" id="node18" href="$WangLandau_8cpp.html" title="simulation/WangLandau.cpp" alt="" coords="1580,237,1767,264"/>
+</map>

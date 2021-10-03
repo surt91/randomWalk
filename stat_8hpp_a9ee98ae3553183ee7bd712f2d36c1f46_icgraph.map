@@ -1,0 +1,6 @@
+<map id="mean" name="mean">
+<area shape="rect" id="node2" href="$classBootstrap.html#a0a89dad79702437a938d1aa471f37274" title="Estimates the mean and standarderror of a sample. " alt="" coords="332,5,473,32"/>
+<area shape="rect" id="node3" href="$stat_8hpp.html#ac412b12563a534d59d358991360951dd" title="variance" alt="" coords="110,56,181,83"/>
+<area shape="rect" id="node4" href="$stat_8hpp.html#a6a73a9ed1a38490ec267135c1a3214e9" title="sdev" alt="" coords="229,56,280,83"/>
+<area shape="rect" id="node5" href="$classMetropolis.html#a7db5e79f3b9cdc2e26a57273a85ed092" title="Equilibrate the walk. " alt="" coords="328,56,477,83"/>
+</map>

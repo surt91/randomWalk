@@ -1,0 +1,7 @@
+<map id="SpecWalker::reconstruct" name="SpecWalker::reconstruct">
+<area shape="rect" id="node2" href="$classSpecWalker.html#ac6233887d6ccc79359cdd160219a03ab" title="Do initialization, e.g. calculate the steps and the hull. " alt="" coords="222,56,341,83"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#a1084b6895f1d3d3251dff029439afc65" title="SpecWalker::updateSteps" alt="" coords="391,5,566,32"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="Updates the points of the walk given its steps. " alt="" coords="390,56,567,83"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#aa9f88215c3996c8516ab114002bf09e3" title="Changes the algorithm used to calculate the hull. " alt="" coords="395,107,563,133"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="Update the convex hull given the current points. " alt="" coords="616,107,779,133"/>
+</map>

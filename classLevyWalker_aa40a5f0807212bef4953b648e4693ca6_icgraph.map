@@ -1,0 +1,5 @@
+<map id="LevyWalker::genStep" name="LevyWalker::genStep">
+<area shape="rect" id="node2" href="$classLevyWalker.html#a983fe0655125510271fb3bb2298d7b99" title="LevyWalker::updateSteps" alt="" coords="201,5,373,32"/>
+<area shape="rect" id="node3" href="$classLevyWalker.html#a9a84bf36ecdf17baf125a86095001d9b" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="216,56,357,83"/>
+<area shape="rect" id="node4" href="$classLevyWalker.html#ac84c7c35d0421e4a11d62131a476ea3e" title="LevyWalker::undoChange" alt="" coords="201,107,373,133"/>
+</map>

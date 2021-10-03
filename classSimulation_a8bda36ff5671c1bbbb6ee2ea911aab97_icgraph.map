@@ -1,0 +1,9 @@
+<map id="Simulation::prepareS" name="Simulation::prepareS">
+<area shape="rect" id="node2" href="$classSimulation.html#a34069a87400e7ea9aeb460fddb267c0d" title="Simulation::Simulation" alt="" coords="212,5,364,32"/>
+<area shape="rect" id="node3" href="$classSimulation.html#a052364d4ab80f6378d71432bba1e57f9" title="Estimate an upper bound with a greedy heuristic. " alt="" coords="197,57,379,98"/>
+<area shape="rect" id="node5" href="$classSimulation.html#af7dd8897487984cf8ba1e008511940ee" title="Estimate a lower bound with a greedy heuristic. " alt="" coords="197,122,379,163"/>
+<area shape="rect" id="node6" href="$classSimulation.html#aec411baad84c1eb3ebdd8acfbc180566" title="get the exact upper bound (possibly infinity) " alt="" coords="197,188,379,215"/>
+<area shape="rect" id="node8" href="$classSimulation.html#a24cdbba306df95331553476413d2e2c2" title="get the exact lower bound (possibly zero) " alt="" coords="197,239,379,265"/>
+<area shape="rect" id="node4" href="$main_8cpp.html#a217dbf8b442f20279ea00b898af96f52" title="randomWalk " alt="" coords="452,97,503,124"/>
+<area shape="rect" id="node7" href="$tests_2walks_8cpp.html#ac857ebaa094fb0a45b367d7e52f5395a" title="TEST_CASE" alt="" coords="427,213,527,240"/>
+</map>

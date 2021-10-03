@@ -1,0 +1,8 @@
+<map id="SpecWalker::A" name="SpecWalker::A">
+<area shape="rect" id="node2" href="$tests_2walks_8cpp.html#a38c7aad84610a3088770789a7ed4a312" title="TEST_CASE" alt="" coords="198,60,298,87"/>
+<area shape="rect" id="node3" href="$classSpecWalker.html#acd5e6763ee2ad29b04639c2a07b82007" title="Performs a greedy downhill optimization to maximize of minimize a the given observable of a walk..." alt="" coords="165,111,331,137"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#a6b74bf0e88b55c38328cdb00924dff71" title="Set the random numbers such that we get an half circle shape. " alt="" coords="379,5,554,46"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a6006a1ba576d57b1f9d7d6fba3ea98af" title="Set the random numbers such that we get an half circle shape in d&#45;1 dimensions. " alt="" coords="379,70,555,111"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#ab744765fe4007dd785e4230ff2b92480" title="Set the random numbers such that we get an half circle shape in d&#45;1 dimensions. " alt="" coords="381,135,552,177"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#a74ee0f799670bedcd09b23ab09b73104" title="Set the random numbers such that we get an L shape in d&#45;1 dimensions. " alt="" coords="381,201,553,242"/>
+</map>

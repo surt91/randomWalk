@@ -1,0 +1,8 @@
+<map id="GaussWalker::degenerateMaxVolume" name="GaussWalker::degenerateMaxVolume">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a006c8bbc97540b78a92fa5a61745cf23" title="SpecWalker\&lt; double \&gt;::r" alt="" coords="262,5,429,32"/>
+<area shape="rect" id="node3" href="$classGaussWalker.html#afcb1ca56ca4389214223e4cb651be888" title="GaussWalker::updateSteps" alt="" coords="254,56,437,83"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; double\l \&gt;::updatePoints" alt="" coords="274,107,417,149"/>
+<area shape="rect" id="node6" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; double\l \&gt;::updateHull" alt="" coords="274,173,417,214"/>
+<area shape="rect" id="node7" href="$classSpecWalker.html#acd5e6763ee2ad29b04639c2a07b82007" title="SpecWalker\&lt; double\l \&gt;::goDownhill" alt="" coords="274,238,417,279"/>
+<area shape="rect" id="node4" href="$classGaussWalker.html#a0f3742cea8dba63552f468cc6bcffe30" title="Generate a step by unit distance and angles determined by the d&#45;1 random numbers after first (inclusi..." alt="" coords="485,56,643,83"/>
+</map>

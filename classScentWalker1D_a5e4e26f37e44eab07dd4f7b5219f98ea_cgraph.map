@@ -1,0 +1,6 @@
+<map id="ScentWalker1D::change" name="ScentWalker1D::change">
+<area shape="rect" id="node2" href="$classWalker.html#a45ad3ce55896f074a1ed25e4323f3fb3" title="Get the number of random numbers used. " alt="" coords="267,5,365,32"/>
+<area shape="rect" id="node3" href="$classScentWalker1D.html#a77c1585ca7509bc55f754c838a2970ef" title="ScentWalker1D::updateSteps" alt="" coords="219,56,413,83"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#aee3eeb36541d99bdbdaaca90db081923" title="SpecWalker\&lt; int \&gt;::\lupdatePoints" alt="" coords="247,107,385,149"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a87bf7a438ff761bfc25a7a887b3c5e4b" title="SpecWalker\&lt; int \&gt;::\lupdateHull" alt="" coords="247,173,385,214"/>
+</map>

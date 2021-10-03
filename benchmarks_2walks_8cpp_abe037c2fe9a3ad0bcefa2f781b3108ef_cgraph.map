@@ -1,0 +1,8 @@
+<map id="BM_walk_construction" name="BM_walk_construction">
+<area shape="rect" id="node2" href="$classSimulation.html#a27a5df67d0f8cb65c08120be1bd99ffc" title="Simulation::prepare" alt="" coords="241,81,375,108"/>
+<area shape="rect" id="node7" href="$classWalker.html#a738dc014a78bd43e1696e85e7bdbf08c" title="Walker::generate_independent\l_sample" alt="" coords="209,133,407,174"/>
+<area shape="rect" id="node3" href="$classWalker.html#a5fc042bfe21117a4e197f260cd25317f" title="Walker::setP1" alt="" coords="470,5,575,32"/>
+<area shape="rect" id="node4" href="$classWalker.html#a18d7b22fe3d7f63c98123ed15ea169fd" title="Walker::setP2" alt="" coords="470,56,575,83"/>
+<area shape="rect" id="node5" href="$classWalker.html#a67fe1447be2351efe9390c985dcaf064" title="Walker::setP3" alt="" coords="470,107,575,133"/>
+<area shape="rect" id="node6" href="$classWalker.html#ac5502d602f17a25e465ebe753018995a" title="Walker::updateHull" alt="" coords="456,157,589,184"/>
+</map>

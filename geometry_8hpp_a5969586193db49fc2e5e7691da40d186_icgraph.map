@@ -1,0 +1,10 @@
+<map id="cross2d_z" name="cross2d_z">
+<area shape="rect" id="node2" href="$classConvexHull.html#a68ac59767efb2ff8f4a37fe2c4143cd0" title="ConvexHull::runAndrews" alt="" coords="137,5,303,32"/>
+<area shape="rect" id="node3" href="$classConvexHull.html#a167e6b68c613ab630d31cf9b4133a271" title="ConvexHull::runJarvis" alt="" coords="353,5,503,32"/>
+<area shape="rect" id="node4" href="$ConvexHull_8hpp.html#a8a95ad15d676949c2bd5f039b40b470e" title="andrew" alt="" coords="396,157,460,184"/>
+<area shape="rect" id="node5" href="$classConvexHull.html#ac1700b2764d5d9a87f8659e9164dc017" title="ConvexHull::runChan" alt="" coords="552,132,699,159"/>
+<area shape="rect" id="node6" href="$geometry_8hpp.html#ad08ace394e18b4f798f55662a0fbe1a6" title="orientation" alt="" coords="179,107,261,133"/>
+<area shape="rect" id="node8" href="$classSpecWalker.html#a86038fb7570f75a3d3845a41344b3e25" title="Get the oblateness of the walk (this is not really oblateness but more the ratio of the longest and s..." alt="" coords="138,259,302,285"/>
+<area shape="rect" id="node7" href="$geometry_8hpp.html#ab4c8eeac1972c18ee6cbf7c94b65eddc" title="polygon_tangent" alt="" coords="369,107,487,133"/>
+<area shape="rect" id="node9" href="$observables_8cpp.html#ae70efa4b66f790bd544bb6ec33b8c1c5" title="TEST_CASE" alt="" coords="378,259,478,285"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="SpecWalker::threejs" name="SpecWalker::threejs">
+<area shape="rect" id="node2" href="$classSpecWalker.html#a36ca5576bc1f4f45cc592ef0b22002e6" title="SpecWalker::points" alt="" coords="211,5,347,32"/>
+<area shape="rect" id="node3" href="$classThreejs.html#ad6be2adbe36aec4b7341199a79b69350" title="Threejs::polyline" alt="" coords="220,56,337,83"/>
+<area shape="rect" id="node4" href="$classSpecWalker.html#a12ce543f28e0655e979e8ebc93a6ae01" title="SpecWalker::convexHull" alt="" coords="195,107,362,133"/>
+<area shape="rect" id="node5" href="$classSpecWalker.html#a2992a55a46a88c8be4f2d1119efa8baa" title="SpecWalker::hullPoints" alt="" coords="199,157,358,184"/>
+<area shape="rect" id="node6" href="$geometry_8hpp.html#ad08d08363c902a16c034433394522dab" title="Test on which side of the line p1, p2 the point p lies. " alt="" coords="255,208,302,235"/>
+<area shape="rect" id="node9" href="$classThreejs.html#a3808077a640ef743edf8bec385fece65" title="Threejs::facet" alt="" coords="227,259,330,285"/>
+<area shape="rect" id="node10" href="$classThreejs.html#ad5c4fcee75a2530299ca8dddf8de18ee" title="Threejs::save" alt="" coords="228,309,329,336"/>
+<area shape="rect" id="node7" href="$classStep.html#a313e046ccc0cce1dc6aeabeaeb8304c2" title="Step::y" alt="" coords="411,183,475,209"/>
+<area shape="rect" id="node8" href="$classStep.html#ab743fe4bc056da38442eed3d637263ad" title="Step::x" alt="" coords="411,233,475,260"/>
+</map>

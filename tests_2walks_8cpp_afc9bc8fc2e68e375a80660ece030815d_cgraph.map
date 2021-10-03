@@ -1,0 +1,51 @@
+<map id="MCMC_sampling" name="MCMC_sampling">
+<area shape="rect" id="node2" href="$classSimulation.html#a3674d73798d25c8defc774e425452042" title="Simulation::mute" alt="" coords="180,740,300,767"/>
+<area shape="rect" id="node3" href="$classMetropolis.html#ac2d1c2359b9b94195a9752d9579426a2" title="Implementation of a Metropolis based large deviations sampling. " alt="" coords="186,791,294,817"/>
+<area shape="rect" id="node50" href="$classSimulation.html#adf4df2bde6a66eb6d40ea8b1435f1a4a" title="A value which can be checked against a known value in tests to find regressions. " alt="" coords="177,841,303,868"/>
+<area shape="rect" id="node4" href="$classSimulation.html#a27a5df67d0f8cb65c08120be1bd99ffc" title="Simulation::prepare" alt="" coords="633,81,767,108"/>
+<area shape="rect" id="node9" href="$classMetropolis.html#a7db5e79f3b9cdc2e26a57273a85ed092" title="Equilibrate the walk. " alt="" coords="376,411,525,437"/>
+<area shape="rect" id="node14" href="$classWalker.html#a0034daf0d7d7f2e387384db957dec0a1" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="643,132,757,159"/>
+<area shape="rect" id="node15" href="$classWalker.html#a5d85a6a2d259c04efe462a70a37f1537" title="Walker::undoChange" alt="" coords="628,588,772,615"/>
+<area shape="rect" id="node16" href="$classWalker.html#a7e99f50e75b0c671d77634acd0be7cb7" title="Returns the surface area of the convex hull. " alt="" coords="661,639,739,665"/>
+<area shape="rect" id="node17" href="$classWalker.html#adc43204ed9a8721e7355a4491a9b5385" title="Returns the Volume of the convex hull. " alt="" coords="660,689,740,716"/>
+<area shape="rect" id="node22" href="$classWalker.html#aa9f2399849ef0e2efc7aa5a4cad6fcd5" title="Walker::saveConfiguration" alt="" coords="363,1069,539,1096"/>
+<area shape="rect" id="node26" href="$classSimulation.html#a0378a3ec7114d31c1914210e8524b912" title="Simulation::write_observables" alt="" coords="353,1019,549,1045"/>
+<area shape="rect" id="node27" href="$classWalker.html#ae7bc46cc263c18314d4e51a2a6da0728" title="Distance between start and end point. " alt="" coords="663,740,737,767"/>
+<area shape="rect" id="node28" href="$classWalker.html#a3701132ed1f0019a963ba53498eeb556" title="Squared distance between start and end point. " alt="" coords="659,791,741,817"/>
+<area shape="rect" id="node45" href="$classWalker.html#ae71215758f931f15116f4b81ef27f6b5" title="first passage of x=0 after t1 " alt="" coords="391,1120,511,1147"/>
+<area shape="rect" id="node46" href="$classWalker.html#a725b1fb5c6aea1eae0d68fb8461caa4b" title="Walker::svg" alt="" coords="405,1171,497,1197"/>
+<area shape="rect" id="node47" href="$classWalker.html#afd20b5178c425ed5c4c29e695e2822d3" title="Walker::pov" alt="" coords="405,1221,497,1248"/>
+<area shape="rect" id="node48" href="$classWalker.html#a0f6212cb50c28e28872db23c0b437497" title="Walker::gp" alt="" coords="408,1272,493,1299"/>
+<area shape="rect" id="node49" href="$classWalker.html#a8de19d6b689ac83150b282df22afe081" title="Walker::threejs" alt="" coords="395,1323,506,1349"/>
+<area shape="rect" id="node5" href="$classWalker.html#a5fc042bfe21117a4e197f260cd25317f" title="Walker::setP1" alt="" coords="865,157,970,184"/>
+<area shape="rect" id="node6" href="$classWalker.html#a18d7b22fe3d7f63c98123ed15ea169fd" title="Walker::setP2" alt="" coords="865,5,970,32"/>
+<area shape="rect" id="node7" href="$classWalker.html#a67fe1447be2351efe9390c985dcaf064" title="Walker::setP3" alt="" coords="865,56,970,83"/>
+<area shape="rect" id="node8" href="$classWalker.html#ac5502d602f17a25e465ebe753018995a" title="Walker::updateHull" alt="" coords="851,107,984,133"/>
+<area shape="rect" id="node10" href="$classWalker.html#a1f0e7205b3d9fcd377caccf7d5f6226e" title="Walker::degenerateMaxVolume" alt="" coords="598,487,802,513"/>
+<area shape="rect" id="node11" href="$classWalker.html#a20ee479dfcc5e7df468b3000ff331264" title="Walker::degenerateMaxSurface" alt="" coords="597,537,803,564"/>
+<area shape="rect" id="node12" href="$classWalker.html#a41b59321f6cd4b886ba62a2660718bb4" title="Walker::degenerateMinVolume" alt="" coords="600,183,800,209"/>
+<area shape="rect" id="node13" href="$classWalker.html#a0faf638c7cda8eeb09ccbba5ab7e66ca" title="Walker::degenerateMinSurface" alt="" coords="599,233,801,260"/>
+<area shape="rect" id="node18" href="$classRollingMean.html#a09d3481b28eaac567394b67b0b782a7a" title="Append a number to the rolling mean. " alt="" coords="639,284,761,311"/>
+<area shape="rect" id="node19" href="$stat_8hpp.html#a6a73a9ed1a38490ec267135c1a3214e9" title="sdev" alt="" coords="675,335,725,361"/>
+<area shape="rect" id="node20" href="$classRollingMean.html#a6a0a234a1ff92aa123dddee757f328a7" title="Return the variance of the current window. " alt="" coords="640,385,760,412"/>
+<area shape="rect" id="node21" href="$classRollingMean.html#a82e090143642183a3050f2e8a33e7bce" title="Return the mean of the current window. " alt="" coords="633,436,767,463"/>
+<area shape="rect" id="node23" href="$classWalker.html#a2422959ec8969563efbaa863649179d4" title="Walker::serialize" alt="" coords="641,1703,759,1729"/>
+<area shape="rect" id="node24" href="$io_8hpp.html#a3c16ae25c5aca94bc2d3ccd9564457a6" title="binary_write" alt="" coords="871,1677,963,1704"/>
+<area shape="rect" id="node25" href="$io_8cpp.html#a42a02e6dcecd4613408605500eb26835" title="binary_write_string" alt="" coords="635,1753,765,1780"/>
+<area shape="rect" id="node29" href="$classWalker.html#af3afe81efcf0541a81da28d3d0dd97fa" title="Returns the maximum distance between all pairs. " alt="" coords="625,1145,775,1172"/>
+<area shape="rect" id="node30" href="$classWalker.html#a4c7e68ff4b8b55d5aa8533fe15e199fb" title="x coordinate of endpoint " alt="" coords="659,1196,741,1223"/>
+<area shape="rect" id="node31" href="$classWalker.html#aafd3cd92b549e3a88a0cd1e8c1a2f8c3" title="y coordinate of endpoint " alt="" coords="659,1247,741,1273"/>
+<area shape="rect" id="node32" href="$classWalker.html#af3d1d7cb599dc2056edce66ad62159bb" title="number of vertices of the hull " alt="" coords="628,1297,772,1324"/>
+<area shape="rect" id="node33" href="$classWalker.html#a25ce04e08877ed4d2dd73a9e60c3e3b1" title="ratio of largest and smallest diameter " alt="" coords="633,1348,767,1375"/>
+<area shape="rect" id="node34" href="$classWalker.html#a2ea4ec54aea9d01686ab6a95d7b9f9b7" title="number of distinct visited sites " alt="" coords="631,1399,769,1425"/>
+<area shape="rect" id="node35" href="$classWalker.html#aa721174b08d31664965fbf9a7cfd5199" title="number of sites enclosed in the walk " alt="" coords="623,1449,777,1476"/>
+<area shape="rect" id="node36" href="$classWalker.html#a5b0fc1cfdc54813b1aff4f0b1420a9a2" title="length the walker walks " alt="" coords="647,1500,753,1527"/>
+<area shape="rect" id="node37" href="$classWalker.html#a243dce6b723c34fd749b5930d644f441" title="number of steps the walk took " alt="" coords="629,1551,771,1577"/>
+<area shape="rect" id="node38" href="$classWalker.html#ac5c0bfda5a4020df78f6c7389b4d8178" title="time where the minimum x coordinate is reached " alt="" coords="641,1601,759,1628"/>
+<area shape="rect" id="node39" href="$classWalker.html#a77b056dfb8b0bbc58451723cc11d710f" title="time where the maximum x coordinate is reached " alt="" coords="639,841,761,868"/>
+<area shape="rect" id="node40" href="$classWalker.html#a57ab89f764d9c234df882add7fcd652a" title="minimum x coordinate reached " alt="" coords="651,892,749,919"/>
+<area shape="rect" id="node41" href="$classWalker.html#a50d1e687a7dbe32d6e3ac5eac0c550b8" title="maximum x coordinate reached " alt="" coords="649,943,751,969"/>
+<area shape="rect" id="node42" href="$classWalker.html#ad6f646ad97db7ec461b77bde1efb8c49" title="number of resets the walk did " alt="" coords="631,993,769,1020"/>
+<area shape="rect" id="node43" href="$classWalker.html#a53e6fcb6239d0b196539fe0a69833f01" title="steps of the longest (in terms of steps) partial walk " alt="" coords="601,1044,799,1071"/>
+<area shape="rect" id="node44" href="$classWalker.html#accbdc49ca520c5ac79059410ee716cf4" title="length of the longest (in terms of length) partial walk " alt="" coords="609,1095,791,1121"/>
+</map>

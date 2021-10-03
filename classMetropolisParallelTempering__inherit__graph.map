@@ -1,0 +1,4 @@
+<map id="MetropolisParallelTempering" name="MetropolisParallelTempering">
+<area shape="rect" id="node3" href="$classMetropolisParallelTemperingMPI.html" title="Metropolis Monte Carlo sampling enhanced with parallel tempering using MPI. " alt="" coords="5,683,235,775"/>
+<area shape="rect" id="node2" href="$classSimulation.html" title="Abstract Base Class, derive classes that sample random walks. " alt="" coords="18,5,221,435"/>
+</map>

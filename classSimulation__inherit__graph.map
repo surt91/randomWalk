@@ -1,0 +1,8 @@
+<map id="Simulation" name="Simulation">
+<area shape="rect" id="node2" href="$classMetropolis.html" title="Standard Metropolis Monte Carlo sampling. " alt="" coords="5,520,107,627"/>
+<area shape="rect" id="node3" href="$classMetropolisParallelTempering.html" title="Metropolis Monte Carlo sampling enhanced with parallel tempering. " alt="" coords="131,498,345,649"/>
+<area shape="rect" id="node5" href="$classSimpleSampling.html" title="Naive Simple Sampling. " alt="" coords="371,527,505,619"/>
+<area shape="rect" id="node6" href="$classWangLandau.html" title="Wang Landau Sampling of the distribution of a given observable. " alt="" coords="531,483,663,663"/>
+<area shape="rect" id="node4" href="$classMetropolisParallelTemperingMPI.html" title="Metropolis Monte Carlo sampling enhanced with parallel tempering using MPI. " alt="" coords="123,713,353,805"/>
+<area shape="rect" id="node7" href="$classFastWLEntropic.html" title="Variant of Wang Landau sampling. " alt="" coords="529,713,664,805"/>
+</map>

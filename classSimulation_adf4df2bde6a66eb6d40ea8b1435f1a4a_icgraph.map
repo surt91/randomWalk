@@ -1,0 +1,5 @@
+<map id="Simulation::check" name="Simulation::check">
+<area shape="rect" id="node2" href="$benchmarks_2walks_8cpp.html#a92902f35dec8813d5ca916ac97d9f0ea" title="simple_sampling" alt="" coords="183,5,302,32"/>
+<area shape="rect" id="node3" href="$tests_2walks_8cpp.html#afc9bc8fc2e68e375a80660ece030815d" title="MCMC_sampling" alt="" coords="181,56,304,83"/>
+<area shape="rect" id="node4" href="$sampling_8cpp.html#a3c8b2c19c63825141cf04443bddf89e2" title="TEST_CASE" alt="" coords="193,107,293,133"/>
+</map>

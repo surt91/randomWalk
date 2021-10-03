@@ -1,0 +1,7 @@
+<map id="CorrelatedWalker::genStep" name="CorrelatedWalker::genStep">
+<area shape="rect" id="node2" href="$classCorrelatedWalker.html#ac2cd00b475e45e3de63f1fff4e585be6" title="CorrelatedWalker::update\lSteps" alt="" coords="249,23,420,65"/>
+<area shape="rect" id="node5" href="$classCorrelatedWalker.html#a46ef844d43535f2b3a31c302f8d58452" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="248,89,421,116"/>
+<area shape="rect" id="node6" href="$classCorrelatedWalker.html#a3493ba8f181faa94c321824cc61fcf95" title="CorrelatedWalker::undoChange" alt="" coords="233,140,437,167"/>
+<area shape="rect" id="node3" href="$classCorrelatedWalker.html#aa7a39436ab36859725d63f7188867082" title="CorrelatedWalker::setP1" alt="" coords="485,5,651,32"/>
+<area shape="rect" id="node4" href="$classCorrelatedWalker.html#a90ff746f9f0806c899831eefa5493e5e" title="CorrelatedWalker::setP2" alt="" coords="485,56,651,83"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="UniformRNG::cauchy" name="UniformRNG::cauchy">
+<area shape="rect" id="node2" href="$classLevyWalker.html#a7b125f50bf290d3a121305032352728a" title="LevyWalker::LevyWalker" alt="" coords="203,5,371,32"/>
+<area shape="rect" id="node3" href="$classLevyWalker.html#a3ab4d58afeb986d0f953b36a2809b1ff" title="Get new random numbers and reconstruct the walk. " alt="" coords="205,56,369,83"/>
+<area shape="rect" id="node4" href="$classLevyWalker.html#a9a84bf36ecdf17baf125a86095001d9b" title="Change the Walker by a small amount, appropiate for the type. " alt="" coords="216,107,357,133"/>
+</map>
